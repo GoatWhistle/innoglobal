@@ -1,0 +1,75 @@
+.toast {
+  composes: float from "../../primitives/surface/surface.module.css";
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-4) var(--space-12);
+  align-items: start;
+  padding: var(--space-16) var(--space-8) var(--space-16) var(--space-16);
+  overflow: hidden;
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+  pointer-events: auto;
+  animation: var(--motion-toast-in);
+}
+
+.toast[data-leaving] {
+  animation: var(--motion-toast-out);
+  pointer-events: none;
+}
+
+.icon {
+  margin-block-start: var(--space-2);
+}
+
+.text {
+  display: grid;
+  gap: var(--space-2);
+  padding-block-start: var(--space-2);
+  color: var(--text-secondary);
+}
+
+.title {
+  color: var(--text-primary);
+  font-weight: var(--weight-medium);
+}
+
+.close {
+  margin-block: calc(var(--space-8) * -1);
+}
+
+.actions {
+  grid-column: 2 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-block-start: var(--space-8);
+}
+
+.timer {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  block-size: var(--hairline);
+  background-color: var(--border-strong);
+  transform-origin: 0 0;
+  animation: var(--motion-countdown);
+}
+
+.toast:focus-within .timer {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .toast:hover .timer {
+    animation-play-state: paused;
+  }
+}
+
+.toast[data-tone="danger"] :is(.icon, .title) {
+  color: var(--text-danger);
+}
+
+.toast[data-tone="warning"] :is(.icon, .title) {
+  color: var(--text-warning);
+}

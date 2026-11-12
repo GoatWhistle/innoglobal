@@ -10,6 +10,8 @@
   --space-40: 40px;
   --space-48: 48px;
   --space-64: 64px;
+  --space-96: 96px;
+  --space-152: 152px;
 
   --space-page: var(--space-24);
   --space-page-wide: var(--space-32);
@@ -22,18 +24,72 @@
   --control-height: 44px;
   --control-height-compact: 36px;
   --icon-sm: 16px;
+  --icon-control: 18px;
   --icon-md: 20px;
   --icon-lg: 24px;
   --icon-xl: 48px;
-  --icon-stroke: 1.75;
+  --icon-stroke: 1.5;
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
-  --scrollbar-size: 10px;
-  --scrollbar-gutter: 2px;
+  --scrollbar-size: 9px;
+  --scrollbar-gutter: 3px;
   --header-height: 64px;
   --state-min-height: 160px;
   --panel-min: 320px;
   --term-min: 160px;
   --prose-measure: 70ch;
   --field-max-width: 480px;
+  --border-width-control: 1.5px;
+  --indicator-size: 20px;
+  --switch-width: 40px;
+  --switch-height: 24px;
+  --thumb-size: 20px;
+  --option-height: 40px;
+  --popover-min-width: 220px;
+  --popover-max-block: 320px;
+  --tooltip-max-width: 260px;
+  --toast-width: 400px;
+  --dialog-width: 480px;
+  --drawer-width: 440px;
+  --fade-edge: 24px;
+  --track-size: 2px;
+
+  --header-height-compact: 48px;
+  --nav-width: 240px;
+  --panel-width: 384px;
+  --panel-width-wide: 440px;
+  --panel-max: 480px;
+  --sheet-peek: 136px;
+  --columns-sm: 4;
+  --columns-md: 8;
+  --columns-lg: 12;
+  --grid-gap: var(--space-24);
+
+  --row-height: 48px;
+  --row-height-compact: 36px;
+  --cell-padding: var(--space-12);
+  --cell-padding-compact: var(--space-8);
+
+  --chart-stroke: 2px;
+  --chart-stroke-model: 1.5px;
+  --chart-dash-model: 6 4;
+  --chart-marker: 8px;
+  --chart-hit: 24px;
+  --chart-height: 240px;
+  --chart-height-sm: 160px;
+  --sparkline-width: 96px;
+  --sparkline-height: 24px;
+
+  --ink-weight-contour: 2px;
+  --ink-weight-line: 1px;
+  --ink-weight-fine: 0.75px;
+  --hatch-angle: 45deg;
+  --hatch-spacing: 6px;
+  --hatch-width: 1px;
+  --centerline-dash: 28 6 3 6;
+  --dimension-tick: 8px;
+  --leader-shelf: 24px;
+  --mark-corner: 8px;
+  --paper-cell: 8px;
+  --paper-cell-major: 40px;
 }

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Две личности | PipeTwin</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="ds.css">
+<link rel="stylesheet" href="doc.css">
+<link rel="stylesheet" href="doc-shell.css">
+<link rel="stylesheet" href="doc-spec.css">
+<link rel="stylesheet" href="doc-table.css">
+<link rel="stylesheet" href="doc-drawing.css">
+<link rel="stylesheet" href="doc-sign.css">
+<link rel="stylesheet" href="doc-narrow.css">
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="top" data-top></header>
+<div class="shell">
+<nav class="toc" aria-label="Разделы" data-toc></nav>
+<main class="doc" id="main">
+<h1 class="visually-hidden">Две личности</h1>
+<section class="chapter chapter-first" id="personas">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Ночь и чертёж</h2>
+    <p class="chapter-lead">Один продукт, две равные личности. Структура, компоненты и смысл общие. Различаются материал и подписные детали.</p>
+  </header>
+  <div class="duo" data-pair>
+    <div data-view>
+      <p class="view-name" data-view-name></p>
+      <header class="sheet">
+        <div class="sheet-title"><p class="sheet-k">Лист</p><h3>Участок Север, км 0–12</h3></div>
+        <dl class="sheet-meta"><div><dt>Масштаб</dt><dd>1 : 50 000</dd></div><div><dt>Ред.</dt><dd>14</dd></div><div><dt>Модель</dt><dd>14:02:11</dd></div><div><dt>Датчики</dt><dd>6 из 6</dd></div></dl>
+      </header>
+      <div class="paper spec">
+        <svg class="ink ink-demo" viewBox="0 0 560 150" role="img" aria-label="Участок 12 000 м, датчик Д-03 показывает 41,62 бар">
+          <path class="axis" d="M16 70H544"/>
+          <path class="contour" d="M40 52H520M40 88H520"/>
+          <path class="line" d="M40 46V52M136 46V52M232 46V52M328 46V52M424 46V52M520 46V52"/>
+          <path class="fine" d="M232 46L262 18H392"/>
+          <text class="strong" x="268" y="13">Д-03</text><text x="310" y="13">41,62 бар</text>
+          <path class="fine" d="M40 94V134M520 94V134"/>
+          <path class="line" d="M40 126H520M36 130L44 122M516 130L524 122"/>
+          <text x="280" y="118" text-anchor="middle">12 000 м</text>
+        </svg>
+      </div>
+      <div class="hatch hatch-strip" data-tone="danger"></div>
+    </div>
+  </div>
+  <div class="scroll" tabindex="0" role="region" aria-label="Две личности по аспектам">
+    <table class="copy">
+      <thead><tr><th scope="col">Что</th><th scope="col">Тёмная: ночной зал</th><th scope="col">Светлая: чертёж</th><th scope="col">Токен</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Основа</th><td>Смола, чистый чёрный под сценой</td><td>Бумага, миллиметровка за рабочими зонами</td><td><code>--paper-grid</code></td></tr>
+        <tr><th scope="row">Линия</th><td>Тон и глубина, линии тихие</td><td>Тушь трёх толщин</td><td><code>--drawing-*</code>, <code>--ink-weight-*</code></td></tr>
+        <tr><th scope="row">Площадь события</th><td>Прозрачная заливка янтарём или оксбладом</td><td>Штриховка той же тушью и лёгкая заливка</td><td><code>--fill-*</code>, <code>--hatch-*</code></td></tr>
+        <tr><th scope="row">Выбор</th><td>Тон <code>--surface-selected</code></td><td>Угловые метки чертёжника</td><td><code>--selection-mark</code></td></tr>
+        <tr><th scope="row">Наведение</th><td>Тон панели</td><td>Контур обводится по ходу пера</td><td><code>--trace</code></td></tr>
+        <tr><th scope="row">Всплывающий слой</th><td>Блик по верхней кромке</td><td>Линия и контактная тень</td><td><code>--sheen</code>, <code>--shadow-float</code></td></tr>
+        <tr><th scope="row">Шапка экрана</th><td>Строка без рамки</td><td>Штамп в рамке</td><td><code>--drawing-frame</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="facts">
+    <li><b>Правило двух слоёв.</b> Подписная деталь рисуется двумя слоями: тушь и заливка. Светлая тема включает тушь, тёмная заливку и блик. Компонент рисует оба слоя и тему не знает.</li>
+    <li>Выключенный слой равен <code>transparent</code>. Условий <code>data-theme</code> в компонентах нет.</li>
+    <li>Фокус в обеих темах одно кольцо <code>--focus-ring</code>. Детали чертежа фокус не заменяют.</li>
+  </ul>
+</section>
+
+<section class="chapter" id="drawing">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Словарь чертежа</h2>
+    <p class="chapter-lead">Шесть знаков из инженерной графики. Каждый что-то сообщает: длину, место, разрез, число.</p>
+  </header>
+  <div class="duo" data-pair>
+    <div data-view>
+      <p class="view-name" data-view-name></p>
+      <svg class="ink ink-demo" viewBox="0 0 520 96" role="img" aria-label="Три толщины туши и осевая">
+        <path class="contour" d="M0 12H360"/><text x="376" y="16">Контур</text>
+        <path class="line" d="M0 36H360"/><text x="376" y="40">Линия</text>
+        <path class="fine" d="M0 60H360"/><text x="376" y="64">Тонкая</text>
+        <path class="axis" d="M0 84H360"/><text x="376" y="88">Осевая</text>
+      </svg>
+      <div class="swatches">
+        <figure><div class="hatch"></div><figcaption>Нет данных</figcaption></figure>
+        <figure><div class="hatch" data-tone="warning"></div><figcaption>Наблюдение</figcaption></figure>
+        <figure><div class="hatch" data-tone="danger"></div><figcaption>Утечка</figcaption></figure>
+      </div>
+      <div class="paper paper-demo"><span class="muted">Миллиметровка: поле графика и сцены</span></div>
+    </div>
+  </div>
+  <div class="scroll" tabindex="0" role="region" aria-label="Где появляются детали чертежа">
+    <table class="copy">
+      <thead><tr><th scope="col">Знак</th><th scope="col">Где</th><th scope="col">Никогда</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Штриховка</th><td>Невязка над порогом, интервал утечки на профиле, зона без данных, отключённый участок</td><td class="no">Фон панели, кнопка, текст</td></tr>
+        <tr><th scope="row">Размерная линия</th><td>Длина участка, ошибка места утечки, шаг датчиков</td><td class="no">Вместо оси графика</td></tr>
+        <tr><th scope="row">Осевая</th><td>Ось трубы на схеме, нулевая линия невязки</td><td class="no">Разделитель секций</td></tr>
+        <tr><th scope="row">Выноска</th><td>Показание датчика на схеме, подпись события на графике</td><td class="no">Больше трёх на одном виде</td></tr>
+        <tr><th scope="row">Миллиметровка</th><td>Поле графика, сцена, схема</td><td class="no">За текстом, в панели, в диалоге</td></tr>
+        <tr><th scope="row">Засечка</th><td>Маркер перечня, деление шкалы</td><td class="no">Нумерация шагов</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="tokens" data-tokens="--ink-weight-contour --ink-weight-line --ink-weight-fine --centerline-dash --hatch-angle --hatch-spacing --hatch-width --dimension-tick --leader-shelf --paper-cell --paper-cell-major"></ul>
+  <ul class="tokens" data-tokens="--drawing-frame --drawing-contour --drawing-line --drawing-fine --hatch-neutral --hatch-warning --hatch-danger --fill-warning --fill-danger --paper-grid --paper-grid-major"></ul>
+</section>
+
+<section class="chapter" id="signature">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Подписные детали</h2>
+    <p class="chapter-lead">Пять деталей, которые делают светлую тему чертежом. Наведите, выберите, сравните с тёмной.</p>
+  </header>
+  <div class="duo" data-pair>
+    <div data-view>
+      <p class="view-name" data-view-name></p>
+      <ul class="picks spec" data-picks>
+        <li><button type="button" class="marked" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-03, 4 800 м</span><span class="fig">41,62 бар</span></button></li>
+        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-04, 7 200 м</span><span class="fig">40,37 бар</span></button></li>
+        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-05, 9 600 м</span><span class="fig">39,21 бар</span></button></li>
+      </ul>
+      <div class="cards">
+        <a class="card-link trace" href="#signature"><small>Расход на входе</small><b>1 500 м³/ч</b></a>
+        <a class="card-link trace" href="#signature"><small>Температура на входе</small><b>51,8 °C</b></a>
+      </div>
+      <ul class="ticks">
+        <li>Порог 0,70 бар</li>
+        <li>Удержание 0,4 с</li>
+        <li>Подтверждают два датчика</li>
+      </ul>
+    </div>
+  </div>
+  <ul class="facts">
+    <li><b>Штамп.</b> Шапка экрана как основная надпись чертежа. Только настоящие данные: лист это участок, масштаб считается из длины, ред. это номер версии параметров модели, время последнего расчёта.</li>
+    <li><b>Отметка выбора.</b> Угловые метки вокруг выбранного <code>.marked</code>, в тёмной теме тон. Тонкая линия <code>--ink-weight-line</code>, длина <code>--mark-corner</code>.</li>
+    <li><b>Обводка.</b> Наведение обводит контур слева направо за <span data-ms="--dur-panel"></span>&nbsp;мс через <code>clip-path</code>. В тёмной теме слой обводки прозрачный, работает тон.</li>
+    <li><b>Засечки.</b> Перечни параметров отмечены засечкой под <span data-raw="--hatch-angle"></span>, как деление размерной линии.</li>
+    <li><b>Выноска с числом.</b> Показание стоит на полке выноски у места на трубе, а не в легенде.</li>
+  </ul>
+  <ul class="tokens" data-tokens="--selection-mark --trace --sheen --mark-corner --shadow-sheen"></ul>
+</section>
+</main>
+</div>
+<script type="module" src="doc-shell.js"></script>
+<script type="module" src="page.js"></script>
+<script type="module" src="doc-spec.js"></script>
+<script type="module" src="doc.js"></script>
+<script type="module" src="doc-sign.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-theme="light">
+<html lang="ru" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -32,9 +32,7 @@
     <script>
       try {
         const theme = localStorage.getItem("app-theme")
-        const systemDark = matchMedia("(prefers-color-scheme: dark)").matches
-        const dark = theme === "dark" || (theme !== "light" && systemDark)
-        document.documentElement.dataset.theme = dark ? "dark" : "light"
+        document.documentElement.dataset.theme = theme === "light" ? "light" : "dark"
         const stored = localStorage.getItem("app-locale")
         const preferred = (navigator.languages || [])
           .map((language) => language.slice(0, 2).toLowerCase())
@@ -42,7 +40,7 @@
         const locale = stored === "ru" || stored === "en" ? stored : preferred
         if (locale !== undefined) document.documentElement.lang = locale
       } catch {
-        document.documentElement.dataset.theme = "light"
+        document.documentElement.dataset.theme = "dark"
       }
     </script>
   </head>

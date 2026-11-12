@@ -15,8 +15,8 @@ function Probe({ display }: { readonly display: SegmentedDisplay }) {
       value={value}
       onChange={setValue}
       options={[
-        { value: "a", label: "A1", short: "S1", icon: "theme-light" },
-        { value: "b", label: "B1", short: "S2", icon: "theme-dark" },
+        { value: "a", label: "A1", short: "S1", icon: "sun" },
+        { value: "b", label: "B1", short: "S2", icon: "moon" },
       ]}
     />
   )

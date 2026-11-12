@@ -6,15 +6,7 @@ import {
   useMemo,
   useState,
 } from "react"
-import { useMediaQuery } from "@/shared/hooks"
-import {
-  applyTheme,
-  DARK_QUERY,
-  readStoredTheme,
-  storeTheme,
-  systemTheme,
-  type Theme,
-} from "./theme"
+import { applyTheme, DEFAULT_THEME, readStoredTheme, storeTheme, type Theme } from "./theme"
 
 export interface ThemeState {
   readonly theme: Theme
@@ -29,8 +21,7 @@ export interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [stored, setStored] = useState<Theme | null>(readStoredTheme)
-  const systemDark = useMediaQuery(DARK_QUERY)
-  const theme = stored ?? systemTheme(systemDark)
+  const theme = stored ?? DEFAULT_THEME
 
   useLayoutEffect(() => {
     applyTheme(theme)

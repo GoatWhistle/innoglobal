@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Шаблоны экранов | PipeTwin</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="screens-base.css">
+<link rel="stylesheet" href="screens-index.css">
+<script type="module" src="screens-index.js"></script>
+</head>
+<body>
+<div class="ix">
+  <aside class="ix-list" aria-labelledby="ix-title">
+    <h1 class="sd-h2" id="ix-title">Шаблоны экранов</h1>
+    <p class="sd-caption">Полноэкранные страницы из компонентов набора. Состояние задаётся в адресе, например ?state=leak.</p>
+    <nav data-screens aria-label="Шаблоны"></nav>
+    <p class="sd-caption ix-links"><a href="kit.html">Набор компонентов</a> <a href="index.html">Основы</a> <a href="404.html">404</a></p>
+  </aside>
+  <section class="ix-view" aria-label="Просмотр">
+    <div class="ix-bar">
+      <div class="segmented" role="radiogroup" aria-label="Ширина" data-width><button type="button" role="radio" aria-checked="true" data-value="100%"><span>Вся ширина</span></button><button type="button" role="radio" aria-checked="false" data-value="1024px"><span>1024</span></button><button type="button" role="radio" aria-checked="false" data-value="375px"><span>375</span></button></div>
+      <a class="button button-secondary button-sm" data-open href="screen-twin.html" target="_blank" rel="noreferrer"><svg class="icon" aria-hidden="true"><use href="icons.svg#external"/></svg><span>Открыть отдельно</span></a>
+    </div>
+    <div class="ix-frame"><iframe title="Шаблон" data-frame src="screen-twin.html?dock=0"></iframe></div>
+  </section>
+</div>
+</body>
+</html>

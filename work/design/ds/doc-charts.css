@@ -1,0 +1,235 @@
+.chart {
+  display: grid;
+  gap: var(--space-12);
+  min-inline-size: 0;
+}
+
+.chart-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-16);
+  margin: 0;
+}
+
+.chart-head b {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--weight-medium);
+}
+
+.chart-head span {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  font-variant-numeric: var(--font-numeric);
+}
+
+[data-chart] {
+  min-inline-size: 0;
+}
+
+.ch {
+  display: block;
+  max-inline-size: 100%;
+  overflow: visible;
+  font-family: var(--font-sans);
+}
+
+.ch-grid {
+  stroke: var(--chart-grid);
+  stroke-width: var(--hairline);
+}
+
+.ch-axis {
+  stroke: var(--chart-axis);
+  stroke-width: var(--hairline);
+}
+
+.ch-paper {
+  fill: none;
+  stroke: var(--paper-grid);
+  stroke-width: var(--hairline);
+}
+
+.ch-paper-major {
+  fill: none;
+  stroke: var(--paper-grid-major);
+  stroke-width: var(--hairline);
+}
+
+.ch-band {
+  fill: var(--chart-band);
+}
+
+.ch-zero {
+  stroke: var(--drawing-line);
+  stroke-width: var(--ink-weight-fine);
+  stroke-dasharray: var(--centerline-dash);
+}
+
+.ch-measured,
+.ch-model,
+.ch-spark-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ch-measured {
+  stroke: var(--chart-measured);
+  stroke-width: var(--chart-stroke);
+}
+
+.ch-model {
+  stroke: var(--chart-model);
+  stroke-width: var(--chart-stroke-model);
+  stroke-dasharray: var(--chart-dash-model);
+}
+
+.ch-line-warning {
+  stroke: var(--chart-warning);
+}
+
+.ch-line-danger {
+  stroke: var(--chart-danger);
+}
+
+.ch-spark-line {
+  stroke: var(--chart-measured);
+  stroke-width: var(--chart-stroke-model);
+}
+
+.ch-dot,
+.ch-dot-warning,
+.ch-dot-danger {
+  fill: var(--chart-measured);
+  stroke: var(--surface-raised);
+  stroke-width: var(--chart-stroke);
+}
+
+.ch-dot-warning {
+  fill: var(--chart-warning);
+}
+
+.ch-dot-danger {
+  fill: var(--chart-danger);
+}
+
+.ch-fill-danger {
+  fill: var(--fill-danger);
+}
+
+.ch-hatch-danger {
+  stroke: var(--hatch-danger);
+  stroke-width: var(--hatch-width);
+}
+
+.ch-event {
+  stroke: var(--drawing-line);
+  stroke-width: var(--hairline);
+}
+
+.ch-event-danger {
+  stroke: var(--chart-danger);
+  stroke-width: var(--hairline);
+}
+
+.ch-leader {
+  fill: none;
+  stroke: var(--drawing-line);
+  stroke-width: var(--ink-weight-fine);
+}
+
+.ch-seg-warning {
+  fill: var(--chart-warning);
+}
+
+.ch-seg-danger {
+  fill: var(--chart-danger);
+}
+
+.ch-text {
+  fill: var(--text-muted);
+  font-size: var(--font-size-caption);
+  font-variant-numeric: var(--font-numeric);
+}
+
+.ch-label {
+  fill: var(--text-primary);
+  font-size: var(--font-size-label);
+  font-variant-numeric: var(--font-numeric);
+}
+
+.ch-end {
+  text-anchor: end;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8) var(--space-20);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.legend svg {
+  inline-size: var(--space-24);
+  block-size: var(--space-8);
+  overflow: visible;
+}
+
+.chart-states {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-16);
+}
+
+.cstate {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-8);
+  min-block-size: 12rem;
+  padding: var(--space-16);
+  border: var(--hairline) solid var(--border-subtle);
+  background: var(--surface-raised);
+}
+
+.cstate-plot {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-8);
+  padding: var(--space-16);
+  border-block-end: var(--hairline) solid var(--chart-axis);
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-sm);
+  text-align: center;
+}
+
+.cstate-plot .icon {
+  inline-size: var(--icon-lg);
+  block-size: var(--icon-lg);
+  color: var(--text-muted);
+}
+
+.cstate-plot.stale {
+  opacity: var(--opacity-stale);
+}
+
+.cstate-plot.skeleton-stack {
+  place-content: center stretch;
+  justify-items: stretch;
+}
+
+.spark-table td {
+  vertical-align: middle;
+}

@@ -1,33 +1,46 @@
 :root {
   --font-sans:
-    "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Onest Variable", "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif;
-  --font-mono:
-    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas,
-    monospace;
+  --font-accent: "Raleway Variable", "Raleway", var(--font-sans);
+  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
   --font-features: "kern" 1;
   --font-numeric: tabular-nums;
 
+  --weight-light: 300;
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
-  --weight-bold: 700;
+  --weight-bold: 600;
 
+  --font-size-micro: 0.6875rem;
+  --line-height-micro: 1.4545;
   --font-size-caption: 0.75rem;
-  --line-height-caption: 1.45;
+  --line-height-caption: 1.33;
   --font-size-label: 0.8125rem;
-  --line-height-label: 1.4;
+  --line-height-label: 1.23;
   --font-size-body-sm: 0.875rem;
-  --line-height-body-sm: 1.45;
+  --line-height-body-sm: 1.43;
   --font-size-body: 1rem;
-  --line-height-body: 1.55;
-  --font-size-subheading: 1.125rem;
-  --line-height-subheading: 1.35;
-  --font-size-heading: 1.5rem;
-  --line-height-heading: 1.25;
-  --font-size-heading-lg: clamp(1.5rem, 1.2rem + 1vw, 2rem);
-  --line-height-heading-lg: 1.15;
+  --line-height-body: 1.5;
+  --font-size-lead: 1.125rem;
+  --line-height-lead: 1.5556;
+  --font-size-subheading: 1.25rem;
+  --line-height-subheading: 1.4;
+  --font-size-heading: 1.75rem;
+  --line-height-heading: 1.14;
+  --font-size-heading-lg: clamp(2rem, 1.4rem + 2vw, 3rem);
+  --line-height-heading-lg: 1.04;
+  --font-size-display: clamp(3.5rem, 1rem + 9vw, 10rem);
+  --line-height-display: 0.86;
+  --font-size-monument: clamp(7rem, 1rem + 20vw, 20rem);
+  --font-size-readout: 2.5rem;
+  --line-height-readout: 1;
+  --font-size-readout-sm: 1.25rem;
+  --line-height-readout-sm: 1.2;
 
+  --tracking-display: -0.035em;
+  --tracking-tight: -0.02em;
   --tracking-normal: 0;
-  --tracking-tight: -0.015em;
+  --tracking-wide: 0.02em;
 }

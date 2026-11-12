@@ -30,7 +30,7 @@ interface OptionFaceProps {
 }
 
 function OptionFace({ label, icon, short, display }: OptionFaceProps) {
-  const glyph = icon === undefined ? null : <Icon name={icon} size="sm" />
+  const glyph = icon === undefined ? null : <Icon name={icon} size="control" />
   if (display === "label")
     return (
       <>
@@ -58,7 +58,7 @@ export function Segmented<T extends string>({
   const modality = useInputModality()
   const { listRef, indicatorRef, itemRef } = useSlidingIndicator<HTMLFieldSetElement>(value, {
     instant: modality.instant,
-    radiusToken: "--radius-md",
+    radiusToken: "--radius-pill",
   })
   return (
     <fieldset
@@ -73,7 +73,7 @@ export function Segmented<T extends string>({
         <label
           key={option.value}
           ref={itemRef(option.value)}
-          className={styles.option}
+          className={clsx(styles.option, display === "icon" && styles.iconOnly)}
           data-checked={option.value === value}
           title={display === "label" ? undefined : option.label}
         >

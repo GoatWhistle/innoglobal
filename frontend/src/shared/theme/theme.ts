@@ -4,7 +4,7 @@ export type Theme = (typeof THEMES)[number]
 
 export const THEME_STORAGE_KEY = "app-theme"
 
-export const DARK_QUERY = "(prefers-color-scheme: dark)"
+export const DEFAULT_THEME: Theme = "dark"
 
 export function isTheme(value: unknown): value is Theme {
   return typeof value === "string" && (THEMES as readonly string[]).includes(value)
@@ -25,10 +25,6 @@ export function storeTheme(theme: Theme): void {
   } catch {
     return
   }
-}
-
-export function systemTheme(systemDark: boolean): Theme {
-  return systemDark ? "dark" : "light"
 }
 
 export function applyTheme(theme: Theme): void {

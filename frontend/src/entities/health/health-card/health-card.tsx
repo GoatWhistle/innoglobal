@@ -33,7 +33,7 @@ export function HealthCard({ motionIndex }: HealthCardProps) {
       actions={
         view === "ok" ? (
           <Button
-            variant="ghost"
+            variant="quiet"
             size="compact"
             icon="refresh"
             pending={query.isFetching}
@@ -60,7 +60,7 @@ export function HealthCard({ motionIndex }: HealthCardProps) {
         {view === "ok" ? (
           <div className={styles.ok} data-stale={indicator === "stale" || indicator === "spinner"}>
             <p className={styles.status}>
-              <Icon name="success" size="md" className={styles.success} />
+              <Icon name="check" size="md" className={styles.success} />
               <span>{t("health:ok")}</span>
             </p>
             <p className={styles.checked}>

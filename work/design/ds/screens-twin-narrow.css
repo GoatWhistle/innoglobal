@@ -1,0 +1,42 @@
+@media (max-width: 48rem) {
+  .twin {
+    grid-template-areas: "status" "stage" "sensors" "profile";
+  }
+
+  .twin-panel {
+    display: contents;
+  }
+
+  .twin-status {
+    grid-area: status;
+    padding: var(--space-20) var(--sd-gutter);
+    border-inline-end: 0;
+  }
+
+  .twin-sensors {
+    grid-area: sensors;
+    padding-inline: var(--sd-gutter);
+    background: var(--surface-raised);
+  }
+
+  .twin-stage {
+    block-size: 340px;
+  }
+
+  .twin-scene {
+    inset: var(--space-48) 0 var(--space-8);
+  }
+
+  .twin-stage-head .twin-tools .icon-button:not(:last-child),
+  .twin-stage-head .sd-caption {
+    display: none;
+  }
+
+  .twin-chart {
+    block-size: 200px;
+  }
+
+  .twin-hint {
+    display: none;
+  }
+}

@@ -3,8 +3,8 @@ import { THEMES, type Theme, useTheme } from "@/shared/theme"
 import { type IconName, Segmented, type SegmentedOption } from "@/shared/ui"
 
 const THEME_ICON: Readonly<Record<Theme, IconName>> = {
-  light: "theme-light",
-  dark: "theme-dark",
+  light: "sun",
+  dark: "moon",
 }
 
 export function ThemeSwitch() {

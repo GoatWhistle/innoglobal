@@ -1,37 +1,39 @@
 .segmented {
   position: relative;
-  display: inline-flex;
-  align-items: stretch;
-  gap: var(--space-2);
-  padding: var(--space-2);
-  border-radius: var(--radius-lg);
-  background-color: var(--surface-sunken);
+  display: inline-grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  padding: var(--space-4);
+  border: var(--hairline) solid var(--border-control);
+  border-radius: var(--radius-pill);
 }
 
 .indicator {
-  position: absolute;
-  inset-block: var(--space-2);
-  inset-inline: 0;
-  background-color: var(--surface-selected);
-  box-shadow: var(--shadow-raised);
-  clip-path: inset(0 100% 0 0);
-  pointer-events: none;
+  composes: slidingIndicator from "../../primitives/surface/surface.module.css";
+  inset-block: var(--space-4);
+  background-color: var(--action-primary);
 }
 
 .option {
-  composes: controlText pressable from "../../../styles/compose.module.css";
+  composes: pressable from "../../../styles/compose.module.css";
   position: relative;
   z-index: var(--layer-raised);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-8);
-  min-inline-size: var(--target-min);
   min-block-size: var(--control-height-compact);
-  padding-inline: var(--space-12);
-  border-radius: var(--radius-md);
+  padding-inline: var(--space-16);
+  border-radius: var(--radius-pill);
   color: var(--text-secondary);
+  font-size: var(--font-size-body-sm);
+  white-space: nowrap;
   cursor: pointer;
+}
+
+.iconOnly {
+  inline-size: var(--control-height-compact);
+  padding-inline: 0;
 }
 
 .option::before {
@@ -42,11 +44,11 @@
 }
 
 .option[data-checked="true"] {
-  color: var(--text-primary);
+  color: var(--action-primary-text);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .option:hover {
+  .option[data-checked="false"]:hover {
     color: var(--text-primary);
   }
 }
@@ -61,10 +63,6 @@
 }
 
 .input {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  opacity: 0;
-  cursor: inherit;
+  composes: choiceInput from "../choice/choice.module.css";
   appearance: none;
 }

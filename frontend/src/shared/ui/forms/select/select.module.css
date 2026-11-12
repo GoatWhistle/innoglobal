@@ -1,0 +1,49 @@
+.trigger {
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.trigger:focus-visible {
+  outline: 0;
+  border-color: var(--border-ink);
+  box-shadow: var(--shadow-raised);
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+}
+
+.value {
+  composes: truncate from "../../layout/text-role/text-role.module.css";
+  flex: 1 1 auto;
+}
+
+.value[data-placeholder] {
+  color: var(--text-muted);
+}
+
+.chevron {
+  color: var(--text-secondary);
+  transition: rotate var(--dur-fast) var(--ease-out);
+}
+
+.trigger[aria-expanded="true"] .chevron {
+  rotate: 180deg;
+}
+
+.layer {
+  composes: float from "../../primitives/surface/surface.module.css";
+  box-sizing: border-box;
+  min-inline-size: var(--popover-min-width);
+  min-block-size: var(--target-min);
+  max-block-size: var(--popover-max-block);
+  padding: var(--space-4);
+  overflow: auto;
+  overscroll-behavior: contain;
+  color: var(--text-primary);
+  font-size: var(--font-size-body-sm);
+}
+
+.layer:focus-visible {
+  outline: 0;
+}

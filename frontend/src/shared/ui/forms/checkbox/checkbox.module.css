@@ -1,0 +1,95 @@
+.check {
+  composes: choice from "../choice/choice.module.css";
+}
+
+.input {
+  composes: choiceInput from "../choice/choice.module.css";
+}
+
+.text {
+  composes: choiceText from "../choice/choice.module.css";
+}
+
+.description {
+  composes: choiceDescription from "../choice/choice.module.css";
+}
+
+.box {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: var(--indicator-size);
+  block-size: var(--indicator-size);
+  border: var(--border-width-control) solid var(--border-control);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    scale var(--dur-press) var(--ease-out);
+}
+
+.mark {
+  composes: icon sm from "../../primitives/icon/icon.module.css";
+  grid-area: 1 / 1;
+  stroke: var(--action-primary-text);
+  stroke-width: calc(var(--icon-stroke) + 1);
+}
+
+.tick {
+  stroke-dasharray: 21;
+  stroke-dashoffset: 21;
+  transition: stroke-dashoffset var(--dur-base) var(--ease-out);
+}
+
+.dash {
+  stroke-dasharray: 13;
+  stroke-dashoffset: 13;
+  transition: stroke-dashoffset var(--dur-fast) var(--ease-out);
+}
+
+.input:is(:checked, :indeterminate) + .box {
+  border-color: var(--action-primary);
+  background-color: var(--action-primary);
+}
+
+.input:checked:not(:indeterminate) + .box .tick,
+.input:indeterminate + .box .dash {
+  stroke-dashoffset: 0;
+}
+
+.check:active .box {
+  scale: var(--press-scale);
+}
+
+.input:focus-visible + .box {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.check[data-invalid] .box {
+  border-color: var(--status-danger);
+}
+
+.input:disabled + .box {
+  border-color: var(--border-strong);
+  background-color: var(--action-disabled);
+}
+
+.input:disabled:is(:checked, :indeterminate) + .box {
+  border-color: var(--text-disabled);
+  background-color: var(--text-disabled);
+}
+
+.input:disabled + .box .mark {
+  stroke: var(--surface-base);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .check:hover .input:not(:disabled, :checked, :indeterminate) + .box {
+    border-color: var(--border-ink);
+  }
+
+  .check:hover .input:not(:disabled):is(:checked, :indeterminate) + .box {
+    border-color: var(--action-primary-hover);
+    background-color: var(--action-primary-hover);
+  }
+}

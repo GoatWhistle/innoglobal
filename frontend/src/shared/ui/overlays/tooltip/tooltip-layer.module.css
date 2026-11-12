@@ -1,0 +1,18 @@
+.tooltip {
+  z-index: var(--layer-tooltip);
+  display: grid;
+  grid-template-columns: fit-content(var(--tooltip-max-width)) auto;
+  align-items: center;
+  gap: var(--space-8);
+  padding: calc(var(--space-4) + var(--space-2)) var(--space-8);
+  background-color: var(--surface-inverse);
+  color: var(--text-on-inverse);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  pointer-events: none;
+}
+
+.kbd {
+  border-color: currentColor;
+  color: inherit;
+}

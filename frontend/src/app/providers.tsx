@@ -3,6 +3,7 @@ import { type ReactNode, useState } from "react"
 import { createQueryClient } from "@/shared/api"
 import { LocaleProvider } from "@/shared/i18n"
 import { ThemeProvider } from "@/shared/theme"
+import { LayerHost, ToastProvider } from "@/shared/ui"
 
 export interface ProvidersProps {
   readonly children: ReactNode
@@ -13,7 +14,11 @@ export function Providers({ children }: ProvidersProps) {
   return (
     <QueryClientProvider client={client}>
       <LocaleProvider>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <LayerHost>
+            <ToastProvider>{children}</ToastProvider>
+          </LayerHost>
+        </ThemeProvider>
       </LocaleProvider>
     </QueryClientProvider>
   )

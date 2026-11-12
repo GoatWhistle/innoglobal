@@ -6,8 +6,30 @@
   animation: var(--motion-fade-in);
 }
 
-.glyph {
+.bare {
+  display: inline-flex;
+  flex: none;
+}
+
+.ring {
+  display: inline-block;
+  flex: none;
+  inline-size: var(--icon-sm);
+  block-size: var(--icon-sm);
+  border: var(--border-width-control) solid var(--border-strong);
+  border-block-start-color: currentColor;
+  border-radius: var(--radius-round);
   animation: var(--motion-spin);
+}
+
+.control {
+  inline-size: var(--icon-control);
+  block-size: var(--icon-control);
+}
+
+.lg {
+  inline-size: var(--icon-lg);
+  block-size: var(--icon-lg);
 }
 
 .label {

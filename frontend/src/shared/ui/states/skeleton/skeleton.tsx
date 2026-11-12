@@ -1,7 +1,7 @@
 import { clsx } from "clsx"
 import styles from "./skeleton.module.css"
 
-export type SkeletonShape = "line" | "block"
+export type SkeletonShape = "line" | "block" | "readout"
 
 export interface SkeletonProps {
   readonly shape?: SkeletonShape | undefined
@@ -12,6 +12,7 @@ export interface SkeletonProps {
 const SHAPE_CLASS: Readonly<Record<SkeletonShape, string | undefined>> = {
   line: styles.line,
   block: styles.block,
+  readout: styles.readout,
 }
 
 export function Skeleton({ shape = "line", lines = 1, className }: SkeletonProps) {

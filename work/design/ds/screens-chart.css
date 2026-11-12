@@ -1,0 +1,236 @@
+.ch-host {
+  position: relative;
+  min-inline-size: 0;
+  min-block-size: 0;
+}
+
+.ch {
+  display: block;
+  overflow: visible;
+  fill: none;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-caption);
+  font-variant-numeric: var(--font-numeric);
+}
+
+.ch text {
+  fill: var(--text-muted);
+  stroke: none;
+}
+
+.ch .ch-sub {
+  font-size: var(--font-size-micro);
+}
+
+.ch-grid {
+  stroke: var(--sd-grid);
+  stroke-width: var(--hairline);
+}
+
+.ch-axis {
+  stroke: var(--border-strong);
+  stroke-width: var(--hairline);
+}
+
+.ch-model {
+  stroke: var(--text-secondary);
+  stroke-width: 1;
+}
+
+.ch-draft {
+  stroke: var(--text-primary);
+  stroke-width: 1;
+  stroke-dasharray: var(--sd-dash);
+}
+
+.ch-measured {
+  stroke: var(--text-primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.ch-line {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.ch-line[data-tone="danger"] {
+  stroke: var(--status-danger);
+  stroke-width: 2;
+}
+
+.ch-line[data-tone="warning"] {
+  stroke: var(--status-warning);
+  stroke-width: 1.5;
+}
+
+.ch-line[data-tone="ink"] {
+  stroke: var(--text-primary);
+  stroke-width: 2;
+}
+
+.ch-gap {
+  fill: var(--sd-gap-fill);
+  stroke: none;
+}
+
+.ch-gap[data-tone="danger"] {
+  fill: transparent;
+}
+
+.ch-hatch {
+  stroke: var(--status-warning);
+  stroke-width: var(--sd-hatch-weight);
+}
+
+.ch-hatch[data-tone="danger"] {
+  stroke: var(--status-danger);
+}
+
+.ch-hatch[data-tone="ink"] {
+  stroke: var(--sd-draw-fine);
+}
+
+.ch-band {
+  fill: var(--surface-range);
+  stroke: none;
+}
+
+.ch-threshold {
+  stroke: var(--sd-draw);
+  stroke-width: 1;
+  stroke-dasharray: var(--sd-dash);
+}
+
+.ch-sensor path {
+  stroke: var(--border-strong);
+}
+
+.ch-sensor circle {
+  fill: var(--surface-base);
+  stroke: var(--text-primary);
+  stroke-width: 1.5;
+}
+
+.ch-sensor[data-state="watch"] circle {
+  stroke: var(--status-warning);
+}
+
+.ch-sensor[data-state="leak"] circle {
+  fill: var(--status-danger);
+  stroke: var(--status-danger);
+}
+
+.ch-sensor[data-state="leak"] text:first-of-type {
+  fill: var(--text-danger);
+}
+
+.ch-sensor[data-state="silent"] circle {
+  stroke: var(--text-muted);
+  stroke-dasharray: 2 2;
+}
+
+.ch-dim path,
+.ch-ext {
+  stroke: var(--sd-draw-fine);
+  stroke-width: 0.75;
+}
+
+.ch-dim text {
+  fill: var(--sd-draw);
+}
+
+.ch-ext {
+  stroke-dasharray: var(--sd-dash);
+  opacity: 0.6;
+}
+
+.ch-center {
+  stroke: var(--status-danger);
+  stroke-width: 1;
+  stroke-dasharray: var(--sd-centerline);
+}
+
+.ch-center[data-tone="ink"] {
+  stroke: var(--sd-draw);
+}
+
+.ch-zone {
+  fill: var(--signal-danger-surface);
+  stroke: none;
+}
+
+.ch-dim-leak path {
+  stroke: var(--status-danger);
+}
+
+.ch-leader path {
+  stroke: var(--sd-draw);
+  stroke-width: 0.75;
+}
+
+.ch-leader circle {
+  fill: var(--sd-draw);
+}
+
+.ch-leader text {
+  fill: var(--text-primary);
+}
+
+.ch-leader[data-tone="danger"] path,
+.ch-leader[data-tone="danger"] circle {
+  stroke: var(--status-danger);
+  fill: var(--status-danger);
+}
+
+.ch-leader[data-tone="danger"] path {
+  fill: none;
+}
+
+.ch-leader[data-tone="danger"] text {
+  fill: var(--text-danger);
+}
+
+.ch-leader[data-tone="warning"] text {
+  fill: var(--text-warning);
+}
+
+.ch-dot {
+  fill: var(--surface-base);
+  stroke: var(--text-primary);
+  stroke-width: 1.5;
+}
+
+.ch-dot[data-tone="danger"] {
+  fill: var(--status-danger);
+  stroke: var(--status-danger);
+}
+
+.ch-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-16);
+  margin: 0;
+  padding: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+  list-style: none;
+}
+
+.ch-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.ch-legend svg {
+  inline-size: 24px;
+  block-size: 8px;
+  overflow: visible;
+}
+
+.ch-legend .ch-hatch-key {
+  stroke: var(--status-warning);
+  stroke-width: 8;
+  stroke-dasharray: 1 2;
+}

@@ -1,4 +1,3 @@
-import { clsx } from "clsx"
 import type { ReactNode } from "react"
 import { Link, type To } from "react-router"
 import type { IconName } from "../icon/icon"
@@ -6,10 +5,8 @@ import {
   ButtonContent,
   type ButtonSize,
   type ButtonVariant,
-  SIZE_CLASS,
-  VARIANT_CLASS,
-} from "./button"
-import styles from "./button.module.css"
+  buttonClassName,
+} from "./button-content"
 
 export interface ButtonLinkProps {
   readonly to: To
@@ -29,11 +26,7 @@ export function ButtonLink({
   children,
 }: ButtonLinkProps) {
   return (
-    <Link
-      to={to}
-      viewTransition
-      className={clsx(styles.button, VARIANT_CLASS[variant], SIZE_CLASS[size], className)}
-    >
+    <Link to={to} viewTransition className={buttonClassName({ variant, size, icon, className })}>
       <ButtonContent icon={icon}>{children}</ButtonContent>
     </Link>
   )

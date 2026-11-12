@@ -1,7 +1,6 @@
 .group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
+  display: grid;
+  gap: var(--space-12);
   inline-size: 100%;
 }
 
@@ -13,7 +12,6 @@
 
 .line {
   block-size: var(--space-12);
-  border-radius: var(--radius-pill);
 }
 
 .line:last-child:not(:first-child) {
@@ -22,5 +20,9 @@
 
 .block {
   block-size: var(--space-64);
-  border-radius: var(--radius-lg);
+}
+
+.readout {
+  inline-size: 80%;
+  block-size: var(--space-40);
 }

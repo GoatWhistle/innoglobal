@@ -9,7 +9,7 @@ export function NotFoundPage() {
       title={t("common:notFound.title")}
       description={t("common:notFound.description")}
       actions={
-        <ButtonLink to="/" icon="home">
+        <ButtonLink to="/" icon="arrow-left">
           {t("common:action.home")}
         </ButtonLink>
       }

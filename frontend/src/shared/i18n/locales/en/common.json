@@ -11,7 +11,8 @@
   },
   "action": {
     "retry": "Try again",
-    "home": "Go to the start page"
+    "home": "Go to the start page",
+    "close": "Close"
   },
   "state": {
     "loading": "Loading"
@@ -37,5 +38,15 @@
   "notFound": {
     "title": "Page not found",
     "description": "The address may contain a typo, or the page has moved."
+  },
+  "field": {
+    "optional": "optional",
+    "increase": "Increase",
+    "decrease": "Decrease",
+    "valueWithUnit": "{{value}} {{unit}}"
+  },
+  "toast": {
+    "region": "Notifications",
+    "dismiss": "Dismiss notification"
   }
 }

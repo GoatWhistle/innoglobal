@@ -15,7 +15,7 @@ export function HomePage() {
         <HealthCard motionIndex={1} />
         <Card as="div" motionIndex={2}>
           <EmptyState
-            icon="empty"
+            icon="journal"
             title={t("home:empty.title")}
             description={t("home:empty.description")}
           />

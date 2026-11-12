@@ -1,0 +1,38 @@
+.choice {
+  position: relative;
+  display: inline-flex;
+  align-items: start;
+  gap: var(--space-12);
+  min-block-size: var(--target-min);
+  padding-block: var(--space-12);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+  cursor: pointer;
+}
+
+.choice:has(.choiceInput:disabled) {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.choiceInput {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.choiceText {
+  display: grid;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+.choiceDescription {
+  composes: mutedCaption from "../../layout/text-role/text-role.module.css";
+}
+
+.choice:has(.choiceInput:disabled) .choiceDescription {
+  color: var(--text-disabled);
+}

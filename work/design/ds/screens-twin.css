@@ -1,0 +1,222 @@
+.app:has(.twin) {
+  block-size: 100dvh;
+}
+
+.twin {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--sd-panel);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas: "stage panel" "profile panel";
+  min-block-size: 0;
+}
+
+.twin-stage {
+  position: relative;
+  grid-area: stage;
+  min-block-size: 280px;
+  overflow: hidden;
+  background: var(--sd-stage);
+  container-type: size;
+}
+
+.twin-scene {
+  position: absolute;
+  inset: var(--sd-bar) 0 var(--space-48);
+  display: grid;
+  place-items: center;
+}
+
+.shot-frame {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent), linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  mask-composite: intersect;
+}
+
+.shot-frame img {
+  position: absolute;
+  max-inline-size: none;
+  block-size: auto;
+}
+
+.twin-nogl {
+  position: absolute;
+  inset: var(--sd-bar) var(--sd-gutter) var(--space-24);
+  display: grid;
+  align-content: center;
+  gap: var(--space-32);
+  overflow: auto;
+}
+
+.twin-schema {
+  min-inline-size: 0;
+  max-inline-size: none;
+}
+
+.twin-stage-head {
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-16);
+  padding: var(--space-16) var(--sd-gutter);
+}
+
+.twin-title {
+  font-size: var(--font-size-subheading);
+  font-weight: var(--weight-regular);
+  line-height: var(--line-height-subheading);
+}
+
+.twin-tools {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.twin-tools .icon-button {
+  background: var(--surface-base);
+}
+
+.twin-hint {
+  position: absolute;
+  inset: auto 0 var(--space-16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  color: var(--text-muted);
+  font-size: var(--font-size-label);
+}
+
+.twin-panel {
+  grid-area: panel;
+  min-block-size: 0;
+  overflow: auto;
+  border-inline-start: var(--hairline) solid var(--border-subtle);
+  background: var(--surface-raised);
+}
+
+.twin-status {
+  display: grid;
+  align-content: start;
+  gap: var(--space-16);
+  padding: var(--space-24);
+  border-block-end: var(--hairline) solid var(--border-subtle);
+}
+
+.twin-status[data-tone="danger"] {
+  background: var(--signal-danger-surface);
+}
+
+.twin-status[data-tone="warning"] {
+  background: var(--signal-warning-surface);
+}
+
+.twin-figure {
+  font-size: var(--font-size-heading-lg);
+  font-weight: var(--weight-light);
+  line-height: var(--line-height-heading-lg);
+  letter-spacing: var(--tracking-tight);
+}
+
+.twin-text {
+  max-inline-size: 44ch;
+  color: var(--text-secondary);
+}
+
+.twin-timer,
+.twin-pair dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-4) var(--space-8);
+  margin: 0;
+}
+
+.twin-timer .sd-caption {
+  inline-size: 100%;
+}
+
+.twin-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-16);
+  margin: 0;
+}
+
+.twin-pair dt {
+  margin-block-end: var(--space-8);
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.twin-pair .sd-caption {
+  inline-size: 100%;
+}
+
+.twin-ack {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--text-secondary);
+}
+
+.twin-actions .button {
+  flex: 1 1 auto;
+}
+
+.twin-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-block-size: var(--target-min);
+  color: var(--text-primary);
+  font-size: var(--font-size-body-sm);
+  text-decoration: none;
+}
+
+.twin-sensors {
+  padding: var(--space-8) var(--space-24) var(--space-24);
+}
+
+.twin-profile {
+  grid-area: profile;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: var(--space-8) var(--sd-gutter) var(--space-12);
+  border-block-start: var(--hairline) solid var(--border-subtle);
+}
+
+.twin-chart {
+  block-size: 220px;
+}
+
+@media (max-width: 75rem) {
+  .app:has(.twin) {
+    block-size: auto;
+  }
+
+  .twin {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: "stage" "panel" "profile";
+  }
+
+  .twin-stage {
+    block-size: clamp(320px, 44vw, 480px);
+  }
+
+  .twin-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    overflow: visible;
+    border-inline-start: 0;
+    border-block-start: var(--hairline) solid var(--border-subtle);
+  }
+
+  .twin-status {
+    border-block-end: 0;
+    border-inline-end: var(--hairline) solid var(--border-subtle);
+  }
+}

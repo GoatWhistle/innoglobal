@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Формы и таблицы | PipeTwin</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="ds.css">
+<link rel="stylesheet" href="doc.css">
+<link rel="stylesheet" href="doc-shell.css">
+<link rel="stylesheet" href="doc-spec.css">
+<link rel="stylesheet" href="doc-table.css">
+<link rel="stylesheet" href="kit-badge.css">
+<link rel="stylesheet" href="kit-button.css">
+<link rel="stylesheet" href="kit-field.css">
+<link rel="stylesheet" href="kit-table.css">
+<link rel="stylesheet" href="doc-drawing.css">
+<link rel="stylesheet" href="doc-forms.css">
+<link rel="stylesheet" href="doc-narrow.css">
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="top" data-top></header>
+<div class="shell">
+<nav class="toc" aria-label="Разделы" data-toc></nav>
+<main class="doc" id="main">
+<h1 class="visually-hidden">Формы и таблицы</h1>
+<section class="chapter chapter-first" id="forms">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Формы и параметры</h2>
+    <p class="chapter-lead">Параметры модели меняют физику участка. Поле проверяет диапазон, форма предупреждает о странной физике, применение пересчитывает модель целиком.</p>
+  </header>
+  <div class="params">
+    <div class="field"><div class="field-top"><label class="field-label" for="p1">Внутренний диаметр</label></div><div class="input input-number"><input id="p1" value="514" inputmode="decimal" aria-describedby="p1m"><span class="input-unit">мм</span></div><p class="field-message" id="p1m"><span>100–1 420 мм</span></p></div>
+    <div class="field" data-state="warning"><div class="field-top"><label class="field-label" for="p2">Шероховатость стенки</label><span class="field-was">было 0,10</span></div><div class="input input-number"><input id="p2" value="2,0" inputmode="decimal" aria-describedby="p2m"><span class="input-unit">мм</span></div><p class="field-message" id="p2m"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg><span>Для стали обычно 0,02–0,5 мм. Проверьте единицы</span></p></div>
+    <div class="field" data-state="error"><div class="field-top"><label class="field-label" for="p3">Расход на входе</label></div><div class="input input-number"><input id="p3" value="9 000" inputmode="decimal" aria-invalid="true" aria-describedby="p3m"><span class="input-unit">м³/ч</span></div><p class="field-message" id="p3m"><svg class="icon" aria-hidden="true"><use href="icons.svg#error"/></svg><span>Не больше 4 000 м³/ч для этого диаметра</span></p></div>
+    <div class="field"><div class="field-top"><label class="field-label" for="p4">Порог детекции</label><span class="field-was">было 0,60</span></div><div class="input input-number"><input id="p4" value="0,70" inputmode="decimal" aria-describedby="p4m"><span class="input-unit">бар</span></div><p class="field-message" id="p4m"><span>Ниже 0,30 бар растут ложные тревоги</span></p></div>
+  </div>
+  <div class="applybar">
+    <p><svg class="icon" aria-hidden="true"><use href="icons.svg#edit"/></svg>Изменено 2 параметра, одна ошибка</p>
+    <div class="actions"><button type="button" class="button button-quiet button-sm"><svg class="icon" aria-hidden="true"><use href="icons.svg#reset"/></svg><span>Вернуть как было</span></button><button type="button" class="button button-primary button-sm" disabled><svg class="icon" aria-hidden="true"><use href="icons.svg#refresh"/></svg><span>Применить и пересчитать</span></button></div>
+  </div>
+  <ul class="facts">
+    <li><b>Подпись</b> над полем, всегда видна. Единица внутри поля справа, в подписи единицы нет. Подсказка с диапазоном под полем до любой ошибки.</li>
+    <li><b>Когда проверять.</b> Формат при вводе не проверяется. Диапазон при уходе из поля. Связи между полями при применении. Исправленная ошибка исчезает сразу при вводе.</li>
+    <li><b>Ошибка или предупреждение.</b> Вне допустимого диапазона: ошибка оксбладом, применить нельзя. Допустимо, но физически странно: предупреждение янтарём, применить можно.</li>
+    <li><b>Значения по умолчанию</b> из типового участка: диаметр 514&nbsp;мм, шероховатость 0,10&nbsp;мм, расход 1&nbsp;500&nbsp;м³/ч, порог 0,70&nbsp;бар, удержание 0,4&nbsp;с. Изменённое поле показывает прошлое значение.</li>
+    <li><b>Применение</b> одной кнопкой на всю форму, строка действий прилипает к низу. Пока считается, кнопка занята, сцена приглушена. После применения номер ред. в штампе растёт на один.</li>
+    <li><b>Сброс к типовым</b> и <b>перекрыть участок</b> через диалог: что изменится, где, можно ли отменить. Кнопка в диалоге называет действие, не «Да».</li>
+    <li><b>Числа</b> через <code>NumberField</code>: запятая и точка принимаются, пробелы в разрядах тоже. Колесо мыши значение не меняет.</li>
+  </ul>
+</section>
+
+<section class="chapter" id="tables">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Таблицы и списки</h2>
+    <p class="chapter-lead">Журнал и датчики. Числа справа и моноширинные, текст слева, состояние строки иконкой, словом и тоном.</p>
+  </header>
+  <div class="filters" role="group" aria-label="Фильтры журнала">
+    <span class="chip" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#calendar"/></svg>Последний час</span>
+    <span class="chip" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#filter"/></svg>Тревоги и наблюдение</span>
+    <span class="chip"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg>Все датчики</span>
+  </div>
+  <div class="bulk"><span>Выбрано 1 событие</span><button type="button" class="button button-quiet button-sm"><svg class="icon" aria-hidden="true"><use href="icons.svg#check"/></svg><span>Принять</span></button><button type="button" class="button button-quiet button-sm"><svg class="icon" aria-hidden="true"><use href="icons.svg#download"/></svg><span>Выгрузить</span></button></div>
+  <div class="table-wrap" tabindex="0" role="region" aria-label="Журнал событий">
+    <table class="table">
+      <thead><tr><th aria-sort="descending"><button type="button" class="sort-button">Время<svg class="icon" aria-hidden="true"><use href="icons.svg#sort-desc"/></svg></button></th><th>Датчик</th><th class="num">Место, м</th><th class="num">Невязка, бар</th><th class="num">Давление, бар</th><th>Статус</th></tr></thead>
+      <tbody>
+        <tr data-level="alarm"><td>14:02:20</td><td>Д-04</td><td class="num">6 840 ± 20</td><td class="num">−0,95</td><td class="num">40,79</td><td><span class="badge badge-sm" data-tone="danger"><svg class="icon" aria-hidden="true"><use href="icons.svg#alarm"/></svg><span>Утечка</span></span></td></tr>
+        <tr data-level="watch"><td>14:02:19</td><td>Д-03</td><td class="num">4 800</td><td class="num">−0,74</td><td class="num">43,79</td><td><span class="badge badge-sm" data-tone="warning"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg><span>Наблюдение</span></span></td></tr>
+        <tr aria-selected="true" class="marked"><td>14:01:02</td><td>Д-02</td><td class="num">2 400</td><td class="num">−0,05</td><td class="num">46,82</td><td><span class="badge badge-sm"><svg class="icon" aria-hidden="true"><use href="icons.svg#check"/></svg><span>Норма</span></span></td></tr>
+        <tr data-stale><td>14:00:31</td><td>Д-05</td><td class="num">9 600</td><td class="num"><span class="no-value">нет данных</span></td><td class="num">39,21</td><td><span class="badge badge-sm" data-tone="muted"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor-off"/></svg><span>Нет сигнала 18 с</span></span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="scroll" tabindex="0" role="region" aria-label="Правила таблиц">
+    <table class="copy">
+      <thead><tr><th scope="col">Что</th><th scope="col">Правило</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Выравнивание</th><td>Числа и время справа, моноширинные. Текст и статус слева. Заголовок числа выровнен как число, единица в заголовке.</td></tr>
+        <tr><th scope="row">Сортировка</th><td>По умолчанию время, новые сверху. Одна колонка, <code>aria-sort</code>, иконка направления. Тревоги не всплывают сами: для этого фильтр.</td></tr>
+        <tr><th scope="row">Фильтры</th><td>Одна строка над таблицей, применяются сразу, число найденного в строке над таблицей.</td></tr>
+        <tr><th scope="row">Утечка</th><td>Фон <code>--signal-danger-surface</code>, статус иконкой и словом. Без цветной полосы сбоку.</td></tr>
+        <tr><th scope="row">Наблюдение</th><td>Фон <code>--signal-warning-surface</code>, статус иконкой и словом.</td></tr>
+        <tr><th scope="row">Устарело</th><td>Числа приглушены, пропуск через <code>NoValue</code>, причина в статусе.</td></tr>
+        <tr><th scope="row">Выбрано</th><td>Тон <code>--surface-selected</code>, в светлой теме угловые метки. Чекбокс слева, если есть массовые действия.</td></tr>
+        <tr><th scope="row">Объём</th><td>До 200 строк страница целиком. Журнал длиннее: виртуальная прокрутка, шапка липнет. Страницы только в выгрузке.</td></tr>
+        <tr><th scope="row">Массовые действия</th><td>Строка над таблицей появляется при выборе: счётчик и действия. Удаления событий журнала нет.</td></tr>
+        <tr><th scope="row">Пусто</th><td>Нет событий: <code>EmptyState</code> «За последний час тревог не было». Нет совпадений: «Ничего не нашлось» и «Сбросить фильтры».</td></tr>
+        <tr><th scope="row">Телефон</th><td>Таблица становится списком: время и статус в первой строке, место и невязка во второй.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</main>
+</div>
+<script type="module" src="doc-shell.js"></script>
+<script type="module" src="page.js"></script>
+<script type="module" src="doc-spec.js"></script>
+<script type="module" src="doc.js"></script>
+</body>
+</html>

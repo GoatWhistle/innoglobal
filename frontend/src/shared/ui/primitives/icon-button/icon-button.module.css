@@ -1,0 +1,60 @@
+.button {
+  composes: pressable from "../../../styles/compose.module.css";
+  --icon-button-size: var(--control-height);
+
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--icon-button-size);
+  block-size: var(--icon-button-size);
+  border: var(--hairline) solid transparent;
+  border-radius: var(--radius-round);
+  color: var(--text-primary);
+}
+
+.button::after {
+  content: "";
+  position: absolute;
+  inset: calc((var(--icon-button-size) - var(--target-min)) / 2);
+}
+
+.secondary {
+  border-color: var(--border-strong);
+}
+
+.compact {
+  --icon-button-size: var(--control-height-compact);
+}
+
+.button[aria-pressed="true"] {
+  background-color: var(--action-primary);
+  color: var(--action-primary-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover:not(:disabled, [aria-busy="true"], [aria-pressed="true"]) {
+    background-color: var(--action-ghost-hover);
+  }
+}
+
+.button:active:not(:disabled, [aria-busy="true"]) {
+  scale: var(--press-scale);
+}
+
+.button:active:not(:disabled, [aria-busy="true"], [aria-pressed="true"]) {
+  background-color: var(--action-ghost-press);
+}
+
+.button:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.secondary:disabled {
+  border-color: var(--border-subtle);
+}
+
+.button[aria-busy="true"] {
+  cursor: progress;
+}

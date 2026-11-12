@@ -1,5 +1,5 @@
-import "@fontsource-variable/inter"
-import "@fontsource-variable/jetbrains-mono"
+import "@fontsource-variable/onest"
+import "@fontsource-variable/raleway/wght-italic.css"
 import "./shared/styles/global.css"
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"

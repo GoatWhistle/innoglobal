@@ -4,8 +4,8 @@ import { fileURLToPath, pathToFileURL } from "node:url"
 import { readTokenSources, TOKEN_FILES, type TokenSource } from "./tokenSources.ts"
 
 export const FONT_PACKAGES = [
-  "@fontsource-variable/inter",
-  "@fontsource-variable/jetbrains-mono",
+  ["@fontsource-variable/onest", "index.css"],
+  ["@fontsource-variable/raleway", "wght-italic.css"],
 ] as const
 
 export const THEMED_CONTRACT = [
@@ -99,9 +99,9 @@ export function pickFontFaces(css: string): FontFaces {
 function copyFonts(frontendRoot: string, target: string): string {
   const fontsDir = join(dirname(target), "fonts")
   mkdirSync(fontsDir, { recursive: true })
-  return FONT_PACKAGES.map((name) => {
+  return FONT_PACKAGES.map(([name, sheet]) => {
     const packageDir = join(frontendRoot, "node_modules", ...name.split("/"))
-    const faces = pickFontFaces(readFileSync(join(packageDir, "index.css"), "utf8"))
+    const faces = pickFontFaces(readFileSync(join(packageDir, sheet), "utf8"))
     for (const file of faces.files)
       copyFileSync(join(packageDir, "files", file), join(fontsDir, file))
     return faces.css

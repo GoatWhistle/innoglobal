@@ -1,0 +1,145 @@
+.dialog,
+.drawer {
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-float);
+  transition:
+    opacity var(--dur-exit) var(--ease-out),
+    scale var(--dur-exit) var(--ease-out),
+    translate var(--dur-exit) var(--ease-out),
+    display var(--dur-exit) allow-discrete,
+    overlay var(--dur-exit) allow-discrete;
+}
+
+.dialog {
+  margin: auto;
+  inline-size: min(var(--dialog-width), 100% - 2 * var(--space-16));
+  max-block-size: min(640px, 100svh - 2 * var(--space-16));
+  opacity: 0;
+  scale: var(--enter-scale);
+}
+
+.dialog[open],
+.drawer[open] {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  scale: 1;
+  translate: 0 0;
+  transition-duration: var(--dur-base);
+}
+
+.drawer[open] {
+  transition-duration: var(--dur-panel);
+  transition-timing-function: var(--ease-drawer);
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    scale: var(--enter-scale);
+  }
+
+  .drawer[open] {
+    translate: 100% 0;
+  }
+}
+
+.drawer {
+  inset: 0 0 0 auto;
+  inline-size: min(var(--drawer-width), 100%);
+  max-inline-size: 100%;
+  block-size: 100svh;
+  max-block-size: none;
+  margin: 0;
+  translate: 100% 0;
+  box-shadow: inset var(--hairline) 0 0 var(--border-subtle);
+}
+
+.dialog::backdrop,
+.drawer::backdrop {
+  background: var(--surface-scrim);
+  opacity: 0;
+  transition:
+    opacity var(--dur-exit) var(--ease-out),
+    display var(--dur-exit) allow-discrete,
+    overlay var(--dur-exit) allow-discrete;
+}
+
+.dialog[open]::backdrop,
+.drawer[open]::backdrop {
+  opacity: 1;
+  transition-duration: var(--dur-base);
+}
+
+@starting-style {
+  .dialog[open]::backdrop,
+  .drawer[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+.dialog-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--space-16);
+  padding: var(--space-20) var(--space-16) 0 var(--space-24);
+}
+
+.dialog-title {
+  margin: var(--space-8) 0 0;
+  font-size: var(--font-size-subheading);
+  font-weight: var(--weight-regular);
+  line-height: var(--line-height-subheading);
+}
+
+.dialog-title:focus {
+  outline: 0;
+}
+
+.dialog-body {
+  display: grid;
+  align-content: start;
+  gap: var(--space-16);
+  padding: var(--space-12) var(--space-24) var(--space-24);
+  overflow: auto;
+  overscroll-behavior: contain;
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+}
+
+.dialog-body p {
+  margin: 0;
+}
+
+.dialog-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: var(--space-8);
+  padding: var(--space-16) var(--space-24);
+  border-block-start: var(--hairline) solid var(--border-subtle);
+}
+
+.drawer .dialog-body {
+  flex: 1 1 auto;
+}
+
+.dialog-static {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  inline-size: auto;
+  max-inline-size: var(--dialog-width);
+  opacity: 1;
+  scale: 1;
+}
+
+html:has(.dialog[open], .drawer[open]) {
+  overflow: hidden;
+}

@@ -1,6 +1,8 @@
 export type DurationToken =
   | `--dur-${string}`
   | `--delay-${string}`
+  | `--window-${string}`
+  | `--timeout-${string}`
   | "--hold-skeleton"
   | "--stagger"
   | "--reduced-fade"

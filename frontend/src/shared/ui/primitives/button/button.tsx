@@ -1,39 +1,13 @@
-import { clsx } from "clsx"
 import type { ButtonHTMLAttributes, MouseEvent, ReactNode, Ref } from "react"
-import { Icon, type IconName } from "../icon/icon"
-import styles from "./button.module.css"
+import type { IconName } from "../icon/icon"
+import {
+  ButtonContent,
+  type ButtonSize,
+  type ButtonVariant,
+  buttonClassName,
+} from "./button-content"
 
-export type ButtonVariant = "primary" | "secondary" | "ghost"
-export type ButtonSize = "regular" | "compact"
-
-export const VARIANT_CLASS: Readonly<Record<ButtonVariant, string | undefined>> = {
-  primary: styles.primary,
-  secondary: styles.secondary,
-  ghost: styles.ghost,
-}
-
-export const SIZE_CLASS: Readonly<Record<ButtonSize, string | undefined>> = {
-  regular: undefined,
-  compact: styles.compact,
-}
-
-export interface ButtonContentProps {
-  readonly icon?: IconName | undefined
-  readonly pending?: boolean
-  readonly children: ReactNode
-}
-
-export function ButtonContent({ icon, pending = false, children }: ButtonContentProps) {
-  return (
-    <>
-      <span className={styles.content} data-pending={pending}>
-        {icon === undefined ? null : <Icon name={icon} size="sm" />}
-        <span>{children}</span>
-      </span>
-      {pending ? <Icon name="loader" size="sm" className={styles.loader} /> : null}
-    </>
-  )
-}
+export type { ButtonSize, ButtonVariant } from "./button-content"
 
 export interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "type"> {
@@ -68,7 +42,7 @@ export function Button({
     <button
       {...rest}
       type={type}
-      className={clsx(styles.button, VARIANT_CLASS[variant], SIZE_CLASS[size], className)}
+      className={buttonClassName({ variant, size, icon, className })}
       aria-busy={pending || undefined}
       aria-disabled={pending || undefined}
       onClick={handleClick}

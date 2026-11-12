@@ -1,0 +1,106 @@
+.toggle {
+  composes: choice from "../choice/choice.module.css";
+}
+
+.input {
+  composes: choiceInput from "../choice/choice.module.css";
+}
+
+.text {
+  composes: choiceText from "../choice/choice.module.css";
+}
+
+.description {
+  composes: choiceDescription from "../choice/choice.module.css";
+}
+
+.track {
+  flex: none;
+  display: flex;
+  align-items: center;
+  inline-size: var(--switch-width);
+  block-size: var(--switch-height);
+  margin-block: calc((var(--indicator-size) - var(--switch-height)) / 2);
+  padding: calc((var(--switch-height) - var(--border-width-control) * 2 - var(--icon-sm)) / 2);
+  border: var(--border-width-control) solid var(--border-control);
+  border-radius: var(--radius-pill);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.thumb {
+  display: grid;
+  place-items: center;
+  block-size: var(--icon-sm);
+  aspect-ratio: 1;
+  border-radius: var(--radius-round);
+  background-color: var(--border-control);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.input:checked + .track {
+  border-color: var(--action-primary);
+  background-color: var(--action-primary);
+}
+
+.input:checked + .track .thumb {
+  background-color: var(--action-primary-text);
+  transform: translateX(calc(var(--switch-width) - var(--switch-height)));
+}
+
+.input:focus-visible + .track {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.toggle[aria-busy="true"] {
+  cursor: progress;
+}
+
+.toggle[aria-busy="true"] .thumb::after {
+  content: "";
+  inline-size: calc(var(--icon-sm) - var(--space-4) - var(--space-2));
+  block-size: calc(var(--icon-sm) - var(--space-4) - var(--space-2));
+  border: var(--hairline) solid transparent;
+  border-block-start-color: var(--surface-base);
+  border-inline-end-color: var(--surface-base);
+  border-radius: var(--radius-round);
+  animation: var(--motion-spin);
+}
+
+.toggle[aria-busy="true"] .input:checked + .track .thumb::after {
+  border-block-start-color: var(--action-primary);
+  border-inline-end-color: var(--action-primary);
+}
+
+.input:disabled + .track {
+  border-color: var(--border-strong);
+  background-color: var(--action-disabled);
+}
+
+.input:disabled + .track .thumb {
+  background-color: var(--text-disabled);
+}
+
+.input:disabled:checked + .track {
+  border-color: var(--text-disabled);
+  background-color: var(--text-disabled);
+}
+
+.input:disabled:checked + .track .thumb {
+  background-color: var(--surface-base);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .toggle:hover .input:not(:disabled, :checked) + .track {
+    border-color: var(--border-ink);
+  }
+
+  .toggle:hover .input:not(:disabled):checked + .track {
+    border-color: var(--action-primary-hover);
+    background-color: var(--action-primary-hover);
+  }
+}

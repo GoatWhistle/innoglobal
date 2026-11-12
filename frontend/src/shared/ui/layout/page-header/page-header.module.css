@@ -12,9 +12,16 @@
   min-inline-size: 0;
 }
 
+.eyebrow {
+  composes: mutedCaption from "../text-role/text-role.module.css";
+}
+
 .title {
   font-size: var(--font-size-heading-lg);
+  font-weight: var(--weight-light);
   line-height: var(--line-height-heading-lg);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
 }
 
 .description {
@@ -25,5 +32,6 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-8);
 }

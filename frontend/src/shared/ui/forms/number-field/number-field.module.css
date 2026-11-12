@@ -1,0 +1,46 @@
+.box {
+  align-items: stretch;
+  gap: var(--space-8);
+  padding-inline: 0;
+}
+
+.input {
+  text-align: end;
+}
+
+.unit {
+  align-self: center;
+}
+
+.step {
+  composes: pressable from "../../../styles/compose.module.css";
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: var(--control-height);
+  min-block-size: var(--control-height);
+  color: var(--text-primary);
+}
+
+.step:first-child {
+  border-inline-end: var(--hairline) solid var(--border-subtle);
+}
+
+.step:last-child {
+  border-inline-start: var(--hairline) solid var(--border-subtle);
+}
+
+.step:active:not(:disabled) {
+  background-color: var(--action-ghost-press);
+}
+
+.step:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .step:hover:not(:disabled) {
+    background-color: var(--action-ghost-hover);
+  }
+}

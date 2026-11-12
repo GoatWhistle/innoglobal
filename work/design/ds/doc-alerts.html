@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тревоги | PipeTwin</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="ds.css">
+<link rel="stylesheet" href="doc.css">
+<link rel="stylesheet" href="doc-shell.css">
+<link rel="stylesheet" href="doc-spec.css">
+<link rel="stylesheet" href="doc-table.css">
+<link rel="stylesheet" href="kit-badge.css">
+<link rel="stylesheet" href="kit-button.css">
+<link rel="stylesheet" href="kit-message.css">
+<link rel="stylesheet" href="doc-alerts.css">
+<link rel="stylesheet" href="doc-narrow.css">
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="top" data-top></header>
+<div class="shell">
+<nav class="toc" aria-label="Разделы" data-toc></nav>
+<main class="doc" id="main">
+<h1 class="visually-hidden">Тревоги</h1>
+<section class="chapter chapter-first" id="alerts">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Жизнь тревоги</h2>
+    <p class="chapter-lead">Шесть состояний от нормы до закрытия. Нажмите состояние: видно, где оно появляется в продукте.</p>
+  </header>
+  <div class="flow" role="group" aria-label="Состояние тревоги">
+    <button type="button" data-life="calm"><svg class="icon" aria-hidden="true"><use href="icons.svg#check"/></svg>Норма</button>
+    <svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    <button type="button" data-life="watch"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg>Наблюдение</button>
+    <svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    <button type="button" data-life="leak"><svg class="icon" aria-hidden="true"><use href="icons.svg#alarm"/></svg>Утечка подтверждена</button>
+    <svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    <button type="button" data-life="accepted"><svg class="icon" aria-hidden="true"><use href="icons.svg#check"/></svg>Принята</button>
+    <svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    <button type="button" data-life="closed"><svg class="icon" aria-hidden="true"><use href="icons.svg#valve"/></svg>Устранена</button>
+    <button type="button" data-life="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#info"/></svg>Ложная</button>
+  </div>
+  <div class="duo" data-pair>
+    <div data-view data-life-view>
+      <p class="view-name" data-view-name></p>
+      <div>
+        <p class="life-tab"><span class="life-fav"><svg class="icon" aria-hidden="true"><use href="icons.svg#pipe"/></svg><i class="life-dot" data-life-dot></i></span><span data-life-title></span></p>
+        <div class="life-app">
+          <div class="life-head"><span>Участок Север, км 0–12</span><span data-life-badge></span></div>
+          <div class="life-banner" data-life-banner></div>
+          <div class="life-row" data-life-row></div>
+          <p class="life-scene"><svg class="icon" aria-hidden="true"><use href="icons.svg#cube"/></svg><span data-life-scene></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll" tabindex="0" role="region" aria-label="Матрица тяжести">
+    <table class="copy">
+      <thead><tr><th scope="col">Состояние</th><th scope="col">Цвет и иконка</th><th scope="col">Звук</th><th scope="col">Держится</th><th scope="col">Где видно</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Норма</th><td>Тушь, <code>check</code></td><td>Нет</td><td>Всегда</td><td>Статус в шапке</td></tr>
+        <tr><th scope="row">Наблюдение</th><td>Янтарь, <code>warning</code></td><td>Нет</td><td>Пока невязка за порогом, снимается сама</td><td>Статус, строка датчика, кольцо на сцене, точка на графике</td></tr>
+        <tr><th scope="row">Утечка подтверждена</th><td>Оксблад, <code>alarm</code>, пульс</td><td>Два коротких сигнала, повтор раз в 30&nbsp;с, если звук включён</td><td>До принятия</td><td>Баннер <code>role="alert"</code>, статус, строка, место на сцене, заголовок вкладки, точка на значке</td></tr>
+        <tr><th scope="row">Принята</th><td>Оксблад без пульса</td><td>Стихает</td><td>До устранения или отметки ложной</td><td>Короткий баннер, статус, строка, вкладка</td></tr>
+        <tr><th scope="row">Устранена</th><td>Тушь, <code>valve</code></td><td>Нет</td><td>Тост 5&nbsp;с</td><td>Тост, журнал</td></tr>
+        <tr><th scope="row">Ложная тревога</th><td>Тушь, <code>info</code></td><td>Нет</td><td>Тост 5&nbsp;с</td><td>Тост, журнал с причиной</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="facts">
+    <li><b>Подтверждение.</b> Наблюдение становится утечкой, когда невязка держится за порогом дольше удержания на двух соседних датчиках. Порог и удержание видны в параметрах.</li>
+    <li><b>Эскалация.</b> Без принятия через 30&nbsp;с баннер повторяет пульс и звук. Через 2&nbsp;мин баннер предлагает перекрыть участок, но не перекрывает сам.</li>
+    <li><b>Принятие.</b> Кнопка «Принять» в баннере и клавиша <kbd class="kbd">A</kbd>. Сразу в интерфейсе, откат тостом при ошибке. Принятие пишет время и оператора в журнал.</li>
+    <li><b>Перекрыть участок</b> только через диалог с местом, временем и последствием. Решение всегда за человеком.</li>
+    <li><b>Несколько утечек.</b> Один баннер со счётчиком «Утечки: 2», список в панели. Самая ранняя сверху.</li>
+    <li><b>Никогда цветом одним:</b> иконка и слово в каждом месте. Тост для утечки не используется: тост уходит сам, а утечка нет.</li>
+  </ul>
+</section>
+
+<section class="chapter" id="feedback">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Обратная связь</h2>
+    <p class="chapter-lead">Форма сообщения выбирается по вопросам сверху вниз. Первый ответ «да» решает.</p>
+  </header>
+  <ol class="tree">
+    <li><span>Это утечка или подозрение?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#alarm"/></svg>Баннер тревоги и статус</b></li>
+    <li><span>Нужно решение, которое нельзя отменить?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#shut"/></svg>Диалог</b></li>
+    <li><span>Не работает всё: сеть, сервер расчёта?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#offline"/></svg>Баннер страницы</b></li>
+    <li><span>Ошибка относится к одному полю?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#edit"/></svg>Сообщение под полем</b></li>
+    <li><span>Сломана одна область, данные есть?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg>Баннер области и приглушение</b></li>
+    <li><span>Сломана одна область, данных нет?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#error"/></svg><code>ErrorState</code> с «Повторить»</b></li>
+    <li><span>Данных ещё нет совсем?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#journal"/></svg><code>EmptyState</code> со следующим шагом</b></li>
+    <li><span>Действие выполнено?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#check"/></svg>Тост, с «Отменить», если можно</b></li>
+  </ol>
+  <h3 class="sub">Загрузка</h3>
+  <div class="scroll" tabindex="0" role="region" aria-label="Стратегия загрузки">
+    <table class="copy">
+      <thead><tr><th scope="col">Случай</th><th scope="col">Что показываем</th><th scope="col">Тайминг</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Первая загрузка области</th><td><code>Skeleton</code> по форме будущего содержимого</td><td>Не раньше <span data-ms="--dur-base"></span>&nbsp;мс, держится от 300&nbsp;мс</td></tr>
+        <tr><th scope="row">Повторная загрузка</th><td>Прошлые данные, приглушение <code>stale</code></td><td>Сразу, без скелетона</td></tr>
+        <tr><th scope="row">Кнопка действия</th><td><code>Spinner</code> в кнопке, ширина та же, <code>aria-busy</code></td><td>Не раньше 400&nbsp;мс</td></tr>
+        <tr><th scope="row">Принять тревогу, выбрать датчик</th><td>Оптимистично, откат тостом</td><td>Сразу</td></tr>
+        <tr><th scope="row">Перекрыть участок, применить параметры</th><td>Ждём ответа, кнопка занята</td><td>Не оптимистично</td></tr>
+        <tr><th scope="row">Пересчёт модели дольше 2&nbsp;с</th><td>Полоса прогресса и этап словами</td><td>С первой секунды</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="facts">
+    <li>Тосты: ошибка 10&nbsp;с, остальное 5&nbsp;с, пауза при наведении, не больше трёх сразу.</li>
+    <li>Текст «Загрузка…» вместо скелетона и пустой экран на ошибке запрещены.</li>
+  </ul>
+</section>
+</main>
+</div>
+<script type="module" src="doc-shell.js"></script>
+<script type="module" src="page.js"></script>
+<script type="module" src="doc-spec.js"></script>
+<script type="module" src="doc.js"></script>
+<script type="module" src="doc-alerts.js"></script>
+</body>
+</html>

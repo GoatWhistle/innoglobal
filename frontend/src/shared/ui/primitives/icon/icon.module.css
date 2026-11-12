@@ -1,11 +1,20 @@
 .icon {
   flex: none;
+  fill: none;
+  stroke: currentColor;
   stroke-width: var(--icon-stroke);
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
 }
 
 .sm {
   inline-size: var(--icon-sm);
   block-size: var(--icon-sm);
+}
+
+.control {
+  inline-size: var(--icon-control);
+  block-size: var(--icon-control);
 }
 
 .md {

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Клавиши и слова | PipeTwin</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="ds.css">
+<link rel="stylesheet" href="doc.css">
+<link rel="stylesheet" href="doc-shell.css">
+<link rel="stylesheet" href="doc-spec.css">
+<link rel="stylesheet" href="doc-table.css">
+<link rel="stylesheet" href="kit-button.css">
+<link rel="stylesheet" href="doc-narrow.css">
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="top" data-top></header>
+<div class="shell">
+<nav class="toc" aria-label="Разделы" data-toc></nav>
+<main class="doc" id="main">
+<h1 class="visually-hidden">Клавиши и слова</h1>
+<section class="chapter chapter-first" id="keys">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Навигация и клавиши</h2>
+    <p class="chapter-lead">Одна карта клавиш на весь продукт. Клавиши по физическому положению, работают в русской раскладке.</p>
+  </header>
+  <div class="scroll" tabindex="0" role="region" aria-label="Карта клавиш">
+    <table class="copy">
+      <thead><tr><th scope="col">Клавиша</th><th scope="col">Действие</th><th scope="col">Где</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><kbd class="kbd">Пробел</kbd></th><td>Вставить утечку под курсором или в выбранной точке</td><td>Сцена</td></tr>
+        <tr><th scope="row"><kbd class="kbd">Esc</kbd></th><td>Закрыть верхний слой. Если слоёв нет: сбросить утечки, с тостом «Отменить»</td><td>Везде</td></tr>
+        <tr><th scope="row"><kbd class="kbd">P</kbd></th><td>Пауза и продолжение</td><td>Сцена, графики</td></tr>
+        <tr><th scope="row"><kbd class="kbd">A</kbd></th><td>Принять активную тревогу</td><td>Везде, пока есть тревога</td></tr>
+        <tr><th scope="row"><kbd class="kbd">/</kbd></th><td>Поиск по датчикам и журналу</td><td>Везде</td></tr>
+        <tr><th scope="row"><kbd class="kbd">G</kbd> <kbd class="kbd">S</kbd>, <kbd class="kbd">G</kbd> <kbd class="kbd">J</kbd>, <kbd class="kbd">G</kbd> <kbd class="kbd">P</kbd></th><td>Перейти: сцена, журнал, параметры</td><td>Везде</td></tr>
+        <tr><th scope="row"><kbd class="kbd">[</kbd> <kbd class="kbd">]</kbd></th><td>Такт назад и вперёд</td><td>Повтор, графики</td></tr>
+        <tr><th scope="row"><kbd class="kbd">?</kbd></th><td>Показать карту клавиш</td><td>Везде</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="facts">
+    <li><b>Клавиши не срабатывают</b> в полях ввода, кроме <kbd class="kbd">Esc</kbd>. У каждой клавиши есть кнопка с подсказкой, где клавиша написана.</li>
+    <li><b>Порядок фокуса</b> по чтению: ссылка «К содержанию», шапка, баннер тревоги, сцена, панель. Баннер тревоги получает фокус только по <kbd class="kbd">A</kbd> или Tab, не перехватывает его сам.</li>
+    <li><b>Смена экрана</b> через View Transitions, фокус переходит на заголовок нового экрана, заголовок вкладки меняется.</li>
+  </ul>
+</section>
+
+<section class="chapter" id="glossary">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Словарь</h2>
+    <p class="chapter-lead">Одно понятие, одно слово. В интерфейсе, журнале и на защите одинаково.</p>
+  </header>
+  <div class="scroll" tabindex="0" role="region" aria-label="Словарь терминов">
+    <table class="copy">
+      <thead><tr><th scope="col">Пишем</th><th scope="col">Значит</th><th scope="col">Не пишем</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Участок</th><td>Труба от входа до выхода, 12&nbsp;км</td><td class="no">Сегмент, линия, пайп</td></tr>
+        <tr><th scope="row">Датчик, Д-03</th><td>Точка замера давления</td><td class="no">Сенсор, точка, ДД3</td></tr>
+        <tr><th scope="row">Замер</th><td>Давление с датчика</td><td class="no">Факт, реальное, actual</td></tr>
+        <tr><th scope="row">Модель, по модели</th><td>Расчётное давление</td><td class="no">Прогноз, ожидаемое, симуляция</td></tr>
+        <tr><th scope="row">Невязка</th><td>Замер минус модель, в бар</td><td class="no">Ошибка, дельта, аномалия</td></tr>
+        <tr><th scope="row">Расхождение</th><td>Невязка в тексте для человека</td><td class="no">Отклонение от нормы</td></tr>
+        <tr><th scope="row">Порог, удержание</th><td>Граница невязки и время за ней</td><td class="no">Чувствительность, таймаут</td></tr>
+        <tr><th scope="row">Наблюдение</th><td>Невязка за порогом, ещё не подтверждена</td><td class="no">Предупреждение, возможная утечка</td></tr>
+        <tr><th scope="row">Утечка</th><td>Подтверждённое событие</td><td class="no">Авария, инцидент, протечка</td></tr>
+        <tr><th scope="row">Обнаружено за 2,4&nbsp;с</th><td>От вставки до подтверждения</td><td class="no">Детектировано, задетектили</td></tr>
+        <tr><th scope="row">Задвижка, перекрыть участок</th><td>Действие оператора</td><td class="no">Закрыть клапан, отключить</td></tr>
+        <tr><th scope="row">Принять</th><td>Оператор увидел тревогу</td><td class="no">Квитировать, подтвердить, ОК</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="facts">
+    <li><b>Тревога:</b> что и где, потом число и время. «Утечка на 6&nbsp;840&nbsp;м, ошибка 20&nbsp;м. Обнаружено за 2,4&nbsp;с по Д-03 и Д-04.»</li>
+    <li><b>Ошибка:</b> что случилось, что уцелело, что нажать. «Сервер расчёта не отвечает 14&nbsp;с. Показания на 14:02:11 сохранены. Повторить.»</li>
+    <li><b>Наблюдение</b> без драмы: «Д-03 ниже модели на 0,74&nbsp;бар, ждём второй датчик.»</li>
+  </ul>
+</section>
+
+<section class="chapter" id="copy">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Текст</h2>
+    <p class="chapter-lead">Интерфейс говорит как журнал оператора: факт, место, число.</p>
+  </header>
+  <div class="scroll" tabindex="0" role="region" aria-label="Правила текста">
+    <table class="copy">
+      <thead><tr><th scope="col">Что</th><th scope="col">Пишем</th><th scope="col">Не пишем</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Число и единица</th><td><span data-num="1245.8" data-digits="1"></span>&nbsp;м³/ч</td><td class="no">1245.8 m3/h</td></tr>
+        <tr><th scope="row">Диапазон</th><td>0,02–0,5&nbsp;мм</td><td class="no">0,02 - 0,5мм</td></tr>
+        <tr><th scope="row">Доля</th><td><span data-pct="0.18"></span></td><td class="no">18 процентов</td></tr>
+        <tr><th scope="row">Время и длительность</th><td>14:02:11, за 0,8&nbsp;с</td><td class="no">2:02 PM, 0.8 сек.</td></tr>
+        <tr><th scope="row">Несколько признаков</th><td>Д-03, участок 1&nbsp;240–1&nbsp;380&nbsp;м</td><td class="no">Д-03 · участок — 1240 м</td></tr>
+        <tr><th scope="row">Событие</th><td>Утечка на 1&nbsp;240–1&nbsp;380&nbsp;м</td><td class="no">Возможно, обнаружена потенциальная утечка!</td></tr>
+        <tr><th scope="row">Ошибка</th><td>Модель не отвечает 14&nbsp;с. Показания сохранены. <b>Повторить</b></td><td class="no">Упс! Что-то пошло не так</td></tr>
+        <tr><th scope="row">Кнопка</th><td>Перекрыть участок</td><td class="no">ОК, Да, Подтвердить</td></tr>
+        <tr><th scope="row">Регистр</th><td>Журнал событий</td><td class="no">Журнал Событий, ЖУРНАЛ</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="facts">
+    <li>Числа форматирует <code>Intl</code>: неразрывный пробел в разрядах и перед единицей, запятая в дробях.</li>
+    <li>Ошибка отвечает на три вопроса: что случилось, что уцелело, что нажать. Текст с сервера в интерфейс не попадает.</li>
+    <li>Без длинного тире, средней точки и вертикальной черты между словами. Короткое тире только в диапазоне чисел.</li>
+  </ul>
+</section>
+</main>
+</div>
+<script type="module" src="doc-shell.js"></script>
+<script type="module" src="page.js"></script>
+<script type="module" src="doc-spec.js"></script>
+<script type="module" src="doc.js"></script>
+</body>
+</html>

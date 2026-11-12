@@ -24,9 +24,9 @@ function words(locale: Locale): CommonWords {
 }
 
 function fontFaces(): string {
-  return FONT_PACKAGES.map((name) => {
+  return FONT_PACKAGES.map(([name, sheet]) => {
     const packageDir = join(frontendRoot, "node_modules", ...name.split("/"))
-    const faces = pickFontFaces(readFileSync(join(packageDir, "index.css"), "utf8"))
+    const faces = pickFontFaces(readFileSync(join(packageDir, sheet), "utf8"))
     return faces.files.reduce((css, file) => {
       const data = readFileSync(join(packageDir, "files", file)).toString("base64")
       return css.replaceAll(`url("fonts/${file}")`, `url("data:font/woff2;base64,${data}")`)
