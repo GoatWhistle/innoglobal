@@ -1,6 +1,6 @@
 import { icon } from "./kit-layer.js"
 import { mount } from "./screens-chart.js"
-import { ARRIVAL, CROSSING, DETECT_S, fmt, HOLD } from "./screens-data.js"
+import { ARRIVAL, CROSSING, DETECT_S, fmt, HOLD, FOUND_X, SPREAD } from "./screens-data.js"
 import { locationSchema, residualChart } from "./screens-incident-chart.js"
 import { badge, shell } from "./screens-shell.js"
 
@@ -8,12 +8,12 @@ const $ = (s) => document.querySelector(s)
 const s = (v) => `${fmt(v)} с`
 
 const SEQ = [
-  ["14:32:06,2", "0,00 с", "Утечку вставили на 6 330 м", "Клик по трубе, сценарий жюри", ""],
+  ["", "0,00 с", "Утечку вставили на 6 330 м", "Клик по трубе, сценарий жюри", ""],
   ["", s(ARRIVAL[3]), "Волна дошла до Д-04", "7 200 м, на 870 м ниже места", ""],
   ["", s(CROSSING[3]), "Д-04 вышел за порог 0,07 МПа", "Начато удержание 0,4 с", "warning"],
   ["", s(ARRIVAL[2]), "Волна дошла до Д-03", "4 800 м, на 1 530 м выше места", ""],
   ["", s(CROSSING[2]), "Д-03 вышел за порог", "Второй датчик, удержание 0,4 с", "warning"],
-  ["14:32:08,2", s(DETECT_S), "Тревога: оба датчика держат расхождение", `Удержание ${fmt(HOLD, 1)} с выполнено, место 6 340 м ± 42 м`, "danger"],
+  ["", s(DETECT_S), "Тревога: оба датчика держат расхождение", `Удержание ${fmt(HOLD, 1)} с выполнено, место ${fmt(FOUND_X, 0)} м ± ${SPREAD} м`, "danger"],
 ]
 
 const EXTRA = {
@@ -53,7 +53,7 @@ function render(state) {
   $("[data-badges]").innerHTML = `${badge(...BADGE[state])}<span class="sd-caption sd-num">INC-2611-0042</span>`
   $("[data-actions]").innerHTML = actions(state)
   $("[data-actions]").dataset.tone = state === "new" ? "danger" : ""
-  const rows = [...SEQ, ...(EXTRA[state] ?? [])]
+  const rows = [...SEQ].sort((a, b) => Number(a[1].replace(/[^0-9,]/g, "").replace(",", ".")) - Number(b[1].replace(/[^0-9,]/g, "").replace(",", ".")))
   $("[data-seq]").innerHTML = rows
     .map(
       ([clock, t, title, note, tone]) =>
@@ -62,8 +62,7 @@ function render(state) {
     .join("")
   mount($("[data-chart]"), residualChart)
   mount($("[data-loc]"), locationSchema)
-  const dlg = $("#dlg-shut")
-  if (state === "shut" && !dlg.open) dlg.showModal()
+  $("[data-actions]").innerHTML = `<p class="sd-h2">Вычисленный пример</p><p class="sd-muted">Данные получены из симулятора с seed 42. Управление задвижками не моделируется.</p><a class="button button-secondary" href="screen-twin.html">${icon("cube")}<span>Открыть симулятор</span></a>`
 }
 
 shell({

@@ -3,59 +3,43 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PipeTwin</title>
-<script>
-  try {
-    const saved = localStorage.getItem("ds-theme")
-    if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved
-  } catch {}
-</script>
+<title>Сцена | PipeTwin</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
 <link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
-<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/raleway/wght-italic.css">
 <link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
-<link rel="stylesheet" href="scene.css">
-<script type="importmap">
-{ "imports": { "three": "/frontend/node_modules/three/build/three.module.js", "three/addons/": "/frontend/node_modules/three/examples/jsm/" } }
-</script>
+<link rel="stylesheet" href="screens-base.css">
+<link rel="stylesheet" href="screens-shell.css">
+<link rel="stylesheet" href="screens-dock.css">
+<link rel="stylesheet" href="screens-chart.css">
+<link rel="stylesheet" href="screens-sensor-row.css">
+<link rel="stylesheet" href="screens-twin.css">
+<link rel="stylesheet" href="screens-twin-narrow.css">
+<script type="module" src="screens-twin.js"></script>
 </head>
 <body>
-<main class="scene" data-scene-root data-phase="idle">
-  <canvas class="scene-canvas" data-scene tabindex="0" aria-label="Участок трубопровода 12 000 м. Нажмите Enter, чтобы вставить утечку"></canvas>
-  <canvas class="scene-canvas scene-paper" data-drawing aria-hidden="true"></canvas>
-
-  <header class="scene-bar">
-    <span class="scene-mark">PipeTwin</span>
-    <button class="scene-icon" type="button" data-theme-toggle aria-label="Светлая тема">
-      <svg class="icon" aria-hidden="true"><use href="icons.svg#sun"/></svg>
-    </button>
-  </header>
-
-  <div class="scene-labels" aria-hidden="true">
-    <span class="scene-tag is-below" data-label="start">0 м</span>
-    <span class="scene-tag is-below" data-label="end">12 000 м</span>
-    <span class="scene-tag is-line is-up" data-label="model">модель</span>
-    <span class="scene-tag is-line is-down" data-label="measured">замер</span>
-    <span class="scene-tag is-hover" data-label="hover"></span>
-    <span class="scene-tag is-estimate" data-label="estimate"></span>
-    <span class="scene-tag scene-legend" data-label="legend">
-      <span class="legend-item"><svg class="legend-swatch" viewBox="0 0 24 4" aria-hidden="true"><path d="M0 2h24" stroke-width="1"/></svg>модель</span>
-      <span class="legend-item"><svg class="legend-swatch" viewBox="0 0 24 4" aria-hidden="true"><path d="M0 2h24" stroke-width="2"/></svg>замер</span>
-    </span>
-  </div>
-
-  <section class="scene-status" data-status="idle" aria-live="polite">
-    <p class="status-caption" data-caption>Участок 12 км, шесть датчиков давления</p>
-    <p class="status-figure" data-figure>Утеч<em>е</em>к нет</p>
-    <p class="status-detail" data-detail></p>
-    <button class="scene-pill" type="button" data-reset hidden>
-      <svg class="icon" aria-hidden="true"><use href="icons.svg#reset"/></svg>
-      <span>Сбросить</span>
-    </button>
+<div class="app">
+<main class="app-main twin" id="main">
+  <section class="twin-stage" aria-labelledby="twin-title">
+    <header class="twin-stage-head"><div><h1 class="twin-title" id="twin-title">Участок 2</h1><p class="sd-caption">Магистраль Север, 12 км, DN 530</p></div>
+    <div class="twin-tools"><button class="button button-secondary" data-cutaway aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#layers"/></svg><span>Разрез</span></button><button class="icon-button icon-button-secondary" data-fullscreen aria-label="Развернуть сцену"><svg class="icon" aria-hidden="true"><use href="icons.svg#expand"/></svg></button></div></header>
+    <div class="twin-viewport" data-stage data-cutaway="true" data-renderer="loading">
+      <canvas data-canvas aria-label="Трубопровод. Вставить утечку можно кликом или через поле координаты"></canvas>
+      <div data-scheme><svg viewBox="0 0 800 220" class="flow-scheme" role="img" aria-label="Схема участка"><path class="scheme-body" d="M36 88H764V108H36Z"/><text x="400" y="154" text-anchor="middle">12 000 м, шесть датчиков</text></svg></div>
+    </div>
+    <p class="twin-hint" data-hint>Задайте место утечки в поле координаты</p>
+    <p class="scene-state sd-caption" data-scene-state role="status">Подготавливаем 3D. Схема доступна сразу.</p>
   </section>
-
-  <p class="scene-hint">Кликните по трубе, чтобы вставить утечку</p>
+  <aside class="twin-panel" aria-label="Состояние участка"><section class="twin-status" data-status><h2>Подготавливаем расчёт</h2><p>Если расчёт не запустился, перезагрузите страницу.</p></section></aside>
+  <section class="twin-profile" aria-label="Сравнение модели и показаний">
+    <div class="twin-chart-panel"><h2 class="sd-h2">Профиль давления вдоль трубы</h2><div class="ch-host twin-chart" data-profile></div></div>
+    <div class="twin-chart-panel"><h2 class="sd-h2">Давление во времени <span data-selected>Д-04</span></h2><div class="ch-host twin-chart" data-history></div></div>
+    <div class="twin-legend"><span><svg viewBox="0 0 24 8" aria-hidden="true"><path class="ch-model" d="M0 4H24"/></svg>модель</span><span><svg viewBox="0 0 24 8" aria-hidden="true"><path class="ch-measured" d="M0 4H24"/></svg>показания</span><span>Наведите на датчик для сравнения</span></div>
+  </section>
+  <section class="twin-details"><button class="button button-secondary" data-disclosure aria-expanded="false" aria-controls="sensor-details"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Датчики и события</span></button><div id="sensor-details" hidden><div class="sensor-readings" data-sensors></div><ol class="simulation-events" data-events aria-label="События симуляции"></ol></div></section>
+  <p class="sd-visually-hidden" data-announcement role="status" aria-live="polite"></p>
 </main>
-<script type="module" src="scene/chrome.js"></script>
-<script type="module" src="scene/main.js"></script>
+</div>
+<script type="importmap">{"imports":{"three":"/frontend/node_modules/three/build/three.module.js","three/addons/":"/frontend/node_modules/three/examples/jsm/"}}</script>
+<script type="module" src="runtime/scene-view.js"></script>
 </body>
 </html>

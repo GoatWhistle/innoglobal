@@ -1,6 +1,6 @@
 import { clsx } from "clsx"
 import { useId } from "react"
-import { useInputModality, useSlidingIndicator } from "../../../motion"
+import { useInputModality } from "../../../motion"
 import { Icon, type IconName } from "../../primitives/icon/icon"
 import styles from "./segmented.module.css"
 
@@ -56,23 +56,16 @@ export function Segmented<T extends string>({
 }: SegmentedProps<T>) {
   const name = useId()
   const modality = useInputModality()
-  const { listRef, indicatorRef, itemRef } = useSlidingIndicator<HTMLFieldSetElement>(value, {
-    instant: modality.instant,
-    radiusToken: "--radius-pill",
-  })
   return (
     <fieldset
-      ref={listRef}
       className={clsx(styles.segmented, className)}
       onKeyDown={modality.onKeyDown}
       onPointerDown={modality.onPointerDown}
     >
       <legend className="visually-hidden">{label}</legend>
-      <span ref={indicatorRef} className={styles.indicator} aria-hidden="true" />
       {options.map((option) => (
         <label
           key={option.value}
-          ref={itemRef(option.value)}
           className={clsx(styles.option, display === "icon" && styles.iconOnly)}
           data-checked={option.value === value}
           title={display === "label" ? undefined : option.label}

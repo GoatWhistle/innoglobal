@@ -20,48 +20,26 @@
 <div class="app">
 <main class="app-main twin" id="main">
   <section class="twin-stage" aria-labelledby="twin-title">
-    <div class="twin-scene" data-scene></div>
-    <div class="twin-nogl" data-nogl hidden></div>
-    <div class="twin-stage-head">
-      <div>
-        <h1 class="twin-title" id="twin-title">Участок 2</h1>
-        <p class="sd-caption">Магистраль Север, 0–12 000 м, DN 530</p>
-      </div>
-      <div class="twin-tools">
-        <button type="button" class="icon-button icon-button-secondary" aria-label="Слои сцены" data-tip="Слои сцены"><svg class="icon icon-control" aria-hidden="true"><use href="icons.svg#layers"/></svg></button>
-        <button type="button" class="icon-button icon-button-secondary" aria-label="Сбросить вид" data-tip="Сбросить вид"><svg class="icon icon-control" aria-hidden="true"><use href="icons.svg#reset"/></svg></button>
-        <button type="button" class="icon-button icon-button-secondary" aria-label="Развернуть сцену" data-tip="Развернуть сцену" data-kbd="F"><svg class="icon icon-control" aria-hidden="true"><use href="icons.svg#expand"/></svg></button>
-      </div>
+    <header class="twin-stage-head"><div><h1 class="twin-title" id="twin-title">Участок 2</h1><p class="sd-caption">Магистраль Север, 12 км, DN 530</p></div>
+    <div class="twin-tools"><button class="button button-secondary" data-cutaway aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#layers"/></svg><span>Разрез</span></button><button class="icon-button icon-button-secondary" data-fullscreen aria-label="Развернуть сцену"><svg class="icon" aria-hidden="true"><use href="icons.svg#expand"/></svg></button></div></header>
+    <div class="twin-viewport" data-stage data-cutaway="true" data-renderer="loading">
+      <canvas data-canvas aria-label="Трубопровод. Вставить утечку можно кликом или через поле координаты"></canvas>
+      <div data-scheme><svg viewBox="0 0 800 220" class="flow-scheme" role="img" aria-label="Схема участка"><path class="scheme-body" d="M36 88H764V108H36Z"/><text x="400" y="154" text-anchor="middle">12 000 м, шесть датчиков</text></svg></div>
     </div>
-    <p class="twin-hint" data-hint><svg class="icon" aria-hidden="true"><use href="icons.svg#cursor"/></svg>Кликните по трубе, чтобы вставить утечку</p>
+    <p class="twin-hint" data-hint>Задайте место утечки в поле координаты</p>
+    <p class="scene-state sd-caption" data-scene-state role="status">Подготавливаем 3D. Схема доступна сразу.</p>
   </section>
-
-  <aside class="twin-panel" aria-label="Состояние участка">
-    <section class="twin-status sd-live" data-status aria-live="polite"></section>
-    <section class="twin-sensors" aria-labelledby="sensors-title">
-      <div class="sd-head">
-        <h2 class="sd-h2" id="sensors-title">Датчики</h2>
-        <a class="twin-link" href="screen-sensors.html">Все датчики<svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg></a>
-      </div>
-      <div class="sr-head" aria-hidden="true"><span>Датчик</span><span>Замер</span><span>Невязка</span></div>
-      <ul class="sr-list sd-live" data-sensors></ul>
-    </section>
-  </aside>
-
-  <section class="twin-profile" aria-labelledby="profile-title">
-    <div class="sd-head">
-      <h2 class="sd-h2" id="profile-title">Профиль давления</h2>
-      <div data-legend></div>
-    </div>
-    <div class="ch-host twin-chart" data-profile></div>
+  <aside class="twin-panel" aria-label="Состояние участка"><section class="twin-status" data-status><h2>Подготавливаем расчёт</h2><p>Если расчёт не запустился, перезагрузите страницу.</p></section></aside>
+  <section class="twin-profile" aria-label="Сравнение модели и показаний">
+    <div class="twin-chart-panel"><h2 class="sd-h2">Профиль давления вдоль трубы</h2><div class="ch-host twin-chart" data-profile></div></div>
+    <div class="twin-chart-panel"><h2 class="sd-h2">Давление во времени <span data-selected>Д-04</span></h2><div class="ch-host twin-chart" data-history></div></div>
+    <div class="twin-legend"><span><svg viewBox="0 0 24 8" aria-hidden="true"><path class="ch-model" d="M0 4H24"/></svg>модель</span><span><svg viewBox="0 0 24 8" aria-hidden="true"><path class="ch-measured" d="M0 4H24"/></svg>показания</span><span>Наведите на датчик для сравнения</span></div>
   </section>
+  <section class="twin-details"><button class="button button-secondary" data-disclosure aria-expanded="false" aria-controls="sensor-details"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Датчики и события</span></button><div id="sensor-details" hidden><div class="sensor-readings" data-sensors></div><ol class="simulation-events" data-events aria-label="События симуляции"></ol></div></section>
+  <p class="sd-visually-hidden" data-announcement role="status" aria-live="polite"></p>
 </main>
 </div>
-
-<dialog class="dialog" id="dlg-shut" aria-labelledby="shut-t">
-  <div class="dialog-head"><h2 class="dialog-title" id="shut-t" tabindex="-1">Перекрыть участок 2?</h2><button type="button" class="icon-button icon-button-sm close-button" aria-label="Закрыть" data-close><svg class="icon" aria-hidden="true"><use href="icons.svg#x"/></svg></button></div>
-  <div class="dialog-body"><p>Задвижки З-2 и З-3 закроются за 40 с. Поток на участке остановится, давление выше по трубе вырастет до 5,6 МПа.</p><p>Открыть задвижки можно только с пульта станции.</p></div>
-  <div class="dialog-foot"><button type="button" data-close class="button button-quiet"><span>Отмена</span></button><button type="button" data-close class="button button-danger"><svg class="icon" aria-hidden="true"><use href="icons.svg#shut"/></svg><span>Перекрыть участок</span></button></div>
-</dialog>
+<script type="importmap">{"imports":{"three":"/frontend/node_modules/three/build/three.module.js","three/addons/":"/frontend/node_modules/three/examples/jsm/"}}</script>
+<script type="module" src="runtime/scene-view.js"></script>
 </body>
 </html>

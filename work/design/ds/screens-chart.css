@@ -33,6 +33,7 @@
 }
 
 .ch-model {
+  stroke-dasharray: var(--chart-dash-model);
   stroke: var(--text-secondary);
   stroke-width: 1;
 }

@@ -1,42 +1,24 @@
+@media (max-width: 64rem) {
+  .twin { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto; grid-template-areas: "panel" "stage" "profile" "details"; }
+  .twin-stage { min-block-size: 380px; }
+  .twin-viewport { min-block-size: 240px; }
+  .twin-panel { border-inline-start: 0; border-block-end: var(--hairline) solid var(--border-subtle); }
+  .twin-status { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .twin-status > :last-child { grid-column: 1 / -1; }
+  .twin-figure { min-block-size: 0; }
+  .twin-profile { grid-template-columns: minmax(0, 1fr); grid-template-rows: 230px 230px auto; }
+  .sensor-readings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 48rem) {
-  .twin {
-    grid-template-areas: "status" "stage" "sensors" "profile";
-  }
-
-  .twin-panel {
-    display: contents;
-  }
-
-  .twin-status {
-    grid-area: status;
-    padding: var(--space-20) var(--sd-gutter);
-    border-inline-end: 0;
-  }
-
-  .twin-sensors {
-    grid-area: sensors;
-    padding-inline: var(--sd-gutter);
-    background: var(--surface-raised);
-  }
-
-  .twin-stage {
-    block-size: 340px;
-  }
-
-  .twin-scene {
-    inset: var(--space-48) 0 var(--space-8);
-  }
-
-  .twin-stage-head .twin-tools .icon-button:not(:last-child),
-  .twin-stage-head .sd-caption {
-    display: none;
-  }
-
-  .twin-chart {
-    block-size: 200px;
-  }
-
-  .twin-hint {
-    display: none;
-  }
+  .twin-status { grid-template-columns: minmax(0, 1fr); gap: var(--space-12); padding: var(--space-20) var(--sd-gutter); }
+  .twin-figure { font-size: var(--font-size-heading); line-height: var(--line-height-heading); }
+  .twin-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .twin-text { min-block-size: 0; }
+  .twin-stage-head { padding-inline: var(--space-16); }
+  .twin-stage-head .sd-caption { font-size: var(--font-size-micro); }
+  .twin-stage-head .icon-button { display: none; }
+  .twin-tools .button { padding-inline: var(--space-12); }
+  .twin-tools .icon { display: none; }
+  .twin-hint { font-size: var(--font-size-caption); }
+  .sensor-readings { grid-template-columns: minmax(0, 1fr); }
 }

@@ -58,7 +58,7 @@ Rules:
   success stay neutral. `--crude-*` exists for the scene and never fills a control.
 - **Light is paper, not inverted dark.** The page is the warm `--ink-25`, panels are white above it,
   tracks sink to `--ink-50`, text is `--ink-950`, not pure black. Layers read by tone and by line.
-- **Dark is pitch.** Pure black page so the scene's vignette disappears into it, panels a step up,
+- **Dark is pitch.** Warm pitch page so the scene's vignette disappears into it, panels a step up,
   floats one more step up because shadows vanish on black.
 - **Status is an icon plus text.** Colour reinforces, never carries alone.
 - **Contrast:** `npm run rules` (`contrast`) keeps text at 4.5:1 and the focus ring at 3:1 on every
@@ -104,7 +104,7 @@ Two tempos.
   through `Swap`; screens change with View Transitions.
 - **Scene:** `--ease-viscous` with `--dur-scene` and `--dur-scene-long` for camera, lens and reveal
   (`--motion-reveal`). Rare events only: inserting a leak, confirming it, resetting.
-- **Loops:** `--motion-alarm` for an active leak indicator, `--motion-shimmer` for skeletons,
+- **Loops:** a static icon for an active leak indicator, `--motion-shimmer` for skeletons,
   `--motion-spin` for spinners.
 - Values that tick (pressure, flow, timer) never animate. Reduced motion shrinks durations to 1ms
   and turns movement into a short fade.
@@ -118,8 +118,7 @@ visual spec for controls and states is `work/design/ds/kit.html`.
   `ghost` in toolbars, `danger` only for shutting off a section.
 - **Panel:** square, hairline, `--surface-raised`. No card grids of identical tiles.
 - **Readout (signature data component):** label in `caption` muted, value in `readout` light
-  tabular, unit in `body-sm` muted, model value beside the measured one. Turns amber or oxblood only
-  through the status badge next to it, never by recolouring the number.
+  tabular, unit in `body-sm` muted, model value beside the measured one. Uses amber or red on the residual and status badge when the detector reports an event.
 - **Status:** icon, word and colour together: calm, suspicion, leak, no data.
 - **States:** `Skeleton` after 200ms and held 300ms, `Spinner` after 400ms, `stale` dimming,
   `EmptyState` with a 48px icon and the next action, `ErrorState` with "Повторить".
@@ -176,7 +175,7 @@ with a unique id per chart, because a pattern takes custom properties from where
 - **Density:** comfortable by default (`--row-height`, `--control-height`, `--cell-padding`);
   compact (`--row-height-compact`, `--control-height-compact`, `--cell-padding-compact`) only in
   tables with a fine pointer from 64rem, through a `density` prop.
-- **Numbers:** pressure and residual in бар with 2 decimals, residual always signed (`U+2212`), flow
+- **Numbers:** pressure and residual in МПа with 2 decimals, residual always signed (`U+2212`), flow
   in м³/ч with 0 decimals from 100, temperature °C with 1, location in м rounded to 10, detection
   time in с with 1. Uncertainty as `6 840 ± 20 м` or "ошибка 20 м"; never more precise than the error.
 - **Charts:** measured `--chart-measured` solid `--chart-stroke`, model `--chart-model` dashed
@@ -189,3 +188,6 @@ with a unique id per chart, because a pattern takes custom properties from where
   (30 s or browser offline, page banner), paused, replay. Readout text at most 4 Hz, charts 10 Hz.
 - **Alerts:** calm, watch, leak confirmed (banner `role="alert"`, tab title, favicon dot, optional
   sound), accepted, resolved, false alarm. A leak is never a toast.
+
+The Segmented selection uses a background on the selected option itself. A separate moving sibling
+can cross underneath an unselected label and break its contrast; selection feedback is immediate.

@@ -15,6 +15,7 @@ const OIL_RATE = 4.5
 
 export function createWorld({ canvas, sim, ease }) {
   const renderer = new WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" })
+  renderer.debug.onShaderError = () => { throw new Error("Scene shader compilation failed") }
   renderer.toneMapping = NeutralToneMapping
   const scene = new Scene()
   const camera = new PerspectiveCamera(20, 1, 1, 600)
@@ -25,13 +26,13 @@ export function createWorld({ canvas, sim, ease }) {
   const ground = createGround()
   const oil = createOil()
   const backdrop = createBackdrop(ground.uniforms)
-  scene.add(backdrop.mesh, ground.mesh, pipe.group, oil.core, oil.stream, curtain.mirror, curtain.mesh)
+  scene.add(pipe.group, oil.core, oil.stream)
   const post = createPost(renderer, scene, camera)
   let frame = frameFor(1, 1)
   const input = createInput({
     canvas,
     camera,
-    targets: () => [pipe.shell, oil.core, curtain.mesh, ...pipe.collars],
+    targets: () => [pipe.shell, oil.core, ...pipe.collars],
     radius: () => frame.radius,
   })
   const parallax = new Vector2()
@@ -41,6 +42,9 @@ export function createWorld({ canvas, sim, ease }) {
   let size = { w: 1, h: 1 }
 
   return {
+    setCutaway(on) {
+      pipe.uniforms.uWindow.value.set(...(on ? [-0.12, 0.82] : [4, 5]))
+    },
     camera,
     rig,
     input,
@@ -57,13 +61,13 @@ export function createWorld({ canvas, sim, ease }) {
       const ratio = Math.min(devicePixelRatio, 1.75)
       renderer.setPixelRatio(ratio)
       renderer.setSize(w, h, false)
-      frame = frameFor(w, h)
+      frame = { ...frameFor(w, h), topRow: 0.48, radius: 1.05, yaw: -0.12, margin: Math.min(64, w * 0.1) }
       camera.aspect = w / h
       camera.fov = frame.fov
       pipe.setRadius(frame.radius)
       oil.setRadius(frame.radius)
       curtain.layout(frame.radius, frame.gap, frame.height)
-      rig.fit(frame, w, h, frame.radius * 2 + curtain.heightAt(sim.model[0]), frame.radius)
+      rig.fit(frame, w, h, frame.radius * 2, frame.radius)
       ground.uniforms.uRadius.value = frame.radius
       ground.uniforms.uStain.value = frame.stain
       post.setSize(w, h, ratio)
@@ -83,25 +87,28 @@ export function createWorld({ canvas, sim, ease }) {
       resetAt = null
     },
     reset(clock) {
-      resetAt = clock
+      resetAt = null
+      pipe.uniforms.uHoleAge.value = -1
+      fades.stain = 0
+      oil.clear()
     },
     update({ clock, dt, reduced, hover, durations }) {
       const calm = reduced ? 0 : 1
-      parallax.lerp(input.pointer, Math.min(dt * 1.5, 1) * calm)
-      const sway = reduced ? 0 : Math.sin(clock * 0.07) * 0.01
+      parallax.set(0, 0)
+      const sway = 0
       const yaw = rig.orbit(clock, reduced ? 1e-3 : durations.long, ease)
       rig.aim(frame, size.w, size.h, frame.yaw + yaw + sway + parallax.x * 0.025, parallax.y * 0.01)
 
       const intro = reduced ? 1 : ease(Math.min(Math.max((clock - 0.2) / (durations.long * 1.6), 0), 1))
       curtain.write(sim.model, sim.measured, intro)
       const [upShare, downShare] = sim.flowShare()
-      const speed = reduced ? 0.15 : 0.55
+      const speed = reduced ? 0 : 0.55
       flow.up += dt * speed * upShare
       flow.down += dt * speed * downShare
       const leakX = sim.leak ? toWorld(sim.leak.x) : HALF * 4
       const found = sim.detection
-      fades.confirm += ((found ? 1 : 0) - fades.confirm) * Math.min(dt * 3, 1)
-      fades.detect = found ? Math.min(fades.detect + dt / durations.scene, 1) : Math.max(fades.detect - dt * 3, 0)
+      fades.confirm += ((found ? 1 : 0) - fades.confirm) * (reduced ? 1 : Math.min(dt * 3, 1))
+      fades.detect = found ? 1 : 0
 
       const hx = toWorld(hover.m)
       const fu = curtain.uniforms
@@ -125,7 +132,7 @@ export function createWorld({ canvas, sim, ease }) {
         pipe.uniforms.uMark.value.y = fades.detect
       }
       pipe.uniforms.uHover.value.set(hx, hover.on)
-      pipe.setSensors(sim.sensors, dt)
+      pipe.setSensors(sim.sensors, reduced ? 1 : dt)
       ground.uniforms.uTime.value = clock * (calm || 0.2)
 
       if (sim.leak) {
@@ -149,7 +156,7 @@ export function createWorld({ canvas, sim, ease }) {
       overlay.layout({ camera, width: size.w, height: size.h, radius: frame.radius, curtain, sim, hover: h, toWorld, toMeters, half: HALF })
     },
     render(clock) {
-      post.render(clock)
+      renderer.render(scene, camera)
     },
   }
 }

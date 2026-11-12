@@ -17,10 +17,10 @@ const RADIAL = 12
 function oilMaterial(key, uniforms, normalCode, vertex = "") {
   const material = new MeshPhysicalMaterial({
     color: 0x050403,
-    roughness: 0.22,
+    roughness: 0.34,
     metalness: 0,
     clearcoat: 1,
-    clearcoatRoughness: 0.05,
+    clearcoatRoughness: 0.14,
     sheen: 0.6,
     sheenRoughness: 0.4,
   })
@@ -69,7 +69,7 @@ export function createOil() {
     uRadius: { value: 0.5 },
     uFlow: { value: new Vector3() },
   }
-  const coreUniforms = { ...shared, uBump: { value: 0.075 }, uGrow: { value: 2 }, uFade: { value: 1 } }
+  const coreUniforms = { ...shared, uBump: { value: 0.14 }, uGrow: { value: 2 }, uFade: { value: 1 } }
   const coreMaterial = oilMaterial("oil-core", coreUniforms, "normal = oilCoreNormal();")
   const coreHook = coreMaterial.onBeforeCompile
   coreMaterial.onBeforeCompile = (shader) => {

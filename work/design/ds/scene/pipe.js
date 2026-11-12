@@ -72,7 +72,7 @@ const EMISSIVE = `
     float fx = i == 0 ? uFront.x : uFront.z;
     float fs = i == 0 ? uFront.y : uFront.w;
     float d = (vWorldP.x - fx) / (uRadius * 0.22);
-    glow += uWarm * fs * (exp(-d * d) * 1.6 + exp(-abs(d) * 0.35) * 0.12);
+    glow += uWarm * fs * exp(-d * d) * 0.08;
   }
   if (uHoleAge >= 0.0 && uHoleAge < 1.2) {
     float phiH = atan(uHole.y - uRadius, uHole.z);
@@ -80,7 +80,7 @@ const EMISSIVE = `
     float dphi = mod(phiH - phiW + 3.14159265, 6.2831853) - 3.14159265;
     float r = length(vec2(vWorldP.x - uHole.x, dphi * uRadius));
     float ring = r - uHoleAge * uRadius * 3.2;
-    glow += uWarm * exp(-ring * ring / (uRadius * uRadius * 0.004)) * (1.0 - uHoleAge / 1.2) * 1.4;
+    glow += uWarm * exp(-ring * ring / (uRadius * uRadius * 0.004)) * (1.0 - uHoleAge / 1.2) * 0.08;
   }
   float hd = abs(vWorldP.x - uHover.x) / fwidth(vWorldP.x);
   glow += uInk * uHover.y * (1.0 - smoothstep(0.6, 1.6, hd)) * 0.55;

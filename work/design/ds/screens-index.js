@@ -2,7 +2,7 @@ import { segmented } from "./kit-controls.js"
 import { icon } from "./kit-layer.js"
 
 const SCREENS = [
-  ["screen-twin.html", "cube", "Участок", "Сцена, панель состояния, датчики, профиль давления", [["calm", "Норма"], ["watch", "Наблюдение"], ["leak", "Утечка"], ["ack", "Принята"], ["nogl", "Нет WebGL"], ["offline", "Нет связи"]]],
+  ["screen-twin.html", "cube", "Участок", "Сцена, панель состояния, датчики, профиль давления", [["calm", "Норма"], ["watch", "Наблюдение"], ["leak", "Утечка"], ["ack", "Принята"], ["nogl", "Нет 3D"]]],
   ["screen-incident.html", "alarm", "Утечка № 42", "Как нашли, где, что делать оператору", [["new", "Новая"], ["ack", "Принята"], ["shut", "Перекрытие"], ["closed", "Перекрыт"], ["false", "Ложная"]]],
   ["screen-journal.html", "journal", "Журнал", "Фильтры, таблица событий, страницы", [["default", "События"], ["loading", "Загрузка"], ["empty", "Пусто"], ["error", "Ошибка"]]],
 ]

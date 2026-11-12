@@ -92,12 +92,12 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --surface-base: var(--ink-1000);
-  --surface-raised: var(--ink-950);
+  --surface-base: var(--ink-950);
+  --surface-raised: var(--ink-900);
   --surface-raised-hover: var(--ink-850);
   --surface-sunken: var(--ink-900);
   --surface-selected: var(--ink-800);
-  --surface-float: var(--ink-900);
+  --surface-float: var(--ink-850);
   --surface-inverse: var(--ink-25);
   --surface-skeleton: var(--ink-850);
   --surface-scrim: color-mix(in oklab, var(--ink-1000) 72%, transparent);
@@ -137,7 +137,7 @@
   --signal-danger-surface: color-mix(in oklab, var(--leak-300) 15%, var(--ink-950));
   --signal-warning-surface: color-mix(in oklab, var(--amber-300) 12%, var(--ink-950));
 
-  --scene-void: var(--ink-1000);
+  --scene-void: var(--ink-950);
   --scene-crude: var(--crude-pitch);
   --scene-sheen-cool: var(--crude-olive);
   --scene-sheen-warm: var(--crude-amber);

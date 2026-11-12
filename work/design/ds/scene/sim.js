@@ -17,9 +17,9 @@ const MU_SLOPE = 0.035
 const LEAK_DROP = 0.32
 const LEAK_SHARE = 0.08
 const RISE = 0.22
-const ARRIVE = 0.045
-const THRESHOLD = 0.07
-const HOLD = 0.4
+export const ARRIVE = 0.045
+export const THRESHOLD = 0.07
+export const HOLD = 0.4
 const FILTER = 0.12
 const STEP = 0.01
 
@@ -42,11 +42,11 @@ function buildModel() {
   return out
 }
 
-function gauss() {
-  return (Math.random() + Math.random() + Math.random() - 1.5) * 1.15
+function gauss(random) {
+  return (random() + random() + random() - 1.5) * 1.15
 }
 
-export function createSim() {
+export function createSim(random = Math.random) {
   const model = buildModel()
   const measured = new Float32Array(SAMPLES)
   const sensors = SENSORS_M.map((x, i) => ({
@@ -108,7 +108,9 @@ export function createSim() {
     time += STEP
     const k = 1 - Math.exp(-STEP / FILTER)
     for (const s of sensors) {
-      const reading = modelAt(s.x) + ripple(s.x, time) - drop(s.x, time) + gauss() * 0.004
+      const reading = modelAt(s.x) + ripple(s.x, time) - drop(s.x, time) + gauss(random) * 0.004
+      s.model = modelAt(s.x)
+      s.measured = reading
       s.residual += (modelAt(s.x) - reading - s.residual) * k
       if (leak && s.arrival === null && s.residual > ARRIVE) s.arrival = time
       if (s.residual > THRESHOLD) s.since ??= time
@@ -145,8 +147,8 @@ export function createSim() {
       return leak ? time - leak.t0 : 0
     },
     advance(dt) {
-      pending += Math.min(dt, 1)
-      while (pending >= STEP) {
+      pending += Math.max(0, dt)
+      while (pending + 1e-9 >= STEP) {
         pending -= STEP
         tick()
       }
@@ -165,6 +167,13 @@ export function createSim() {
     clear() {
       leak = null
       detection = null
+      for (const s of sensors) {
+        s.arrival = null
+        s.since = null
+        s.tripped = false
+        s.state = 0
+        s.residual = 0
+      }
     },
     fronts() {
       if (!leak) return null

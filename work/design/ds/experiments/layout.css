@@ -1,0 +1,67 @@
+.lab-header { display: flex; align-items: center; gap: var(--space-24); padding: var(--space-12) var(--space-page-wide); border-block-end: var(--hairline) solid var(--border-subtle); }
+.lab-brand { color: var(--text-primary); font-size: var(--font-size-subheading); text-decoration: none; }
+.lab-back { color: var(--text-secondary); font-size: var(--font-size-body-sm); }
+.lab-header-note { margin-inline-start: auto; color: var(--text-secondary); font-size: var(--font-size-caption); }
+.lab-variants { display: flex; align-items: center; gap: var(--space-8); padding: var(--space-12) var(--space-page-wide); border-block-end: var(--hairline) solid var(--border-subtle); }
+.lab-variants .sd-caption { margin-inline-start: auto; }
+.lab-variants button[aria-pressed="true"] { background: var(--action-primary); color: var(--action-primary-text); border-color: var(--action-primary); }
+.lab { display: grid; grid-template-columns: minmax(0, 1fr) 300px; grid-template-rows: minmax(430px, calc(100dvh - 370px)) 200px auto; grid-template-areas: "scene panel" "chart chart" "details details"; }
+.lab-stage { grid-area: scene; display: grid; grid-template-rows: auto minmax(260px, 1fr) auto; min-inline-size: 0; }
+.lab-title { padding: var(--space-20) var(--space-page-wide) 0; position: relative; z-index: var(--layer-raised); }
+.lab-title h1 { font-weight: var(--weight-light); font-size: var(--font-size-heading-lg); line-height: var(--line-height-heading-lg); letter-spacing: var(--tracking-tight); }
+.lab-title p { margin-block-start: var(--space-8); color: var(--text-secondary); max-inline-size: 64ch; font-size: var(--font-size-body-sm); }
+.lab-panel { grid-area: panel; padding: var(--space-20); background: var(--surface-raised); border-inline-start: var(--hairline) solid var(--border-subtle); font-size: var(--font-size-body-sm); line-height: var(--line-height-body-sm); }
+.lab-panel [data-panel] { display: grid; gap: var(--space-8); }
+.lab-panel .twin-figure { font-size: var(--font-size-heading-lg); font-weight: var(--weight-light); line-height: var(--line-height-heading-lg); min-block-size: 56px; font-variant-numeric: tabular-nums; }
+.lab-panel .twin-facts { margin: 0; display: grid; gap: var(--space-8); }
+.lab-panel dt { color: var(--text-secondary); font-size: var(--font-size-caption); }
+.lab-panel dd { margin: 0; font-variant-numeric: tabular-nums; }
+.lab-panel .twin-text { color: var(--text-secondary); min-block-size: 60px; }
+.lab-panel .twin-insert { display: grid; gap: var(--space-8); }
+.lab-panel .twin-input-row { display: flex; gap: var(--space-8); }
+.lab-panel .input { min-inline-size: 0; flex: 1; }
+.lab-panel .twin-insert label { font-size: var(--font-size-label); }
+.lab-panel .twin-validation { color: var(--text-danger); font-size: var(--font-size-caption); }
+.lab-panel .twin-timing { color: var(--text-secondary); }
+[data-tone="danger"] { color: var(--text-danger); }
+[data-tone="warning"] { color: var(--text-warning); }
+.lab-history { grid-area: chart; display: grid; grid-template-rows: auto minmax(0, 1fr); min-inline-size: 0; padding: var(--space-12) var(--space-page-wide); border-block: var(--hairline) solid var(--border-subtle); }
+.lab-chart-heading { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: var(--space-8); }
+.lab-chart-heading h2, .lab-details h2 { font-size: var(--font-size-body); font-weight: var(--weight-medium); }
+.lab-chart-heading p { display: flex; gap: var(--space-16); color: var(--text-secondary); font-size: var(--font-size-caption); }
+.lab-model-key, .lab-measured-key { display: inline-flex; align-items: center; gap: var(--space-8); }
+.lab-model-key::before, .lab-measured-key::before { content: ""; inline-size: 24px; border-block-start: var(--hairline) solid currentColor; }
+.lab-model-key::before { border-block-start-style: dashed; }
+.lab-details { grid-area: details; padding: var(--space-12) var(--space-page-wide) var(--space-24); }
+.lab-detail-tools { display: flex; flex-wrap: wrap; gap: var(--space-8); }
+.lab-presets { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8); margin-block-start: var(--space-12); }
+.lab-sensors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-block: var(--space-16); }
+.sensor-reading { display: grid; gap: var(--space-4); padding: var(--space-16); border: var(--hairline) solid var(--border-subtle); background: var(--surface-base); color: var(--text-primary); text-align: start; cursor: pointer; }
+.sensor-reading[aria-pressed="true"] { border-color: var(--border-control); }
+.lab-profile { block-size: 230px; }
+.live-chart { inline-size: 100%; block-size: 100%; }
+.chart-gap { fill: var(--chart-band); }
+.chart-event { stroke: var(--text-secondary); stroke-dasharray: var(--chart-dash-model); }
+.chart-event[data-tone="danger"] { stroke: var(--status-danger); }
+.chart-zone { fill: var(--fill-danger); stroke: var(--status-danger); }
+.chart-sensor { fill: var(--surface-base); stroke: var(--text-primary); }
+.chart-hit { fill: transparent; cursor: pointer; }
+@media (max-width: 64rem) {
+  .lab { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 460px 230px auto; grid-template-areas: "panel" "scene" "chart" "details"; }
+  .lab-panel { border-inline-start: 0; border-block-end: var(--hairline) solid var(--border-subtle); }
+  .lab-header, .lab-variants, .lab-history, .lab-details { padding-inline: var(--space-24); }
+  .lab-header-note, .lab-variants .sd-caption { display: none; }
+  .lab-header .lab-back { margin-inline-start: auto; }
+  .lab-title { padding-inline: var(--space-24); }
+  .lab-panel .twin-text { min-block-size: 0; }
+}
+@media (max-width: 48rem) {
+  .lab-header { gap: var(--space-12); flex-wrap: wrap; }
+  .lab-header .button { margin-inline-start: auto; }
+  .lab-variants { flex-wrap: wrap; padding-inline: var(--space-16); }
+  .lab-variants .button { padding-inline: var(--space-12); font-size: var(--font-size-caption); }
+  .lab-title h1 { font-size: var(--font-size-heading); }
+  .lab-sensors { grid-template-columns: minmax(0, 1fr); }
+  .lab-panel .twin-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lab-panel .twin-figure { font-size: var(--font-size-heading); line-height: var(--line-height-heading); }
+}

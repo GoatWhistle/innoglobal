@@ -74,7 +74,7 @@ describe("motion tokens", () => {
   it("points every --motion-* at an existing keyframe", () => {
     const keyframes = new Set([...keyframesCss.matchAll(/@keyframes\s+([\w-]+)/g)].map((m) => m[1]))
     for (const [token, value] of [...rootTokens].filter(([name]) => name.startsWith("--motion-")))
-      expect(keyframes.has(value.split(/\s+/)[0]), token).toBe(true)
+      expect(value === "none" || keyframes.has(value.split(/\s+/)[0]), token).toBe(true)
   })
 
   it("keeps ms, cubic-bezier and !important out of styles outside tokens", () => {

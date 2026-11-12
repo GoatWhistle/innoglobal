@@ -87,7 +87,7 @@
   <ol class="tree">
     <li><span>Это утечка или подозрение?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#alarm"/></svg>Баннер тревоги и статус</b></li>
     <li><span>Нужно решение, которое нельзя отменить?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#shut"/></svg>Диалог</b></li>
-    <li><span>Не работает всё: сеть, сервер расчёта?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#offline"/></svg>Баннер страницы</b></li>
+    <li><span>Остановился локальный расчёт?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#offline"/></svg>Баннер страницы</b></li>
     <li><span>Ошибка относится к одному полю?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#edit"/></svg>Сообщение под полем</b></li>
     <li><span>Сломана одна область, данные есть?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg>Баннер области и приглушение</b></li>
     <li><span>Сломана одна область, данных нет?</span><b><svg class="icon" aria-hidden="true"><use href="icons.svg#error"/></svg><code>ErrorState</code> с «Повторить»</b></li>
@@ -113,7 +113,7 @@
     <li>Текст «Загрузка…» вместо скелетона и пустой экран на ошибке запрещены.</li>
   </ul>
 </section>
-</main>
+<section class="doc-section"><h2>События симуляции</h2><p>Норма, ожидание расхождения, наблюдение, подтверждённая утечка, принята оператором. Наблюдение начинается при невязке выше 0,045 МПа. Подтверждение требует двух датчиков выше 0,07 МПа в течение 0,4 с. Время обнаружения равно разнице событий вставки и подтверждения. Принятие не устраняет утечку.</p><p>Панель остаётся нейтральной. Янтарь и красный обозначают локальные метки, значения и участок трубы. Постоянное мигание отключено.</p></section></main>
 </div>
 <script type="module" src="doc-shell.js"></script>
 <script type="module" src="page.js"></script>

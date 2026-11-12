@@ -8,12 +8,6 @@
   border-radius: var(--radius-pill);
 }
 
-.indicator {
-  composes: slidingIndicator from "../../primitives/surface/surface.module.css";
-  inset-block: var(--space-4);
-  background-color: var(--action-primary);
-}
-
 .option {
   composes: pressable from "../../../styles/compose.module.css";
   position: relative;
@@ -44,6 +38,7 @@
 }
 
 .option[data-checked="true"] {
+  background-color: var(--action-primary);
   color: var(--action-primary-text);
 }
 

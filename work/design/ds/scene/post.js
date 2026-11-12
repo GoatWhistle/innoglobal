@@ -82,8 +82,8 @@ export function createPost(renderer, scene, camera) {
     },
     setTheme({ dark }) {
       material.uniforms.uDark.value = dark ? 1 : 0
-      material.uniforms.uGrain.value = dark ? 0.055 : 0.045
-      material.uniforms.uVignette.value = dark ? 0.55 : 0.05
+      material.uniforms.uGrain.value = dark ? 0.008 : 0.008
+      material.uniforms.uVignette.value = dark ? 0.08 : 0.05
     },
     render(time) {
       material.uniforms.uTime.value = time
