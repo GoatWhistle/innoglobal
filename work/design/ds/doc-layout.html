@@ -26,7 +26,7 @@
 <section class="chapter chapter-first" id="layout">
   <header class="chapter-head">
     <h2 class="chapter-title">Каркас и сетка</h2>
-    <p class="chapter-lead">Экран заполняет всю ширину. Сцена занимает сцену, панель стоит справа, прокручиваются только области.</p>
+    <p class="chapter-lead">Экран заполняет всю ширину. На ноутбуке труба занимает левую часть, состояние справа, графики снизу. На телефоне эти области идут друг за другом.</p>
   </header>
   <div class="shell-demo" role="img" aria-label="Каркас экрана: шапка, баннер тревоги, сцена и панель показаний">
     <div class="shell-head"><b>Шапка</b><span><code>--header-height</code> <span data-px="--header-height"></span>&nbsp;px, до 48rem <span data-px="--header-height-compact"></span>&nbsp;px. Участок, разделы, статус линии, свежесть, тема</span><span>липкая</span></div>
@@ -43,8 +43,8 @@
     <table class="copy">
       <thead><tr><th scope="col">Ширина</th><th scope="col" class="num">Колонки</th><th scope="col" class="num">Поля</th><th scope="col">Сцена и панель</th></tr></thead>
       <tbody>
-        <tr><th scope="row">до 48rem, 375</th><td class="num">4</td><td class="num">24</td><td>Сцена сверху на 56svh, панель листом снизу, видно <span data-px="--sheet-peek"></span>&nbsp;px: статус и главное показание</td></tr>
-        <tr><th scope="row">48–64rem, 768</th><td class="num">8</td><td class="num">24</td><td>То же, лист раскрывается до половины высоты</td></tr>
+        <tr><th scope="row">до 48rem, 375</th><td class="num">4</td><td class="num">24</td><td>Состояние, сцена, графики и раскрываемые датчики идут друг за другом</td></tr>
+        <tr><th scope="row">48–64rem, 768</th><td class="num">8</td><td class="num">24</td><td>Вертикальная компоновка, графики рядом при достаточной ширине</td></tr>
         <tr><th scope="row">64–75rem, 1024</th><td class="num">12</td><td class="num">24</td><td>Сцена и панель рядом, панель <span data-px="--panel-min"></span>&nbsp;px</td></tr>
         <tr><th scope="row">75–120rem, 1440</th><td class="num">12</td><td class="num">32</td><td>Панель <span data-px="--panel-width"></span>&nbsp;px</td></tr>
         <tr><th scope="row">от 120rem, 1920</th><td class="num">12</td><td class="num">32</td><td>Панель <span data-px="--panel-width-wide"></span>&nbsp;px, рядом с графиком профиля помещается журнал</td></tr>
@@ -52,7 +52,7 @@
     </table>
   </div>
   <ul class="facts">
-    <li><b>Кто прокручивается.</b> Экран сцены не прокручивается целиком: высота <code>calc(100svh - var(--header-height))</code>, прокручивается панель. Журнал и параметры прокручивают страницу, шапка липнет.</li>
+    <li><b>Кто прокручивается.</b> На ноутбуке рабочие области распределены по высоте экрана. На телефоне страница прокручивается целиком. Журнал и параметры сохраняют липкую шапку.</li>
     <li><b>Липкое.</b> Шапка, заголовок таблицы внутри её области, строка действий панели снизу. Больше ничего.</li>
     <li><b>Сетка.</b> <code>repeat(var(--columns-lg), minmax(0, 1fr))</code> с <code>--grid-gap</code>. Колонки делят панели, а не карточки одинаковой ширины.</li>
     <li><b>Ширина.</b> Без <code>max-width</code> у страниц. Ограничены только текст <code>--prose-measure</code> и одиночное поле <code>--field-max-width</code>.</li>
@@ -71,8 +71,8 @@
     <p class="chapter-lead">Две плотности. Обычная для жюри и касания, плотная для оператора с мышью в длинных таблицах.</p>
   </header>
   <div class="dens">
-    <div><ul class="dens-rows"><li><span>Д-03, 4 800 м</span><span>41,62 бар</span><span class="muted">2 с</span></li><li><span>Д-04, 7 200 м</span><span>40,37 бар</span><span class="muted">2 с</span></li><li><span>Д-05, 9 600 м</span><span>39,21 бар</span><span class="muted">3 с</span></li></ul><p class="spec-cap">Обычная: строка <span data-px="--row-height"></span>&nbsp;px, поле <span data-px="--control-height"></span>&nbsp;px, отступ <span data-px="--cell-padding"></span>&nbsp;px, текст <code>body-sm</code></p></div>
-    <div><ul class="dens-rows" data-density="compact"><li><span>Д-03, 4 800 м</span><span>41,62 бар</span><span class="muted">2 с</span></li><li><span>Д-04, 7 200 м</span><span>40,37 бар</span><span class="muted">2 с</span></li><li><span>Д-05, 9 600 м</span><span>39,21 бар</span><span class="muted">3 с</span></li></ul><p class="spec-cap">Плотная: строка <span data-px="--row-height-compact"></span>&nbsp;px, поле <span data-px="--control-height-compact"></span>&nbsp;px, отступ <span data-px="--cell-padding-compact"></span>&nbsp;px, текст <code>label</code></p></div>
+    <div><ul class="dens-rows"><li><span>Д-03, 4 800 м</span><span>4,65 МПа</span><span class="muted">2 с</span></li><li><span>Д-04, 7 200 м</span><span>4,46 МПа</span><span class="muted">2 с</span></li><li><span>Д-05, 9 600 м</span><span>4,28 МПа</span><span class="muted">3 с</span></li></ul><p class="spec-cap">Обычная: строка <span data-px="--row-height"></span>&nbsp;px, поле <span data-px="--control-height"></span>&nbsp;px, отступ <span data-px="--cell-padding"></span>&nbsp;px, текст <code>body-sm</code></p></div>
+    <div><ul class="dens-rows" data-density="compact"><li><span>Д-03, 4 800 м</span><span>4,65 МПа</span><span class="muted">2 с</span></li><li><span>Д-04, 7 200 м</span><span>4,46 МПа</span><span class="muted">2 с</span></li><li><span>Д-05, 9 600 м</span><span>4,28 МПа</span><span class="muted">3 с</span></li></ul><p class="spec-cap">Плотная: строка <span data-px="--row-height-compact"></span>&nbsp;px, поле <span data-px="--control-height-compact"></span>&nbsp;px, отступ <span data-px="--cell-padding-compact"></span>&nbsp;px, текст <code>label</code></p></div>
   </div>
   <ul class="facts">
     <li><b>По умолчанию обычная.</b> Сцена, панель показаний, формы, диалоги и всё на касании.</li>
@@ -92,8 +92,8 @@
       <thead><tr><th scope="col">Семейство</th><th scope="col">375</th><th scope="col">768</th><th scope="col">1024</th><th scope="col">1440</th><th scope="col">1920</th></tr></thead>
       <tbody>
         <tr><th scope="row">Шапка</th><td>Знак, статус, меню</td><td>Знак, разделы иконками, статус</td><td colspan="3">Знак, участок, разделы, статус, свежесть, тема</td></tr>
-        <tr><th scope="row">Сцена</th><td colspan="2">56svh, касание ставит утечку</td><td colspan="3">Вся высота рабочей зоны</td></tr>
-        <tr><th scope="row">Панель показаний</th><td colspan="2">Лист снизу, видно статус и главное показание</td><td>Справа, 320</td><td>Справа, 384</td><td>Справа, 440</td></tr>
+        <tr><th scope="row">Сцена</th><td colspan="2">В потоке страницы, касание ставит утечку</td><td colspan="3">Вся высота рабочей зоны</td></tr>
+        <tr><th scope="row">Панель показаний</th><td colspan="2">Состояние перед сценой, подробности раскрываются</td><td>Справа, 320</td><td>Справа, 384</td><td>Справа, 440</td></tr>
         <tr><th scope="row">Показания</th><td>2 в ряд</td><td>3 в ряд</td><td colspan="3">2 в ряд в панели</td></tr>
         <tr><th scope="row">Таблица журнала</th><td>Список карточек: время, статус, место</td><td>Таблица, 4 колонки</td><td colspan="3">Таблица целиком, плотная при мыши</td></tr>
         <tr><th scope="row">График</th><td><span data-px="--chart-height-sm"></span>&nbsp;px, 3 деления</td><td colspan="4"><span data-px="--chart-height"></span>&nbsp;px, 5 делений, подписи прямо у линий</td></tr>

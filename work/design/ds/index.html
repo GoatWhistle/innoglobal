@@ -6,7 +6,6 @@
 <title>Основы | PipeTwin</title>
 <script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
 <link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
-<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/raleway/wght-italic.css">
 <link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
 <link rel="stylesheet" href="ds.css">
 <link rel="stylesheet" href="doc.css">
@@ -24,7 +23,10 @@
 <div class="shell">
 <nav class="toc" aria-label="Разделы" data-toc></nav>
 <main class="doc" id="main">
-<h1 class="visually-hidden">Основы интерфейса PipeTwin</h1>
+<header class="foundation-intro">
+  <h1>Основы<br>интерфейса</h1>
+  <div class="foundation-summary"><p>Реалистичная труба, точные показания и спокойная рабочая среда. Цвет появляется, когда линии нужно внимание.</p><nav aria-label="Знакомство с системой"><a href="screen-twin.html">Открыть симулятор<svg class="icon" aria-hidden="true"><use href="icons.svg#external"/></svg></a><a href="kit.html">Компоненты<svg class="icon" aria-hidden="true"><use href="icons.svg#arrow-right"/></svg></a></nav></div>
+</header>
 
 <section class="chapter chapter-first" id="principles" aria-label="Принципы">
   <ol class="rules">
@@ -71,12 +73,12 @@
       <p class="tv-name"><span data-view-name></span><span class="tv-hex" data-view-base></span></p>
       <div class="tv-panel">
         <p class="tv-row"><span class="tv-label">Давление, Д-03</span><span class="tv-time">4&nbsp;с назад</span></p>
-        <p class="tv-read">41,62<small>бар</small></p>
-        <p class="tv-model">Модель 42,48&nbsp;бар</p>
+        <p class="tv-read">4,60<small>МПа</small></p>
+        <p class="tv-model">Модель 4,65&nbsp;МПа</p>
         <p class="tv-track"><span class="tv-seg" data-on>Сцена</span><span class="tv-seg">Профиль</span><span class="tv-seg">Журнал</span></p>
       </div>
-      <p class="tv-signal tv-warn"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg>Расхождение 0,86&nbsp;бар на Д-03</p>
-      <p class="tv-signal tv-leak"><svg class="icon" aria-hidden="true"><use href="icons.svg#leak"/></svg>Утечка на 6&nbsp;840&nbsp;м</p>
+      <p class="tv-signal tv-warn"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg>Расхождение 0,05&nbsp;МПа на Д-03</p>
+      <p class="tv-signal tv-leak"><svg class="icon" aria-hidden="true"><use href="icons.svg#leak"/></svg>Утечка на 6&nbsp;340&nbsp;м</p>
       <p class="tv-actions"><span class="tv-btn tv-primary">Перекрыть участок</span><span class="tv-btn tv-ghost">Журнал</span></p>
     </div>
   </div>
@@ -94,7 +96,7 @@
 <section class="chapter" id="type">
   <header class="chapter-head">
     <h2 class="chapter-title">Типографика</h2>
-    <p class="chapter-lead">Onest во всех ролях. Крупное говорит шёпотом, начертанием 300. Высота строки кратна 4&nbsp;px, кроме плавных заголовков.</p>
+    <p class="chapter-lead">Onest во всех ролях. Заголовки задают структуру, подписи держат контекст, табличные цифры сохраняют разряды. Одна гарнитура связывает сцену и рабочие панели.</p>
   </header>
   <div class="faces">
     <div class="face">
@@ -103,9 +105,9 @@
       <p class="face-weights"><span class="w-300">300 крупный текст</span><span class="w-400">400 текст и подписи</span><span class="w-500">500 кнопки</span></p>
     </div>
     <div class="face">
-      <p class="face-swap">Мы с<em>л</em>ушаем трубу</p>
-      <p class="face-name">Raleway Italic</p>
-      <p class="face-note">Одна буква в заголовке сцены и в знаке. Больше нигде.</p>
+      <p class="face-swap">4,65 <small>МПа</small></p>
+      <p class="face-name">Точность в деталях</p>
+      <p class="face-note">Табличные цифры. Десятичная запятая. Единица рядом со значением.</p>
     </div>
   </div>
   <div class="scroll" tabindex="0" role="region" aria-label="Шкала размеров">

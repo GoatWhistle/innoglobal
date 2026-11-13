@@ -29,30 +29,49 @@ export function start(state) {
   function attach() {
     if (attached || !snapshot || !window.pipeTwinSceneReady) return
     attached = true
-    window.dispatchEvent(new CustomEvent("pipetwin:scene", { detail: { host, sim: runtime.sim, send: runtime.send, select } }))
+    window.dispatchEvent(new CustomEvent("pipetwin:scene", { detail: { host, sim: runtime.sim, send: runtime.send, select, choose, selected: () => selected } }))
+  }
+  function choose(index) {
+    selected = index
+    draw()
   }
   function draw() {
     if (!snapshot || document.hidden) return
-    q("[data-scheme]").innerHTML = scheme(snapshot, selected, hover, host.clientWidth)
+    if (host.dataset.renderer !== "ready") q("[data-scheme]").innerHTML = scheme(snapshot, selected, hover, host.clientWidth)
     for (const [key, temporal] of [["profile", false], ["history", true]]) {
       const el = q(`[data-${key}]`)
       el.innerHTML = chart(snapshot, selected, temporal, el.clientWidth, el.clientHeight)
     }
     q("[data-selected]").textContent = `Д-0${selected + 1}`
   }
+  function sequence(sim) {
+    const steps = [["calm", "Норма"], ["deviation", "Расхождение"], ["watch", "Наблюдение"], ["leak", "Обнаружена"], ["ack", "Принята"]]
+    const signature = sim.events.map((event) => event.type).join(",")
+    const node = q("[data-sequence]")
+    if (node.dataset.signature === signature) return
+    node.dataset.signature = signature
+    node.innerHTML = steps.map(([key, name]) => {
+      const event = sim.events.find((entry) => entry.type === key)
+      const current = sim.phase === key || key === "calm" && sim.phase === "search"
+      const time = event && sim.leak ? `${Math.max(0, event.time - sim.leak.t0).toLocaleString("ru-RU", { maximumFractionDigits: 2 })} с` : key === "calm" ? "До воздействия" : "Ожидание"
+      return `<li data-done="${Boolean(event) || key === "calm"}" data-tone="${event ? tone(key) : ""}"${current ? ' aria-current="step"' : ""}><span>${name}</span><time>${time}</time></li>`
+    }).join("")
+  }
   function update(sim) {
     snapshot = sim
+    sequence(sim)
     attach()
     updatePanel(status, sim, previous)
     if (previous !== sim.phase) {
       q("[data-line]").innerHTML = badge(tone(sim.phase), symbol(sim.phase), labels[sim.phase])
       q("[data-announcement]").setAttribute("role", sim.phase === "leak" ? "alert" : "status")
+      q("[data-announcement]").setAttribute("aria-live", sim.phase === "leak" ? "assertive" : "polite")
       q("[data-announcement]").textContent = labels[sim.phase]
       document.title = `${labels[sim.phase]} | PipeTwin`
       previous = sim.phase
     }
     q(".app-live span").textContent = sim.paused ? "Пример на паузе" : "Расчёт в браузере"
-    q(".app-live time").textContent = `${sim.time.toFixed(1)} с`
+    q(".app-live time").textContent = `${sim.time.toLocaleString("ru-RU", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} с`
     if (performance.now() - shownAt > 250) {
       updateSensorTable(q("[data-sensors]"), sim, selected)
       shownAt = performance.now()
@@ -64,7 +83,7 @@ export function start(state) {
   addEventListener("pipetwin:renderer", attach)
   host.addEventListener("scene:failed", ({ detail }) => { q("[data-scene-state]").textContent = detail })
   host.addEventListener("pointermove", (e) => {
-    if (host.dataset.renderer === "ready" && document.documentElement.dataset.theme !== "light") return
+    if (host.dataset.renderer === "ready") return
     const rect = q("[data-scheme] svg")?.getBoundingClientRect()
     if (!rect) return
     const px = (e.clientX - rect.left) / rect.width * 800
@@ -74,7 +93,11 @@ export function start(state) {
   q("[data-scheme]").addEventListener("click", (e) => {
     const target = e.target.closest("[data-sensor]")
     if (target) { selected = Number(target.dataset.sensor); draw(); return }
-    if (hover !== null) runtime.send("insert", { x: hover })
+    const rect = q("[data-scheme] svg")?.getBoundingClientRect()
+    if (!rect) return
+    const px = (e.clientX - rect.left) / rect.width * 800
+    const py = (e.clientY - rect.top) / rect.height * 220
+    if (px >= 36 && px <= 764 && py >= 70 && py <= 165) runtime.send("insert", { x: (px - 36) / 728 * 12000 })
   })
   q("[data-insert]").addEventListener("submit", (e) => {
     e.preventDefault()
@@ -87,12 +110,7 @@ export function start(state) {
   })
   q("[data-reset]").addEventListener("click", () => { previous = null; runtime.send("reset") })
   q("[data-accept]").addEventListener("click", () => runtime.send("accept"))
-  q("[data-cutaway]").addEventListener("click", (e) => {
-    const on = host.dataset.cutaway !== "false"
-    host.dataset.cutaway = String(!on)
-    e.currentTarget.setAttribute("aria-pressed", String(!on))
-    e.currentTarget.querySelector("span").textContent = on ? "Оболочка" : "Разрез"
-  })
+  q("[data-home]").addEventListener("click", () => host.dispatchEvent(new Event("scene:home")))
   q("[data-fullscreen]").addEventListener("click", () => {
     if (document.fullscreenElement) document.exitFullscreen()
     else host.requestFullscreen?.().catch(() => { q("[data-scene-state]").textContent = "Полный экран недоступен. Используйте текущий вид." })

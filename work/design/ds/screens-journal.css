@@ -5,6 +5,7 @@
 }
 
 .jr-rail {
+  background: var(--surface-raised);
   position: sticky;
   inset-block-start: var(--sd-bar);
   display: grid;

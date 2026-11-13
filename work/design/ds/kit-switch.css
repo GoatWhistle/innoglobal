@@ -6,6 +6,7 @@
   block-size: var(--switch-height);
   margin-block: calc((var(--indicator-size) - var(--switch-height)) / 2);
   padding: 2.5px;
+  background: var(--surface-sunken);
   border: var(--border-width-control) solid var(--border-control);
   border-radius: var(--radius-pill);
   transition:

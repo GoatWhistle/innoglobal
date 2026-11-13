@@ -1,65 +1,61 @@
-import { sceneLabels } from "./scene-labels.js"
-import { createWorld } from "../scene/world.js"
-import { readEase, readSceneTheme } from "../scene/theme.js"
+import { Raycaster, Vector2 } from "three"
+import { createEngine } from "../pipeline/engine.js"
+import { createLabels } from "../pipeline/labels.js"
 
-function attach({ detail: { host, sim, send, select } }) {
-  if (new URLSearchParams(location.search).get("state") === "nogl") return
-  const canvas = host.querySelector("[data-canvas]")
-  let world
-  try {
-    world = createWorld({ canvas, sim, ease: readEase("--ease-viscous") })
-    const fit = () => world.resize(Math.max(1, host.clientWidth), Math.max(1, host.clientHeight))
-    new ResizeObserver(fit).observe(host)
-    fit()
-    const theme = () => world.applyTheme(readSceneTheme("dark"))
-    theme()
-    document.addEventListener("theme:change", theme)
-    const annotate = sceneLabels(host, sim, select)
-    const hover = { m: 0, on: 0 }
-    let last = performance.now()
-    let clock = 8
-    let leak = null
-    let stopped = false
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)")
-    const lost = (message) => {
-      stopped = true
-      host.dataset.renderer = "failed"
-      host.dispatchEvent(new CustomEvent("scene:failed", { detail: message }))
-    }
-    canvas.addEventListener("webglcontextlost", (e) => { e.preventDefault(); lost("Контекст 3D потерян. Схема и расчёт продолжают работать.") })
-    function tick(now) {
-      if (stopped) return
-      const dt = Math.min((now - last) / 1000, 0.05)
-      last = now
-      if (!document.hidden && sim.model.length) {
-        try {
-          if (sim.leak !== null && leak !== sim.leak.t0) { world.insert(sim.leak.x); leak = sim.leak.t0 }
-          if (!sim.leak && leak !== null) { world.reset(clock); leak = null }
-          if (!reduced.matches) clock += dt
-          world.setCutaway(host.dataset.cutaway !== "false")
-          world.update({ clock, dt, reduced: reduced.matches, hover, durations: { scene: 0.8, long: 1.25 } })
-          if (document.documentElement.dataset.theme !== "light") world.render(clock)
-          annotate(world)
-          host.dataset.renderer = "ready"
-        } catch (error) { lost("3D не запустился. Показываем интерактивную схему.") }
-      }
-      requestAnimationFrame(tick)
-    }
-    canvas.addEventListener("pointermove", (e) => {
-      const m = world.pick(e)
-      hover.on = m === null ? 0 : 1
-      if (m !== null) {
-        hover.m = m
-        select(m)
-      }
-      canvas.style.cursor = m === null || sim.leak ? "default" : "crosshair"
-    })
-    canvas.addEventListener("pointerleave", () => { hover.on = 0; select(null) })
-    canvas.addEventListener("click", (e) => { const x = world.pick(e); if (x !== null) send("insert", { x }) })
-    requestAnimationFrame(tick)
-  } catch {
+function attach({ detail: { host, sim, send, select, choose, selected } }) {
+  const fail = (message) => {
     host.dataset.renderer = "failed"
-    host.dispatchEvent(new CustomEvent("scene:failed", { detail: "3D недоступен. Показываем интерактивную схему." }))
+    host.dispatchEvent(new CustomEvent("scene:failed", { detail: message }))
+  }
+  if (new URLSearchParams(location.search).get("state") === "nogl") return
+  try {
+    const canvas = host.querySelector("[data-canvas]")
+    const overlay = createLabels(host, choose, selected)
+    const engine = createEngine(canvas, sim, overlay, () => fail("3D остановился. Схема и расчёт продолжают работать."))
+    const events = new AbortController()
+    const options = { signal: events.signal }
+    const raycaster = new Raycaster(), pointer = new Vector2()
+    let drag = null
+    const pick = (event) => {
+      const rect = canvas.getBoundingClientRect()
+      pointer.set((event.clientX - rect.left) / rect.width * 2 - 1, -(event.clientY - rect.top) / rect.height * 2 + 1)
+      raycaster.setFromCamera(pointer, engine.camera)
+      return engine.pick(raycaster.intersectObjects(engine.targets, false)[0])
+    }
+    canvas.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, moved: false } }, options)
+    addEventListener("pointerup", () => { if (drag) setTimeout(() => { drag = null }, 0) }, options)
+    canvas.addEventListener("pointermove", (e) => {
+      if (drag && e.buttons) {
+        const dx = e.clientX - drag.x, dy = e.clientY - drag.y
+        if (!drag.moved && Math.hypot(dx, dy) < 6) return
+        drag.moved = true
+        engine.orbit(dx, dy)
+        drag.x = e.clientX; drag.y = e.clientY
+        canvas.style.cursor = "grabbing"
+        engine.hover(null)
+        return
+      }
+      const hovered = pick(e)
+      engine.hover(hovered)
+      select(hovered)
+      canvas.style.cursor = hovered === null || sim.leak ? "grab" : "crosshair"
+    }, options)
+    canvas.addEventListener("pointerleave", () => { engine.hover(null); select(null) }, options)
+    canvas.addEventListener("click", (e) => {
+      if (drag?.moved) return
+      const x = pick(e)
+      if (x !== null) send("insert", { x })
+    }, options)
+    canvas.addEventListener("dblclick", () => engine.home(), options)
+    host.addEventListener("scene:home", () => engine.home(), options)
+    document.addEventListener("theme:change", () => engine.setTheme(document.documentElement.dataset.theme), options)
+    engine.setTheme(document.documentElement.dataset.theme)
+    const observer = new ResizeObserver(() => engine.resize(host.clientWidth, host.clientHeight))
+    observer.observe(host)
+    addEventListener("pagehide", () => { observer.disconnect(); events.abort(); engine.dispose() }, { once: true })
+    host.dataset.renderer = "ready"
+  } catch {
+    fail("3D недоступен. Показываем интерактивную схему.")
   }
 }
 

@@ -14,7 +14,7 @@
   block-size: var(--sd-bar);
   padding-inline: var(--sd-gutter);
   border-block-end: var(--hairline) solid var(--border-subtle);
-  background: var(--surface-base);
+  background: var(--surface-raised);
 }
 
 .app-mark {
@@ -24,11 +24,13 @@
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-tight);
   text-decoration: none;
+  padding-inline-end: var(--space-24);
+  border-inline-end: var(--hairline) solid var(--border-strong);
 }
 
 .app-nav {
   display: flex;
-  align-self: stretch;
+  align-self: center;
   gap: var(--space-4);
   min-inline-size: 0;
 }
@@ -38,7 +40,9 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-8);
-  padding-inline: var(--space-12);
+  padding-inline: var(--space-16);
+  min-block-size: var(--target-min);
+  border-radius: var(--radius-control);
   color: var(--text-secondary);
   font-size: var(--font-size-body-sm);
   text-decoration: none;
@@ -47,14 +51,7 @@
 
 .app-nav a[aria-current="page"] {
   color: var(--text-primary);
-}
-
-.app-nav a[aria-current="page"]::after {
-  position: absolute;
-  inset: auto var(--space-12) -1px;
-  block-size: 2px;
-  background: var(--text-primary);
-  content: "";
+  background: var(--surface-selected);
 }
 
 .app-nav a:focus-visible {
@@ -115,6 +112,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .app-nav a:hover {
+    background: var(--surface-raised-hover);
     color: var(--text-primary);
   }
 }
@@ -158,6 +156,7 @@
   }
 
   .app-bar .app-nav,
+  .app-tail [data-line],
   .app-live {
     display: none;
   }

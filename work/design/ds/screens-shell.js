@@ -11,7 +11,7 @@ const NAV = [
 ]
 
 const LINE = {
-  calm: ["", "check", "Норма"],
+  calm: ["", "check", "Утечек нет"],
   watch: ["warning", "warning", "Наблюдение"],
   leak: ["danger", "alarm", "Утечка"],
   off: ["muted", "offline", "Нет связи"],

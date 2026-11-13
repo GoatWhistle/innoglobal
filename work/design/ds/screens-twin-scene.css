@@ -1,0 +1,17 @@
+.twin-viewport canvas { cursor: grab; touch-action: pan-y; }
+.twin-viewport:not([data-renderer="ready"]) .lab-labels { display: none; }
+.lab-labels { position: absolute; inset: 0; pointer-events: none; }
+.lab-sensor, .lab-mark { position: absolute; inset: 0 auto auto 0; white-space: nowrap; font-size: var(--font-size-caption); }
+.lab-sensor { display: grid; place-items: center; min-inline-size: var(--target-min); min-block-size: var(--target-min); padding: 0; pointer-events: auto; cursor: pointer; color: var(--text-secondary); background: transparent; border: 0; font-variant-numeric: tabular-nums; }
+.lab-sensor span { padding: var(--space-4); background: color-mix(in oklab, var(--surface-base) 82%, transparent); }
+.lab-sensor[aria-pressed="true"] { color: var(--text-primary); }
+.lab-sensor[aria-pressed="true"] span { border-block-end: var(--hairline) solid currentColor; }
+.lab-sensor[data-tone="warning"] { color: var(--text-warning); }
+.lab-sensor[data-tone="danger"] { color: var(--text-danger); }
+.lab-mark { z-index: var(--layer-raised); margin-block: var(--space-4); padding: var(--space-4) var(--space-8); color: var(--text-primary); background: var(--surface-base); border: var(--hairline) solid var(--border-strong); font-variant-numeric: tabular-nums; }
+.lab-estimate { color: var(--text-danger); border-color: var(--status-danger); }
+.lab-locator { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; fill: none; stroke: var(--status-danger); stroke-width: var(--hairline); }
+.lab-locator .lab-interval { stroke-width: 6; stroke-opacity: .5; }
+@media (hover: hover) and (pointer: fine) {
+  .lab-sensor:hover { color: var(--text-primary); }
+}

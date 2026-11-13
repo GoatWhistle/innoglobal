@@ -12,19 +12,21 @@
 <script type="module" src="screens-index.js"></script>
 </head>
 <body>
+<a class="ix-skip" href="#ix-preview">К просмотру экрана</a>
+<header class="ix-masthead"><a class="ix-brand" href="index.html">PipeTwin</a><nav aria-label="Дизайн-система"><a href="index.html">Основы</a><a href="kit.html">Компоненты</a><a href="screens.html" aria-current="page">Экраны</a><a href="scene.html">Сцена</a></nav><div class="segmented segmented-icons" role="radiogroup" aria-label="Тема" data-theme-switch><button type="button" role="radio" aria-checked="true" data-value="dark" aria-label="Тёмная тема"><svg class="icon" aria-hidden="true"><use href="icons.svg#moon"/></svg></button><button type="button" role="radio" aria-checked="false" data-value="light" aria-label="Светлая тема"><svg class="icon" aria-hidden="true"><use href="icons.svg#sun"/></svg></button></div></header>
 <div class="ix">
   <aside class="ix-list" aria-labelledby="ix-title">
-    <h1 class="sd-h2" id="ix-title">Шаблоны экранов</h1>
-    <p class="sd-caption">Полноэкранные страницы из компонентов набора. Состояние задаётся в адресе, например ?state=leak.</p>
+    <h1 id="ix-title">Экраны продукта</h1>
+    <p class="sd-caption">Рабочие сценарии и состояния. Выберите экран, затем проверьте его на ширине ноутбука или телефона.</p>
     <nav data-screens aria-label="Шаблоны"></nav>
     <p class="sd-caption ix-links"><a href="kit.html">Набор компонентов</a> <a href="index.html">Основы</a> <a href="404.html">404</a> <a href="experiments.html">Эксперименты</a> <a href="pipeline.html">Магистраль</a></p>
   </aside>
-  <section class="ix-view" aria-label="Просмотр">
+  <section class="ix-view" id="ix-preview" tabindex="-1" aria-label="Просмотр">
     <div class="ix-bar">
       <div class="segmented" role="radiogroup" aria-label="Ширина" data-width><button type="button" role="radio" aria-checked="true" data-value="100%"><span>Вся ширина</span></button><button type="button" role="radio" aria-checked="false" data-value="1024px"><span>1024</span></button><button type="button" role="radio" aria-checked="false" data-value="375px"><span>375</span></button></div>
       <a class="button button-secondary button-sm" data-open href="screen-twin.html" target="_blank" rel="noreferrer"><svg class="icon" aria-hidden="true"><use href="icons.svg#external"/></svg><span>Открыть отдельно</span></a>
     </div>
-    <div class="ix-frame"><iframe title="Шаблон" data-frame src="screen-twin.html?dock=0"></iframe></div>
+    <div class="ix-frame"><iframe title="Предпросмотр экрана продукта" data-frame src="screen-twin.html?dock=0"></iframe></div>
   </section>
 </div>
 </body>

@@ -35,9 +35,9 @@
         <p class="view-name" data-view-name></p>
         <div class="ro">
           <p class="ro-head"><span class="ro-label"><svg class="icon" aria-hidden="true"><use href="icons.svg#pressure"/></svg>Давление, Д-03</span><span class="ro-fresh"><svg class="icon" aria-hidden="true"><use href="icons.svg#clock"/></svg>1 с назад</span></p>
-          <p class="ro-value"><span class="ro-num">41,62</span><span class="ro-unit">бар</span></p>
-          <p class="ro-model">Модель 42,48 бар</p>
-          <p class="ro-delta"><span class="badge badge-sm" data-tone="warning"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg><span>Наблюдение</span></span><span>−0,86 бар</span></p>
+          <p class="ro-value"><span class="ro-num">4,60</span><span class="ro-unit">МПа</span></p>
+          <p class="ro-model">Модель 4,65 МПа</p>
+          <p class="ro-delta"><span class="badge badge-sm" data-tone="warning"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg><span>Наблюдение</span></span><span>−0,05 МПа</span></p>
         </div>
       </div>
     </div>
@@ -53,11 +53,11 @@
     <table class="copy">
       <thead><tr><th scope="col">Величина</th><th scope="col">Единица</th><th scope="col">Знаков</th><th scope="col">Пишем</th><th scope="col">Не пишем</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Давление</th><td>бар</td><td>2</td><td>41,62&nbsp;бар</td><td class="no">41.6249 bar</td></tr>
-        <tr><th scope="row">Расхождение</th><td>бар</td><td>2, знак всегда</td><td>−0,86&nbsp;бар, +0,12&nbsp;бар, 0,00&nbsp;бар</td><td class="no">-0,86 бар с дефисом, 0.86</td></tr>
+        <tr><th scope="row">Давление</th><td>МПа</td><td>2</td><td>4,65&nbsp;МПа</td><td class="no">4.6512 MPa</td></tr>
+        <tr><th scope="row">Расхождение</th><td>МПа</td><td>2, знак всегда</td><td>−0,05&nbsp;МПа, +0,01&nbsp;МПа, 0,00&nbsp;МПа</td><td class="no">-0,05 МПа с дефисом, 0.05</td></tr>
         <tr><th scope="row">Расход</th><td>м³/ч</td><td>0 от 100, 1 ниже</td><td>1&nbsp;500&nbsp;м³/ч, 87,3&nbsp;м³/ч</td><td class="no">1500.00 м3/ч</td></tr>
         <tr><th scope="row">Температура</th><td>°C</td><td>1</td><td>51,8&nbsp;°C</td><td class="no">51.83°</td></tr>
-        <tr><th scope="row">Место на участке</th><td>м</td><td>0, шаг 10&nbsp;м</td><td>на 6&nbsp;840&nbsp;м</td><td class="no">6,84 км от начала</td></tr>
+        <tr><th scope="row">Место на участке</th><td>м</td><td>0, шаг 10&nbsp;м</td><td>на 6&nbsp;340&nbsp;м</td><td class="no">6,34 км от начала</td></tr>
         <tr><th scope="row">Длина участка</th><td>км</td><td>0 или 1</td><td>12&nbsp;км, 2,4&nbsp;км</td><td class="no">12000 м участок</td></tr>
         <tr><th scope="row">Время обнаружения</th><td>с</td><td>1</td><td>за 3,4&nbsp;с</td><td class="no">3412 мс</td></tr>
         <tr><th scope="row">Длительность</th><td>с, мин</td><td>0</td><td>48&nbsp;с, 2&nbsp;мин 05&nbsp;с</td><td class="no">125 сек.</td></tr>
@@ -67,8 +67,8 @@
   </div>
   <ul class="facts">
     <li><b>Знак.</b> Минус это <code>U+2212</code> из <code>Intl</code> с <code>signDisplay: "exceptZero"</code>. Стрелки вверх и вниз вместо знака не используются.</li>
-    <li><b>Диапазон.</b> Короткое тире без пробелов, единица один раз: 1&nbsp;240–1&nbsp;380&nbsp;м.</li>
-    <li><b>Неопределённость.</b> В показании 6&nbsp;840&nbsp;±&nbsp;20&nbsp;м, в тексте «на 6&nbsp;840&nbsp;м, ошибка 20&nbsp;м». На схеме интервал рисуется размерной линией и штриховкой. Точность не выше погрешности: 6&nbsp;843&nbsp;м при ошибке 20&nbsp;м не пишем.</li>
+    <li><b>Диапазон.</b> Короткое тире без пробелов, единица один раз: 6&nbsp;290–6&nbsp;390&nbsp;м.</li>
+    <li><b>Неопределённость.</b> В показании 6&nbsp;340&nbsp;±&nbsp;50&nbsp;м, в тексте «на 6&nbsp;340&nbsp;м ± 50&nbsp;м». На схеме интервал рисуется размерной линией и штриховкой. Точность не выше погрешности: 6&nbsp;843&nbsp;м при ошибке 20&nbsp;м не пишем.</li>
     <li><b>Нет значения.</b> <code>NoValue</code> со словом «нет данных» и причиной в подсказке. Ноль пишется нулём, прочерк не пишется.</li>
     <li><b>Крупное число</b> не сокращается: 12&nbsp;000&nbsp;м, а не 12k. Разряды делит неразрывный узкий пробел.</li>
   </ul>
@@ -91,7 +91,7 @@
     <div data-view data-live-view>
       <p class="view-name" data-view-name></p>
       <div class="ro-grid">
-        <div class="ro"><p class="ro-head"><span class="ro-label">Давление, Д-03</span><span class="ro-fresh" data-fresh></span></p><p class="ro-value"><span class="ro-num">41,62</span><span class="ro-unit">бар</span></p><p class="ro-model">Модель 42,48 бар</p></div>
+        <div class="ro"><p class="ro-head"><span class="ro-label">Давление, Д-03</span><span class="ro-fresh" data-fresh></span></p><p class="ro-value"><span class="ro-num">4,60</span><span class="ro-unit">МПа</span></p><p class="ro-model">Модель 4,65 МПа</p></div>
         <div class="ro"><p class="ro-head"><span class="ro-label">Расход на входе</span><span class="ro-fresh" data-fresh></span></p><p class="ro-value"><span class="ro-num">1 500</span><span class="ro-unit">м³/ч</span></p><p class="ro-model">Модель 1 500 м³/ч</p></div>
       </div>
       <p class="live-line" data-live-line role="status"></p>

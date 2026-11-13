@@ -68,7 +68,7 @@
 
 .cal-grid {
   display: grid;
-  grid-template-columns: repeat(7, 40px);
+  grid-template-columns: repeat(7, var(--target-min));
   font-variant-numeric: var(--font-numeric);
 }
 
@@ -81,7 +81,8 @@
 }
 
 .cal-day {
-  block-size: 40px;
+  block-size: var(--target-min);
+  border-radius: var(--radius-sm);
   padding: 0;
   border: 0;
   background: transparent;
@@ -121,5 +122,5 @@
 }
 
 .range-time .input {
-  min-block-size: var(--control-height-compact);
+  min-block-size: var(--control-height);
 }

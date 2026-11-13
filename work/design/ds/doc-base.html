@@ -26,14 +26,15 @@
 <section class="chapter chapter-first" id="space">
   <header class="chapter-head">
     <h2 class="chapter-title">Ритм и форма</h2>
-    <p class="chapter-lead">Шаг 4&nbsp;px. Угол либо 0, либо полная пилюля.</p>
+    <p class="chapter-lead">Шаг 4&nbsp;px. Прямые панели, мягкие углы управления, круглые метки состояния.</p>
   </header>
   <div class="form-grid">
   <div class="spaces" data-spaces></div>
   <div class="shapes">
-    <figure class="shape"><div class="shape-sharp"></div><figcaption><b>0 px</b>Панели, поля, списки, всплывающие слои</figcaption></figure>
-    <figure class="shape"><div class="shape-pill"></div><figcaption><b>Пилюля</b>Кнопки, метки, переключатели, ползунки</figcaption></figure>
-    <figure class="shape"><div class="shape-banned"></div><figcaption><b>1–9998 px</b>Не используется</figcaption></figure>
+    <figure class="shape"><div class="shape-sharp"></div><figcaption><b>Прямая рамка</b>Рабочие панели, таблицы и схемы</figcaption></figure>
+    <figure class="shape"><div class="shape-control"></div><figcaption><b><span data-px="--radius-control"></span> px</b>Кнопки, поля и выбор значения</figcaption></figure>
+    <figure class="shape"><div class="shape-layers"><i></i><i></i><i></i></div><figcaption><b><span data-px="--radius-sm"></span> / <span data-px="--radius-md"></span> / <span data-px="--radius-lg"></span> px</b>Малые элементы, меню и диалоги</figcaption></figure>
+    <figure class="shape"><div class="shape-pill"></div><figcaption><b>Пилюля</b>Метки состояния и переключатели</figcaption></figure>
   </div>
   </div>
   <dl class="measures" data-measures></dl>
@@ -81,7 +82,7 @@
   <div class="icon-sizes" data-icon-sizes></div>
   <ul class="facts">
     <li>Сетка 24&nbsp;px, поле 2&nbsp;px, штрих <span data-raw="--icon-stroke"></span>.</li>
-    <li>Концы рубленые, стыки острые, как углы панелей. Окружности рифмуются с пилюлями.</li>
+    <li>Рубленые концы и точные стыки повторяют инженерную графику. Окружности обозначают датчики и состояния.</li>
     <li>Иконка в статусе всегда стоит рядом со словом. Иконка без подписи только в кнопке с <code>aria-label</code> и подсказкой.</li>
   </ul>
   <p class="more"><a href="kit.html#icons">Весь набор<svg class="icon" aria-hidden="true"><use href="icons.svg#arrow-right"/></svg></a></p>

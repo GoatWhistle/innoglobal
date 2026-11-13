@@ -5,7 +5,7 @@
   min-block-size: 28px;
   max-inline-size: 100%;
   padding: 0 var(--space-12) 0 var(--space-8);
-  border: var(--hairline) solid var(--border-strong);
+  border: var(--hairline) solid var(--border-subtle);
   border-radius: var(--radius-pill);
   color: var(--text-primary);
   font-size: var(--font-size-label);
@@ -26,13 +26,13 @@
 
 .badge[data-tone="warning"] {
   border-color: var(--status-warning);
-  background: var(--signal-warning-surface);
+  background: var(--surface-raised);
   color: var(--text-warning);
 }
 
 .badge[data-tone="danger"] {
   border-color: var(--status-danger);
-  background: var(--signal-danger-surface);
+  background: var(--surface-raised);
   color: var(--text-danger);
 }
 
@@ -64,7 +64,7 @@
   min-block-size: 28px;
   max-inline-size: 240px;
   padding: 0 var(--space-12);
-  border: var(--hairline) solid var(--border-strong);
+  border: var(--hairline) solid var(--border-subtle);
   border-radius: var(--radius-pill);
   background: transparent;
   color: var(--text-primary);
@@ -105,6 +105,8 @@
 }
 
 button.tag {
+  border-color: var(--border-control);
+  border-radius: var(--radius-control);
   min-block-size: var(--control-height-compact);
   cursor: pointer;
   transition: var(--transition-control-press);

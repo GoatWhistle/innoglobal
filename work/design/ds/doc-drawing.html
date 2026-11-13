@@ -32,16 +32,16 @@
     <div data-view>
       <p class="view-name" data-view-name></p>
       <header class="sheet">
-        <div class="sheet-title"><p class="sheet-k">Лист</p><h3>Участок Север, км 0–12</h3></div>
+        <div class="sheet-title"><h3>Участок Север, км 0–12</h3></div>
         <dl class="sheet-meta"><div><dt>Масштаб</dt><dd>1 : 50 000</dd></div><div><dt>Ред.</dt><dd>14</dd></div><div><dt>Модель</dt><dd>14:02:11</dd></div><div><dt>Датчики</dt><dd>6 из 6</dd></div></dl>
       </header>
       <div class="paper spec">
-        <svg class="ink ink-demo" viewBox="0 0 560 150" role="img" aria-label="Участок 12 000 м, датчик Д-03 показывает 41,62 бар">
+        <svg class="ink ink-demo" viewBox="0 0 560 150" role="img" aria-label="Участок 12 000 м, датчик Д-03 показывает 4,65 МПа">
           <path class="axis" d="M16 70H544"/>
           <path class="contour" d="M40 52H520M40 88H520"/>
           <path class="line" d="M40 46V52M136 46V52M232 46V52M328 46V52M424 46V52M520 46V52"/>
           <path class="fine" d="M232 46L262 18H392"/>
-          <text class="strong" x="268" y="13">Д-03</text><text x="310" y="13">41,62 бар</text>
+          <text class="strong" x="268" y="13">Д-03</text><text x="310" y="13">4,65 МПа</text>
           <path class="fine" d="M40 94V134M520 94V134"/>
           <path class="line" d="M40 126H520M36 130L44 122M516 130L524 122"/>
           <text x="280" y="118" text-anchor="middle">12 000 м</text>
@@ -54,7 +54,7 @@
     <table class="copy">
       <thead><tr><th scope="col">Что</th><th scope="col">Тёмная: ночной зал</th><th scope="col">Светлая: чертёж</th><th scope="col">Токен</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Основа</th><td>Смола, чистый чёрный под сценой</td><td>Бумага, миллиметровка за рабочими зонами</td><td><code>--paper-grid</code></td></tr>
+        <tr><th scope="row">Основа</th><td>Тёплый чёрный под сценой, графитовые рабочие слои</td><td>Бумага, миллиметровка за рабочими зонами</td><td><code>--paper-grid</code></td></tr>
         <tr><th scope="row">Линия</th><td>Тон и глубина, линии тихие</td><td>Тушь трёх толщин</td><td><code>--drawing-*</code>, <code>--ink-weight-*</code></td></tr>
         <tr><th scope="row">Площадь события</th><td>Прозрачная заливка янтарём или оксбладом</td><td>Штриховка той же тушью и лёгкая заливка</td><td><code>--fill-*</code>, <code>--hatch-*</code></td></tr>
         <tr><th scope="row">Выбор</th><td>Тон <code>--surface-selected</code></td><td>Угловые метки чертёжника</td><td><code>--selection-mark</code></td></tr>
@@ -119,17 +119,17 @@
     <div data-view>
       <p class="view-name" data-view-name></p>
       <ul class="picks spec" data-picks>
-        <li><button type="button" class="marked" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-03, 4 800 м</span><span class="fig">41,62 бар</span></button></li>
-        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-04, 7 200 м</span><span class="fig">40,37 бар</span></button></li>
-        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-05, 9 600 м</span><span class="fig">39,21 бар</span></button></li>
+        <li><button type="button" class="marked" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-03, 4 800 м</span><span class="fig">4,65 МПа</span></button></li>
+        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-04, 7 200 м</span><span class="fig">4,46 МПа</span></button></li>
+        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-05, 9 600 м</span><span class="fig">4,28 МПа</span></button></li>
       </ul>
       <div class="cards">
         <a class="card-link trace" href="#signature"><small>Расход на входе</small><b>1 500 м³/ч</b></a>
         <a class="card-link trace" href="#signature"><small>Температура на входе</small><b>51,8 °C</b></a>
       </div>
       <ul class="ticks">
-        <li>Порог 0,70 бар</li>
-        <li>Удержание 0,4 с</li>
+        <li>Порог 0,07 МПа</li>
+        <li>Выдержка 0,4 с</li>
         <li>Подтверждают два датчика</li>
       </ul>
     </div>

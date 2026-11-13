@@ -110,7 +110,7 @@
   min-block-size: var(--target-min);
   padding-inline: var(--space-12) var(--space-16);
   border: var(--hairline) solid var(--border-strong);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   background: transparent;
   color: var(--text-secondary);
   font: inherit;

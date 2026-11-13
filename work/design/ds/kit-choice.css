@@ -48,6 +48,11 @@
     scale var(--dur-press) var(--ease-out);
 }
 
+.check-box {
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}
+
 .check-box svg {
   grid-area: 1 / 1;
   inline-size: var(--icon-sm);

@@ -3,6 +3,8 @@
   overflow: auto;
   overscroll-behavior: contain;
   border: var(--hairline) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
 }
 
 .table {
@@ -17,10 +19,10 @@
   position: sticky;
   inset-block-start: 0;
   z-index: 1;
-  block-size: 40px;
+  block-size: var(--target-min);
   padding: 0 var(--space-16);
   border-block-end: var(--hairline) solid var(--border-strong);
-  background: var(--surface-raised);
+  background: var(--surface-sunken);
   color: var(--text-muted);
   font-size: var(--font-size-caption);
   font-weight: var(--weight-regular);
@@ -61,7 +63,9 @@
 }
 
 .table .check {
-  min-block-size: 0;
+  min-inline-size: var(--target-min);
+  align-items: center;
+  min-block-size: var(--target-min);
   padding: 0;
   vertical-align: middle;
 }
@@ -70,7 +74,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-4);
-  min-block-size: 40px;
+  min-block-size: var(--target-min);
   padding: 0;
   border: 0;
   background: none;
@@ -103,7 +107,7 @@ th[aria-sort] .sort-button .icon {
 }
 
 .table tr[aria-selected="true"] td {
-  background: var(--surface-range);
+  background: var(--surface-selected);
 }
 
 
@@ -145,11 +149,11 @@ th[aria-sort] .sort-button .icon {
 
 .page {
   position: relative;
-  min-inline-size: var(--control-height-compact);
-  block-size: var(--control-height-compact);
+  min-inline-size: var(--target-min);
+  block-size: var(--target-min);
   padding: 0 var(--space-8);
   border: var(--hairline) solid transparent;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   background: transparent;
   color: var(--text-secondary);
   font: inherit;
@@ -157,8 +161,9 @@ th[aria-sort] .sort-button .icon {
 }
 
 .page[aria-current="page"] {
-  border-color: var(--border-ink);
-  color: var(--text-primary);
+  border-color: var(--action-primary);
+  background: var(--action-primary);
+  color: var(--action-primary-text);
 }
 
 .page-gap {
@@ -168,7 +173,7 @@ th[aria-sort] .sort-button .icon {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .table tbody tr:not(.table-empty):hover td {
+  .table tbody tr:not(.table-empty, [aria-selected="true"]):hover td {
     background: var(--action-ghost-hover);
   }
 

@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="screens-sensor-row.css">
 <link rel="stylesheet" href="screens-twin.css">
 <link rel="stylesheet" href="screens-twin-narrow.css">
+<link rel="stylesheet" href="screens-twin-scene.css">
 <script type="module" src="screens-twin.js"></script>
 </head>
 <body>
@@ -21,9 +22,9 @@
 <main class="app-main twin" id="main">
   <section class="twin-stage" aria-labelledby="twin-title">
     <header class="twin-stage-head"><div><h1 class="twin-title" id="twin-title">Участок 2</h1><p class="sd-caption">Магистраль Север, 12 км, DN 530</p></div>
-    <div class="twin-tools"><button class="button button-secondary" data-cutaway aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#layers"/></svg><span>Разрез</span></button><button class="icon-button icon-button-secondary" data-fullscreen aria-label="Развернуть сцену"><svg class="icon" aria-hidden="true"><use href="icons.svg#expand"/></svg></button></div></header>
-    <div class="twin-viewport" data-stage data-cutaway="true" data-renderer="loading">
-      <canvas data-canvas aria-label="Трубопровод. Вставить утечку можно кликом или через поле координаты"></canvas>
+    <div class="twin-tools"><button class="button button-secondary" data-home><svg class="icon" aria-hidden="true"><use href="icons.svg#cube"/></svg><span>Вернуть вид</span></button><button class="icon-button icon-button-secondary" data-fullscreen aria-label="Развернуть сцену"><svg class="icon" aria-hidden="true"><use href="icons.svg#expand"/></svg></button></div></header>
+    <div class="twin-viewport" data-stage data-renderer="loading">
+      <canvas data-canvas aria-label="Трубопровод в разрезе. Нажмите на трубу, чтобы вставить утечку, потяните, чтобы повернуть"></canvas>
       <div data-scheme><svg viewBox="0 0 800 220" class="flow-scheme" role="img" aria-label="Схема участка"><path class="scheme-body" d="M36 88H764V108H36Z"/><text x="400" y="154" text-anchor="middle">12 000 м, шесть датчиков</text></svg></div>
     </div>
     <p class="twin-hint" data-hint>Задайте место утечки в поле координаты</p>

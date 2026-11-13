@@ -3,6 +3,8 @@ body {
   background: var(--surface-base);
   color: var(--text-primary);
   font-family: var(--font-sans);
+  text-underline-offset: 0.2em;
+  caret-color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -15,6 +17,7 @@ body {
   stroke-width: var(--icon-stroke);
   stroke-linecap: butt;
   stroke-linejoin: miter;
+  vertical-align: middle;
 }
 
 .stage {

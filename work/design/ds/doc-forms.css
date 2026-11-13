@@ -88,7 +88,7 @@
   min-block-size: var(--control-height-compact);
   padding-inline: var(--space-12) var(--space-16);
   border: var(--hairline) solid var(--border-strong);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   color: var(--text-secondary);
   font-size: var(--font-size-body-sm);
 }

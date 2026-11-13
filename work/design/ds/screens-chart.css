@@ -23,7 +23,7 @@
 }
 
 .ch-grid {
-  stroke: var(--sd-grid);
+  stroke: var(--chart-grid);
   stroke-width: var(--hairline);
 }
 
@@ -34,8 +34,8 @@
 
 .ch-model {
   stroke-dasharray: var(--chart-dash-model);
-  stroke: var(--text-secondary);
-  stroke-width: 1;
+  stroke: var(--chart-model);
+  stroke-width: var(--chart-stroke-model);
 }
 
 .ch-draft {
@@ -45,8 +45,8 @@
 }
 
 .ch-measured {
-  stroke: var(--text-primary);
-  stroke-width: 2;
+  stroke: var(--chart-measured);
+  stroke-width: var(--chart-stroke);
   stroke-linejoin: round;
 }
 

@@ -77,3 +77,67 @@
 .build-links a {
   color: var(--text-primary);
 }
+
+.foundation-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-40);
+  align-items: end;
+  padding-block: var(--space-64) var(--space-48);
+  border-block-end: var(--hairline) solid var(--border-strong);
+}
+
+.foundation-intro h1 {
+  margin: 0;
+  font-size: clamp(2.75rem, 1.8rem + 2.5vw, 5rem);
+  font-weight: var(--weight-light);
+  line-height: 1.04;
+  letter-spacing: var(--tracking-display);
+}
+
+.foundation-summary p {
+  max-inline-size: 42ch;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
+
+.foundation-summary nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8) var(--space-24);
+  margin-block-start: var(--space-24);
+}
+
+.foundation-summary a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-block-size: var(--target-min);
+  color: var(--text-primary);
+  font-size: var(--font-size-body-sm);
+}
+
+.rules {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-32) var(--space-40);
+}
+
+.rules li { padding-block-start: var(--space-16); border-color: var(--border-subtle); }
+.rules h2 { font-size: var(--font-size-subheading); font-weight: var(--weight-medium); line-height: var(--line-height-subheading); }
+.rules p { max-inline-size: 52ch; font-size: var(--font-size-body-sm); line-height: var(--line-height-body-sm); }
+.build { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--space-40); }
+.build li { grid-template-columns: minmax(0, 1fr); }
+.build h3 { font-weight: var(--weight-medium); }
+.build-links { grid-template-columns: minmax(0, 1fr); gap: 0; }
+.build-links .spec { padding: var(--space-20) 0; border: 0; border-block-start: var(--hairline) solid var(--border-subtle); background: transparent; }
+.build-links p { max-inline-size: 72ch; font-size: var(--font-size-body-sm); line-height: var(--line-height-body-sm); }
+
+@media (max-width: 64rem) {
+  .foundation-intro { grid-template-columns: minmax(0, 1fr); gap: var(--space-24); padding-block: var(--space-40); }
+}
+
+@media (max-width: 48rem) {
+  .build { grid-template-columns: minmax(0, 1fr); }
+}

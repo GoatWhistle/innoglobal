@@ -118,13 +118,13 @@
   justify-self: start;
   margin-block-start: var(--space-8);
   padding: var(--space-4);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   background: var(--surface-sunken);
 }
 
 .tv-seg {
   padding: var(--space-4) var(--space-12);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   color: var(--text-secondary);
   font-size: var(--font-size-label);
   line-height: var(--line-height-label);
@@ -171,7 +171,7 @@
   min-block-size: var(--control-height-compact);
   padding-inline: var(--space-16);
   border: var(--hairline) solid transparent;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   font-size: var(--font-size-body-sm);
   font-weight: var(--weight-medium);
 }

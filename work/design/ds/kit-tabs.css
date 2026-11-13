@@ -5,7 +5,8 @@
   grid-auto-flow: column;
   padding: var(--space-4);
   border: var(--hairline) solid var(--border-control);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
+  background: var(--surface-sunken);
 }
 
 .segmented button {
@@ -18,7 +19,7 @@
   min-block-size: var(--control-height-compact);
   padding: 0 var(--space-16);
   border: 0;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   background: transparent;
   color: var(--text-secondary);
   font: inherit;
@@ -28,12 +29,20 @@
   transition: color var(--dur-fast) var(--ease-out);
 }
 
+.segmented button::after {
+  content: "";
+  position: absolute;
+  inset-block: calc((var(--control-height-compact) - var(--target-min)) / 2);
+  inset-inline: 0;
+}
+
 .segmented-icons button {
-  inline-size: var(--control-height-compact);
+  inline-size: var(--target-min);
   padding: 0;
 }
 
 .segmented button[aria-checked="true"] {
+  background: var(--action-primary);
   color: var(--action-primary-text);
 }
 
@@ -47,8 +56,9 @@
   inset-block: var(--space-4);
   inset-inline-start: var(--space-4);
   inline-size: calc((100% - 2 * var(--space-4)) / var(--count, 3));
-  border-radius: var(--radius-pill);
-  background: var(--action-primary);
+  border-radius: var(--radius-control);
+  background: transparent;
+  pointer-events: none;
   transform: translateX(calc(100% * var(--index, 0)));
   transition: transform var(--dur-panel) var(--ease-out);
 }
@@ -56,10 +66,13 @@
 .tabs {
   position: relative;
   display: flex;
-  gap: var(--space-24);
+  gap: var(--space-4);
+  padding: var(--space-4);
   overflow-x: auto;
   scrollbar-width: none;
-  border-block-end: var(--hairline) solid var(--border-subtle);
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
 }
 
 .tabs [role="tab"] {
@@ -68,8 +81,9 @@
   align-items: center;
   gap: var(--space-8);
   min-block-size: var(--control-height);
-  padding: 0;
+  padding: 0 var(--space-16);
   border: 0;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-secondary);
   font: inherit;
@@ -84,6 +98,8 @@
 }
 
 .tabs [aria-selected="true"] {
+  background: var(--surface-raised);
+  font-weight: var(--weight-medium);
   color: var(--text-primary);
 }
 
@@ -111,7 +127,7 @@
 
 .tabs-ink {
   position: absolute;
-  inset-block-end: 0;
+  inset-block-end: var(--space-4);
   inset-inline-start: 0;
   inline-size: 1px;
   block-size: 2px;

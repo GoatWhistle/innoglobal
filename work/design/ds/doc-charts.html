@@ -36,11 +36,11 @@
       <p class="view-name" data-view-name></p>
       <div class="chart">
         <p class="chart-head"><b>Профиль давления по участку</b><span>14:02:20, 6 датчиков</span></p>
-        <div data-chart="profile" role="img" aria-label="Профиль давления: замер ниже модели после 5,6 км, утечка на 6 840 м, ошибка 20 м"></div>
+        <div data-chart="profile" role="img" aria-label="Профиль давления: замер ниже модели по всей длине, сильнее всего у 6,3 км, утечка на 6 330 м, найдено 6 340 ± 50 м"></div>
       </div>
       <div class="chart">
         <p class="chart-head"><b>Невязка Д-04, 30 с</b><span>замер минус модель</span></p>
-        <div data-chart="residual" role="img" aria-label="Невязка Д-04 выходит за порог минус 0,70 бар на 19-й секунде, утечка подтверждена через 0,4 с, обнаружено за 2,4 с"></div>
+        <div data-chart="residual" role="img" aria-label="Невязка Д-04 выходит за порог минус 0,07 МПа через 0,9 с после вставки, утечка подтверждена вторым датчиком, обнаружено за 2,0 с"></div>
       </div>
     </div>
   </div>
@@ -55,24 +55,24 @@
     <table class="copy">
       <thead><tr><th scope="col">График</th><th scope="col">Вопрос</th><th scope="col">Ось X</th><th scope="col">Ось Y</th><th scope="col">Событие</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Профиль давления</th><td>Где замер разошёлся с моделью</td><td>0–12&nbsp;км, подпись единицы у последнего деления</td><td>бар, 0 знаков на оси</td><td>Площадь расхождения штрихуется, место утечки вертикалью и выноской</td></tr>
-        <tr><th scope="row">Невязка датчика</th><td>Когда сработал порог</td><td>Последние 30&nbsp;с, окно едет</td><td>бар, деления на ±порог</td><td>Отрезок за порогом янтарём на удержании, оксбладом после</td></tr>
-        <tr><th scope="row">Ряд датчика</th><td>Как менялось давление</td><td>5&nbsp;мин, 1&nbsp;ч</td><td>бар, своя шкала у каждого</td><td>Только отметки событий журнала</td></tr>
+        <tr><th scope="row">Профиль давления</th><td>Где замер разошёлся с моделью</td><td>0–12&nbsp;км, подпись единицы у последнего деления</td><td>МПа, 1 знак на оси</td><td>Площадь расхождения штрихуется, место утечки вертикалью и выноской</td></tr>
+        <tr><th scope="row">Невязка датчика</th><td>Когда сработал порог</td><td>Последние 30&nbsp;с, окно едет</td><td>МПа, деления через 0,1</td><td>Отрезок за порогом янтарём на выдержке, оксбладом после</td></tr>
+        <tr><th scope="row">Ряд датчика</th><td>Как менялось давление</td><td>5&nbsp;мин, 1&nbsp;ч</td><td>МПа, своя шкала у каждого</td><td>Только отметки событий журнала</td></tr>
         <tr><th scope="row">Спарклайн в строке</th><td>Есть ли тренд</td><td>30&nbsp;с, без оси</td><td>Без оси, полоса допуска</td><td>Цвет только у последней точки</td></tr>
         <tr><th scope="row">Шкала обнаружения</th><td>За сколько поймали</td><td>Секунды от вставки</td><td>Нет</td><td>Отрезки наблюдения и утечки, отметки действий</td></tr>
       </tbody>
     </table>
   </div>
   <h3 class="sub">Шкала обнаружения</h3>
-  <div class="spec"><div data-chart="timeline" role="img" aria-label="Утечка вставлена на 17-й секунде, подтверждена на 19,4, принята оператором на 24,1"></div></div>
+  <div class="spec"><div data-chart="timeline" role="img" aria-label="Утечка вставлена на 17-й секунде, подтверждена на 19,0, принята оператором на 24,1"></div></div>
   <h3 class="sub">Спарклайны в таблице</h3>
   <div class="scroll" tabindex="0" role="region" aria-label="Датчики со спарклайнами">
     <table class="copy spark-table">
-      <thead><tr><th scope="col">Датчик</th><th scope="col" class="num">Давление, бар</th><th scope="col" class="num">Невязка, бар</th><th scope="col">30 с</th><th scope="col">Статус</th></tr></thead>
+      <thead><tr><th scope="col">Датчик</th><th scope="col" class="num">Давление, МПа</th><th scope="col" class="num">Невязка, МПа</th><th scope="col">30 с</th><th scope="col">Статус</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Д-02, 2 400 м</th><td class="num">46,82</td><td class="num">−0,05</td><td><span data-spark></span></td><td><span class="badge badge-sm"><svg class="icon" aria-hidden="true"><use href="icons.svg#check"/></svg><span>Норма</span></span></td></tr>
-        <tr><th scope="row">Д-03, 4 800 м</th><td class="num">43,93</td><td class="num">−0,52</td><td><span data-spark data-shift="-11" data-k="0.5"></span></td><td><span class="badge badge-sm" data-tone="warning"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg><span>Наблюдение</span></span></td></tr>
-        <tr><th scope="row">Д-04, 7 200 м</th><td class="num">40,79</td><td class="num">−0,95</td><td><span data-spark data-shift="-2"></span></td><td><span class="badge badge-sm" data-tone="danger"><svg class="icon" aria-hidden="true"><use href="icons.svg#alarm"/></svg><span>Утечка</span></span></td></tr>
+        <tr><th scope="row">Д-02, 2 400 м</th><td class="num">4,82</td><td class="num">−0,01</td><td><span data-spark></span></td><td><span class="badge badge-sm"><svg class="icon" aria-hidden="true"><use href="icons.svg#check"/></svg><span>Норма</span></span></td></tr>
+        <tr><th scope="row">Д-03, 4 800 м</th><td class="num">4,60</td><td class="num">−0,05</td><td><span data-spark data-shift="-11" data-k="0.5"></span></td><td><span class="badge badge-sm" data-tone="warning"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg><span>Наблюдение</span></span></td></tr>
+        <tr><th scope="row">Д-04, 7 200 м</th><td class="num">4,18</td><td class="num">−0,28</td><td><span data-spark data-shift="-2"></span></td><td><span class="badge badge-sm" data-tone="danger"><svg class="icon" aria-hidden="true"><use href="icons.svg#alarm"/></svg><span>Утечка</span></span></td></tr>
       </tbody>
     </table>
   </div>
@@ -81,7 +81,7 @@
     <li><b>Подписи прямо у линий</b> справа, легенда одна над группой графиков. Значение у каждой точки не пишется, только у последней и у события.</li>
     <li><b>Сетка</b> волосяная <code>--chart-grid</code>, сплошная. Пунктир только у модели, штрихпунктир только у нуля невязки.</li>
     <li><b>Цвет.</b> Линии в туши. Янтарь и оксблад получают только отрезок, точка или площадь события. Текст никогда не красится цветом серии.</li>
-    <li><b>Порог и удержание.</b> Порог это полоса допуска <code>--chart-band</code>, а не красная линия. Удержание показывается выноской или размерной линией с числом.</li>
+    <li><b>Порог и выдержка.</b> Порог это полоса допуска <code>--chart-band</code>, а не красная линия. Выдержка показывается выноской или размерной линией с числом.</li>
     <li><b>Наведение.</b> Вертикальная линия <code>--chart-crosshair</code> находит ближайший такт, подсказка показывает замер, модель и невязку. Клавиатура: стрелки по тактам. Таблица значений доступна рядом.</li>
     <li><b>Отрисовка.</b> График не анимируется на такте: новая точка дописывается. Анимируется только появление события.</li>
   </ul>
