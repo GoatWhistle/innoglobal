@@ -51,6 +51,25 @@ test("jet lands in front of the hole and stays within its particle budget", () =
   assert.ok(jet.impact.z > at.position.z + 0.8)
   assert.ok(Number.isFinite(jet.geometry.attributes.position.array[0]))
   jet.stop()
-  for (let i = 0; i < 240; i++) { clock += 1 / 60; jet.update(1 / 60, clock) }
+  for (let i = 0; i < 90; i++) { clock += 1 / 60; jet.update(1 / 60, clock) }
+  assert.ok(jet.dripping)
+  for (let i = 0; i < 900; i++) { clock += 1 / 60; jet.update(1 / 60, clock) }
   assert.equal(jet.alive, 0)
+  assert.equal(jet.dripping, false)
+})
+
+test("jet strength follows the leak intensity", () => {
+  const at = surface(6330)
+  const run = (power) => {
+    const jet = createJet(3200)
+    jet.setPower(power)
+    jet.start(at.position, at.normal, at.tangent, 0)
+    let clock = 0, peak = 0
+    for (let i = 0; i < 180; i++) { clock += 1 / 60; jet.update(1 / 60, clock); peak = Math.max(peak, jet.alive) }
+    return { peak, reach: jet.impact.z - at.position.z, dripping: jet.dripping }
+  }
+  const seep = run(0.08), steady = run(1), strong = run(1.5)
+  assert.ok(seep.peak < 40 && seep.dripping)
+  assert.ok(steady.peak > seep.peak * 10)
+  assert.ok(strong.reach > steady.reach)
 })

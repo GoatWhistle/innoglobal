@@ -33,8 +33,10 @@ function leaking(material, uniforms, key) {
       float run = smoothstep(width, width * 0.55, abs(along + wander)) * step(-uHoleR * 0.4, below) * smoothstep(uWet, uWet * 0.8 - 0.02, below);
       float rim = smoothstep(ragged * 2.1, ragged * 1.1, holeD) * smoothstep(0.0, 0.15, uWet);
       leakWet = near * max(run, rim) * uWetFade;`)
-      .replace("#include <color_fragment>", "#include <color_fragment>\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.006, 0.005, 0.004), leakWet);")
-      .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\nroughnessFactor = mix(roughnessFactor, 0.07, leakWet);")
+      .replace("#include <color_fragment>", `#include <color_fragment>
+      vec3 wetTone = mix(vec3(0.056, 0.029, 0.0137), vec3(0.0075, 0.006, 0.0048), smoothstep(0.45, 0.95, leakWet));
+      diffuseColor.rgb = mix(diffuseColor.rgb, wetTone, min(1.0, leakWet * 1.6));`)
+      .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\nroughnessFactor = mix(roughnessFactor, 0.14, leakWet);")
       .replace("#include <metalnessmap_fragment>", "#include <metalnessmap_fragment>\nmetalnessFactor = mix(metalnessFactor, 0.0, leakWet);")
   }
   return material

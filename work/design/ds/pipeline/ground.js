@@ -38,8 +38,8 @@ export function createGround(textures) {
 export function createPuddle() {
   const uniforms = { uGrow: { value: 0 }, uTime: { value: 0 }, uFade: { value: 1 }, uStir: { value: 0 }, uSeed: { value: 0 } }
   const material = new MeshPhysicalMaterial({
-    color: 0x030202, roughness: 0.05, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.03, ior: 1.47, envMapIntensity: 1.6,
-    iridescence: 0.22, iridescenceIOR: 1.32, iridescenceThicknessRange: [240, 380], alphaToCoverage: true,
+    color: 0x15120f, roughness: 0.16, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.05, ior: 1.5, envMapIntensity: 1.3,
+    alphaToCoverage: true,
   })
   material.customProgramCacheKey = () => "pipeline-puddle"
   material.onBeforeCompile = (shader) => {
@@ -55,14 +55,16 @@ export function createPuddle() {
       float spatter = smoothstep(0.5, 0.62, snoise(vec3(vPool * 7.5, uSeed))) * step(1.0, poolD) * (1.0 - smoothstep(1.04, 1.5, poolD)) * smoothstep(0.5, 1.2, uGrow);
       float poolAlpha = max(1.0 - smoothstep(1.0 - poolSoft, 1.0, poolD), spatter) * uFade;
       if (poolAlpha < 0.004) discard;`)
+      .replace("#include <color_fragment>", `#include <color_fragment>
+      float poolThin = smoothstep(0.86, 1.0, poolD) * step(poolD, 1.0) + spatter * 0.3;
+      diffuseColor.rgb = mix(diffuseColor.rgb, mix(vec3(0.025, 0.0152, 0.0091), vec3(0.056, 0.029, 0.0137), smoothstep(0.96, 1.0, poolD)), min(1.0, poolThin) * 0.7);`)
       .replace("#include <alphatest_fragment>", "diffuseColor.a = poolAlpha;\n#include <alphatest_fragment>")
       .replace("#include <normal_fragment_maps>", `#include <normal_fragment_maps>
       float lip = smoothstep(0.9, 1.0, poolD) * 1.1 * step(poolD, 1.0);
-      float wave = sin(poolR * 34.0 - uTime * 9.0) * exp(-poolR * 2.6) * uStir * 0.32;
-      float swell = snoise(vec3(vPool * 2.2, uTime * 0.25)) * 0.02;
+      float wave = sin(poolR * 26.0 - uTime * 3.6) * exp(-poolR * 3.2) * uStir * 0.22;
+      float swell = snoise(vec3(vPool * 2.2, uTime * 0.1)) * 0.012 * exp(-poolR * 1.4) * (0.3 + 0.7 * uStir);
       vec3 tilt = vec3(poolDir.x, 0.0, -poolDir.y) * (lip + wave) + vec3(swell, 0.0, swell);
       normal = normalize(normal + (viewMatrix * vec4(tilt, 0.0)).xyz);`)
-      .replace("#include <lights_physical_fragment>", "#include <lights_physical_fragment>\nmaterial.iridescence *= smoothstep(0.6, 0.97, poolD);")
   }
   const mesh = new Mesh(new PlaneGeometry(9, 9), material)
   mesh.rotation.x = -Math.PI / 2

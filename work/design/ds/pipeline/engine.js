@@ -46,7 +46,9 @@ export function createEngine(canvas, sim, overlay, fail) {
   const jet = createJet()
   const fluid = createFluid(renderer, jet.geometry)
   const rig = createRig(camera)
-  const leak = createLeak({ surfaces, jet, puddle, rig })
+  const query = new URLSearchParams(location.search)
+  const flow = query.has("flow") ? Math.max(0, Number(query.get("flow")) || 0) / 1500 : 1
+  const leak = createLeak({ surfaces, jet, puddle, rig, holeMm: Number(query.get("hole")) || undefined })
   const aim = new Mesh(new RingGeometry(0.105, 0.125, 48), new MeshBasicMaterial({ color: 0xffffff, depthTest: false, transparent: true }))
   aim.visible = false
   aim.renderOrder = 5
@@ -57,7 +59,7 @@ export function createEngine(canvas, sim, overlay, fail) {
   })
   scene.add(pipe.group, fittings.group, ground.mesh, puddle.mesh, aim, ...fronts)
   const tones = { neutral: new Color(), warning: new Color(), danger: new Color(), dark: new Color(0x000000) }
-  const forced = new URLSearchParams(location.search).get("motion") === "reduce"
+  const forced = query.get("motion") === "reduce"
   const media = matchMedia("(prefers-reduced-motion: reduce)")
   const reduced = { get matches() { return forced || media.matches } }
   const projected = new Vector3(), forward = new Vector3(0, 0, 1)
@@ -70,7 +72,8 @@ export function createEngine(canvas, sim, overlay, fail) {
     scene.background = new Color(token("--surface-base"))
     scene.environment = studio.environment(light)
     scene.environmentIntensity = light ? 0.9 : 1
-    fluid.setEnvironment(studio.cube(light))
+    fluid.setEnvironment(studio.cube(light), light)
+    oil.setTheme(light)
     ground.setTheme(light)
     fill.intensity = light ? 1.1 : 0.5
     key.intensity = light ? 2.3 : 3.1
@@ -95,8 +98,7 @@ export function createEngine(canvas, sim, overlay, fail) {
     return place(f.center.clone().addScaledVector(radial(f, anchor === "top" ? 0 : 1.05), outerRadius(s) + (anchor === "top" ? 0.74 : 0.02)))
   }
   function update(dt) {
-    oil.uniforms.uTime.value = clock
-    oil.uniforms.uSpeed.value = sim.leak ? 0.82 : 1
+    oil.update(dt, sim, reduced.matches, flow)
     for (const [i, sensor] of (sim.sensors ?? []).entries()) {
       const tone = sensor.state === 2 ? tones.danger : sensor.state === 1 ? tones.warning : tones.neutral
       const unit = fittings.sensors[i]
@@ -165,7 +167,7 @@ export function createEngine(canvas, sim, overlay, fail) {
     dispose() {
       stopped = true; cancelAnimationFrame(frameId)
       for (const part of [pipe, fittings, ground, puddle, jet, fluid, surfaces, studio]) part.dispose()
-      oil.material.dispose(); disposeTextures(textures)
+      oil.dispose(); disposeTextures(textures)
       aim.geometry.dispose(); aim.material.dispose()
       for (const ring of fronts) { ring.geometry.dispose(); ring.material.dispose() }
       renderer.dispose()

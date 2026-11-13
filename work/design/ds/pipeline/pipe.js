@@ -33,8 +33,14 @@ export function buildPipe(surfaces, oil) {
     shell({ s0: open, s1: close, inner: bore, outer: DIM.steel, a0: CUT.sector[1], a1: CUT.sector[0] + TAU, capStart: false, capEnd: false }),
     shell({ s0: close, s1: 1, inner: bore, outer: DIM.steel }),
   ]), surfaces.steel)
-  const liquid = add(shell({ s0: 0.0015, s1: 0.9985, inner: 0, outer: bore - 0.004, round: 96 }), oil.material)
+  const fill = bore - 0.004
+  const liquid = add(mergeGeometries([
+    shell({ s0: 0.0015, s1: open, inner: 0, outer: fill, round: 96 }),
+    shell({ s0: close, s1: 0.9985, inner: 0, outer: fill, round: 96 }),
+  ]), oil.body)
+  const section = add(shell({ s0: open, s1: close, inner: 0, outer: fill, a0: CUT.sector[1], a1: CUT.sector[0] + TAU, capStart: false, capEnd: false, along: 140 }), oil.section)
   liquid.castShadow = false
+  section.castShadow = false
   const straps = [], collars = []
   for (const [s0, s1] of jacketRuns) {
     const count = Math.max(1, Math.round((s1 - s0) * LENGTH / 1.25))
@@ -46,7 +52,7 @@ export function buildPipe(surfaces, oil) {
   add(rings(collars, 0.05, DIM.jacket - 0.004, DIM.jacket + 0.014), surfaces.band)
   add(rings([CUT.wool[0] + 0.2 / LENGTH, CUT.wool[1] - 0.2 / LENGTH, ...JOINTS.flatMap((j) => [j - 0.2 / LENGTH, j + 0.2 / LENGTH])], 0.024, DIM.steel - 0.004, DIM.steel + 0.013), surfaces.weld)
   return {
-    group, liquid, targets: [jacket, wool, steel, liquid],
+    group, liquid, targets: [jacket, wool, steel, liquid, section],
     dispose() { group.traverse((o) => o.geometry?.dispose()) },
   }
 }

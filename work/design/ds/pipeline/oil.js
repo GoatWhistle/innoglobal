@@ -1,34 +1,62 @@
-import { MeshPhysicalMaterial } from "three"
-import { NOISE } from "../scene/noise.js"
+import { Color, MeshPhysicalMaterial } from "three"
+import { DIM, LENGTH, toS } from "./route.js"
+
+const SPEED = 0.28
+const BORE = DIM.steel - DIM.wall - 0.004
+
+const TRACERS = `
+  float tracerLane(float r, float lane, float phase) {
+    float width = 0.0055;
+    float line = smoothstep(width, width * 0.35, abs(r - lane * ${BORE.toFixed(4)}));
+    float profile = pow(max(0.02, 1.0 - lane), 0.16);
+    float run = (vOilUv.x - phase * profile + lane * 1.7) / 0.62;
+    float f = fract(run);
+    float dash = smoothstep(0.0, 0.18, f) * smoothstep(0.62, 0.34, f);
+    return line * dash;
+  }`
+
+function material(flat) {
+  return new MeshPhysicalMaterial({
+    color: new Color(0x15120f), roughness: flat ? 0.22 : 0.16, metalness: 0, ior: 1.5,
+    clearcoat: flat ? 0 : 0.6, clearcoatRoughness: 0.12, envMapIntensity: flat ? 0.3 : 0.9, specularIntensity: flat ? 0.45 : 1,
+  })
+}
 
 export function createOil() {
-  const uniforms = { uTime: { value: 0 }, uSpeed: { value: 1 } }
-  const material = new MeshPhysicalMaterial({
-    color: 0x040303, roughness: 0.16, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.08, ior: 1.47,
-    envMapIntensity: 1.5, iridescence: 0.1, iridescenceIOR: 1.3, iridescenceThicknessRange: [260, 340],
-  })
-  material.customProgramCacheKey = () => "pipeline-oil"
-  material.onBeforeCompile = (shader) => {
+  const uniforms = { uPhaseUp: { value: 0 }, uPhaseDown: { value: 0 }, uLeakS: { value: 1e4 }, uTracer: { value: new Color(0x77736c) }, uTracerAlpha: { value: 0.32 } }
+  const body = material()
+  body.customProgramCacheKey = () => "pipeline-oil-body"
+  const section = material(true)
+  section.customProgramCacheKey = () => "pipeline-oil-section"
+  section.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms)
-    shader.vertexShader = `attribute vec3 aFlow; varying vec2 vOilUv; varying vec3 vAxial;\n${shader.vertexShader}`.replace(
-      "#include <begin_vertex>", "#include <begin_vertex>\nvOilUv = uv; vAxial = normalize(normalMatrix * aFlow);")
-    shader.fragmentShader = `uniform float uTime; uniform float uSpeed; varying vec2 vOilUv; varying vec3 vAxial;\n${NOISE}\n${shader.fragmentShader}`.replace(
-      "void main() {", `float oilFold(vec2 p) {
-        float t = uTime * uSpeed;
-        float a = snoise(vec3(p.x * 0.42 - t * 0.5, p.y * 2.6, t * 0.03));
-        float b = snoise(vec3(p.x * 1.1 - t * 0.9, p.y * 5.2 + a * 0.5, 3.0 + t * 0.05));
-        float c = snoise(vec3(p.x * 3.0 - t * 1.5, p.y * 9.0, 7.0));
-        return a * 0.62 + b * 0.3 + c * 0.08;
-      }
-      void main() {`)
-      .replace("#include <normal_fragment_maps>", `#include <normal_fragment_maps>
-      vec3 axial = normalize(vAxial - normal * dot(vAxial, normal) + vec3(1e-4, 2e-4, 3e-4));
-      vec3 hoop = normalize(cross(normal, axial));
-      float e = 0.012;
-      float h = oilFold(vOilUv);
-      float du = (oilFold(vOilUv + vec2(e, 0.0)) - h) / e;
-      float dv = (oilFold(vOilUv + vec2(0.0, e)) - h) / e;
-      normal = normalize(normal - axial * du * 0.05 - hoop * dv * 0.045);`)
+    shader.vertexShader = `attribute vec3 aFlow; varying vec2 vOilUv; varying float vAcross;\n${shader.vertexShader}`.replace(
+      "#include <begin_vertex>", "#include <begin_vertex>\nvOilUv = uv; vAcross = 1.0 - abs(dot(normal, aFlow));")
+    shader.fragmentShader = `uniform float uPhaseUp; uniform float uPhaseDown; uniform float uLeakS; uniform vec3 uTracer; uniform float uTracerAlpha;
+      varying vec2 vOilUv; varying float vAcross;\n${TRACERS}\n${shader.fragmentShader}`.replace(
+      "#include <color_fragment>", `#include <color_fragment>
+      float tracerPhase = vOilUv.x < uLeakS ? uPhaseUp : uPhaseDown;
+      float tracer = 0.0;
+      for (int i = 1; i <= 4; i++) tracer = max(tracer, tracerLane(vOilUv.y, float(i) * 0.2, tracerPhase));
+      float tracerEnd = smoothstep(0.0, 0.25, abs(vOilUv.x - uLeakS));
+      diffuseColor.rgb = mix(diffuseColor.rgb, uTracer, tracer * uTracerAlpha * step(0.5, vAcross) * tracerEnd);`)
   }
-  return { material, uniforms }
+  let up = 0, down = 0, rate = 0
+  return {
+    body, section, uniforms,
+    update(dt, sim, frozen, flow = 1) {
+      const [before, after] = sim.flowShare?.() ?? [1, 1]
+      const target = frozen ? 0 : flow
+      rate += (target - rate) * Math.min(1, dt * 2.5)
+      up += dt * SPEED * before * rate; down += dt * SPEED * after * rate
+      uniforms.uPhaseUp.value = up
+      uniforms.uPhaseDown.value = down
+      uniforms.uLeakS.value = sim.leak ? toS(sim.leak.x) * LENGTH : 1e4
+    },
+    setTheme(light) {
+      uniforms.uTracer.value.set(light ? 0x8a8378 : 0x77736c)
+      uniforms.uTracerAlpha.value = light ? 0.4 : 0.32
+    },
+    dispose() { body.dispose(); section.dispose() },
+  }
 }

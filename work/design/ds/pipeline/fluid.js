@@ -41,7 +41,7 @@ const BLUR = `uniform sampler2D tSource; uniform vec2 uStep; uniform float uInve
   }`
 
 const SHADE = `uniform sampler2D tFluid; uniform samplerCube tEnv; uniform vec2 uTexel; uniform vec2 uTan; uniform mat3 uCamera; uniform vec2 uProjection;
-  uniform vec3 uLight; uniform float uEnv; uniform float uFade; varying vec2 vUv;
+  uniform vec3 uLight; uniform vec3 uSide; uniform float uEnv; uniform float uWarm; uniform float uFade; varying vec2 vUv;
   vec3 viewAt(vec2 uv, float d) { return vec3((uv * 2.0 - 1.0) * uTan * d, -d); }
   void main() {
     vec4 t = texture2D(tFluid, vUv);
@@ -58,16 +58,20 @@ const SHADE = `uniform sampler2D tFluid; uniform samplerCube tEnv; uniform vec2 
     vec3 n = normalize(cross(dx, dy));
     float edge = smoothstep(0.62, 0.42, t.g);
     vec3 v = normalize(-p);
-    n = normalize(mix(n, normalize(n - v * dot(n, v) + v * 0.9), edge * 0.8));
+    n = normalize(mix(n, normalize(n - v * dot(n, v) + v * 0.9), edge * 0.35));
     if (dot(n, v) < 0.0) n = -n;
     float facing = clamp(dot(n, v), 0.0, 1.0);
-    float fresnel = 0.035 + 0.5 * pow(1.0 - facing, 5.0);
+    float fresnel = 0.035 + 0.1 * pow(1.0 - facing, 4.0);
     vec3 r = uCamera * reflect(-v, n);
-    vec3 coat = textureCube(tEnv, r, 0.4).rgb;
-    vec3 h = normalize(uLight + v);
-    float spec = pow(max(dot(n, h), 0.0), 220.0) * 2.4;
-    vec3 film = 0.5 + 0.5 * cos(6.2831 * (facing * 1.7 + vec3(0.0, 0.33, 0.67)));
-    vec3 color = vec3(0.0025, 0.002, 0.0018) + min(coat, vec3(4.0)) * uEnv * fresnel * mix(vec3(1.0), film, 0.08 * (1.0 - facing)) + vec3(spec) * 0.7;
+    vec3 coat = min(textureCube(tEnv, r, 1.2).rgb, vec3(1.3));
+    float lit = max(dot(n, uLight), 0.0);
+    float nh = max(dot(n, normalize(uLight + v)), 0.0);
+    float side = max(dot(n, uSide), 0.0) * pow(1.0 - facing, 2.0);
+    vec3 body = vec3(0.0075, 0.006, 0.0048) * (0.55 + 0.45 * lit);
+    vec3 tint = mix(vec3(0.025, 0.0152, 0.0091), vec3(0.138, 0.061, 0.0168), edge * edge);
+    body += tint * lit * (0.18 + 0.5 * edge) * uWarm;
+    vec3 shine = vec3(0.768, 0.745, 0.68) * (pow(nh, 18.0) * 0.08 + pow(nh, 260.0) * 1.7);
+    vec3 color = body + coat * uEnv * fresnel + shine + vec3(0.386, 0.456, 0.509) * side * 0.05;
     gl_FragColor = vec4(color, alpha);
     float ndc = (uProjection.x * -t.r + uProjection.y) / t.r;
     gl_FragDepth = clamp(ndc * 0.5 + 0.5, 0.0, 1.0);
@@ -88,13 +92,13 @@ export function createFluid(renderer, geometry) {
   const blur = new ShaderMaterial({ vertexShader: QUAD, fragmentShader: BLUR, depthTest: false, depthWrite: false, uniforms: { tSource: { value: null }, uStep: { value: new Vector2() }, uInverse: { value: 1 }, uReach: { value: 1 }, uFar: { value: 20 } } })
   const shade = new ShaderMaterial({
     vertexShader: QUAD, fragmentShader: SHADE, transparent: true, depthTest: true, depthWrite: true,
-    uniforms: { tFluid: { value: a.texture }, tEnv: { value: null }, uTexel: { value: new Vector2() }, uTan: { value: new Vector2() }, uCamera: { value: new Matrix3() }, uProjection: { value: new Vector2() }, uLight: { value: new Vector3(0, 1, 0) }, uEnv: { value: 1.0 }, uFade: { value: 1 } },
+    uniforms: { tFluid: { value: a.texture }, tEnv: { value: null }, uTexel: { value: new Vector2() }, uTan: { value: new Vector2() }, uCamera: { value: new Matrix3() }, uProjection: { value: new Vector2() }, uLight: { value: new Vector3(0, 1, 0) }, uSide: { value: new Vector3(1, 0, 0) }, uEnv: { value: 1.0 }, uWarm: { value: 1.0 }, uFade: { value: 1 } },
   })
   const quad = new Mesh(new PlaneGeometry(2, 2), blur)
   quad.frustumCulled = false
   const screen = new Scene()
   screen.add(quad)
-  const size = new Vector2(), light = new Vector3()
+  const size = new Vector2(), light = new Vector3(), SIDE = new Vector3(5, 2, 7).normalize()
   let width = 4, height = 4
   function pass(source, target, x, y, inverse) {
     blur.uniforms.tSource.value = source.texture
@@ -104,7 +108,11 @@ export function createFluid(renderer, geometry) {
     renderer.render(screen, camera)
   }
   return {
-    setEnvironment(texture) { shade.uniforms.tEnv.value = texture },
+    setEnvironment(texture, light) {
+      shade.uniforms.tEnv.value = texture
+      shade.uniforms.uEnv.value = light ? 0.75 : 1
+      shade.uniforms.uWarm.value = light ? 1.25 : 1
+    },
     render(view, lightDirection, far, fade) {
       renderer.getDrawingBufferSize(size)
       const w = Math.max(4, Math.round(size.x)), h = Math.max(4, Math.round(size.y))
@@ -139,6 +147,7 @@ export function createFluid(renderer, geometry) {
       shade.uniforms.uCamera.value.setFromMatrix4(view.matrixWorld)
       shade.uniforms.uProjection.value.set(view.projectionMatrix.elements[10], view.projectionMatrix.elements[14])
       shade.uniforms.uLight.value.copy(light.copy(lightDirection).transformDirection(view.matrixWorldInverse))
+      shade.uniforms.uSide.value.copy(light.copy(SIDE).transformDirection(view.matrixWorldInverse))
       shade.uniforms.uFade.value = fade
       renderer.render(screen, camera)
       renderer.autoClear = auto
