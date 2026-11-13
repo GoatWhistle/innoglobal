@@ -9,7 +9,8 @@
   min-block-size: var(--control-height);
   padding-inline: var(--space-12);
   border: var(--hairline) solid var(--box-edge);
-  background-color: transparent;
+  border-radius: var(--radius-control);
+  background-color: var(--surface-sunken);
   color: var(--text-muted);
   font-size: var(--font-size-body-sm);
   text-align: start;
@@ -22,7 +23,8 @@
   --box-edge: var(--border-ink);
   --box-edge-hover: var(--border-ink);
 
-  box-shadow: var(--shadow-raised);
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .box[data-state="error"] {

@@ -1,7 +1,5 @@
 .button {
-  composes: pressable from "../../../styles/compose.module.css";
-  /* biome-ignore lint/suspicious/noDuplicateProperties: composes from two modules */
-  composes: pill from "../pill/pill.module.css";
+  composes: control from "../surface/surface.module.css";
   --button-surface: transparent;
   --button-surface-hover: var(--action-ghost-hover);
   --button-surface-press: var(--action-ghost-press);
@@ -10,6 +8,9 @@
   --button-height: var(--control-height);
 
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-inline-size: 100%;
   justify-content: center;
   gap: var(--space-8);
   min-block-size: var(--button-height);
@@ -17,8 +18,8 @@
   border: var(--hairline) solid var(--button-edge);
   background-color: var(--button-surface);
   color: var(--button-text);
-  font-size: var(--font-size-body-sm);
   line-height: var(--line-height-label);
+  font-weight: var(--weight-medium);
   text-decoration: none;
   cursor: pointer;
 }
@@ -42,7 +43,7 @@
 }
 
 .secondary {
-  --button-edge: var(--border-ink);
+  --button-edge: var(--border-control);
 }
 
 .quiet {
@@ -86,6 +87,11 @@
 
 .secondary:disabled {
   --button-edge: var(--border-subtle);
+}
+
+.button[aria-pressed="true"] {
+  background-color: var(--action-primary);
+  color: var(--action-primary-text);
 }
 
 .button[aria-busy="true"] {

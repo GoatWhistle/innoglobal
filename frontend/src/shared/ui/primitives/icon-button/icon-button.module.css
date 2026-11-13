@@ -1,5 +1,5 @@
 .button {
-  composes: pressable from "../../../styles/compose.module.css";
+  composes: control from "../surface/surface.module.css";
   --icon-button-size: var(--control-height);
 
   position: relative;
@@ -9,7 +9,6 @@
   inline-size: var(--icon-button-size);
   block-size: var(--icon-button-size);
   border: var(--hairline) solid transparent;
-  border-radius: var(--radius-round);
   color: var(--text-primary);
 }
 
@@ -20,7 +19,7 @@
 }
 
 .secondary {
-  border-color: var(--border-strong);
+  border-color: var(--border-control);
 }
 
 .compact {

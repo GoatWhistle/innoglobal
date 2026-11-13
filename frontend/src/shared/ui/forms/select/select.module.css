@@ -4,9 +4,9 @@
 }
 
 .trigger:focus-visible {
-  outline: 0;
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
   border-color: var(--border-ink);
-  box-shadow: var(--shadow-raised);
 }
 
 .trigger:disabled {

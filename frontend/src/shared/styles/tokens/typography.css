@@ -34,13 +34,14 @@
   --font-size-display: clamp(3.5rem, 1rem + 9vw, 10rem);
   --line-height-display: 0.86;
   --font-size-monument: clamp(7rem, 1rem + 20vw, 20rem);
-  --font-size-readout: 2.5rem;
+  --font-size-readout: 3rem;
   --line-height-readout: 1;
-  --font-size-readout-sm: 1.25rem;
-  --line-height-readout-sm: 1.2;
+  --font-size-readout-sm: 1.5rem;
+  --line-height-readout-sm: 1.1667;
 
   --tracking-display: -0.035em;
   --tracking-tight: -0.02em;
+  --tracking-readout: -0.035em;
   --tracking-normal: 0;
   --tracking-wide: 0.02em;
 }

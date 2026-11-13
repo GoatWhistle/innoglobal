@@ -1,12 +1,14 @@
 ---
 name: "PipeTwin"
-description: "Operator console with two personalities, a night control room and an engineering drawing; colour appears only when oil is where it should not be"
+description: "A precise operator console around a physical steel pipe, with warm graphite depth, thin Onest numerals and colour reserved for events"
 ---
 
 # Design System: PipeTwin
 
-The interface is ink on paper around one living object, the WebGL pipe with crude flowing inside.
-Every screen must make one thing obvious within a second: is the line calm, suspicious or leaking.
+A physical steel pipe with crude flowing inside is the visual centre of PipeTwin. The interface
+around it uses quiet graphite planes, exact outlines and light Onest numerals. Its depth comes from
+the relation between surfaces; buttons do not imitate metal. Every screen must make one thing
+obvious within a second: is the line calm, suspicious or leaking.
 
 Source style, picked by the user: <https://styles.refero.design/style/3e52dd36-6ab1-48c6-bc40-47ef6d33abc2>,
 extracted from <https://monopo.vn/>. Full extraction, conflicts and decisions: `work/design/style.md`.
@@ -28,9 +30,9 @@ shows the current values.
   (`--prose-measure`) and a single field (`--field-max-width`) are capped.
 - **Breakpoints:** 30, 48, 64, 75, 90 and 120rem, the same values in `matchMedia`.
 - **Themes:** two equal personalities of one product, dark by default. Dark is the night control
-  room: pitch, depth, glossy oil, a sheen on floating edges. Light is an engineering drawing: paper,
-  ink in three weights, hatching, dimension lines, leader callouts, millimetre grid behind work
-  areas. Structure, components and meaning are shared; components never know the theme.
+  room: warm black ground, graphite panels, lighter floating layers and oil in the pipe. Light is an
+  engineering drawing: warm paper, white work surfaces, ink in three weights and measured marks
+  inside schemes. Structure, components and meaning are shared; components never know the theme.
 - **Language:** Russian only (user decision, `work/design/style.md`, C6).
 
 ## 2. Colors
@@ -45,8 +47,8 @@ semantic tokens only. Every semantic token exists in both themes.
 | Track | `--surface-sunken`, `--surface-selected` | recessed track and the chosen item in it | segmented, slider rail |
 | Float | `--surface-float` | layers above everything, with `--shadow-float` | popover, menu, dialog, toast |
 | Text | `--text-primary`, `--text-secondary`, `--text-muted` | reading, supporting, captions | body, hints, units, timestamps |
-| Action | `--action-primary`, `--action-primary-text` | the one main action, in ink | primary pill, selection |
-| Lines | `--border-subtle`, `--border-strong`, `--border-control`, `--border-ink` | divider, outline, field edge, emphasis | panels, ghost pill, inputs, rules |
+| Action | `--action-primary`, `--action-primary-text` | the one main action, in ink | primary button, selection |
+| Lines | `--border-subtle`, `--border-strong`, `--border-control`, `--border-ink` | divider, outline, field edge, emphasis | panels, secondary button, inputs, rules |
 | Focus | `--focus-ring` | keyboard position | shared `:focus-visible` |
 | Suspicion | `--status-warning`, `--text-warning`, `--signal-warning-surface` | the model and the sensors drift apart | badge, row, banner |
 | Leak | `--status-danger`, `--text-danger`, `--signal-danger-surface`, `--action-danger` | a leak is confirmed | alarm, banner, shut-off action |
@@ -58,8 +60,12 @@ Rules:
   success stay neutral. `--crude-*` exists for the scene and never fills a control.
 - **Light is paper, not inverted dark.** The page is the warm `--ink-25`, panels are white above it,
   tracks sink to `--ink-50`, text is `--ink-950`, not pure black. Layers read by tone and by line.
-- **Dark is pitch.** Warm pitch page so the scene's vignette disappears into it, panels a step up,
-  floats one more step up because shadows vanish on black.
+- **Dark has distinct planes.** The warm black page stays continuous with the scene. Sunken tracks
+  sit below graphite panels; hovered rows, floating layers and selected items each have their own
+  tone. Captions retain reading contrast on the lightest of these planes.
+- **Lines have a job.** Subtle lines divide content, strong lines close an outline, control lines
+  identify interactive boundaries, ink lines mark the active or measured reference. Never outline
+  every nested region at the same strength.
 - **Status is an icon plus text.** Colour reinforces, never carries alone.
 - **Contrast:** `npm run rules` (`contrast`) keeps text at 4.5:1 and the focus ring at 3:1 on every
   surface in both themes. The foundations page recomputes the full matrix live, including field
@@ -74,25 +80,30 @@ Rules:
   domain (sensor ids, pipe grades) in Onest.
 - **Scale:** `micro`, `caption`, `label`, `body-sm`, `body`, `lead`, `subheading`, `heading`,
   `heading-lg` (fluid), `display` (fluid), `readout`, `readout-sm`. Each has a matching
-  `--line-height-*`; fixed sizes land on a 4px line grid.
+  `--line-height-*`; fixed sizes land on a 4px line grid. `micro` is reserved for compact chart
+  annotations; ordinary captions use `caption` or larger.
 - **Weights:** `--weight-light` for anything at `lead` size and above and for readouts,
   `--weight-regular` for text, `--weight-medium` for buttons and labels. Nothing heavier above
   `subheading`.
-- **Numbers:** `--font-numeric` wherever values line up or tick; formatted with `Intl` (`ru-RU`):
+- **Numbers:** readouts are large and light, with `--tracking-readout`; units and labels remain
+  regular and quieter. `--font-numeric` wherever values line up or tick; formatted with `Intl` (`ru-RU`):
   narrow no-break space in groups and before units, decimal comma.
 
 ## 4. Space, shape, elevation
 
 - **Rhythm:** 4px step, `--space-*`. Semantic aliases: `--space-page`, `--space-section`,
   `--space-card`, `--space-element`.
-- **Corners:** 0 or pill, nothing between. `--radius-sm`, `--radius-md`, `--radius-lg` are 0 by
-  decision and stay as names so primitives keep one vocabulary; `--radius-pill` for buttons, tags,
-  switches, tracks; `--radius-round` for dots.
+- **Corners:** square structural panels use `--radius-none`. Buttons, inputs and segmented
+  controls share `--radius-control`. `--radius-sm` belongs to small floating details, `--radius-md`
+  to menus and popovers, `--radius-lg` to dialogs. `--radius-pill` is reserved for status badges and
+  switches; `--radius-round` for dots and circular handles.
 - **Lines before shadows:** a panel is `--surface-raised` with a `--border-subtle` hairline.
-  `--shadow-ring` outlines secondary controls, `--shadow-raised` marks the selected segment,
-  `--shadow-float` (ring, contact and ambient layers) belongs to floats only.
+  `--shadow-ring` outlines secondary controls, `--shadow-raised` gives the selected segment a
+  restrained outline and contact shadow. `--shadow-float` combines outline, contact and ambient
+  depth for overlays. Panels stay flat; there are no bevels, gloss strips or chrome effects.
 - **Sizes:** `--control-height` and `--target-min` 44px, `--control-height-compact` only inside
-  dense toolbars with an enlarged hit area. Icons `--icon-sm` to `--icon-xl`, stroke `--icon-stroke`.
+  dense toolbars with an enlarged hit area. Control padding uses `--space-control-inline` and
+  `--space-control-block`. Icons `--icon-sm` to `--icon-xl`, stroke `--icon-stroke`.
 - **Layers:** `--layer-*` only, from `--layer-raised` to `--layer-skip-link`.
 
 ## 5. Motion
@@ -114,7 +125,8 @@ Two tempos.
 Everything is built from `src/shared/ui`; a screen never writes its own variant of a primitive. The
 visual spec for controls and states is `work/design/ds/kit.html`.
 
-- **Button:** pill. `primary` in ink for the one main action, `secondary` with `--shadow-ring`,
+- **Button:** `--radius-control`, an exact outline and balanced label spacing. `primary` in ink
+  for the one main action, `secondary` with `--shadow-ring`,
   `ghost` in toolbars, `danger` only for shutting off a section.
 - **Panel:** square, hairline, `--surface-raised`. No card grids of identical tiles.
 - **Readout (signature data component):** label in `caption` muted, value in `readout` light
@@ -135,7 +147,7 @@ visual spec for controls and states is `work/design/ds/kit.html`.
 ### Don't:
 
 - No gradients, glows, glass or gradient text; no emoji; no lucide or other stock icons.
-- No radius between 0 and pill; no shadow on panels or buttons.
+- No pill buttons or fields, no rounded structural panels, no decorative shadows or metal effects.
 - No amber or oxblood as decoration, branding or hover.
 - No caps-lock labels, no fake 01/02/03 numbering, no coloured side stripe.
 - No em dash, middle dot or pipe as a separator; no "Упс", no exclamation marks.
@@ -159,7 +171,7 @@ Focus stays one ring, `--focus-ring`, in both themes.
 | Title block | `--drawing-frame` | screen header with real data: section, scale, parameter revision, last run | cards |
 | Selection marks | `--selection-mark`, `--mark-corner` | selected row, sensor, section | focus |
 | Hover trace | `--trace`, `--dur-panel` | clickable panels and scheme rows | buttons |
-| Sheen | `--sheen`, `--shadow-sheen`, inside `--shadow-float` | floats, sticky action bars | panels |
+| Sheen | `--sheen`, `--shadow-sheen`, inside `--shadow-float` | a restrained top edge on floating layers | panels, controls, metal imitation |
 
 Hatching in HTML is a pseudo-element filled with the hatch colour and masked with
 `repeating-linear-gradient` (gradients are allowed only in `mask-image`); in SVG it is a `<pattern>`

@@ -8,11 +8,11 @@
   --layer-skip-link: 70;
 
   --shadow-ring: inset 0 0 0 var(--hairline) var(--border-strong);
-  --shadow-raised: inset 0 0 0 var(--hairline) var(--border-ink);
+  --shadow-raised: inset 0 0 0 var(--hairline) var(--border-strong), 0 1px 2px var(--shadow-near);
   --shadow-sheen: inset 0 var(--hairline) 0 var(--sheen);
   --shadow-float:
     inset 0 var(--hairline) 0 var(--sheen), 0 0 0 var(--hairline) var(--border-strong),
-    0 1px 2px var(--shadow-near), 0 12px 32px -4px var(--shadow-color);
+    0 2px 4px var(--shadow-near), 0 16px 40px -8px var(--shadow-color);
 
   --opacity-stale: 0.55;
 }

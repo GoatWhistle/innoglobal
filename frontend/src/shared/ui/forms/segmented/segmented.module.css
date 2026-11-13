@@ -5,11 +5,12 @@
   grid-auto-flow: column;
   padding: var(--space-4);
   border: var(--hairline) solid var(--border-control);
-  border-radius: var(--radius-pill);
+  background-color: var(--surface-sunken);
+  border-radius: var(--radius-control);
 }
 
 .option {
-  composes: pressable from "../../../styles/compose.module.css";
+  composes: control from "../../primitives/surface/surface.module.css";
   position: relative;
   z-index: var(--layer-raised);
   display: inline-flex;
@@ -18,15 +19,12 @@
   gap: var(--space-8);
   min-block-size: var(--control-height-compact);
   padding-inline: var(--space-16);
-  border-radius: var(--radius-pill);
   color: var(--text-secondary);
-  font-size: var(--font-size-body-sm);
-  white-space: nowrap;
   cursor: pointer;
 }
 
 .iconOnly {
-  inline-size: var(--control-height-compact);
+  inline-size: var(--target-min);
   padding-inline: 0;
 }
 

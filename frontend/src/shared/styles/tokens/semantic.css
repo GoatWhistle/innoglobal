@@ -14,7 +14,7 @@
 
   --text-primary: var(--ink-950);
   --text-secondary: var(--ink-600);
-  --text-muted: var(--ink-500);
+  --text-muted: var(--ink-550);
   --text-disabled: var(--ink-300);
   --text-on-inverse: var(--ink-0);
   --text-accent: var(--ink-950);
@@ -34,8 +34,8 @@
   --action-danger-hover: color-mix(in oklab, var(--leak-700) 86%, var(--ink-1000));
   --action-danger-press: color-mix(in oklab, var(--leak-700) 74%, var(--ink-1000));
 
-  --border-subtle: color-mix(in oklab, var(--ink-1000) 12%, transparent);
-  --border-strong: color-mix(in oklab, var(--ink-1000) 22%, transparent);
+  --border-subtle: var(--ink-200);
+  --border-strong: var(--ink-300);
   --border-control: var(--ink-400);
   --border-control-hover: var(--ink-600);
   --border-ink: var(--ink-950);
@@ -93,18 +93,18 @@
   color-scheme: dark;
 
   --surface-base: var(--ink-950);
-  --surface-raised: var(--ink-900);
-  --surface-raised-hover: var(--ink-850);
-  --surface-sunken: var(--ink-900);
-  --surface-selected: var(--ink-800);
-  --surface-float: var(--ink-850);
+  --surface-raised: var(--ink-850);
+  --surface-raised-hover: var(--ink-825);
+  --surface-sunken: var(--ink-925);
+  --surface-selected: var(--ink-775);
+  --surface-float: var(--ink-800);
   --surface-inverse: var(--ink-25);
-  --surface-skeleton: var(--ink-850);
+  --surface-skeleton: var(--ink-775);
   --surface-scrim: color-mix(in oklab, var(--ink-1000) 72%, transparent);
 
   --text-primary: var(--ink-25);
   --text-secondary: var(--ink-300);
-  --text-muted: var(--ink-400);
+  --text-muted: var(--ink-350);
   --text-disabled: var(--ink-600);
   --text-on-inverse: var(--ink-950);
   --text-accent: var(--ink-25);
@@ -118,15 +118,15 @@
   --action-primary-press: var(--ink-200);
   --action-ghost-hover: color-mix(in oklab, var(--ink-0) 7%, transparent);
   --action-ghost-press: color-mix(in oklab, var(--ink-0) 12%, transparent);
-  --action-disabled: var(--ink-900);
+  --action-disabled: var(--ink-825);
   --action-danger: var(--leak-700);
   --action-danger-text: var(--ink-0);
   --action-danger-hover: color-mix(in oklab, var(--leak-700) 90%, var(--ink-0));
   --action-danger-press: color-mix(in oklab, var(--leak-700) 80%, var(--ink-0));
 
-  --border-subtle: color-mix(in oklab, var(--ink-0) 11%, transparent);
-  --border-strong: color-mix(in oklab, var(--ink-0) 24%, transparent);
-  --border-control: var(--ink-500);
+  --border-subtle: var(--ink-775);
+  --border-strong: var(--ink-650);
+  --border-control: var(--ink-400);
   --border-control-hover: var(--ink-300);
   --border-ink: var(--ink-25);
 

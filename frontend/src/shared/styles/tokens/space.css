@@ -18,6 +18,8 @@
   --space-section: var(--space-32);
   --space-card: var(--space-20);
   --space-element: var(--space-12);
+  --space-control-inline: var(--space-16);
+  --space-control-block: var(--space-12);
 
   --hairline: 1px;
   --target-min: 44px;
@@ -39,7 +41,7 @@
   --term-min: 160px;
   --prose-measure: 70ch;
   --field-max-width: 480px;
-  --border-width-control: 1.5px;
+  --border-width-control: 1px;
   --indicator-size: 20px;
   --switch-width: 40px;
   --switch-height: 24px;

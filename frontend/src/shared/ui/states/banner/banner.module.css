@@ -1,17 +1,20 @@
 .banner {
   composes: secondaryText from "../../../styles/compose.module.css";
+  /* biome-ignore lint/suspicious/noDuplicateProperties: composes text and framing */
+  composes: frame from "../../primitives/surface/surface.module.css";
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: var(--space-12);
   align-items: center;
   min-block-size: calc(var(--space-48) + var(--space-8));
   padding: var(--space-8) var(--space-8) var(--space-8) var(--space-16);
-  border: var(--hairline) solid var(--border-subtle);
+  background-color: var(--surface-raised);
   animation: var(--motion-fade-in);
 }
 
 .edge {
   border-inline: 0;
+  border-radius: 0;
 }
 
 .text {
@@ -31,12 +34,12 @@
 
 .banner[data-tone="danger"] {
   border-color: var(--status-danger);
-  background-color: var(--signal-danger-surface);
+  background-color: var(--surface-raised);
 }
 
 .banner[data-tone="warning"] {
   border-color: var(--status-warning);
-  background-color: var(--signal-warning-surface);
+  background-color: var(--surface-raised);
 }
 
 .banner[data-tone="danger"] :is(.icon, .title) {

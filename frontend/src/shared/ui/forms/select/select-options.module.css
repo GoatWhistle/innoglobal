@@ -5,6 +5,7 @@
   inline-size: 100%;
   min-block-size: var(--target-min);
   padding-inline: var(--space-8) var(--space-12);
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
@@ -19,6 +20,10 @@
 .label {
   composes: truncate from "../../layout/text-role/text-role.module.css";
   flex: 1 1 auto;
+}
+
+.option[aria-selected="true"] {
+  background-color: var(--surface-selected);
 }
 
 .option[aria-selected="true"] .label {

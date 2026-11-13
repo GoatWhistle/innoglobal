@@ -157,8 +157,8 @@ at once; `pending` spins inside the thumb and ignores toggles until the server c
 with `transform`.
 
 **Segmented** `{ label; options: { value; label; icon?; short? }[]; value; onChange; display?:
-"label" | "icon" | "short" }`. Native radios, so arrows work; ink pill slides with
-`useSlidingIndicator` (clip-path). Two to five options; icon-only keeps the label for readers.
+"label" | "icon" | "short" }`. Native radios, so arrows work; the selected option paints its own background inside a
+framed control. Selection is immediate so moving ink cannot reduce label contrast. Two to five options; icon-only keeps the label for readers.
 
 **Select** `{ label; options: { value; label; meta?; icon?; disabled? }[]; value: T | null;
 onChange; placeholder?; ...field }`. Trigger is a button with `aria-haspopup="listbox"`; list is a
