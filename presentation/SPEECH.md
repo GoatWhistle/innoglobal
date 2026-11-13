@@ -1,6 +1,6 @@
 # Speech: 5:40 at regulation 6:00
 
-{{PRODUCT}}, {{TEAM}}.
+duppel, {{TEAM}}.
 
 Pace 125 words per minute. `[→]` is a key press: the next slide.
 

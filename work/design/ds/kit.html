@@ -7,6 +7,7 @@
 <script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
 <link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
 <link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="brand.css">
 <link rel="stylesheet" href="kit-base.css">
 <link rel="stylesheet" href="kit-button.css">
 <link rel="stylesheet" href="kit-field.css">
@@ -30,6 +31,7 @@
 </head>
 <body>
 <header class="kit-bar">
+  <a class="kit-brand brand" href="index.html" aria-label="duppel, дизайн-система"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg></a>
   <p class="kit-title">Набор компонентов <a href="index.html">Дизайн-система</a></p>
   <div class="segmented segmented-icons" role="radiogroup" aria-label="Тема" data-segmented data-theme-switch>
     <button type="button" role="radio" aria-checked="true" data-value="dark" aria-label="Тёмная тема" data-tip="Тёмная тема"><svg class="icon" aria-hidden="true"><use href="icons.svg#moon"/></svg></button>

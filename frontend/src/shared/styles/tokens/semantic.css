@@ -55,6 +55,9 @@
   --scene-leak: var(--crude-oxblood);
   --scene-steel: var(--ink-400);
 
+  --brand-ink: var(--ink-950);
+  --brand-accent: var(--leak-700);
+
   --focus-ring: var(--ink-950);
   --shadow-near: color-mix(in oklab, var(--ink-1000) 6%, transparent);
   --shadow-color: color-mix(in oklab, var(--ink-1000) 10%, transparent);
@@ -144,6 +147,9 @@
   --scene-sheen-deep: var(--crude-umber);
   --scene-leak: var(--crude-oxblood);
   --scene-steel: var(--ink-500);
+
+  --brand-ink: var(--ink-25);
+  --brand-accent: var(--amber-400);
 
   --focus-ring: var(--ink-25);
   --shadow-near: color-mix(in oklab, var(--ink-1000) 60%, transparent);

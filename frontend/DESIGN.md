@@ -1,11 +1,11 @@
 ---
-name: "PipeTwin"
+name: "duppel"
 description: "A precise operator console around a physical steel pipe, with warm graphite depth, thin Onest numerals and colour reserved for events"
 ---
 
-# Design System: PipeTwin
+# Design System: duppel
 
-A physical steel pipe with crude flowing inside is the visual centre of PipeTwin. The interface
+A physical steel pipe with crude flowing inside is the visual centre of duppel. The interface
 around it uses quiet graphite planes, exact outlines and light Onest numerals. Its depth comes from
 the relation between surfaces; buttons do not imitate metal. Every screen must make one thing
 obvious within a second: is the line calm, suspicious or leaking.
@@ -13,7 +13,7 @@ obvious within a second: is the line calm, suspicious or leaking.
 Source style, picked by the user: <https://styles.refero.design/style/3e52dd36-6ab1-48c6-bc40-47ef6d33abc2>,
 extracted from <https://monopo.vn/>. Full extraction, conflicts and decisions: `work/design/style.md`.
 Living reference with values read from the tokens: `work/design/ds/index.html` and the `doc-*.html`
-pages (build checklist, two personalities, layout, density, numbers, real time, charts, alerts,
+pages (build checklist, brand mark, two personalities, layout, density, numbers, real time, charts, alerts,
 feedback, forms, tables, keys, glossary), `kit.html` (controls and states), `screens.html`
 (product screens), `scene.html` (the pipe). Code mapping: `frontend/COMPONENTS.md`.
 
@@ -74,8 +74,10 @@ Rules:
 ## 3. Typography
 
 - **Sans:** `--font-sans`, Onest, for every role. Tabular figures verified.
-- **Accent:** `--font-accent`, Raleway Italic, only for the one-letter swap in the scene headline and
-  in the mark. Never a word, never body.
+- **Accent:** `--font-accent`, Raleway Italic, only for the one-letter swap in the scene headline.
+  Never a word, never body.
+- **Logo:** the wordmark `duppel` is Schibsted Grotesk 800 converted to outlines in `docs/brand/`;
+  that font never sets UI text and Onest never sets the logo. Always lowercase.
 - **Mono:** `--font-mono` for raw identifiers in developer views only; the UI shows tokens of the
   domain (sensor ids, pipe grades) in Onest.
 - **Scale:** `micro`, `caption`, `label`, `body-sm`, `body`, `lead`, `subheading`, `heading`,
@@ -148,7 +150,8 @@ visual spec for controls and states is `work/design/ds/kit.html`.
 
 - No gradients, glows, glass or gradient text; no emoji; no lucide or other stock icons.
 - No pill buttons or fields, no rounded structural panels, no decorative shadows or metal effects.
-- No amber or oxblood as decoration, branding or hover.
+- No amber or oxblood as decoration or hover. The one brand use is the dropped second stroke of
+  the mark (`--brand-accent`), which itself means a leak.
 - No caps-lock labels, no fake 01/02/03 numbering, no coloured side stripe.
 - No em dash, middle dot or pipe as a separator; no "Упс", no exclamation marks.
 - No colour as the only signal; no text below 4.5:1 in either theme.

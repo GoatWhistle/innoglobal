@@ -74,7 +74,7 @@ const init = () => {
     const angle = ORDER[i % ORDER.length]
     return { slug: `${i + 1}-${angle}`, author: i, angle, variant: (i % 5) + 1, images: ANGLES[angle] }
   })
-  const data = { product: "{{PRODUCT}}", hackathon: "{{HACKATHON}}", url: "{{DOMAIN}}", repo: "github.com/{{REPO}}", shot: "shot.png", team, posts }
+  const data = { product: "duppel", hackathon: "{{HACKATHON}}", url: "{{DOMAIN}}", repo: "github.com/{{REPO}}", shot: "shot.png", team, posts }
   fs.writeFileSync(DATA, `${JSON.stringify(data, null, 2)}\n`)
   for (const post of posts) {
     const file = path.join(DIR, `${post.slug}.md`)

@@ -1,4 +1,4 @@
-# Demo runbook: {{PRODUCT}}
+# Demo runbook: duppel
 
 Not shown to the audience. Slot in the talk: {{1:45–3:45}} (`SPEECH.md` §{{N}}). Facts:
 [pitch-evidence.md](pitch-evidence.md). Run commands: `../docs/running.md`.

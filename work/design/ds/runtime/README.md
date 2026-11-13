@@ -1,4 +1,4 @@
-# PipeTwin examples runtime
+# duppel examples runtime
 
 Run from the repository root:
 

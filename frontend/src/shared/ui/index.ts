@@ -1,4 +1,12 @@
 export {
+  BRAND_MARK_STATES,
+  BrandMark,
+  type BrandMarkProps,
+  type BrandMarkSize,
+  type BrandMarkState,
+  type BrandMarkVariant,
+} from "./brand/brand-mark/brand-mark"
+export {
   STATUS_ICON,
   StatusBadge,
   type StatusBadgeProps,

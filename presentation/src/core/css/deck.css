@@ -87,18 +87,8 @@ body {
 .chrome-brand {
   position: absolute;
   left: var(--gutter);
-  top: 56px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--font-sans);
-  font-size: var(--fs-micro);
-  font-weight: var(--weight-strong);
-  color: var(--deck-fg-2);
-}
-
-.chrome-brand .mark {
-  width: 24px;
+  top: 52px;
+  --word-size: 30px;
 }
 
 .chrome-num {

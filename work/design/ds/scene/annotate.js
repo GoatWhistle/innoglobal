@@ -150,7 +150,7 @@ export function drawTitle(ctx, L, model, colors, sizes) {
         [["масштаб", `1 : ${m10(scale)}`], ["дата", date.format(new Date())]],
       ]
     : [
-        [["", "PipeTwin, участок трубопровода"]],
+        [["", "duppel, участок трубопровода"]],
         [["длина", `${m10(SEGMENT_M)} м`], ["труба", `DN ${Math.round(DIAMETER * 1000 / 50) * 50}`]],
         [["давление на входе", `${pressure.format(model[0])} МПа`], ["масштаб", `1 : ${m10(scale)}`]],
         [["дата", date.format(new Date())], ["лист", "1"]],

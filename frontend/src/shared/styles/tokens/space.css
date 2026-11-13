@@ -30,6 +30,9 @@
   --icon-md: 20px;
   --icon-lg: 24px;
   --icon-xl: 48px;
+  --brand-size-sm: 24px;
+  --brand-size-md: 32px;
+  --brand-size-lg: 64px;
   --icon-stroke: 1.5;
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;

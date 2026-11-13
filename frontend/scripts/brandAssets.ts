@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url"
 import { chromium, type Page } from "@playwright/test"
 import { ICO_SIZES, type Locale, MANIFEST, META_LOCALE, ogFile, RASTERS } from "./brand/assets.ts"
 import { buildIco, type PngImage } from "./brand/binary.ts"
+import { GEOMETRY_FILE, geometryModule, readGeometry, wordmarkSvg } from "./brand/geometry.ts"
 import { faviconSvg, paintedMark, readMark, readPalette } from "./brand/marks.ts"
 import { cardHtml, rasterHtml, tileHtml } from "./brand/pages.ts"
 import { FONT_PACKAGES, pickFontFaces } from "./exportTokens.ts"
@@ -17,6 +18,7 @@ const frontendRoot = resolve(fileURLToPath(new URL("..", import.meta.url)))
 const repoRoot = resolve(frontendRoot, "..")
 const publicDir = join(frontendRoot, "public")
 const LOCALES: readonly Locale[] = ["ru", "en"]
+const CARD_WORDMARK_HEIGHT = 112
 
 function words(locale: Locale): CommonWords {
   const file = join(frontendRoot, "src", "shared", "i18n", "locales", locale, "common.json")
@@ -57,9 +59,11 @@ async function shoot(page: Page, html: string): Promise<Buffer> {
 const mark = readMark(repoRoot)
 const palette = readPalette(frontendRoot)
 const light = paintedMark(mark, palette.light)
+const geometry = readGeometry(repoRoot)
 const site = process.env.SITE_URL?.replace(/^https?:\/\//, "").replace(/\/$/, "") ?? ""
 
 write("favicon.svg", faviconSvg(mark, palette))
+writeFileSync(join(frontendRoot, ...GEOMETRY_FILE.split("/")), geometryModule(geometry))
 
 const browser = await chromium.launch()
 const page = await browser.newPage({ deviceScaleFactor: 1 })
@@ -71,15 +75,11 @@ for (const asset of RASTERS)
   write(asset.file, await shoot(page, rasterHtml(light, asset, palette.light)))
 const fonts = fontFaces()
 const family = fontFamily()
+const wordmark = wordmarkSvg(geometry, palette.light, CARD_WORDMARK_HEIGHT)
 for (const locale of LOCALES) {
   const text = words(locale)
-  const card = {
-    name: text.app.name,
-    tagline: text.app.tagline,
-    description: text.meta.description,
-    site: site || text.app.name,
-  }
-  write(ogFile(locale), await shoot(page, cardHtml(light, card, palette.light, fonts, family)))
+  const card = { tagline: text.app.tagline, description: text.meta.description, site }
+  write(ogFile(locale), await shoot(page, cardHtml(wordmark, card, palette.light, fonts, family)))
 }
 await browser.close()
 
@@ -104,5 +104,5 @@ const manifest = {
 write(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`)
 
 process.stdout.write(
-  `public/: favicon.svg (light and dark), favicon.ico ${ICO_SIZES.join("/")}, ${RASTERS.map((asset) => asset.file).join(", ")}, ${LOCALES.map(ogFile).join(", ")}, ${MANIFEST}\n`,
+  `${GEOMETRY_FILE}, public/: favicon.svg (light and dark), favicon.ico ${ICO_SIZES.join("/")}, ${RASTERS.map((asset) => asset.file).join(", ")}, ${LOCALES.map(ogFile).join(", ")}, ${MANIFEST}\n`,
 )

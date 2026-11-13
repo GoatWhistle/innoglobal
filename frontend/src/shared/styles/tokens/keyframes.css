@@ -114,3 +114,26 @@
     transform: scaleX(0);
   }
 }
+
+@keyframes kf-brand-base-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--shift-brand-align) * -1));
+  }
+}
+
+@keyframes kf-brand-drop-in {
+  from {
+    transform: translateY(calc(var(--shift-brand-align) * -1));
+  }
+}
+
+@keyframes kf-brand-busy {
+  from {
+    transform: translateY(calc(var(--shift-brand-align) * -1));
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}

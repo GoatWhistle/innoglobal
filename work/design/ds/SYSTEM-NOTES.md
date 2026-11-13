@@ -66,7 +66,7 @@ Plan
    glossary. Each: rules, live specimen from tokens, do and don't, token names.
 5. Three screenshot rounds at 1440 and 375 in both themes.
 
-Pages: `index.html` (principles, build, colour, type), `doc-drawing.html`, `doc-base.html` (rhythm,
+Pages: `index.html` (principles, build, colour, type), `doc-brand.html` (duppel mark: idea, construction, clear space, colour, misuse, motion, seconds, icons), `doc-drawing.html`, `doc-base.html` (rhythm,
 layers, motion, icons, accessibility), `doc-layout.html`, `doc-data.html`, `doc-charts.html`,
 `doc-alerts.html`, `doc-forms.html`, `doc-words.html`.
 

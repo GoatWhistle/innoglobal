@@ -12,10 +12,9 @@
   left: 0;
   right: 0;
   top: 150px;
-  gap: 32px;
-  --mark-size: 128px;
   --word-size: 132px;
-  --word-d: 0.45s;
+  --word-d: 0.1s;
+  --mark-d: 0.5s;
 }
 
 #final .final-line {

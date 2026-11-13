@@ -23,7 +23,7 @@ export function recording(button, status, canvas, variant) {
     recorder.onstop = () => {
       const url = URL.createObjectURL(new Blob(chunks, { type: mimeType }))
       const link = document.createElement("a")
-      link.href = url; link.download = `pipetwin-${name}.webm`; link.click()
+      link.href = url; link.download = `duppel-${name}.webm`; link.click()
       setTimeout(() => URL.revokeObjectURL(url), 1000)
       stream.getTracks().forEach((track) => track.stop())
       button.disabled = false

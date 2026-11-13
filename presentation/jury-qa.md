@@ -1,4 +1,4 @@
-# Jury Q&A: {{PRODUCT}}
+# Jury Q&A: duppel
 
 Q&A {{5:00}}. Facts: [pitch-evidence.md](pitch-evidence.md). A fact not confirmed
 there is answered as not measured, followed by what is known.

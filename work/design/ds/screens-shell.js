@@ -45,7 +45,7 @@ function bar(screen, shellState) {
   const radio = (v, ic, label) =>
     `<button type="button" role="radio" aria-checked="${theme === v}" data-value="${v}" aria-label="${label}" data-tip="${label}">${icon(ic)}</button>`
   return `<header class="app-bar">
-<a class="app-mark" href="screens.html">PipeTwin</a>
+<a class="app-mark brand" href="screens.html" aria-label="duppel"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg></a>
 <nav class="app-nav" aria-label="Разделы">${navLinks(screen)}</nav>
 <div class="app-tail">
 <span class="app-live" data-tone="${live[0]}" aria-label="${live[2]}" data-tip="${live[2]}">${icon(live[1])}<span>${live[2]}</span><time>14:32:08</time></span>

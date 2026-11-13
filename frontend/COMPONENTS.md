@@ -81,6 +81,7 @@ for `--timeout-toast`, announces through `aria-live`.
 | Component | Path | Status |
 |---|---|---|
 | Icon | `primitives/icon/` | built |
+| BrandMark (symbol, lockup; states identity, calm, alarm, busy) | `brand/brand-mark/` | built |
 | StatusBadge | `data-display/status-badge/` | built |
 | NoValue | `primitives/no-value/` | built |
 | Tag, Chip (filter) | `data-display/tag/` | spec |

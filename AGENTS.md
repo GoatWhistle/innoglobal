@@ -1,7 +1,8 @@
-# {{PRODUCT}} — {{one-line positioning}}
+# duppel — a browser digital twin of a pipeline section that finds leaks from model vs. measurement
 
-{{HACKATHON}}, track {{TRACK}}. Deadline: {{date, time, timezone}}.
-{{User, product action and observable benefit. Fill during hackathon kickoff.}}
+{{HACKATHON}}, track: case 2 "Nedra Digital: PipeTwin" (`brief/TASK.md`). Deadline: {{date, time, timezone}}.
+The jury inserts a leak with the mouse into the simulated section and sees how many seconds duppel
+needs to catch it from the gap between modelled and "measured" pressure, and where the leak is.
 
 ## Start a session
 

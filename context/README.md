@@ -1,9 +1,9 @@
 # Project context
 
-Project: {{PRODUCT}}
-Hackathon and track: {{HACKATHON}}, {{TRACK}}
+Project: duppel, always lowercase (name and mark approved 2026-11-14, `work/naming.md`, `docs/brand/`)
+Hackathon and track: {{HACKATHON}}, case 2 "Nedra Digital: PipeTwin" (`brief/TASK.md`)
 Deadline: {{date, time, timezone}}
-P0 scenario: {{user action and observable result}}
+P0 scenario: the jury inserts a leak with the mouse and sees the alarm, its location and the detection time in seconds (`brief/TASK.md`)
 
 ## Current facts
 

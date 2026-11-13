@@ -7,7 +7,7 @@ site: {{stand URL, the one the jury opens}}
 theme: light
 ---
 
-# {{PRODUCT}}: video script
+# duppel: video script
 
 Platform limits: `../brief/PLATFORM.md`. Every number: `src/data/numbers.json` and `pitch-evidence.md`.
 UI labels in «» are copied from `frontend/src/shared/i18n/locales/{{lang}}/` and checked on the live

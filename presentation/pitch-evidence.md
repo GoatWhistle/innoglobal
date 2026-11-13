@@ -1,4 +1,4 @@
-# Defense evidence: {{PRODUCT}}
+# Defense evidence: duppel
 
 Every claim on a slide, in the speech, in the video or in an answer has a row here. No row, no
 claim. Product-level proofs (reports, test runs, measurements) live in `../docs/evidence.md`;

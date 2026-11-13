@@ -13,7 +13,7 @@ trunk line for hours and needs to know at a glance whether the line is calm, sus
 
 ## Product Purpose
 
-PipeTwin is a digital twin of a pipeline section in the browser: a flow model (Darcy-Weisbach,
+duppel (always lowercase) is a digital twin of a pipeline section in the browser: a flow model (Darcy-Weisbach,
 heat losses) runs on the client and the system detects a leak in real time from the gap between
 modelled and "measured" pressure. Success is observable: the jury inserts a leak with the mouse and
 sees the alarm, its location and the detection time without anyone explaining the screen. The
@@ -26,6 +26,10 @@ exclamation marks and no hedging. Ink carries action and structure; amber carrie
 oxblood carries a leak, and nothing else in the interface has a hue. The only rich colour is the
 crude oil inside the WebGL pipe. Two equal personalities: at night a control room with depth and
 glossy oil, by day an engineering drawing in ink on paper.
+
+The name is German Doppel, "twin". The mark is the ditto sign 〃 ("the same") whose second stroke
+has dropped: the twin no longer matches reality, that is the leak. The same double prime ″ reads as
+seconds, the time to catch it. Reference: `work/design/ds/doc-brand.html`, sources in `docs/brand/`.
 
 ## Anti-references
 

@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Schibsted Grotesk Logo";
+  src: url("../../fonts/SchibstedGrotesk-800.ttf") format("truetype");
+  font-weight: 800;
+  font-display: block;
+}
+
 .mark {
   display: inline-block;
   flex: none;
@@ -13,35 +20,30 @@
 }
 
 .mark-base {
-  fill: var(--deck-fg);
+  fill: var(--brand-ink);
 }
 
 .mark-accent {
-  fill: var(--deck-accent);
-  transform-box: fill-box;
-  transform-origin: center;
+  fill: var(--brand-accent);
 }
 
 .lockup {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: center;
-  gap: 48px;
-}
-
-.lockup .mark {
-  width: var(--mark-size, 220px);
+  --word-size: 200px;
 }
 
 .wordmark {
   display: flex;
   margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--word-size, 200px);
-  font-weight: var(--weight-strong);
+  font-family: "Schibsted Grotesk Logo", var(--font-sans);
+  font-size: var(--word-size);
+  font-weight: 800;
+  font-kerning: none;
   line-height: 1;
-  letter-spacing: var(--tracking-display);
-  color: var(--deck-fg);
+  letter-spacing: 0;
+  color: var(--brand-ink);
   white-space: nowrap;
 }
 
@@ -49,22 +51,24 @@
   display: inline-block;
 }
 
+.lockup .mark {
+  width: calc(var(--word-size) * 0.7666);
+  margin-inline-start: calc(var(--word-size) * -0.0302);
+  translate: 0 calc(var(--word-size) * -0.0365);
+}
+
 .play .is-assemble .mark-base {
-  animation: mark-reveal 1.1s var(--ease-out) var(--mark-d, 0.1s) both;
+  animation: mark-reveal var(--dur-scene) var(--ease-viscous) var(--mark-d, 0.6s) both;
 }
 
 .play .is-assemble .mark-accent {
-  animation: mark-land 1.1s var(--ease-out) calc(var(--mark-d, 0.1s) + 0.65s) both;
-}
-
-.play .is-assemble.is-idle .mark-accent {
   animation:
-    mark-land 1.1s var(--ease-out) calc(var(--mark-d, 0.1s) + 0.65s) both,
-    mark-hover 3.2s var(--ease-in-out) calc(var(--mark-d, 0.1s) + 2s) infinite;
+    mark-show var(--dur-slow) var(--ease-out) calc(var(--mark-d, 0.6s) + 0.2s) both,
+    mark-drop var(--dur-scene-long) var(--ease-viscous) calc(var(--mark-d, 0.6s) + 0.65s) both;
 }
 
 .play .wordmark.is-letters span {
-  animation: deck-rise 0.7s var(--ease-out) calc(var(--word-d, 0.55s) + var(--i, 0) * 0.07s) both;
+  animation: deck-rise 0.7s var(--ease-out) calc(var(--word-d, 0.1s) + var(--i, 0) * 0.07s) both;
 }
 
 .qr .mark.qr-mark {
@@ -84,26 +88,27 @@
 
 @keyframes mark-reveal {
   from {
-    clip-path: inset(100% 0 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
+    opacity: 0;
+    transform: translateY(-7px);
   }
 }
 
-@keyframes mark-land {
+@keyframes mark-show {
   from {
     opacity: 0;
-    transform: translate(-40px, -140px) rotate(-135deg) scale(0.6);
   }
 }
 
-@keyframes mark-hover {
-  0%,
-  100% {
-    transform: translateY(0);
+@keyframes mark-drop {
+  from {
+    fill: var(--brand-ink);
+    transform: translateY(-7px);
   }
-  50% {
-    transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play .is-assemble .mark-base,
+  .play .is-assemble .mark-accent {
+    animation: none;
   }
 }

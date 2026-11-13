@@ -67,7 +67,7 @@ export function start(state) {
       q("[data-announcement]").setAttribute("role", sim.phase === "leak" ? "alert" : "status")
       q("[data-announcement]").setAttribute("aria-live", sim.phase === "leak" ? "assertive" : "polite")
       q("[data-announcement]").textContent = labels[sim.phase]
-      document.title = `${labels[sim.phase]} | PipeTwin`
+      document.title = `${labels[sim.phase]} | duppel`
       previous = sim.phase
     }
     q(".app-live span").textContent = sim.paused ? "Пример на паузе" : "Расчёт в браузере"

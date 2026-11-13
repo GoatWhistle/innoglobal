@@ -5,6 +5,16 @@ const PAGES = [
     ["color", "Цвет"],
     ["type", "Типографика"],
   ]],
+  ["doc-brand.html", "Знак", [
+    ["idea", "Идея"],
+    ["build", "Построение"],
+    ["space", "Поле и размеры"],
+    ["color", "Цвет"],
+    ["misuse", "Так нельзя"],
+    ["motion", "Движение знака"],
+    ["seconds", "Секунды"],
+    ["icons", "Иконки и favicon"],
+  ]],
   ["doc-drawing.html", "Две личности", [
     ["personas", "Ночь и чертёж"],
     ["drawing", "Словарь чертежа"],
@@ -61,7 +71,7 @@ function header() {
     const current = file === here || (isDoc && file === "index.html")
     return `<a href="${file}"${current ? ' aria-current="page"' : ""}>${label}</a>`
   }).join("")
-  top.innerHTML = `<a class="top-mark" href="index.html">PipeTwin</a>
+  top.innerHTML = `<a class="top-mark brand" href="index.html" aria-label="duppel, дизайн-система"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg></a>
 <nav class="top-pages" aria-label="Страницы">${links}</nav>
 <div class="switch" role="radiogroup" aria-label="Тема">
 <button class="switch-option" role="radio" aria-checked="true" aria-label="Тёмная тема" data-theme-pick="dark"><svg class="icon" aria-hidden="true"><use href="icons.svg#moon"/></svg><span class="switch-label">Тёмная</span></button>

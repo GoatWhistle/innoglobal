@@ -1,10 +1,10 @@
 {
   "app": {
-    "name": "Product",
-    "tagline": "Product interface skeleton"
+    "name": "duppel",
+    "tagline": "Digital twin of a pipeline"
   },
   "meta": {
-    "description": "Product interface skeleton: shell, themes, languages and shared states."
+    "description": "A Darcy-Weisbach model computes pressure along a pipeline section right in the browser. When the sensors disagree with the model, duppel finds the leak in seconds and shows where it is."
   },
   "shell": {
     "skip": "Skip to content"

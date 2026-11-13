@@ -186,7 +186,7 @@ const init = () => {
     const head = [
       `# Speech: ${clock(total)} at regulation ${clock(duration)}`,
       "",
-      "{{PRODUCT}}, {{TEAM}}.",
+      "duppel, {{TEAM}}.",
       "",
       "Pace 125 words per minute. `[→]` is a key press: the next slide.",
       "",

@@ -12,12 +12,9 @@
   left: 0;
   right: 0;
   top: 250px;
-  --mark-size: 220px;
   --word-size: 200px;
-}
-
-#cover .cover-lockup .wordmark {
-  translate: 0 -6px;
+  --word-d: 0.1s;
+  --mark-d: 0.5s;
 }
 
 #cover .cover-promise {

@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Эксперименты | PipeTwin</title>
+<title>Эксперименты | duppel</title>
 <script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
 <link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
 <link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="brand.css">
 <link rel="stylesheet" href="screens-base.css">
 <link rel="stylesheet" href="screens-chart.css">
 <link rel="stylesheet" href="experiments/layout.css">
@@ -16,7 +17,7 @@
 <script type="module" src="experiments/renderer.js"></script>
 </head>
 <body>
-<header class="lab-header"><a class="lab-brand" href="screens.html">PipeTwin</a><a class="lab-back" href="screen-twin.html">Основной экран</a><a class="lab-back" href="pipeline.html">Магистраль</a><span class="lab-header-note">Визуальные эксперименты</span><button class="button button-secondary" data-theme-toggle aria-label="Переключить тему"><svg class="icon" aria-hidden="true"><use href="icons.svg#sun"/></svg><span>Светлая тема</span></button></header>
+<header class="lab-header"><a class="lab-brand brand" href="screens.html" aria-label="duppel"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg></a><a class="lab-back" href="screen-twin.html">Основной экран</a><a class="lab-back" href="pipeline.html">Магистраль</a><span class="lab-header-note">Визуальные эксперименты</span><button class="button button-secondary" data-theme-toggle aria-label="Переключить тему"><svg class="icon" aria-hidden="true"><use href="icons.svg#sun"/></svg><span>Светлая тема</span></button></header>
 <nav class="lab-variants" aria-label="Вариант сцены"><button class="button button-secondary" data-variant="sculpture" aria-pressed="true">Скульптура</button><button class="button button-secondary" data-variant="flow" aria-pressed="false">Открытый поток</button><button class="button button-secondary" data-variant="loop" aria-pressed="false">Петля</button><span class="sd-caption">Один участок, одна симуляция</span></nav>
 <main class="lab" id="main">
 <section class="lab-stage" aria-labelledby="lab-title">

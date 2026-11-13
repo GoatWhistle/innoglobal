@@ -1,4 +1,4 @@
-# Deck plan: {{PRODUCT}}
+# Deck plan: duppel
 
 Status: {{draft | ready for audit | final}}. Updated {{YYYY-MM-DD}}.
 Rules: [AGENTS.md](AGENTS.md). Proofs: [pitch-evidence.md](pitch-evidence.md).

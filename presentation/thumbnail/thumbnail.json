@@ -1,5 +1,5 @@
 {
-  "product": "{{PRODUCT}}",
+  "product": "duppel",
   "theme": "dark",
   "shot": "shot.png",
   "badge": { "icon": "play", "text": "{{Живое демо}}" },

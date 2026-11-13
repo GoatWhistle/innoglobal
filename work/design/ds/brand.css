@@ -1,0 +1,47 @@
+:root {
+  --mark-accent: var(--brand-accent, var(--leak-700));
+}
+
+:root[data-theme="dark"] {
+  --mark-accent: var(--brand-accent, var(--crude-amber));
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: var(--text-primary);
+  line-height: 0;
+  text-decoration: none;
+}
+
+.brand-lockup {
+  display: block;
+  block-size: var(--brand-size, 24px);
+  inline-size: auto;
+  aspect-ratio: 409.5 / 120.2;
+  overflow: visible;
+}
+
+.brand-symbol {
+  display: block;
+  block-size: var(--brand-size, 24px);
+  inline-size: auto;
+  aspect-ratio: 1;
+}
+
+.top-mark,
+.ix-brand {
+  --brand-size: 28px;
+}
+
+.app-mark,
+.kit-brand,
+.lab-brand,
+.nf-mark {
+  --brand-size: 22px;
+}
+
+.kit-brand + .kit-title {
+  margin-inline-end: auto;
+}

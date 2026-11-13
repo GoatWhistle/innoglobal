@@ -2,7 +2,6 @@ import type { RasterAsset } from "./assets.ts"
 import type { ThemePalette } from "./marks.ts"
 
 export interface CardText {
-  readonly name: string
   readonly tagline: string
   readonly description: string
   readonly site: string
@@ -38,19 +37,23 @@ export function rasterHtml(mark: string, asset: RasterAsset, colors: ThemePalett
 }
 
 export function cardHtml(
-  mark: string,
+  wordmark: string,
   text: CardText,
   colors: ThemePalette,
   fonts: string,
   family: string,
 ): string {
-  const body = `<div id="asset" style="width:1200px;height:630px;display:grid;grid-template-rows:auto 1fr auto;padding:72px 88px;background:${colors.surface};color:${colors.base};-webkit-font-smoothing:antialiased">
-  <div style="display:flex;align-items:center;gap:22px"><div style="width:72px;height:72px">${mark}</div><span style="font-size:44px;font-weight:650;letter-spacing:-0.02em">${escapeHtml(text.name)}</span></div>
-  <div style="display:grid;align-content:center;gap:28px">
-    <p style="font-size:68px;font-weight:700;line-height:1.05;letter-spacing:-0.035em;text-wrap:balance;max-width:1000px">${escapeHtml(text.tagline)}</p>
-    <p style="font-size:30px;line-height:1.35;color:${colors.muted};max-width:960px;text-wrap:pretty">${escapeHtml(text.description)}</p>
+  const footer =
+    text.site === ""
+      ? ""
+      : `<div style="display:flex;align-items:center;gap:20px;padding-top:28px;border-top:2px solid ${colors.line};font-size:26px;color:${colors.muted}"><span style="width:14px;height:14px;border-radius:50%;background:${colors.accent}"></span>${escapeHtml(text.site)}</div>`
+  const body = `<div id="asset" style="width:1200px;height:630px;display:grid;grid-template-rows:auto 1fr auto;padding:80px 88px 72px;background:${colors.surface};color:${colors.base};-webkit-font-smoothing:antialiased">
+  <div>${wordmark}</div>
+  <div style="display:grid;align-content:end;gap:24px">
+    <p style="font-size:64px;font-weight:700;line-height:1.05;letter-spacing:-0.035em;text-wrap:balance;max-width:1000px">${escapeHtml(text.tagline)}</p>
+    <p style="font-size:28px;line-height:1.4;color:${colors.muted};max-width:980px;text-wrap:pretty">${escapeHtml(text.description)}</p>
   </div>
-  <div style="display:flex;align-items:center;gap:20px;padding-top:28px;border-top:2px solid ${colors.line};font-size:26px;color:${colors.muted}"><span style="width:14px;height:14px;border-radius:50%;background:${colors.accent}"></span>${escapeHtml(text.site)}</div>
+  ${footer}
 </div>`
   return page(body, `${fonts}#asset{font-family:${family}}`)
 }

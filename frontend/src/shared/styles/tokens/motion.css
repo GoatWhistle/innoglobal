@@ -32,6 +32,7 @@
   --shift-rise: 6px;
   --shift-anchor: 4px;
   --blur-soft: 2px;
+  --shift-brand-align: 7px;
 
   --delay-skeleton: 200ms;
   --hold-skeleton: 300ms;
@@ -39,6 +40,8 @@
   --reduced-fade: 160ms;
   --reduced-fade-exit: 110ms;
   --view-transition-limit: 900ms;
+  --delay-brand-accent: calc(var(--dur-scene) * 0.4);
+  --delay-brand-drop: var(--dur-scene);
 
   --transition-control:
     background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
@@ -47,6 +50,8 @@
     background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out), scale var(--dur-press) var(--ease-out);
   --transition-fade: opacity var(--dur-base) var(--ease-out);
+  --transition-brand-drop: transform var(--dur-scene-long) var(--ease-viscous);
+  --transition-brand-rise: transform var(--dur-scene) var(--ease-viscous);
 
   --motion-fade-in: kf-fade-in var(--dur-base) var(--ease-out) both;
   --motion-fade-out: kf-fade-out var(--dur-exit) var(--ease-out) both;
@@ -63,6 +68,12 @@
   --motion-toast-out: kf-toast-out var(--dur-exit) var(--ease-out) both;
   --motion-indeterminate: kf-indeterminate var(--dur-indeterminate) var(--ease-in-out) infinite;
   --motion-countdown: kf-countdown var(--timeout-toast) var(--ease-linear) both;
+  --motion-brand-base-in: kf-brand-base-in var(--dur-scene) var(--ease-viscous) both;
+  --motion-brand-accent-in: kf-fade-in var(--dur-scene) var(--ease-out) var(--delay-brand-accent)
+    both;
+  --motion-brand-drop-in: kf-brand-drop-in var(--dur-scene-long) var(--ease-viscous)
+    var(--delay-brand-drop) both;
+  --motion-brand-busy: kf-brand-busy var(--dur-scene) var(--ease-in-out) infinite alternate;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -89,10 +100,12 @@
     --shift-rise: 0px;
     --shift-anchor: 0px;
     --blur-soft: 0px;
+    --shift-brand-align: 0px;
     --motion-spin: none;
     --motion-shimmer: none;
     --motion-alarm: none;
     --motion-indeterminate: none;
+    --motion-brand-busy: none;
   }
 
   [data-motion="fade"] {

@@ -10,11 +10,20 @@ import {
   REQUIRED_HEAD,
 } from "../../scripts/brand/assets.ts"
 import { icoSizes, pngSize } from "../../scripts/brand/binary.ts"
+import {
+  GEOMETRY_FILE,
+  geometryModule,
+  readGeometry,
+  wordmarkSvg,
+} from "../../scripts/brand/geometry.ts"
 import { faviconSvg, readMark, readPalette } from "../../scripts/brand/marks.ts"
+import { cardHtml } from "../../scripts/brand/pages.ts"
+import { readTokenSources, themeColor } from "../../scripts/tokenSources.ts"
 
 const ROOT = process.cwd()
 const PUBLIC = join(ROOT, "public")
 const FIX = "run npm run brand:assets"
+const REPO = resolve(ROOT, "..")
 
 interface Manifest {
   readonly name: string
@@ -62,5 +71,38 @@ describe("brand assets in public/", () => {
   it("index.html links every icon, the manifest, the card and the title", () => {
     const html = readFileSync(join(ROOT, "index.html"), "utf8")
     for (const tag of REQUIRED_HEAD) expect(html).toContain(tag)
+  })
+
+  it(`the React mark is generated from docs/brand (${FIX})`, () => {
+    const expected = geometryModule(readGeometry(REPO))
+    expect(readFileSync(join(ROOT, GEOMETRY_FILE), "utf8")).toBe(expected)
+  })
+
+  it("paints the mark with the brand tokens: ink and oxblood by day, ink and amber at night", () => {
+    const palette = readPalette(ROOT)
+    const tokens = readTokenSources(ROOT)
+    for (const theme of ["light", "dark"] as const) {
+      expect(palette[theme].base).toBe(themeColor(tokens, theme, "--brand-ink"))
+      expect(palette[theme].accent).toBe(themeColor(tokens, theme, "--brand-accent"))
+    }
+    expect(palette.light.accent).toBe("#a3271e")
+    expect(palette.dark.accent).toBe("#ffac2e")
+  })
+
+  it("puts the outlined wordmark on the social card instead of the name set in the UI font", () => {
+    const geometry = readGeometry(REPO)
+    const palette = readPalette(ROOT).light
+    const card = cardHtml(
+      wordmarkSvg(geometry, palette, 112),
+      { tagline: "T1", description: "D1", site: "" },
+      palette,
+      "",
+      "sans-serif",
+    )
+    expect(card).toContain(geometry.word)
+    expect(card).toContain(geometry.markAccent)
+    expect(card).toContain(`fill="${palette.accent}"`)
+    expect(card).toContain("T1")
+    expect(card).not.toContain("border-top")
   })
 })

@@ -23,8 +23,8 @@ const SVG = /<svg\b[^>]*\bviewBox="([^"]+)"[^>]*>([\s\S]*?)<\/svg>/
 const SHELL_MARK = /<template id="brand-mark">\s*([\s\S]*?)\s*<\/template>/
 
 const PALETTE_TOKENS: Readonly<Record<keyof ThemePalette, string>> = {
-  base: "--text-primary",
-  accent: "--action-primary",
+  base: "--brand-ink",
+  accent: "--brand-accent",
   surface: "--surface-base",
   raised: "--surface-raised",
   muted: "--text-secondary",
