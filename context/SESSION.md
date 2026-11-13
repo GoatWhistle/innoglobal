@@ -1,6 +1,6 @@
 # Session state
 
-Updated: 2026-11-12, MSK
+Updated: 2026-11-13, MSK
 
 ## Explicit user instructions
 
@@ -17,19 +17,24 @@ Updated: 2026-11-12, MSK
   и 3d».
 - 2026-11-12: порядок: «после базовой дизайн системы придумае название и лого».
 - 2026-11-12: «запушь все наши изменения в ветку отдельную назови feat/redesign-oil без коммита и пуша от агентов а как бы от моего лица».
+- 2026-11-13: «давай попробуй еще раз сделать и доделать дизайн систему».
 
 ## Current state
 
-- Task: publish all design-system, simulation and scene changes on feat/redesign-oil using the
-  configured human Git author and committer, with subject-only commits and no attribution trailers.
-- Page: /work/design/ds/pipeline.html, code work/design/ds/pipeline/ (15 modules, all under 250 lines).
-- Layered pipe (steel, wool, aluminium jacket), stepped cutaway, flanges, supports, sensors,
-  screen-space fluid jet, puddle, camera focus and drag orbit. Reuses the shared Worker simulation.
-- Checked in Chrome: calm, leak, reset, both themes, orbit, 375 px, nogl fallback. 5 node tests pass.
-  Evidence and limits: work/audits/pipeline/README.md. Reduced motion not exercised live.
-- Earlier scope: HTML design-system screens improved; full React simulator excluded by user.
-- Branch: feat/redesign-oil, created from main at b6a8336. Remote: origin on GoatWhistle/innoglobal.
-- Server: Python HTTP server at 127.0.0.1:5178, serving repository root.
+- Task (2026-11-13): finish the HTML design system. Done: realistic pipe on the main screen
+  `screen-twin.html` in both themes; new `screen-sensors.html` (3 states) and `screen-model.html`
+  (5 states, live preview through the real simulator); units unified to МПа and the canonical run
+  (6 330 м inserted, 6 340 м ± 50 м, 2,0 с); valve toast renamed, header calm label "Утечек нет",
+  "выдержка" as the single hold term. Notes: work/design/ds/SCREENS-NOTES.md; decisions:
+  docs/design-decisions.md; checks: work/audits/pipeline/README.md.
+- Oil spec done 2026-11-13 (palette, flat section with flow tracers, jet tied to flowShare, taper,
+  drips, persistent puddle, slow viscous motion). Decisions: docs/design-decisions.md; checks: audits.
+- `scene/sim.js` now takes parameters (`buildModel(params)`, `createSim(random, options)`); defaults
+  unchanged, session/pipeline/geometry tests pass.
+- Pipeline scene page: /work/design/ds/pipeline.html, code work/design/ds/pipeline/.
+- Branch and revision: feat/redesign-oil, 6a21e13, uncommitted changes (no commits by request).
+- Server: python3 -m http.server 5178 --bind 127.0.0.1 from repository root. Chrome caches modules:
+  hard-reload (cmd+shift+r) after edits.
 
 ## Implemented and checked
 
@@ -61,13 +66,17 @@ Updated: 2026-11-12, MSK
   passed. First verify after disabling alarm motion needed the token test to accept CSS none.
 - English product name and logo remain future work per the earlier user instruction.
 
-## Latest comparison
+## Next
 
-- User request: «что изменилось посмотри». Inspection only, after the earlier stop request.
-- main, b6a8336; current uncommitted tree includes pipeline.html and the earlier experiments.
-- Compared pipeline source and saved final frames with the sculptural experiment. New scene adds
-  layered metal/insulation, fittings, supports, textured surfaces, particle fluid, puddle and orbit.
-- Visual tradeoff: stronger industrial realism, brighter metal and nearly chrome liquid highlights
-  move away from the earlier quiet black object. Main screen is still a separate page.
-- Live Chrome inspection was interrupted by unavailable native windows; final visual comparison
-  uses work/audits/pipeline/leak-closeup-final.png and leak-dark.jpg. No source changes made.
+- Name and logo with the user (their stated order: after the base design system).
+- Not built: first-run and error screens (`screen-start.html`); 375 px checked via iframes only.
+
+
+## Active redesign, 2026-11-13
+
+User: «давай тогда пробуй и начинай менять дизайн по трубе, брат. делай с помощью субагентов sol 6.1 high fast».
+User: «параоллельно работает если что агент который работает полностью с нефтью.»
+Three Sol6.1 high workers completed tokens, controls and catalog in separate /tmp/pipetwin-ds-redesign worktrees; owned files integrated. No commits/push.
+Parent implemented main-screen status/timeline, shell, mobile layout and focus fixes. Oil paths untouched by this stream. Branch feat/redesign-oil, HEAD6a21e13.
+Verify316 tests+36rules/build,4axe React,25 scene/session tests passed. Chrome1440 dark normal/live leak viewed; real detection2.01s. Audit and images: work/audits/ds-redesign/README.md.
+Pending: final visual matrix375/1280/1440,both themes, catalog/kit/docs/other screens,reduced motion/fallback. CUA AX updates but screenshots stale; noWindowsAvailable/-3812. Asked user to bring Chrome foreground. Goal remains active; do not claim all visual checks passed. Latest CSS chart-height/mobile-header tweaks not recaptured.
