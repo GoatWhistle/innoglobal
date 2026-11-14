@@ -142,13 +142,43 @@
     },
     {
       "case": "case1",
-      "model": "quant_cal_phys",
+      "model": "dens_quant",
       "n": 55,
-      "pearson_r2": 0.2054,
-      "r2d": 0.021,
-      "mae": 0.386,
-      "rmse": 0.544,
-      "mape": 6.57
+      "pearson_r2": 0.2886,
+      "r2d": 0.0816,
+      "mae": 0.483,
+      "rmse": 0.629,
+      "mape": 8.37
+    },
+    {
+      "case": "case1",
+      "model": "dens_quant_cal",
+      "n": 55,
+      "pearson_r2": 0.2886,
+      "r2d": 0.0816,
+      "mae": 0.357,
+      "rmse": 0.507,
+      "mape": 6.07
+    },
+    {
+      "case": "case1",
+      "model": "dens_quant_cal_ens",
+      "n": 55,
+      "pearson_r2": 0.2886,
+      "r2d": 0.0816,
+      "mae": 0.337,
+      "rmse": 0.468,
+      "mape": 5.69
+    },
+    {
+      "case": "case1",
+      "model": "dens_quant_cal_phys",
+      "n": 55,
+      "pearson_r2": 0.2871,
+      "r2d": 0.0816,
+      "mae": 0.357,
+      "rmse": 0.507,
+      "mape": 6.06
     },
     {
       "case": "case1",
@@ -292,13 +322,43 @@
     },
     {
       "case": "case1_measured",
-      "model": "quant_cal_phys",
+      "model": "dens_quant",
       "n": 55,
-      "pearson_r2": 0.7297,
-      "r2d": 0.4602,
-      "mae": 0.206,
-      "rmse": 0.288,
-      "mape": 3.65
+      "pearson_r2": 0.7475,
+      "r2d": 0.5103,
+      "mae": 0.366,
+      "rmse": 0.449,
+      "mape": 6.37
+    },
+    {
+      "case": "case1_measured",
+      "model": "dens_quant_cal",
+      "n": 55,
+      "pearson_r2": 0.7475,
+      "r2d": 0.5103,
+      "mae": 0.202,
+      "rmse": 0.279,
+      "mape": 3.53
+    },
+    {
+      "case": "case1_measured",
+      "model": "dens_quant_cal_ens",
+      "n": 55,
+      "pearson_r2": 0.7475,
+      "r2d": 0.5103,
+      "mae": 0.227,
+      "rmse": 0.313,
+      "mape": 3.87
+    },
+    {
+      "case": "case1_measured",
+      "model": "dens_quant_cal_phys",
+      "n": 55,
+      "pearson_r2": 0.7475,
+      "r2d": 0.5103,
+      "mae": 0.202,
+      "rmse": 0.279,
+      "mape": 3.53
     },
     {
       "case": "case1_measured",
@@ -344,31 +404,81 @@
       "case": "case2",
       "model": "lgbm",
       "n": 525,
-      "pearson_r2": 0.1934,
-      "r2d": 0.0885,
-      "mae": 0.932,
-      "rmse": 1.176,
-      "mape": 12.72
+      "pearson_r2": 0.1902,
+      "r2d": 0.0997,
+      "mae": 0.854,
+      "rmse": 1.058,
+      "mape": 11.89
     },
     {
       "case": "case2",
       "model": "ensemble",
       "n": 525,
-      "pearson_r2": 0.1934,
-      "r2d": 0.0885,
-      "mae": 0.932,
-      "rmse": 1.176,
-      "mape": 12.72
+      "pearson_r2": 0.1902,
+      "r2d": 0.0997,
+      "mae": 0.854,
+      "rmse": 1.058,
+      "mape": 11.89
+    },
+    {
+      "case": "case2",
+      "model": "ens_prior",
+      "n": 525,
+      "pearson_r2": 0.1946,
+      "r2d": 0.094,
+      "mae": 0.856,
+      "rmse": 1.056,
+      "mape": 11.94
+    },
+    {
+      "case": "case2",
+      "model": "ens_prior_cal",
+      "n": 525,
+      "pearson_r2": 0.1946,
+      "r2d": 0.094,
+      "mae": 0.815,
+      "rmse": 0.997,
+      "mape": 12.11
     },
     {
       "case": "case2",
       "model": "ensemble_smooth5",
       "n": 525,
-      "pearson_r2": 0.169,
-      "r2d": 0.0814,
-      "mae": 0.938,
-      "rmse": 1.183,
-      "mape": 12.82
+      "pearson_r2": 0.1625,
+      "r2d": 0.0937,
+      "mae": 0.863,
+      "rmse": 1.067,
+      "mape": 12.03
+    },
+    {
+      "case": "case2_strict",
+      "model": "ensemble",
+      "n": 525,
+      "pearson_r2": 0.0296,
+      "r2d": NaN,
+      "mae": 0.945,
+      "rmse": NaN,
+      "mape": NaN
+    },
+    {
+      "case": "case2_strict",
+      "model": "ens_prior",
+      "n": 525,
+      "pearson_r2": 0.048,
+      "r2d": NaN,
+      "mae": 0.94,
+      "rmse": NaN,
+      "mape": NaN
+    },
+    {
+      "case": "case2_strict",
+      "model": "ens_prior_cal",
+      "n": 525,
+      "pearson_r2": 0.048,
+      "r2d": NaN,
+      "mae": 0.866,
+      "rmse": NaN,
+      "mape": NaN
     }
   ],
   "params": {
@@ -391,8 +501,8 @@
   },
   "conformal": {
     "case1": {
-      "p10_p90": 0.32557412169316713,
-      "p05_p95": 0.3791968856003969
+      "p10_p90": 0.3146561695512773,
+      "p05_p95": 0.40786974706640944
     },
     "case2": null
   }
