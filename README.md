@@ -27,7 +27,7 @@ numpy, Optuna и все три бустинга. Работает на CPU об�
 
 | Этап | Модуль | Что делает |
 |---|---|---|
-| 0. Хранилище | `warehouse/build.py`, `warehouse/sql/` | CSV -> DuckDB `warehouse/pipetwin.duckdb`: слои raw -> core (+ quarantine, mart), 35 проверок качества (`dq.check_result`). Модель читает только `core`. Подробно — `warehouse/README.md` |
+| 0. Хранилище | `warehouse/build.py`, `warehouse/sql/` | CSV -> DuckDB `warehouse/pipetwin.duckdb`: слои raw -> core (+ quarantine, mart), 42 проверки качества (`dq.check_result`), весь паспорт в `core.pipe_attribute`, привязка мониторинга к трубам по топологии сети. Модель читает только `core`. Подробно — `warehouse/README.md` |
 | 1. Подготовка | `src/pipetwin/prepare.py` | Паспорт, профиль, ВТД из `core`; сегментация по 10 м (`segment_id = floor(dist/10)`); посегментные таргеты (min остаточной толщины за пропуск); обучающие пары «старт → целевой пропуск» |
 | 2. Признаки | `src/pipetwin/features.py` | Геометрия трассы (уклон, низинность, ловушки воды), агрегаты техрежима за горизонт, состояние стенки на старте (сглаженный профиль прошлого ВТД, плотность дефектов), гравиметрия коррозии по направлениям, паспорт и возраст |
 | 3. Обучение | `src/pipetwin/train.py` | 2 базлайна + две раздельные модели по кейсам (CatBoost/LightGBM/XGBoost, квантильный лосс), опционально Optuna по GroupKFold на train; валидация на отложенных парах; финальные модели + P10/P90 |
