@@ -85,7 +85,7 @@ CASES = {
                   blend_w=2.0, gap_w=0.5, calib=None, shrink=None,
                   # lab63: медиана LGBM/XGB/AFT вместо среднего (honest 8/8 по r², r2d, MAE)
                   member_agg="median",
-                  quant_scale="prev"),  # lab70: разброс quant_cal = std(prev_min)
+                  quant_scale=1.2),  # lab73: разброс quant_cal/dens_quant_cal = 1.2·std(ens_blend)
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID, calibrate=True,
@@ -466,17 +466,25 @@ def dens_quant_score(ds: pd.DataFrame) -> np.ndarray:
 
 
 def case1_stat_predictors(ds: pd.DataFrame, ens_blend: np.ndarray,
-                          quant_scale: str = "ens") -> dict[str, np.ndarray]:
+                          quant_scale: str | float = "ens") -> dict[str, np.ndarray]:
     """Предикторы кейса 1 поверх выровненного прошлого пропуска (без обучения) и их бленды с ансамблем.
 
-    quant_scale="prev" (lab70/lab73): разброс quant_cal и dens_quant_cal = std(prev_min) трубы вместо
-    std(ens_blend). MSE-оптимальный разброс r·σy при измеренном сдвиге (r ≈ 0.81-0.87) — 0.45-0.48 мм,
-    а std(ens) на валидации 0.33: прогноз сжат к среднему. На 22871 std(prev_min) 0.62 против std(ens)
-    0.525 (×1.19). При сдвиге «от соседа» (ошибка 6-11 м) растягивание вредит — у 22871 такой
-    геометрии нет (сдвиг измерен на обоих концах). *_ens — прежний разброс, для сравнения.
+    quant_scale (lab70/lab73) — разброс quant_cal и dens_quant_cal: "ens" — std(ens_blend) (как было),
+    число k — k·std(ens_blend), "prev" — std(prev_min) трубы. MSE-оптимальный разброс r·σy при
+    измеренном сдвиге (r ≈ 0.81-0.87) — 0.44-0.48 мм, а std(ens) на валидации 0.33: прогноз сжат к
+    среднему. Принято k=1.2 (lab73, dens_quant_cal, оракул δ ∈ [−2, 2]): MAE 7/7 лучше (|δ|≤1:
+    0.233 -> 0.215), RMSE 0.321 -> 0.298, r² тот же; сосед +0.004; self22 без изменений.
+    "prev" в оракуле чуть лучше (0.207), но на self22 (прошлый пропуск — редкий снаряд 2018,
+    std(prev_min) 1.01) MAE 0.398 -> 0.737 — правило ломается, если разброс прошлого пропуска
+    раздут; ×1.2 не зависит от него. На 22871 оба дают ~0.63 мм. *_ens — прежний разброс.
     """
     st, qt, dq = aligned_stats_score(ds), quant_score(ds), dens_quant_score(ds)
-    sp = float(np.std(ds["prev_min"].values)) if quant_scale == "prev" else None
+    if quant_scale == "prev":
+        sp = float(np.std(ds["prev_min"].values))
+    elif isinstance(quant_scale, (int, float)):
+        sp = float(quant_scale) * float(np.std(ens_blend))
+    else:
+        sp = None
     return {"aligned_stats": st, "aligned_stats_cal": stats_at_level(ens_blend, st),
             "ens_blend+stats": blend_stats(ens_blend, st),
             "quant": qt, "quant_cal": stats_at_level(ens_blend, qt, sp),
