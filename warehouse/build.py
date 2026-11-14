@@ -97,6 +97,9 @@ CHECKS = [
     ("ut.thicker_than_nominal", "warn",
      "select count(*) from core.ut_measurement where not is_plausible",
      "select count(*) from core.ut_measurement", "толщина > номинал·1.15 — физически невозможно"),
+    ("ut.thicker_after_offset", "warn",
+     "select count(*) from core.ut_measurement where not is_plausible_corr",
+     "select count(*) from core.ut_measurement", "толщина за вычетом сдвига прибора > номинал·1.15"),
 
     # --- коррозионный мониторинг
     ("coupon.no_pipe_direction", "info",

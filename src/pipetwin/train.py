@@ -306,6 +306,35 @@ def tune(family: str, X_tr, y_tr, groups, n_trials: int) -> dict:
     return study.best_params
 
 
+def aligned_stats_score(ds: pd.DataFrame) -> np.ndarray:
+    """Кейс 1 без обучения: устойчивое состояние стенки на прошлом выровненном пропуске.
+
+    z(min) + z(q10) + z(q10 по ±1 сегменту) − z(log числа дефектов по ±1 сегменту), аффинно
+    возвращённый в уровень/разброс prev_min (Пирсону масштаб безразличен). Работает, только если
+    прошлый пропуск выровнен с целевым (align.py): без сдвига r² падает с ~0.68 до ~0.3.
+    """
+    s = (zscore(ds["prev_min"].values) + zscore(ds["prev_q10"].values)
+         + zscore(ds["prev_q10_nb3"].values) - zscore(ds["prev_lnn_nb3"].values))
+    base = ds["prev_min"].values
+    return zscore(s) * float(np.std(base)) + float(np.mean(base))
+
+
+def stats_at_level(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
+    """Форма aligned_stats в уровне и разбросе ансамбля (aligned_stats_cal).
+
+    r² тот же, что у aligned_stats (Пирсон инвариантен к аффинному), а MAE как у ансамбля:
+    снаряд 2023 года показывает глубже, и уровень прошлого пропуска для мм не годится
+    (валидация с измеренным сдвигом: MAE 0.375 -> 0.240 мм, experiments/lab23).
+    """
+    return zscore(stats) * float(np.std(ens)) + float(np.mean(ens))
+
+
+def blend_stats(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
+    """Равный бленд формы ансамбля и aligned_stats в уровне ансамбля."""
+    b = zscore(ens) + zscore(stats)
+    return zscore(b) * float(np.std(ens)) + float(np.mean(ens))
+
+
 def baseline_predictions(ds: pd.DataFrame) -> dict[str, pd.Series]:
     """Два простых базлайна для таблицы сравнения."""
     rate = ds["grav_rate_mean"].fillna(0.1)
@@ -370,6 +399,12 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             val_preds["ens_blend"] = blend_prob(
                 val_preds["ensemble"], p_va, cfg["blend_w"],
                 gap=val_preds["ensemble"] - q05_va, gap_w=cfg.get("gap_w", 0.0))
+        if case == "case1":
+            val_preds["aligned_stats"] = aligned_stats_score(va)
+            val_preds["aligned_stats_cal"] = stats_at_level(val_preds["ens_blend"],
+                                                            val_preds["aligned_stats"])
+            val_preds["ens_blend+stats"] = blend_stats(val_preds["ens_blend"],
+                                                       val_preds["aligned_stats"])
         for base_name in ("catboost", "ensemble", "ens_blend"):
             if base_name not in val_preds:
                 continue
