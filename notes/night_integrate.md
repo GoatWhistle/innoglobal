@@ -42,3 +42,16 @@ run_all (сид 42, honest): кейс 1 сосед dens_quant_cal 0.2886 / MAE 0
 кейс 2 ens_prior_cal 0.1946 / 0.815, strict 0.0480 / 0.866.
 result.csv: 22871 corr с прошлым (aligned_stats_cal) 0.977, mean 5.979, std 0.501, min 3.429, max 7.662,
 409 уникальных, top 1% — полок нет; 9583 без изменений.
+
+## 3. exp/calib (1cf5e2f) — влито
+Взято (подтверждено на honest): конформные интервалы вокруг прод-предиктора кейса 1 (lab43/lab64; невязки
+блока case1_measured, полуширины 80%/90% = 0.318/0.491 мм; в lab64 по nb — 0.512/0.772, это консервативнее),
+медиана членов ансамбля (lab63) — у dens_quant_cal меняет только уровень/масштаб: case1_measured MAE
+0.235 -> 0.227, RMSE 0.313; кривая деградации artifacts/degradation_curve.csv (монотонность — assert);
+r2d/RMSE/MAPE в validation_report. calib=prev (lab41) и shrink (lab60) в ветке выключены — так и оставлено.
+Кейс 2 — свой конверт (CatBoost-квантили, перенесённые за ens_prior_cal), конформа нет.
+run_all: case1 (сосед) dens_quant_cal 0.2886 / r2d 0.082 / MAE 0.337; case1_measured 0.7475 / 0.510 / 0.227;
+кейс 2 0.1946 / MAE 0.815, strict 0.0480. 22871: corr с прошлым 1.000 (сдвиг уровня +0.015 мм), интервал
+80% ширина 0.64 мм; 9583 без изменений.
+
+## 4. exp/newmodels: кригинг остатков поверх aligned_stats — у агента «no gain at |δ|<=1» (f843a29) — не берём.
