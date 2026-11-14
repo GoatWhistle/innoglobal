@@ -34,9 +34,13 @@ def run() -> pd.DataFrame:
         # бэг, усреднённый по сидам/сетке (train.BAG_SEEDS / PARAM_GRID)
         preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale)
         if name == "ens_blend":
-            # форма классификатора дефекта вклеивается в профиль этой трубы
+            # формы классификатора дефекта и спреда до q05 вклеиваются
+            # в профиль этой трубы (lab13-19)
             p_def = models["clf"].predict_proba(X)[:, 1]
-            pred = blend_prob(preds["ensemble"], p_def, b["blend_w"])
+            q05 = np.mean([m.predict(X) for m in models["q05_pair"]], axis=0)
+            pred = blend_prob(preds["ensemble"], p_def, b["blend_w"],
+                              gap=preds["ensemble"] - q05,
+                              gap_w=b.get("gap_w", 0.0))
         else:
             pred = preds[name]
         if smooth:

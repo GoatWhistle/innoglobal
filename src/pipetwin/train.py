@@ -58,7 +58,7 @@ PARAM_GRID = tuple(
 CASES = {
     "case1": dict(val_split="val_case1", train_kinds=("vtd2vtd", "comm2vtd"),
                   target="abs", families=("lgbm", "xgb"),
-                  aft=dict(dist="normal", sigma=2.0), blend_w=1.0),
+                  aft=dict(dist="normal", sigma=2.0), blend_w=1.0, gap_w=0.5),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID),
@@ -164,14 +164,24 @@ def zscore(a: np.ndarray) -> np.ndarray:
     return (a - np.mean(a)) / s if s > 1e-12 else np.zeros_like(a, dtype=float)
 
 
-def blend_prob(ens: np.ndarray, p: np.ndarray, w: float) -> np.ndarray:
-    """Форма z(ens) + w·z(−P), аффинно возвращённая в уровень/разброс ens.
+def blend_prob(ens: np.ndarray, p: np.ndarray, w: float,
+               gap: np.ndarray | None = None, gap_w: float = 0.0) -> np.ndarray:
+    """Форма z(ens) + w·z(−P) [+ gap_w·z(gap)], аффинно в уровень/разброс ens.
 
     Пирсон к аффинному преобразованию инвариантен, уровень мм сохраняется
-    (MAE на валидации даже улучшился, lab14).
+    (MAE на валидации даже улучшился, lab14). gap = ens − q05 (lab19 gap+):
+    широкий зазор до q05 — признак чистого сегмента (сигнал инвертированный,
+    AUC 0.245), знак «плюс» это и использует; +0.011 sm5 на 8/8 сидах.
     """
     b = zscore(ens) + w * zscore(-p)
+    if gap is not None and gap_w:
+        b = b + gap_w * zscore(gap)
     return zscore(b) * float(np.std(ens)) + float(np.mean(ens))
+
+
+def fit_q05_pair(X: pd.DataFrame, y: pd.Series) -> list:
+    """Пара LGBM+XGB на alpha=0.05 — спред до q05 для gap-члена бленда."""
+    return [make_model(f, alpha=0.05).fit(X, y) for f in ("lgbm", "xgb")]
 
 
 def fit_clf(X: pd.DataFrame, had_defect: pd.Series) -> CatBoostClassifier:
@@ -285,8 +295,11 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         val_preds = predict_bag(val_bag, va[feats], va["wt_nom"].values, va_scale)
         if cfg.get("blend_w"):
             p_va = fit_clf(X_tr, tr["had_defect"]).predict_proba(va[feats])[:, 1]
+            q05_va = np.mean([m.predict(va[feats])
+                              for m in fit_q05_pair(X_tr, y_tr)], axis=0)
             val_preds["ens_blend"] = blend_prob(
-                val_preds["ensemble"], p_va, cfg["blend_w"])
+                val_preds["ensemble"], p_va, cfg["blend_w"],
+                gap=val_preds["ensemble"] - q05_va, gap_w=cfg.get("gap_w", 0.0))
         for base_name in ("catboost", "ensemble", "ens_blend"):
             if base_name not in val_preds:
                 continue
@@ -311,13 +324,15 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         final["bag"] = bag
         if cfg.get("blend_w"):
             final["clf"] = fit_clf(X_all, subset["had_defect"])
+            final["q05_pair"] = fit_q05_pair(X_all, y_all)
         for alpha, tag in ((0.05, "p05"), (0.1, "p10"), (0.9, "p90"), (0.95, "p95")):
             m = make_model("catboost", dict(best_params["catboost"]), alpha=alpha)
             m.fit(X_all, y_all)
             final[tag] = m
         bundle["cases"][case] = dict(models=final, features=feats,
                                      params=best_params, target=cfg["target"],
-                                     blend_w=cfg.get("blend_w"))
+                                     blend_w=cfg.get("blend_w"),
+                                     gap_w=cfg.get("gap_w", 0.0))
 
     report = pd.DataFrame(report_rows)
     C.ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)

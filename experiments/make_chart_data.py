@@ -13,7 +13,8 @@ from pipetwin import features as F  # noqa: E402
 from pipetwin import prepare  # noqa: E402
 from pipetwin import warehouse as W  # noqa: E402
 from pipetwin.train import (CASES, blend_prob, fit_bag, fit_clf,  # noqa: E402
-                            pearson_r2, predict_bag, survival_labels)
+                            fit_q05_pair, pearson_r2, predict_bag,
+                            survival_labels)
 
 OUT = Path(__file__).resolve().parents[1] / "chart_data.json"
 np.random.seed(C.SEED)
@@ -62,9 +63,12 @@ for case, cfg in CASES.items():
         tr[feats], tr["y"], tr["aft_lb"].values, tr["aft_ub"].values, prm, aftp,
         families=cfg["families"])]
     p = predict_bag(bag, va[feats], va["wt_nom"].values)["ensemble"]
-    if cfg.get("blend_w"):  # кейс 1: бленд с классификатором дефекта (lab13-15)
+    if cfg.get("blend_w"):  # кейс 1: бленд классификатора + gap q05 (lab13-19)
         p_def = fit_clf(tr[feats], tr["had_defect"]).predict_proba(va[feats])[:, 1]
-        p = blend_prob(p, p_def, cfg["blend_w"])
+        q05 = np.mean([m.predict(va[feats])
+                       for m in fit_q05_pair(tr[feats], tr["y"])], axis=0)
+        p = blend_prob(p, p_def, cfg["blend_w"], gap=p - q05,
+                       gap_w=cfg.get("gap_w", 0.0))
     if case == "case1":
         p = (pd.DataFrame({"id": va["id"].values, "p": p}).groupby("id")["p"]
              .transform(lambda s: s.rolling(5, center=True, min_periods=1).median()).values)
