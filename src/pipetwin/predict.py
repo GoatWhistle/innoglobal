@@ -4,13 +4,16 @@ import numpy as np
 import pandas as pd
 
 from . import config as C
-from .train import predict_bag
+from .train import blend_prob, predict_bag
 
-# Предиктор по кейсу — выбор по СТАБИЛЬНОСТИ между прогонами (тюненный и нет),
-# а не по максимуму одной таблицы: валидация кейса 1 — всего 55 сегментов.
-# case1: ансамбль + роллинг-медиана 5 (0.163 и 0.220 в двух прогонах);
-# case2: сырой ансамбль (0.088 и 0.110; сглаживание стабильно чуть хуже).
-PREDICTOR = {"case1": ("ensemble", 5), "case2": ("ensemble", None)}
+# Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
+# на всех 3 сидах по r² и sm5):
+# case1: ансамбль + бленд классификатора дефекта (r² 0.268/0.315 против
+#        0.177/0.261 у чистого ансамбля, MAE тоже лучше) + роллинг-медиана 5;
+# case2: «ансамбль» = LGBM по сетке PARAM_GRID (0.175/0.148 против
+#        0.157/0.127 у 4-членного ансамбля); классификатор там слеп
+#        (AUC 0.56), бленд не положен, сглаживание стабильно чуть хуже.
+PREDICTOR = {"case1": ("ens_blend", 5), "case2": ("ensemble", None)}
 
 
 def run() -> pd.DataFrame:
@@ -28,8 +31,14 @@ def run() -> pd.DataFrame:
         X = grp[feats]
         name, smooth = PREDICTOR[case]
         scale = grp["wt_nom"].values if b.get("target") == "rel" else 1.0
-        # ансамбль 3 бустингов + AFT, усреднённый по сидам (train.BAG_SEEDS)
-        pred = predict_bag(models["bag"], X, grp["wt_nom"].values, scale)[name]
+        # бэг, усреднённый по сидам/сетке (train.BAG_SEEDS / PARAM_GRID)
+        preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale)
+        if name == "ens_blend":
+            # форма классификатора дефекта вклеивается в профиль этой трубы
+            p_def = models["clf"].predict_proba(X)[:, 1]
+            pred = blend_prob(preds["ensemble"], p_def, b["blend_w"])
+        else:
+            pred = preds[name]
         if smooth:
             pred = (pd.Series(pred)
                     .rolling(smooth, center=True, min_periods=1).median().values)

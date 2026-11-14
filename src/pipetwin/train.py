@@ -1,8 +1,10 @@
-"""Этап 3: базлайны, по два ансамбля бустингов на кейс, Optuna, валидация.
+"""Этап 3: базлайны, модели по кейсам, валидация.
 
-Архитектура (итог лабораторных серий 1-4, см. experiments/):
-  - case1 (между ВТД): обучение на всех расширенных парах, базовые признаки;
-  - case2 (от ввода): обучение только на парах "ввод -> ВТД", база + УЗТ.
+Архитектура (итог лабораторных серий, см. experiments/):
+  - case1 (между ВТД): все расширенные пары; ансамбль 3 бустинга + AFT,
+    бэггинг по сидам, поверх — бленд классификатора дефекта (lab13-15);
+  - case2 (от ввода): только пары "ввод -> ВТД"; одиночный LGBM,
+    усреднённый по сетке PARAM_GRID (lab15, совет ментора).
 """
 import json
 
@@ -10,7 +12,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import xgboost
-from catboost import CatBoostRegressor
+from catboost import CatBoostClassifier, CatBoostRegressor
 from lightgbm import LGBMRegressor
 from xgboost import XGBRegressor
 
@@ -41,11 +43,21 @@ PARAM_GRID = tuple(
      "xgb": dict(max_depth=d, learning_rate=lr)}
     for d, lr in ((4, 0.03), (6, 0.05), (8, 0.10), (4, 0.10), (6, 0.03), (8, 0.05)))
 
+# Итог лабораторных серий 13-15:
+# - кейс 1: ансамбль + классификатор дефекта (AUC 0.97) аффинным блендом
+#   z(ens) + w·z(−P): r² 0.177→0.268, sm5 0.261→0.315, MAE 0.387→0.360.
+#   P признаком внутрь бустингов не работает (lab14 feat), квантильная
+#   маршрутизация q05/q95 — тоже (lab13: квантили, обученные на всех
+#   сегментах, сами липнут к полке);
+# - кейс 2: одна модель — LGBM, усреднённый по сетке PARAM_GRID, бьёт
+#   4-членный ансамбль (0.175/0.148 против 0.157/0.127 на всех сидах,
+#   lab15); классификатор там слеп (AUC 0.56), бленд не применяется.
 CASES = {
     "case1": dict(val_split="val_case1", train_kinds=("vtd2vtd", "comm2vtd"),
-                  target="abs", aft=dict(dist="normal", sigma=2.0)),
+                  target="abs", families=MODEL_FAMILIES,
+                  aft=dict(dist="normal", sigma=2.0), blend_w=1.0),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
-                  target="abs", aft=dict(dist="normal", sigma=0.5),
+                  target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID),
 }
 
@@ -82,7 +94,8 @@ def fit_aft(X: pd.DataFrame, lb: np.ndarray, ub: np.ndarray,
 
 
 def fit_bag(X: pd.DataFrame, y: pd.Series, lb: np.ndarray, ub: np.ndarray,
-            params: dict, aft_cfg: dict, seeds=BAG_SEEDS) -> list[dict]:
+            params: dict, aft_cfg: dict | None, seeds=BAG_SEEDS,
+            families=MODEL_FAMILIES) -> list[dict]:
     """Ансамбль (3 бустинга + AFT) на каждом сиде из seeds.
 
     От сида зависит только CatBoost (случайная сила разбиений, бутстрап);
@@ -100,16 +113,18 @@ def fit_bag(X: pd.DataFrame, y: pd.Series, lb: np.ndarray, ub: np.ndarray,
         for s in seeds:
             C.SEED = s
             members = {}
-            for f in MODEL_FAMILIES:
+            for f in families:
                 if seed_sensitive(f) or f not in shared:
                     members[f] = make_model(f, dict(params.get(f, {}))).fit(X, y)
                     if not seed_sensitive(f):
                         shared[f] = members[f]
                 else:
                     members[f] = shared[f]
-            if "aft" not in shared:
-                shared["aft"] = fit_aft(X, lb, ub, dist=aft_cfg["dist"], sigma=aft_cfg["sigma"])
-            members["aft"] = shared["aft"]
+            if aft_cfg:
+                if "aft" not in shared:
+                    shared["aft"] = fit_aft(X, lb, ub, dist=aft_cfg["dist"],
+                                            sigma=aft_cfg["sigma"])
+                members["aft"] = shared["aft"]
             bag.append(members)
     finally:
         C.SEED = seed0
@@ -118,12 +133,17 @@ def fit_bag(X: pd.DataFrame, y: pd.Series, lb: np.ndarray, ub: np.ndarray,
 
 def predict_bag(bag: list[dict], X: pd.DataFrame, wt_nom: np.ndarray,
                 scale=1.0) -> dict[str, np.ndarray]:
-    """Прогноз толщины: члены ансамбля усреднены по сидам + общий ансамбль."""
-    dm = xgboost.DMatrix(X)
+    """Прогноз толщины: члены ансамбля усреднены по сидам + общий ансамбль.
+
+    Состав членов берётся из самого бэга (кейс 2 — только LGBM, без AFT).
+    """
+    fams = [f for f in MODEL_FAMILIES if f in bag[0]]
     out = {f: np.mean([m[f].predict(X) for m in bag], axis=0) * scale
-           for f in MODEL_FAMILIES}
-    out["aft"] = wt_nom - np.mean([m["aft"].predict(dm) for m in bag], axis=0)
-    out["ensemble"] = np.mean([out[f] for f in MODEL_FAMILIES] + [out["aft"]], axis=0)
+           for f in fams}
+    if "aft" in bag[0]:
+        dm = xgboost.DMatrix(X)
+        out["aft"] = wt_nom - np.mean([m["aft"].predict(dm) for m in bag], axis=0)
+    out["ensemble"] = np.mean(list(out.values()), axis=0)
     return out
 
 
@@ -134,6 +154,29 @@ def pearson_r2(y_true: np.ndarray, y_pred: np.ndarray) -> float:
         return 0.0
     r2 = float(np.corrcoef(y_true, y_pred)[0, 1] ** 2)
     return r2 if np.isfinite(r2) else 0.0
+
+
+def zscore(a: np.ndarray) -> np.ndarray:
+    s = float(np.std(a))
+    return (a - np.mean(a)) / s if s > 1e-12 else np.zeros_like(a, dtype=float)
+
+
+def blend_prob(ens: np.ndarray, p: np.ndarray, w: float) -> np.ndarray:
+    """Форма z(ens) + w·z(−P), аффинно возвращённая в уровень/разброс ens.
+
+    Пирсон к аффинному преобразованию инвариантен, уровень мм сохраняется
+    (MAE на валидации даже улучшился, lab14).
+    """
+    b = zscore(ens) + w * zscore(-p)
+    return zscore(b) * float(np.std(ens)) + float(np.mean(ens))
+
+
+def fit_clf(X: pd.DataFrame, had_defect: pd.Series) -> CatBoostClassifier:
+    """Классификатор «в сегменте будет дефект» — источник формы для бленда."""
+    clf = CatBoostClassifier(iterations=600, learning_rate=0.05, depth=6,
+                             random_seed=C.SEED, verbose=0)
+    clf.fit(X, had_defect.astype(int))
+    return clf
 
 
 def make_model(family: str, params: dict | None = None, alpha: float = 0.5):
@@ -234,9 +277,16 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                              if tune_trials else {}) for fam in MODEL_FAMILIES}
         grid = (cfg.get("param_grid") if not tune_trials else None) or (best_params,)
         val_bag = [m for p in grid for m in fit_bag(
-            X_tr, y_tr, tr["aft_lb"].values, tr["aft_ub"].values, p, cfg["aft"])]
+            X_tr, y_tr, tr["aft_lb"].values, tr["aft_ub"].values, p, cfg["aft"],
+            families=cfg["families"])]
         val_preds = predict_bag(val_bag, va[feats], va["wt_nom"].values, va_scale)
-        for base_name in ("catboost", "ensemble"):
+        if cfg.get("blend_w"):
+            p_va = fit_clf(X_tr, tr["had_defect"]).predict_proba(va[feats])[:, 1]
+            val_preds["ens_blend"] = blend_prob(
+                val_preds["ensemble"], p_va, cfg["blend_w"])
+        for base_name in ("catboost", "ensemble", "ens_blend"):
+            if base_name not in val_preds:
+                continue
             val_preds[f"{base_name}_smooth5"] = (
                 pd.DataFrame({"id": va["id"].values, "p": val_preds[base_name]})
                 .groupby("id")["p"]
@@ -252,15 +302,19 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         X_all = subset[feats]
         y_all = subset["y"] / subset["wt_nom"] if rel else subset["y"]
         bag = [m for p in grid for m in fit_bag(
-            X_all, y_all, subset["aft_lb"].values, subset["aft_ub"].values, p, cfg["aft"])]
+            X_all, y_all, subset["aft_lb"].values, subset["aft_ub"].values,
+            p, cfg["aft"], families=cfg["families"])]
         final = dict(bag[0])  # первый сид — для важностей признаков
         final["bag"] = bag
+        if cfg.get("blend_w"):
+            final["clf"] = fit_clf(X_all, subset["had_defect"])
         for alpha, tag in ((0.05, "p05"), (0.1, "p10"), (0.9, "p90"), (0.95, "p95")):
             m = make_model("catboost", dict(best_params["catboost"]), alpha=alpha)
             m.fit(X_all, y_all)
             final[tag] = m
         bundle["cases"][case] = dict(models=final, features=feats,
-                                     params=best_params, target=cfg["target"])
+                                     params=best_params, target=cfg["target"],
+                                     blend_w=cfg.get("blend_w"))
 
     report = pd.DataFrame(report_rows)
     C.ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -272,8 +326,11 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         ensure_ascii=False, indent=2, default=str))
 
     for case, b in bundle["cases"].items():
-        imp = pd.DataFrame({"feature": b["features"],
-                            "importance": b["models"]["catboost"].get_feature_importance()})
+        fam = next(f for f in MODEL_FAMILIES if f in b["models"])
+        m = b["models"][fam]
+        vals = (m.get_feature_importance() if fam == "catboost"
+                else m.feature_importances_)
+        imp = pd.DataFrame({"feature": b["features"], "importance": vals})
         imp.sort_values("importance", ascending=False).to_csv(
             C.ARTIFACTS_DIR / f"feature_importance_{case}.csv", index=False)
     return report
