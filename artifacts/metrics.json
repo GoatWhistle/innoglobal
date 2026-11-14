@@ -18,49 +18,49 @@
       "case": "case1",
       "model": "lgbm",
       "n": 55,
-      "pearson_r2": 0.2428,
-      "mae": 0.393
+      "pearson_r2": 0.234,
+      "mae": 0.378
     },
     {
       "case": "case1",
       "model": "xgb",
       "n": 55,
-      "pearson_r2": 0.099,
-      "mae": 0.492
+      "pearson_r2": 0.0946,
+      "mae": 0.556
     },
     {
       "case": "case1",
       "model": "aft",
       "n": 55,
-      "pearson_r2": 0.3872,
-      "mae": 0.435
+      "pearson_r2": 0.4588,
+      "mae": 0.367
     },
     {
       "case": "case1",
       "model": "ensemble",
       "n": 55,
-      "pearson_r2": 0.3739,
-      "mae": 0.33
+      "pearson_r2": 0.3885,
+      "mae": 0.347
     },
     {
       "case": "case1",
       "model": "ens_blend",
       "n": 55,
-      "pearson_r2": 0.6172,
-      "mae": 0.278
+      "pearson_r2": 0.6349,
+      "mae": 0.264
     },
     {
       "case": "case1",
       "model": "ensemble_smooth5",
       "n": 55,
-      "pearson_r2": 0.4032,
-      "mae": 0.329
+      "pearson_r2": 0.402,
+      "mae": 0.334
     },
     {
       "case": "case1",
       "model": "ens_blend_smooth5",
       "n": 55,
-      "pearson_r2": 0.3808,
+      "pearson_r2": 0.3907,
       "mae": 0.325
     },
     {

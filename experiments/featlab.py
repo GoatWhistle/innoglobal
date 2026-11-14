@@ -38,6 +38,8 @@ def log(*a):
 
 
 def build(extra_state=None, extra_geom=None, tag: str = "ref", force: bool = False) -> pd.DataFrame:
+    if os.environ.get("PIPETWIN_VAL1"):
+        tag = f"{tag}_{os.environ['PIPETWIN_VAL1']}"
     path = CACHE / f"{tag}.pkl"
     if path.exists() and not force:
         return pd.read_pickle(path)
@@ -96,7 +98,10 @@ def _split(ds, case):
     cfg = T.CASES[case]
     ds = T.survival_labels(ds)
     sub = ds[ds["kind"].isin(cfg["train_kinds"])]
-    return cfg, sub[sub["split"] == "train"], ds[ds["split"] == cfg["val_split"]]
+    tr, va = sub[sub["split"] == "train"], ds[ds["split"] == cfg["val_split"]]
+    if case == "case2" and os.environ.get("PIPETWIN_VAL2_STRICT") == "1":
+        tr = tr[~tr["id"].isin(va["id"].unique())]
+    return cfg, tr, va
 
 
 def eval_case1(ds: pd.DataFrame, feats: list[str], seeds=SEEDS3, ret_pred=False):
@@ -109,14 +114,17 @@ def eval_case1(ds: pd.DataFrame, feats: list[str], seeds=SEEDS3, ret_pred=False)
     ens = T.predict_bag(bag, X_va, va["wt_nom"].values)["ensemble"]
     q05 = np.mean([m.predict(X_va) for m in T.fit_q05_pair(X_tr, y_tr, cfg["params"])], axis=0)
     out, preds = {}, {}
+    dm = va["had_defect"].astype(bool).values  # r2d: только дефектные сегменты (координатор)
     for s in seeds:
         C.SEED = s
         p = T.fit_clf(X_tr, tr["had_defect"]).predict_proba(X_va)[:, 1]
         pred = T.blend_prob(ens, p, cfg["blend_w"], gap=ens - q05, gap_w=cfg["gap_w"])
-        out[s] = (T.pearson_r2(y_va, pred), float(np.mean(np.abs(y_va - pred))))
+        out[s] = (T.pearson_r2(y_va, pred), float(np.mean(np.abs(y_va - pred))),
+                  T.pearson_r2(y_va[dm], pred[dm]))
         preds[s] = pred
     C.SEED = 42
-    out["ens_raw"] = (T.pearson_r2(y_va, ens), float(np.mean(np.abs(y_va - ens))))
+    out["ens_raw"] = (T.pearson_r2(y_va, ens), float(np.mean(np.abs(y_va - ens))),
+                      T.pearson_r2(y_va[dm], ens[dm]))
     return (out, preds) if ret_pred else out
 
 
@@ -129,11 +137,29 @@ def eval_case2(ds: pd.DataFrame, feats: list[str]):
     return T.pearson_r2(y_va, pred), float(np.mean(np.abs(y_va - pred)))
 
 
+def permuted(ds: pd.DataFrame, cols: list[str], seed: int) -> pd.DataFrame:
+    """Нулевая гипотеза: значения новых колонок перемешаны внутри пары (id, start, end) —
+    маргинальное распределение то же, связи с сегментом нет."""
+    rng = np.random.default_rng(seed)
+    ds = ds.copy()
+    for _, idx in ds.groupby(["id", "start", "end"]).groups.items():
+        perm = rng.permutation(len(idx))
+        ds.loc[idx, cols] = ds.loc[idx, cols].values[perm]
+    return ds
+
+
+def null_case1(ds, base, extra, perms=(0, 1, 2, 3, 4), seed=42):
+    """r² бленда (сид seed) при перемешанных новых признаках — шум «добавления колонок»."""
+    return [eval_case1(permuted(ds, extra, p), base + extra, seeds=(seed,))[seed]
+            for p in perms]
+
+
 def fmt(res: dict) -> str:
     s = [k for k in res if k != "ens_raw"]
     r = [res[k][0] for k in s]
     return (" ".join(f"{k}:{res[k][0]:.4f}" for k in s)
             + f" | mean {np.mean(r):.4f} min {np.min(r):.4f} mae {np.mean([res[k][1] for k in s]):.3f}"
+            + (f" r2d {np.mean([res[k][2] for k in s]):.4f}" if len(res[s[0]]) > 2 else "")
             + (f" | raw {res['ens_raw'][0]:.4f}" if "ens_raw" in res else ""))
 
 
