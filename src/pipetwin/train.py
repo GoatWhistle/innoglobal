@@ -80,7 +80,8 @@ CASES = {
                   params={f: dict(n_estimators=300, learning_rate=0.1)
                           for f in ("lgbm", "xgb")},
                   aft=dict(dist="normal", sigma=3.0, lr=0.1, rounds=300),
-                  blend_w=2.0, gap_w=0.5, calib="prev"),
+                  blend_w=2.0, gap_w=0.5, calib="prev",
+                  shrink=dict(lam=0.5, win=5)),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID),
@@ -221,6 +222,22 @@ def calibrate_mm(blend: np.ndarray, ens: np.ndarray, prev_min: np.ndarray) -> np
     if scale < 1e-12:
         scale = float(np.std(ens))
     return zscore(blend) * scale + float(np.median(ens))
+
+
+def shrink_target(df: pd.DataFrame, lam: float, win: int) -> pd.Series:
+    """Денойз таргета (lab60): y -> (1−lam)·y + lam·медиана y по окну win сегментов пары.
+
+    Минимум сегмента — крайняя статистика шумных замеров (корреляция остатка
+    2022<->2023 по совпавшим дефектам 0.34): обучение формы на усреднённом к соседям
+    минимуме убирает шум метки. База формы (бленд) учится на нём, уровень мм — от
+    базы на реальном минимуме. Валидация, парный джиттер базы 5×3: r² 0.602 -> 0.618,
+    r2d (только дефектные) 0.200 -> 0.229, MAE 0.266 -> 0.256 — 15/15 по всем трём.
+    """
+    grp = ["id", "start", "end"]
+    med = (df.sort_values(grp + ["segment_id"]).groupby(grp)["y"]
+           .transform(lambda v: v.rolling(win, center=True, min_periods=1).median())
+           .reindex(df.index))
+    return (1 - lam) * df["y"] + lam * med
 
 
 def conformal_halfwidths(resid: np.ndarray) -> dict[str, float]:
@@ -367,10 +384,12 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         groups = tr["id"].astype(str) + "_" + tr["end"].astype(str)
 
         y_va = va["y"].values
+        hd_va = va["had_defect"].values.astype(bool)
         for name, p in baseline_predictions(va).items():
             report_rows.append(dict(
                 case=case, model=name, n=len(va),
                 pearson_r2=round(pearson_r2(y_va, p.values), 4),
+                r2d=round(pearson_r2(y_va[hd_va], p.values[hd_va]), 4),
                 mae=round(float(np.mean(np.abs(y_va - p.values))), 3),
                 rmse=round(float(np.sqrt(np.mean((y_va - p.values) ** 2))), 3),
                 mape=round(float(np.mean(np.abs(y_va - p.values) / y_va) * 100), 2)))
@@ -383,13 +402,23 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             X_tr, y_tr, tr["aft_lb"].values, tr["aft_ub"].values, p, cfg["aft"],
             families=cfg["families"])]
         val_preds = predict_bag(val_bag, va[feats], va["wt_nom"].values, va_scale)
+        shr = cfg.get("shrink")
         if cfg.get("blend_w"):
             p_va = fit_clf(X_tr, tr["had_defect"]).predict_proba(va[feats])[:, 1]
+            ens_shape, ys_tr = val_preds["ensemble"], y_tr
+            if shr:  # база формы на денойзнутом таргете (lab60)
+                ys_tr = shrink_target(tr, **shr)
+                lab = survival_labels(tr.assign(y=ys_tr))
+                ens_shape = predict_bag(fit_bag(
+                    X_tr, ys_tr, lab["aft_lb"].values, lab["aft_ub"].values,
+                    best_params, cfg["aft"], families=cfg["families"]),
+                    va[feats], va["wt_nom"].values)["ensemble"]
+                val_preds["ensemble_shrink"] = ens_shape
             q05_va = np.mean([m.predict(va[feats])
-                              for m in fit_q05_pair(X_tr, y_tr, cfg.get("params"))], axis=0)
+                              for m in fit_q05_pair(X_tr, ys_tr, cfg.get("params"))], axis=0)
             val_preds["ens_blend"] = blend_prob(
-                val_preds["ensemble"], p_va, cfg["blend_w"],
-                gap=val_preds["ensemble"] - q05_va, gap_w=cfg.get("gap_w", 0.0))
+                ens_shape, p_va, cfg["blend_w"],
+                gap=ens_shape - q05_va, gap_w=cfg.get("gap_w", 0.0))
             if cfg.get("calib") == "prev":
                 val_preds["ens_blend_uncal"] = val_preds["ens_blend"]
                 val_preds["ens_blend"] = calibrate_mm(
@@ -412,6 +441,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             report_rows.append(dict(
                 case=case, model=name, n=len(va),
                 pearson_r2=round(pearson_r2(y_va, p), 4),
+                # r² только по дефектным сегментам: 0.617 держится на 2 чистых (11604 #36-37)
+                r2d=round(pearson_r2(y_va[hd_va], p[hd_va]), 4),
                 mae=round(float(np.mean(np.abs(y_va - p))), 3),
                 rmse=round(float(np.sqrt(np.mean((y_va - p) ** 2))), 3),
                 mape=round(float(np.mean(np.abs(y_va - p) / y_va) * 100), 2)))
@@ -426,7 +457,14 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         final["bag"] = bag
         if cfg.get("blend_w"):
             final["clf"] = fit_clf(X_all, subset["had_defect"])
-            final["q05_pair"] = fit_q05_pair(X_all, y_all, cfg.get("params"))
+            ys_all = y_all
+            if shr:
+                ys_all = shrink_target(subset, **shr)
+                lab = survival_labels(subset.assign(y=ys_all))
+                final["shape_bag"] = fit_bag(
+                    X_all, ys_all, lab["aft_lb"].values, lab["aft_ub"].values,
+                    best_params, cfg["aft"], families=cfg["families"])
+            final["q05_pair"] = fit_q05_pair(X_all, ys_all, cfg.get("params"))
         for alpha, tag in ((0.05, "p05"), (0.1, "p10"), (0.9, "p90"), (0.95, "p95")):
             m = make_model("catboost", dict(best_params["catboost"]), alpha=alpha)
             m.fit(X_all, y_all)

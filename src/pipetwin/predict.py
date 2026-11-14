@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from . import config as C
+from . import curve
 from .train import blend_prob, calibrate_mm, predict_bag
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
@@ -45,8 +46,11 @@ def run() -> pd.DataFrame:
             # в профиль этой трубы (lab13-19)
             p_def = models["clf"].predict_proba(X)[:, 1]
             q05 = np.mean([m.predict(X) for m in models["q05_pair"]], axis=0)
-            pred = blend_prob(preds["ensemble"], p_def, b["blend_w"],
-                              gap=preds["ensemble"] - q05,
+            # форма — база на денойзнутом таргете (lab60), уровень — база на минимуме
+            shape = (predict_bag(models["shape_bag"], X, grp["wt_nom"].values)["ensemble"]
+                     if "shape_bag" in models else preds["ensemble"])
+            pred = blend_prob(shape, p_def, b["blend_w"],
+                              gap=shape - q05,
                               gap_w=b.get("gap_w", 0.0))
             if b.get("calib") == "prev":
                 pred = calibrate_mm(pred, preds["ensemble"], grp["prev_min"].values)
@@ -99,6 +103,18 @@ def run() -> pd.DataFrame:
     pred_ds["p90"] = np.maximum(pred_ds["p90"], pred_ds["thickness_pred"])
     pred_ds["p05"] = np.minimum(pred_ds["p05"], pred_ds["p10"])
     pred_ds["p95"] = np.maximum(pred_ds["p95"], pred_ds["p90"])
+
+    # кривая деградации по сегментам (физичная, монотонная) — для отчёта/демо
+    curves = []
+    for pipe_id, grp in pred_ds.groupby("id"):
+        end = pd.Timestamp(grp["end"].iloc[0])
+        date_in = end - grp["age_end"].iloc[0] * curve.YEAR
+        date_prev = grp["start"].iloc[0] if grp["kind"].iloc[0] == "vtd2vtd" else None
+        curves.append(curve.degradation_curve(grp, date_in.normalize(), date_prev, end))
+    curves = pd.concat(curves, ignore_index=True)
+    n_bad = curve.check_monotone(curves)
+    assert n_bad == 0, f"кривая деградации растёт у {n_bad} сегментов"
+    curves.to_csv(C.ARTIFACTS_DIR / "degradation_curve.csv", index=False)
 
     result = pred_ds[["id", "segment_id", "thickness_pred"]].copy()
     result["thickness_pred"] = result["thickness_pred"].round(3)

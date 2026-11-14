@@ -56,13 +56,18 @@ def segment_targets(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
     """
     sub = vtd[(vtd["id"] == pipe_id) & (vtd["run_date"] == run_date)]
     wall = runs.set_index(["id", "run_date"]).loc[(pipe_id, run_date), "wall_mode"]
-    mins = sub.dropna(subset=["Residual Wall Thickness"]).groupby("segment_id")[
-        "Residual Wall Thickness"].min()
+    g = sub.dropna(subset=["Residual Wall Thickness"]).groupby("segment_id")[
+        "Residual Wall Thickness"]
     segs = pd.DataFrame({"segment_id": np.arange(nseg.loc[pipe_id])})
     segs["id"] = pipe_id
-    segs["y"] = segs["segment_id"].map(mins)
+    segs["y"] = segs["segment_id"].map(g.min())
     segs["had_defect"] = segs["y"].notna()
     segs["y"] = segs["y"].fillna(wall)
+    # денойз-статистики таргета (lab60): шумный снаряд — минимум есть крайняя
+    # статистика замеров, квантили остатка устойчивее; в признаки не идут
+    for q, col in ((0.10, "y_q10"), (0.25, "y_q25")):
+        segs[col] = segs["segment_id"].map(g.quantile(q)).fillna(wall)
+    segs["y_ndef"] = segs["segment_id"].map(g.size()).fillna(0).astype(int)
     return segs
 
 

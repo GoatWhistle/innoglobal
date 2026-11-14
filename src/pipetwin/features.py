@@ -227,7 +227,8 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
 
 # ------------------------------------------------------------------ сборка
 META_COLS = ["id", "segment_id", "kind", "start", "end", "y", "had_defect", "split",
-             "aft_lb", "aft_ub"]  # метки survival-модели — не признаки
+             "aft_lb", "aft_ub",  # метки survival-модели — не признаки
+             "y_q10", "y_q25", "y_ndef"]  # денойз-статистики таргета (lab60)
 
 # группы признаков, подключаемые по кейсам (итог абляций, см. experiments/)
 UZT_FEATS = ["uzt_dist", "uzt_min_250", "uzt_loss_rate"]
@@ -318,7 +319,8 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
         df["kind"], df["start"], df["end"] = kind, start, end
         if with_target:
             tgt = prepare.segment_targets(vtd_end, runs, nseg, pipe_id, end)
-            df = df.merge(tgt[["segment_id", "y", "had_defect"]], on="segment_id")
+            df = df.merge(tgt[["segment_id", "y", "had_defect", "y_q10", "y_q25", "y_ndef"]],
+                          on="segment_id")
         frames.append(df)
     return pd.concat(frames, ignore_index=True)
 
