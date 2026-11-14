@@ -19,6 +19,7 @@
 для p10-p90, 0.607 для p05-p95), predict.py строит интервал кейса 1 вокруг
 прогноза; кейс 2 — прежний CatBoost-конверт.
 """
+import os
 import sys
 from pathlib import Path
 
@@ -28,10 +29,12 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from pipetwin import config as C  # noqa: E402
+if os.environ.get("LAB_PROC"):  # честный датасет lab62
+    C.PROCESSED_DIR = Path(__file__).resolve().parents[1] / os.environ["LAB_PROC"]
 from pipetwin import features as F  # noqa: E402
 from pipetwin import train as T  # noqa: E402
 
-CACHE = joblib.load(Path(__file__).resolve().parent / "data" / "lab40_cache.joblib")
+CACHE = joblib.load(os.environ.get("LAB40_CACHE", Path(__file__).resolve().parent / "data" / "lab40_cache.joblib"))
 K = 5
 
 

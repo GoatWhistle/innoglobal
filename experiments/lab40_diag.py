@@ -8,7 +8,8 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from pipetwin import train as T  # noqa: E402
 
-cache = joblib.load(Path(__file__).resolve().parent / "data" / "lab40_cache.joblib")
+import os
+cache = joblib.load(os.environ.get("LAB40_CACHE", Path(__file__).resolve().parent / "data" / "lab40_cache.joblib"))
 for part, c in cache.items():
     m = c["meta"]
     y = m["y"].values

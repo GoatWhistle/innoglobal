@@ -20,6 +20,8 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from pipetwin import config as C  # noqa: E402
+if os.environ.get("LAB_PROC"):  # честный датасет lab62
+    C.PROCESSED_DIR = Path(__file__).resolve().parents[1] / os.environ["LAB_PROC"]
 from pipetwin import features as F  # noqa: E402
 from pipetwin import train as T  # noqa: E402
 

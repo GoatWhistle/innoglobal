@@ -32,6 +32,7 @@ MAPE 4.50, r² -0.004 (два чистых сегмента y=8.0 теряют �
   на валидации — взято правило std(prev_min) (эквивалент ×1.6 на валидации,
   ×1.19 на прогнозе 22871).
 """
+import os
 import sys
 from pathlib import Path
 
@@ -43,7 +44,7 @@ from sklearn.isotonic import IsotonicRegression
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from pipetwin import train as T  # noqa: E402
 
-CACHE = joblib.load(Path(__file__).resolve().parent / "data" / "lab40_cache.joblib")
+CACHE = joblib.load(os.environ.get("LAB40_CACHE", Path(__file__).resolve().parent / "data" / "lab40_cache.joblib"))
 BW, GW = 2.0, 0.5
 
 

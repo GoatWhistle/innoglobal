@@ -38,10 +38,12 @@ import xgboost
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from pipetwin import config as C  # noqa: E402
+if os.environ.get("LAB_PROC"):  # честный датасет lab62
+    C.PROCESSED_DIR = Path(__file__).resolve().parents[1] / os.environ["LAB_PROC"]
 from pipetwin import features as F  # noqa: E402
 from pipetwin import train as T  # noqa: E402
 
-CACHE = joblib.load(Path(__file__).resolve().parent / "data" / "lab40_cache.joblib")["val"]
+CACHE = joblib.load(os.environ.get("LAB40_CACHE", Path(__file__).resolve().parent / "data" / "lab40_cache.joblib"))["val"]
 SEEDS = tuple(int(s) for s in os.environ.get("LAB60_SEEDS", "42,7,2024").split(","))
 CFG = T.CASES["case1"]
 GRP = ["id", "start", "end"]
@@ -93,7 +95,8 @@ def fit_ens(tr, Xv, wt_v, target, w):
         m = T.make_model(f, dict(prm[f]), alpha=0.05)
         m.fit(X, target, sample_weight=w)
         q05.append(m.predict(Xv))
-    return np.mean(preds, axis=0), np.mean(q05, axis=0)
+    agg = np.median if os.environ.get("LAB60_AGG") == "median" else np.mean
+    return agg(preds, axis=0), np.mean(q05, axis=0)
 
 
 def fit_clf(tr, Xv, w, seed):
@@ -113,7 +116,11 @@ def fit_clf(tr, Xv, w, seed):
 
 def evaluate(y, ens, q05, p, pm, wt, hd, lvl=None):
     b = T.blend_prob(ens, p, CFG["blend_w"], gap=ens - q05, gap_w=CFG["gap_w"])
-    cal = T.calibrate_mm(b, ens if lvl is None else lvl, pm)
+    base = ens if lvl is None else lvl
+    if os.environ.get("LAB60_CAL", "1") == "1":
+        cal = T.calibrate_mm(b, base, pm)
+    else:  # без калибровки lab41: уровень/разброс — среднее/std базы уровня
+        cal = T.zscore(b) * float(np.std(base)) + float(np.mean(base))
     phys = np.clip(cal, 0.5, wt)
     return dict(r2=T.pearson_r2(y, cal), r2_phys=T.pearson_r2(y, phys),
                 r2d=T.pearson_r2(y[hd], phys[hd]),  # без бездефектных сегментов
@@ -180,6 +187,9 @@ SETS = {
         **{f"sh{lam}_w5 lvlref": (f"sh{lam}_w5", w_none, None, False, True)
            for lam in (0.5, 0.75, 1.0)},
         "multi_y+sh0.5_w5": (("y", "sh0.5_w5"), w_none, None, False),
+        **{f"sh{lam}_w{w} lvlref": (f"sh{lam}_w{w}", w_none, None, False, True)
+           for lam in (0.25, 0.5) for w in (3, 9)},
+        "sh0.25_w5 lvlref": ("sh0.25_w5", w_none, None, False, True),
     },
     # парный джиттер базы: те же варианты на 5 случайных подвыборках 97% train
     # (база детерминирована, сиды меняют только классификатор — 3/3 сидов не

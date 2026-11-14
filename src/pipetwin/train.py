@@ -80,8 +80,9 @@ CASES = {
                   params={f: dict(n_estimators=300, learning_rate=0.1)
                           for f in ("lgbm", "xgb")},
                   aft=dict(dist="normal", sigma=3.0, lr=0.1, rounds=300),
-                  blend_w=2.0, gap_w=0.5, calib="prev",
-                  shrink=dict(lam=0.5, win=5)),
+                  # calib="prev" (lab41) и shrink=dict(lam=0.5, win=5) (lab60) выключены:
+                  # на честной валидации (exp/honest-val) оба вредят, см. lab63
+                  blend_w=2.0, gap_w=0.5, calib=None, shrink=None),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID),
@@ -97,11 +98,14 @@ def survival_labels(ds: pd.DataFrame) -> pd.DataFrame:
     """
     ds = ds.copy()
     loss = (ds["wt_nom"] - ds["y"]).clip(lower=AFT_EPS)
-    det = (ds[ds["had_defect"]].groupby(["id", "end"])
+    # split в ключе: строки train_honest (те же труба/пропуск, иное выравнивание)
+    # не должны менять порог исходных строк
+    keys = ["id", "end", "split"] if "split" in ds else ["id", "end"]
+    det = (ds[ds["had_defect"]].groupby(keys)
            .apply(lambda g: max(0.3, float((g["wt_nom"] - g["y"])
                                            .clip(lower=AFT_EPS).min())),
                   include_groups=False))
-    thr = ds.set_index(["id", "end"]).index.map(det).to_numpy().astype(float)
+    thr = ds.set_index(keys).index.map(det).to_numpy().astype(float)
     thr = np.where(np.isnan(thr), 0.3, thr)
     ds["aft_lb"] = np.where(ds["had_defect"], loss, AFT_EPS)
     ds["aft_ub"] = np.where(ds["had_defect"], loss, thr)
@@ -215,6 +219,8 @@ def calibrate_mm(blend: np.ndarray, ens: np.ndarray, prev_min: np.ndarray) -> np
     прогноз был сжат к среднему. Масштаб std(prev_min) — правило без подбора
     (прошлый профиль известен в момент прогноза), медиана — уровень под MAE.
     Валидация, 8/8 сидов: MAE 0.279 -> 0.267, RMSE 0.374 -> 0.356, MAPE 4.90 -> 4.66%.
+    ВЫКЛЮЧЕНО (calib=None): на честной валидации MAE 0.335 -> 0.357 — честная корреляция
+    0.47, MSE-оптимальный разброс r·σy = 0.26 мм меньше std(ens) 0.335, растягивать нельзя.
     Внутренний CV по train-парам 2018->2022 для калибровки непригоден:
     модель там без навыка (r² 0.00-0.05), подогнанный наклон ломает и r², и MAE.
     """
@@ -230,7 +236,9 @@ def shrink_target(df: pd.DataFrame, lam: float, win: int) -> pd.Series:
     Минимум сегмента — крайняя статистика шумных замеров (корреляция остатка
     2022<->2023 по совпавшим дефектам 0.34): обучение формы на усреднённом к соседям
     минимуме убирает шум метки. База формы (бленд) учится на нём, уровень мм — от
-    базы на реальном минимуме. Валидация, парный джиттер базы 5×3: r² 0.602 -> 0.618,
+    базы на реальном минимуме. ВЫКЛЮЧЕНО (shrink=None): на честной валидации r² 0.225 -> 0.209,
+    r2d 0.063 -> 0.039 — выигрыш ниже был отбором по утечке выравнивания.
+    Старая (утёкшая) валидация, парный джиттер базы 5×3: r² 0.602 -> 0.618,
     r2d (только дефектные) 0.200 -> 0.229, MAE 0.266 -> 0.256 — 15/15 по всем трём.
     """
     grp = ["id", "start", "end"]
@@ -371,7 +379,19 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
     for case, cfg in CASES.items():
         feats = F.case_features(ds, case)
         subset = ds[ds["kind"].isin(cfg["train_kinds"])]
+        honest = subset[subset["split"] == "train_honest"]
+        subset = subset[subset["split"] != "train_honest"]
         tr = subset[subset["split"] == "train"]
+        if case == "case1" and len(honest):
+            # честная валидация: строки труб валидации, выровненные без пропуска 2023
+            # (features.honest_val_rows); замена на тех же позициях — порядок строк
+            # влияет на бустинги, финальное обучение ниже — на исходных строках
+            key = ["id", "start", "end", "kind", "segment_id"]
+            mask = tr["id"].isin(honest["id"].unique()).to_numpy()
+            rep = honest.set_index(key).loc[pd.MultiIndex.from_frame(tr.loc[mask, key])]
+            tr = tr.copy()
+            for c in rep.columns.drop("split"):
+                tr.loc[mask, c] = rep[c].to_numpy()
         va = ds[ds["split"] == cfg["val_split"]]
         if case == "case2" and os.environ.get("PIPETWIN_VAL2_STRICT") == "1":
             # у целевой трубы кейса 2 нет ни одного пропуска: валидационная труба тоже
