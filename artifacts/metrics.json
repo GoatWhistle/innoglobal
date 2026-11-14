@@ -18,36 +18,36 @@
       "case": "case1",
       "model": "lgbm",
       "n": 55,
-      "pearson_r2": 0.3387,
-      "mae": 0.397
+      "pearson_r2": 0.2376,
+      "mae": 0.39
     },
     {
       "case": "case1",
       "model": "xgb",
       "n": 55,
-      "pearson_r2": 0.1409,
-      "mae": 0.446
+      "pearson_r2": 0.154,
+      "mae": 0.418
     },
     {
       "case": "case1",
       "model": "aft",
       "n": 55,
-      "pearson_r2": 0.5028,
-      "mae": 0.427
+      "pearson_r2": 0.2402,
+      "mae": 0.434
     },
     {
       "case": "case1",
       "model": "ensemble",
       "n": 55,
-      "pearson_r2": 0.4805,
-      "mae": 0.297
+      "pearson_r2": 0.2858,
+      "mae": 0.336
     },
     {
       "case": "case1",
       "model": "ens_blend",
       "n": 55,
-      "pearson_r2": 0.6931,
-      "mae": 0.248
+      "pearson_r2": 0.2783,
+      "mae": 0.312
     },
     {
       "case": "case1",
@@ -61,14 +61,14 @@
       "model": "aligned_stats_cal",
       "n": 55,
       "pearson_r2": 0.2733,
-      "mae": 0.345
+      "mae": 0.339
     },
     {
       "case": "case1",
       "model": "ens_blend+stats",
       "n": 55,
-      "pearson_r2": 0.546,
-      "mae": 0.285
+      "pearson_r2": 0.292,
+      "mae": 0.324
     },
     {
       "case": "case1",
@@ -82,63 +82,77 @@
       "model": "quant_cal",
       "n": 55,
       "pearson_r2": 0.2115,
-      "mae": 0.363
+      "mae": 0.358
     },
     {
       "case": "case1",
       "model": "ens_blend+quant",
       "n": 55,
-      "pearson_r2": 0.5178,
-      "mae": 0.295
+      "pearson_r2": 0.2631,
+      "mae": 0.332
+    },
+    {
+      "case": "case1",
+      "model": "dens_quant",
+      "n": 55,
+      "pearson_r2": 0.2886,
+      "mae": 0.483
+    },
+    {
+      "case": "case1",
+      "model": "dens_quant_cal",
+      "n": 55,
+      "pearson_r2": 0.2886,
+      "mae": 0.339
     },
     {
       "case": "case1",
       "model": "ensemble_smooth5",
       "n": 55,
-      "pearson_r2": 0.4006,
-      "mae": 0.33
+      "pearson_r2": 0.26,
+      "mae": 0.363
     },
     {
       "case": "case1",
       "model": "ens_blend_smooth5",
       "n": 55,
-      "pearson_r2": 0.3686,
-      "mae": 0.324
+      "pearson_r2": 0.2149,
+      "mae": 0.345
     },
     {
       "case": "case1_measured",
       "model": "lgbm",
       "n": 55,
-      "pearson_r2": 0.4249,
+      "pearson_r2": 0.3162,
       "mae": 0.377
     },
     {
       "case": "case1_measured",
       "model": "xgb",
       "n": 55,
-      "pearson_r2": 0.2171,
-      "mae": 0.417
+      "pearson_r2": 0.2535,
+      "mae": 0.375
     },
     {
       "case": "case1_measured",
       "model": "aft",
       "n": 55,
-      "pearson_r2": 0.3131,
-      "mae": 0.454
+      "pearson_r2": 0.1042,
+      "mae": 0.505
     },
     {
       "case": "case1_measured",
       "model": "ensemble",
       "n": 55,
-      "pearson_r2": 0.3986,
-      "mae": 0.313
+      "pearson_r2": 0.293,
+      "mae": 0.326
     },
     {
       "case": "case1_measured",
       "model": "ens_blend",
       "n": 55,
-      "pearson_r2": 0.5989,
-      "mae": 0.267
+      "pearson_r2": 0.2697,
+      "mae": 0.33
     },
     {
       "case": "case1_measured",
@@ -152,14 +166,14 @@
       "model": "aligned_stats_cal",
       "n": 55,
       "pearson_r2": 0.7012,
-      "mae": 0.24
+      "mae": 0.234
     },
     {
       "case": "case1_measured",
       "model": "ens_blend+stats",
       "n": 55,
-      "pearson_r2": 0.6899,
-      "mae": 0.242
+      "pearson_r2": 0.5709,
+      "mae": 0.268
     },
     {
       "case": "case1_measured",
@@ -173,27 +187,41 @@
       "model": "quant_cal",
       "n": 55,
       "pearson_r2": 0.7306,
-      "mae": 0.233
+      "mae": 0.232
     },
     {
       "case": "case1_measured",
       "model": "ens_blend+quant",
       "n": 55,
-      "pearson_r2": 0.7205,
-      "mae": 0.238
+      "pearson_r2": 0.6358,
+      "mae": 0.252
+    },
+    {
+      "case": "case1_measured",
+      "model": "dens_quant",
+      "n": 55,
+      "pearson_r2": 0.7475,
+      "mae": 0.366
+    },
+    {
+      "case": "case1_measured",
+      "model": "dens_quant_cal",
+      "n": 55,
+      "pearson_r2": 0.7475,
+      "mae": 0.235
     },
     {
       "case": "case1_measured",
       "model": "ensemble_smooth5",
       "n": 55,
-      "pearson_r2": 0.3512,
-      "mae": 0.357
+      "pearson_r2": 0.3622,
+      "mae": 0.349
     },
     {
       "case": "case1_measured",
       "model": "ens_blend_smooth5",
       "n": 55,
-      "pearson_r2": 0.3439,
+      "pearson_r2": 0.3369,
       "mae": 0.338
     },
     {

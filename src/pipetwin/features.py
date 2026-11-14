@@ -208,6 +208,7 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
         df["prev_q02"] = wt_nom
         df["prev_q10_nb3"] = wt_nom
         df["prev_lnn_nb3"] = 0.0
+        df["prev_ndef_w5"] = 0.0
         df["has_prev"] = 0
         return df
 
@@ -244,6 +245,10 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
     df["prev_q02"] = df["segment_id"].map(q02).fillna(df["prev_min"])
     df["prev_q10_nb3"] = df["prev_q10"].rolling(3, center=True, min_periods=1).mean()
     df["prev_lnn_nb3"] = np.log1p(df["prev_ndef"]).rolling(3, center=True, min_periods=1).mean()
+    # плотность дефектов в окне ±2 сегмента (линейно, на 1000 дефектов пропуска): слагаемое
+    # предиктора dens_quant (train.dens_quant_score, experiments/lab56b); окна ±1/±5 — то же (плато)
+    df["prev_ndef_w5"] = (df["prev_ndef"].rolling(5, center=True, min_periods=1).sum()
+                          / total_def * 1000.0)
     df["has_prev"] = 1
     return df
 
@@ -263,7 +268,7 @@ REGIME_SHARE_FEATS = ["rg_share_laminar", "rg_share_trans", "rg_share_turb"]
 CLIMB_FEATS = ["climb_len", "climb_rise", "climb_pos", "rise_500m"]
 TP_FEATS = ["t_at", "p_at"]
 # только для предиктора aligned_stats, в бустинги не идут (их состав не меняется)
-STAT_FEATS = ["prev_q10", "prev_q02", "prev_q10_nb3", "prev_lnn_nb3"]
+STAT_FEATS = ["prev_q10", "prev_q02", "prev_q10_nb3", "prev_lnn_nb3", "prev_ndef_w5"]
 OPTIONAL_FEATS = (UZT_FEATS + PROF_FEATS + INTER_FEATS + ERA_FEATS + POCKET_FEATS
                   + CHEM_FEATS + REGIME_SHARE_FEATS + CLIMB_FEATS + TP_FEATS + STAT_FEATS)
 

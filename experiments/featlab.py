@@ -32,6 +32,25 @@ SEEDS3 = (42, 7, 2024)
 SEEDS8 = (42, 7, 2024, 1, 2, 3, 123, 777)
 _orig_state = F.start_state_features
 
+# Честная валидация (координатор, exp/newmodels lab54): train-строки валидационных труб
+# выравнивались цепочкой через скрытый пропуск 2023. PIPETWIN_HONEST=1 исключает его.
+HONEST = os.environ.get("PIPETWIN_HONEST") == "1"
+_VAL_PIPES = {1250009490, 1250011604}
+_orig_tp = align.to_profile
+
+
+def _to_profile_honest(vtd, passport, pipe_id, run, exclude=None, method=None):
+    end, start = pd.Timestamp(C.VAL_CASE1_END), pd.Timestamp(C.VAL_CASE1_START)
+    is_val_start = method is not None and pd.Timestamp(run) == start  # как lab30 (exp/merge-c2)
+    if pipe_id in _VAL_PIPES and pd.Timestamp(run) != end and exclude is None and not is_val_start:
+        exclude = end
+    return _orig_tp(vtd, passport, pipe_id, run, exclude, method=method)
+
+
+if HONEST:
+    align.to_profile = _to_profile_honest
+    align._cache.clear()
+
 
 def log(*a):
     print(time.strftime("%H:%M:%S"), *a, flush=True)
@@ -40,6 +59,8 @@ def log(*a):
 def build(extra_state=None, extra_geom=None, tag: str = "ref", force: bool = False) -> pd.DataFrame:
     if os.environ.get("PIPETWIN_VAL1"):
         tag = f"{tag}_{os.environ['PIPETWIN_VAL1']}"
+    if HONEST:
+        tag = f"{tag}_honest"
     path = CACHE / f"{tag}.pkl"
     if path.exists() and not force:
         return pd.read_pickle(path)

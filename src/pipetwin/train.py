@@ -338,13 +338,30 @@ def quant_score(ds: pd.DataFrame) -> np.ndarray:
     return ((ds["prev_q02"] + ds["prev_q10"] + ds["prev_q10_nb3"]) / 3).to_numpy(dtype=float)
 
 
+def dens_quant_score(ds: pd.DataFrame) -> np.ndarray:
+    """Квантили прошлого выровненного пропуска + плотность дефектов вокруг (experiments/lab56b).
+
+    z(q02) + z(q10) + z(q10 по ±1 сегменту) − z(число дефектов в окне ±2 сегмента), равные веса,
+    в уровне/разбросе prev_min. Плотность — независимый от квантилей сигнал «зоны активной
+    коррозии»: сегмент в густом поле дефектов истончается сильнее, чем такой же по q10 одиночный.
+    Против quant (lab24) при измеренном сдвиге с ошибкой δ = −1/0/+1 м: r² 0.681/0.731/0.720 ->
+    0.713/0.748/0.735, r2d 0.36/0.46/0.44 -> 0.44/0.51/0.49; от соседа 0.212 -> 0.289; на самой
+    22871 (2018 -> 2022, 525 сегм.) 0.162 -> 0.224. Плато: окна ±1/±5 и вес 0.5 — то же.
+    """
+    s = (zscore(ds["prev_q02"].values) + zscore(ds["prev_q10"].values)
+         + zscore(ds["prev_q10_nb3"].values) - zscore(ds["prev_ndef_w5"].values))
+    base = ds["prev_min"].values
+    return zscore(s) * float(np.std(base)) + float(np.mean(base))
+
+
 def case1_stat_predictors(ds: pd.DataFrame, ens_blend: np.ndarray) -> dict[str, np.ndarray]:
     """Предикторы кейса 1 поверх выровненного прошлого пропуска (без обучения) и их бленды с ансамблем."""
-    st, qt = aligned_stats_score(ds), quant_score(ds)
+    st, qt, dq = aligned_stats_score(ds), quant_score(ds), dens_quant_score(ds)
     return {"aligned_stats": st, "aligned_stats_cal": stats_at_level(ens_blend, st),
             "ens_blend+stats": blend_stats(ens_blend, st),
             "quant": qt, "quant_cal": stats_at_level(ens_blend, qt),
-            "ens_blend+quant": blend_stats(ens_blend, qt)}
+            "ens_blend+quant": blend_stats(ens_blend, qt),
+            "dens_quant": dq, "dens_quant_cal": stats_at_level(ens_blend, dq)}
 
 
 def blend_stats(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
