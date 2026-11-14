@@ -453,7 +453,9 @@ def honest_val_rows(pairs: pd.DataFrame, train: pd.DataFrame, ctx: dict) -> pd.D
     Эти строки заменяют исходные ТОЛЬКО в модели валидации кейса 1 (split=train_honest);
     финальные модели и боевой прогноз (у 22871 пропуска 2023 нет) не меняются.
     """
-    if align.MODE != "profile" or align.ORACLE:
+    # и в оракуле (PIPETWIN_ALIGN_ORACLE=1): оракул измеряет сдвиг ВАЛИДАЦИОННОЙ пары по 2023,
+    # но train-строки тех же труб всё равно должны выравниваться без скрытого пропуска (аудит lab80)
+    if align.MODE != "profile":
         return train.iloc[0:0]
     end = pd.Timestamp(C.VAL_CASE1_END)
     vids = train.loc[train["split"] == "val_case1", "id"].unique()
