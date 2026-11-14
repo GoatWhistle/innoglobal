@@ -1,0 +1,28 @@
+.nav {
+  min-inline-size: 0;
+}
+
+.list {
+  composes: plainList from "../../shared/styles/compose.module.css";
+
+  display: flex;
+  gap: var(--space-4);
+}
+
+.link {
+  composes: controlFrame controlRow controlText from "../../shared/styles/compose.module.css";
+  min-block-size: var(--target-min);
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.active {
+  background-color: var(--surface-selected);
+  color: var(--text-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--text-primary);
+  }
+}

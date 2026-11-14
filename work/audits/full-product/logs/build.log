@@ -1,0 +1,171 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load local bake definitions
+#1 reading docker-compose.yml 1.25kB / 1.25kB done
+#1 reading docker-bake.hcl 549B / 549B done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.46kB done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 398B done
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/nginx:1.27-alpine
+#4 DONE 0.0s
+
+#5 [frontend internal] load metadata for docker.io/library/node:22-alpine
+#5 DONE 0.6s
+
+#6 [backend] resolve image config for docker-image://docker.io/docker/dockerfile:1.7
+#6 DONE 0.6s
+
+#7 [frontend internal] load .dockerignore
+#7 transferring context: 126B done
+#7 DONE 0.0s
+
+#8 [frontend build 1/6] FROM docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a
+#8 resolve docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a done
+#8 DONE 0.0s
+
+#9 [frontend stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+#9 resolve docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10 0.0s done
+#9 DONE 0.0s
+
+#10 [backend] docker-image://docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
+#10 resolve docker.io/docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e 0.0s done
+#10 CACHED
+
+#11 [frontend internal] load build context
+#11 transferring context: 28.20kB 0.0s done
+#11 DONE 0.0s
+
+#12 [frontend build 2/6] WORKDIR /app
+#12 CACHED
+
+#13 [frontend build 3/6] COPY package.json package-lock.json ./
+#13 CACHED
+
+#14 [frontend build 4/6] RUN npm ci --no-audit --no-fund
+#14 CACHED
+
+#15 [frontend build 5/6] COPY . .
+#15 DONE 0.0s
+
+#16 [backend internal] load metadata for ghcr.io/astral-sh/uv:0.11.33@sha256:77280f2f771df71f90786c314fe1bbc1e023feac652969bbf139c280babf2eb7
+#16 DONE 0.0s
+
+#17 [backend internal] load metadata for docker.io/library/python:3.12.15-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#17 DONE 0.0s
+
+#18 [backend internal] load .dockerignore
+#18 transferring context: 129B done
+#18 DONE 0.0s
+
+#19 [backend internal] load build context
+#19 transferring context: 2.93kB done
+#19 DONE 0.0s
+
+#20 [backend uv 1/1] FROM ghcr.io/astral-sh/uv:0.11.33@sha256:77280f2f771df71f90786c314fe1bbc1e023feac652969bbf139c280babf2eb7
+#20 resolve ghcr.io/astral-sh/uv:0.11.33@sha256:77280f2f771df71f90786c314fe1bbc1e023feac652969bbf139c280babf2eb7 done
+#20 DONE 0.0s
+
+#21 [backend base 1/4] FROM docker.io/library/python:3.12.15-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+#21 resolve docker.io/library/python:3.12.15-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1 done
+#21 DONE 0.0s
+
+#22 [backend base 2/4] RUN useradd --create-home --uid 1000 app
+#22 CACHED
+
+#23 [backend base 4/4] RUN --mount=from=uv,source=/uv,target=/usr/local/bin/uv     --mount=type=cache,id=uv,target=/root/.cache/uv     --mount=type=bind,source=pyproject.toml,target=pyproject.toml     --mount=type=bind,source=uv.lock,target=uv.lock     uv sync --locked --no-install-project --no-default-groups
+#23 CACHED
+
+#24 [backend base 3/4] WORKDIR /srv
+#24 CACHED
+
+#25 [backend stage-4 1/1] COPY --chown=app:app src ./src
+#25 CACHED
+
+#26 [backend] exporting to image
+#26 exporting layers done
+#26 exporting manifest sha256:6dee83fa160f2adb6af3433e1ac730f310894001650708650e903f1b7d15466b done
+#26 exporting config sha256:e5fee5bf3644cd06b7c0dd575251a35bbf9afeeed56899b4689216cfb053e4fd done
+#26 exporting attestation manifest sha256:51ef5fabae73da0f8f992bbb83cbe23db41d786a93d1753831c32d4d621756ee done
+#26 exporting manifest list sha256:6ea3fe669f9866faa89ad8aed6fa21216eb5305f100fd06533d95f8115141fdd done
+#26 naming to docker.io/library/app-backend:latest done
+#26 unpacking to docker.io/library/app-backend:latest done
+#26 DONE 0.0s
+
+#27 [frontend build 6/6] RUN npm run build
+#27 0.125
+#27 0.125 > app-frontend@0.1.0 build
+#27 0.125 > tsc --noEmit && vite build
+#27 0.125
+#27 4.220 vite v8.3.4 building client environment for production...
+#27 4.225 transforming...
+#27 4.347
+#27 4.347 A PostCSS plugin did not pass the `from` option to `postcss.parse`. This may cause imported assets to be incorrectly transformed. If you've recently added a PostCSS plugin that raised this warning, please contact the package author to fix the issue.
+#27 4.427 ✓ 326 modules transformed.
+#27 4.464 rendering chunks...
+#27 4.497 computing gzip size...
+#27 4.501 dist/index.html                                                3.48 kB │ gzip:  1.08 kB
+#27 4.501 dist/assets/onest-cyrillic-ext-wght-normal-DOFToQv1.woff2     10.54 kB
+#27 4.501 dist/assets/raleway-vietnamese-wght-italic-DYF7k-fG.woff2     11.76 kB
+#27 4.501 dist/assets/onest-vietnamese-wght-normal-BBxOatbv.woff2       12.40 kB
+#27 4.501 dist/assets/onest-cyrillic-wght-normal-DayYxulF.woff2         15.86 kB
+#27 4.501 dist/assets/onest-symbols-wght-normal-DxQzqQfC.woff2          18.16 kB
+#27 4.501 dist/assets/onest-math-wght-normal-Bl4ZGkZl.woff2             25.48 kB
+#27 4.501 dist/assets/raleway-cyrillic-wght-italic-DWTmaMJk.woff2       26.05 kB
+#27 4.501 dist/assets/onest-latin-ext-wght-normal-QAhDxQuo.woff2        28.45 kB
+#27 4.501 dist/assets/raleway-cyrillic-ext-wght-italic-Hi97ePR8.woff2   30.48 kB
+#27 4.501 dist/assets/raleway-latin-ext-wght-italic-MbfTa5YI.woff2      33.47 kB
+#27 4.501 dist/assets/onest-latin-wght-normal-Dun_Rd-l.woff2            33.76 kB
+#27 4.501 dist/assets/raleway-latin-wght-italic-RigrtYt2.woff2          50.24 kB
+#27 4.501 dist/assets/data-quality-page-Cl4DonhA.css                     0.29 kB │ gzip:  0.19 kB
+#27 4.501 dist/assets/priorities-page-DkYtFeFv.css                       2.46 kB │ gzip:  0.85 kB
+#27 4.501 dist/assets/overview-page-w6buO2YQ.css                         2.48 kB │ gzip:  0.87 kB
+#27 4.501 dist/assets/model-page-BIAXqZr5.css                            2.88 kB │ gzip:  0.94 kB
+#27 4.501 dist/assets/segment-strip-BrhtgvLB.css                         3.43 kB │ gzip:  1.08 kB
+#27 4.501 dist/assets/pipe-page-_6U-nzj6.css                             7.69 kB │ gzip:  2.08 kB
+#27 4.501 dist/assets/ui-y_fT6w1q.css                                   26.76 kB │ gzip:  5.49 kB
+#27 4.501 dist/assets/index-DUCOazeb.css                                30.64 kB │ gzip:  7.55 kB
+#27 4.501 dist/assets/case-copy-DYgJhUW3.js                              0.33 kB │ gzip:  0.13 kB
+#27 4.501 dist/assets/not-found-page-B1dIWRZ_.js                         0.33 kB │ gzip:  0.23 kB
+#27 4.501 dist/assets/pipe-switch-DmlGEQyF.js                            0.45 kB │ gzip:  0.31 kB
+#27 4.501 dist/assets/pipe-redirect-page-BkxN35vF.js                     0.55 kB │ gzip:  0.37 kB
+#27 4.501 dist/assets/feature-copy-DotiWKCL.js                           0.83 kB │ gzip:  0.28 kB
+#27 4.501 dist/assets/data-quality-page-CAevCUr_.js                      2.04 kB │ gzip:  0.79 kB
+#27 4.501 dist/assets/overview-page-C8tGGyk4.js                          3.45 kB │ gzip:  1.30 kB
+#27 4.501 dist/assets/reference-BL6MvstU.js                              4.53 kB │ gzip:  1.22 kB
+#27 4.501 dist/assets/priorities-page-BPHwYidW.js                        5.17 kB │ gzip:  1.99 kB
+#27 4.501 dist/assets/model-page-VfFUo5V7.js                             6.10 kB │ gzip:  2.07 kB
+#27 4.501 dist/assets/segment-strip-CP6J3qSM.js                          6.73 kB │ gzip:  2.93 kB
+#27 4.501 dist/assets/useQuery-CGg5ewIz.js                               8.19 kB │ gzip:  3.03 kB
+#27 4.501 dist/assets/pipe-page-CxRwYRy8.js                             21.20 kB │ gzip:  7.01 kB
+#27 4.501 dist/assets/index-Ch8xMtka.js                                215.21 kB │ gzip: 68.08 kB
+#27 4.501 dist/assets/ui-B4zDPlTQ.js                                   265.50 kB │ gzip: 85.63 kB
+#27 4.501
+#27 4.503 ✓ built in 282ms
+#27 DONE 4.5s
+
+#28 [frontend stage-1 2/3] COPY nginx.conf /etc/nginx/templates/default.conf.template
+#28 CACHED
+
+#29 [frontend stage-1 3/3] COPY --from=build /app/dist /usr/share/nginx/html
+#29 DONE 0.0s
+
+#30 [frontend] exporting to image
+#30 exporting layers 0.0s done
+#30 exporting manifest sha256:e3df4d02e887ed576e2749da453a889d959a0cedb752b98d370fb5bbcf626c1c done
+#30 exporting config sha256:c1dd105dc2d60d940917b017c9ff84d4738c6351342c017af2231b7e38b22ad8 done
+#30 exporting attestation manifest sha256:0e53fff3cbcb59a9b6869d81df58453f9c3ef4430b7588de1e48827d3a59e9ee done
+#30 exporting manifest list sha256:b55d75a7e4ba68dfbb713add90d4f9c6a843bd748e4f106c0206cb003ae62e8b done
+#30 naming to docker.io/library/app-frontend:latest done
+#30 unpacking to docker.io/library/app-frontend:latest done
+#30 DONE 0.1s
+
+View build details:
+  backend: docker-desktop://dashboard/build/desktop-linux/desktop-linux/j4lvovj3r4byrln3wg2no7gvi
+  frontend: docker-desktop://dashboard/build/desktop-linux/desktop-linux/jol0p2iqqgoi32b7l9exruct8

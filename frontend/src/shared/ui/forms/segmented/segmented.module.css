@@ -23,6 +23,10 @@
   cursor: pointer;
 }
 
+.segmented .option {
+  transition: var(--transition-choice);
+}
+
 .iconOnly {
   inline-size: var(--target-min);
   padding-inline: 0;
@@ -46,7 +50,8 @@
   }
 }
 
-.option:active {
+.segmented .option:active {
+  transition: var(--transition-choice-press);
   scale: var(--press-scale);
 }
 

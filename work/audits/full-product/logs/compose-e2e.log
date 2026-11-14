@@ -1,0 +1,30 @@
+
+> app-frontend@0.1.0 e2e
+> playwright test
+
+
+Running 9 tests using 6 workers
+
+(node:1805) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1809) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1808) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1806) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1807) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [chromium] › e2e/axe.spec.ts:33:5 › axe dark ru (3.3s)
+  ✓  1 [chromium] › e2e/axe.spec.ts:33:5 › axe light ru (3.3s)
+  ✓  7 [chromium] › e2e/product.spec.ts:140:1 › reduced motion and unavailable WebGL keep selection usable (380ms)
+  ✓  9 [chromium] › e2e/product.spec.ts:161:1 › navigation remembers the selected pipe (826ms)
+  ✓  8 [chromium] › e2e/product.spec.ts:129:1 › API outage is retryable (3.6s)
+  ✓  6 [chromium] › e2e/product.spec.ts:37:5 › product 375 light (12.0s)
+  ✓  3 [chromium] › e2e/product.spec.ts:37:5 › product 375 dark (12.1s)
+  ✓  5 [chromium] › e2e/product.spec.ts:37:5 › product 1440 dark (12.3s)
+  ✓  4 [chromium] › e2e/product.spec.ts:37:5 › product 1440 light (12.4s)
+
+  9 passed (12.8s)

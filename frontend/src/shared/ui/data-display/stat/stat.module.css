@@ -1,0 +1,40 @@
+.stat {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  min-inline-size: 0;
+}
+
+.label {
+  composes: secondaryText from "../../../styles/compose.module.css";
+}
+
+.body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+
+.value {
+  font-size: var(--font-size-readout-sm);
+  font-weight: var(--weight-light);
+  font-variant-numeric: var(--font-numeric);
+  line-height: var(--line-height-readout-sm);
+  letter-spacing: var(--tracking-tight);
+}
+
+.large .value {
+  font-size: var(--font-size-readout);
+  line-height: var(--line-height-readout);
+  letter-spacing: var(--tracking-readout);
+}
+
+.unit {
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-sm);
+}
+
+.hint {
+  composes: captionText from "../../../styles/compose.module.css";
+}

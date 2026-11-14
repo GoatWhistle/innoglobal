@@ -1,0 +1,149 @@
+
+> app-frontend@0.1.0 e2e
+> playwright test
+
+
+Running 9 tests using 6 workers
+
+(node:94371) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:94367) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:94372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:94368) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:94370) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:94369) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [chromium] › e2e/axe.spec.ts:33:5 › axe dark ru (3.2s)
+  ✓  1 [chromium] › e2e/axe.spec.ts:33:5 › axe light ru (3.3s)
+  ✓  8 [chromium] › e2e/product.spec.ts:140:1 › reduced motion and unavailable WebGL keep selection usable (350ms)
+  ✓  9 [chromium] › e2e/product.spec.ts:161:1 › navigation remembers the selected pipe (783ms)
+  ✓  7 [chromium] › e2e/product.spec.ts:129:1 › API outage is retryable (3.6s)
+  ✓  4 [chromium] › e2e/product.spec.ts:37:5 › product 375 dark (11.9s)
+  ✘  2 [chromium] › e2e/product.spec.ts:37:5 › product 375 light (11.9s)
+  ✘  5 [chromium] › e2e/product.spec.ts:37:5 › product 1440 light (12.1s)
+  ✘  6 [chromium] › e2e/product.spec.ts:37:5 › product 1440 dark (12.4s)
+
+
+  1) [chromium] › e2e/product.spec.ts:37:5 › product 375 light ─────────────────────────────────────
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 10
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "id": "color-contrast",
+    +     "nodes": Array [
+    +       Array [
+    +         "section[aria-labelledby=\"_r_4_\"] > fieldset > label[data-checked=\"false\"] > span",
+    +       ],
+    +     ],
+    +   },
+    + ]
+
+      116 |         expect(
+      117 |           axe.violations.map((v) => ({ id: v.id, nodes: v.nodes.map((n) => n.target) })),
+    > 118 |         ).toEqual([])
+          |           ^
+      119 |         await page.screenshot({
+      120 |           path: `${out}/${route.replaceAll("/", "") || "overview"}-${width}-${theme}.png`,
+      121 |           fullPage: true,
+        at /Users/kaifarikman/hackathons/innoglobal/frontend/e2e/product.spec.ts:118:11
+
+    Error Context: test-results/product-product-375-light-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/product-product-375-light-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/product-product-375-light-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › e2e/product.spec.ts:37:5 › product 1440 light ────────────────────────────────────
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 10
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "id": "color-contrast",
+    +     "nodes": Array [
+    +       Array [
+    +         "section[aria-labelledby=\"_r_4_\"] > fieldset > label[data-checked=\"false\"] > span",
+    +       ],
+    +     ],
+    +   },
+    + ]
+
+      116 |         expect(
+      117 |           axe.violations.map((v) => ({ id: v.id, nodes: v.nodes.map((n) => n.target) })),
+    > 118 |         ).toEqual([])
+          |           ^
+      119 |         await page.screenshot({
+      120 |           path: `${out}/${route.replaceAll("/", "") || "overview"}-${width}-${theme}.png`,
+      121 |           fullPage: true,
+        at /Users/kaifarikman/hackathons/innoglobal/frontend/e2e/product.spec.ts:118:11
+
+    Error Context: test-results/product-product-1440-light-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/product-product-1440-light-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/product-product-1440-light-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › e2e/product.spec.ts:37:5 › product 1440 dark ─────────────────────────────────────
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 10
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "id": "color-contrast",
+    +     "nodes": Array [
+    +       Array [
+    +         "section[aria-labelledby=\"_r_4_\"] > fieldset > label[data-checked=\"false\"] > span",
+    +       ],
+    +     ],
+    +   },
+    + ]
+
+      116 |         expect(
+      117 |           axe.violations.map((v) => ({ id: v.id, nodes: v.nodes.map((n) => n.target) })),
+    > 118 |         ).toEqual([])
+          |           ^
+      119 |         await page.screenshot({
+      120 |           path: `${out}/${route.replaceAll("/", "") || "overview"}-${width}-${theme}.png`,
+      121 |           fullPage: true,
+        at /Users/kaifarikman/hackathons/innoglobal/frontend/e2e/product.spec.ts:118:11
+
+    Error Context: test-results/product-product-1440-dark-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/product-product-1440-dark-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/product-product-1440-dark-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [chromium] › e2e/product.spec.ts:37:5 › product 375 light ──────────────────────────────────────
+    [chromium] › e2e/product.spec.ts:37:5 › product 1440 light ─────────────────────────────────────
+    [chromium] › e2e/product.spec.ts:37:5 › product 1440 dark ──────────────────────────────────────
+  6 passed (13.6s)

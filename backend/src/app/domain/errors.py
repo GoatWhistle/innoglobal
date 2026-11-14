@@ -26,3 +26,27 @@ class DecisionFailure(ModelFailure):
 class InvalidQuestion(DomainError):
     code = "invalid_question"
     message = "Decision question is invalid"
+
+
+class DataUnavailable(DomainError):
+    code = "data_unavailable"
+    message = "Forecast data is unavailable"
+
+    def __init__(self, issues: tuple[str, ...] = ()) -> None:
+        self.issues = issues
+        super().__init__(f"{self.message}: {len(issues)} issues" if issues else None)
+
+
+class PipeNotFound(DomainError):
+    code = "pipe_not_found"
+    message = "Pipe is not a forecast target"
+
+
+class SegmentNotFound(DomainError):
+    code = "segment_not_found"
+    message = "Segment does not exist on this pipe"
+
+
+class InvalidRange(DomainError):
+    code = "invalid_range"
+    message = "Distance range is invalid"

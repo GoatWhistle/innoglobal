@@ -24,10 +24,10 @@ two pipes. One case starts from a previous in-line inspection (VTD); the other s
 wall thickness at commissioning. The target inspection is withheld. The score is squared Pearson
 correlation, not the coefficient of determination. Sources: the organizer brief, pages 1–3.
 
-The current deliverable is an HTML design-system catalog and interactive synthetic example, separate
-from the React product. There are no trained degradation model, real case datasets or product API
-endpoints for the scanner. Every example is labelled synthetic. The earlier live leak simulator is
-preserved as an experiment and does not define the current product.
+The product serves two real target pipes from the imported DuckDB and forecast CSVs through FastAPI.
+React provides overview, pipe workspace, priorities, data quality and historical validation.
+No retraining occurs at startup. The target inspection remains withheld. All geometry views are SVG;
+the section is schematic and does not reconstruct measured circumferential defects.
 
 ## Primary scenario
 
@@ -48,11 +48,9 @@ share one selection. Keyboard and 2D fallback support the same route.
 
 ## Evidence and boundaries
 
-The demo is deterministic, with two synthetic pipeline cases, a partial terminal segment and
-incomplete-data states. Factors shown in the example are context, not established causal effects.
-Uncertainty bands are illustrative and their coverage has not been assessed. A ranked list is a
-relative selection, not a maintenance safety limit. Validation metrics will be added only after
-runs against available historical inspections.
+The served snapshot has 525 and 1475 segments. Historical metrics come from imported validation
+artifacts and are not target-date accuracy. Quantile coverage has not been calibrated. Feature
+importance is global. Inspection ranking does not establish safety or failure probability.
 
 ## Accessibility
 

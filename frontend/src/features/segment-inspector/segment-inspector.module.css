@@ -1,0 +1,77 @@
+.inspector {
+  display: grid;
+  align-content: start;
+  gap: var(--space-20);
+  min-inline-size: 0;
+  transition: var(--transition-control);
+}
+
+.stale {
+  opacity: var(--opacity-stale);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8) var(--space-12);
+}
+
+.range {
+  composes: secondaryNumber from "../../shared/styles/compose.module.css";
+
+  margin: 0;
+}
+
+.lead {
+  grid-column: 1 / -1;
+}
+
+.block {
+  display: grid;
+  gap: var(--space-8);
+  min-inline-size: 0;
+}
+
+.runs {
+  composes: plainList from "../../shared/styles/compose.module.css";
+
+  display: grid;
+  gap: var(--space-8);
+}
+
+.run {
+  display: grid;
+  grid-template-columns: minmax(7rem, auto) auto 1fr;
+  align-items: baseline;
+  gap: var(--space-4) var(--space-12);
+  font-size: var(--font-size-body-sm);
+  font-variant-numeric: var(--font-numeric);
+}
+
+.runDate {
+  color: var(--text-secondary);
+}
+
+.runValue {
+  font-weight: var(--weight-medium);
+}
+
+.runNote {
+  composes: mutedCaption from "../../shared/ui/layout/text-role/text-role.module.css";
+}
+
+.note {
+  composes: note from "../../shared/ui/layout/text-role/text-role.module.css";
+}
+
+.featureName {
+  font-weight: var(--weight-regular);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-8);
+}

@@ -1,6 +1,6 @@
 # Session state
 
-Updated: 2026-11-14, MSK
+Updated: 2026-11-15, MSK
 
 ## Explicit user instructions
 
@@ -22,49 +22,63 @@ Updated: 2026-11-14, MSK
 
 ## Current task
 
-2026-11-14: implement the approved wall-scanner design-system plan, in feat/redesign-oil at 0310a8c.
-User: «Implement the plan.» Decisions: «Система и главный экран», «Развить нынешний стиль»,
-«Сканер стенки», «В текущем HTML-каталоге», «Синтетический пример».
-The new source is brief/sources/pipeline-degradation.pdf: thickness prediction per 10 m segment,
-not live leak detection. Preserve old simulator as an experiment. RU only, both themes, Onest,
-existing pipe materials. No ML or product API in this stage. Brand decided by the user: duppel
-(work/naming.md, docs/brand/, ds/doc-brand.html).
+2026-11-14 user: «work/audits/full-product/progress-review.md добей цель до конца друг».
+Complete product scope supersedes the design-only phase. RU only, both themes, duppel, Onest.
+Branch feat/redesign-oil, HEAD 1ef235d; product implementation is uncommitted in the shared tree.
 
-Previous user instructions retained from that session:
+Previous user instructions retained:
 User: «давай тогда пробуй и начинай менять дизайн по трубе, брат. делай с помощью субагентов sol 6.1 high fast».
 User: «параоллельно работает если что агент который работает полностью с нефтью.»
+User: «удаляем ровно все то, что не нужно по дизайну ... оставил ровно то, что я последнее тыкал»; «все связанное с dupple оставь , остальное убери».
+User: «спулллься полностью , подтяни в мою ветку другую ветку (ml-pipetwin-merge-case-2) и как бы я хочу чтобы у меня появились данные».
+User: «так ну давай промт агенту чтобы построилась полностью наша система по реальным данным и был построен полностью сайт по нашему кейсу, не просто дизайн система а прям готовый фронтенд . сделай это в план и положи в md доку».
 
 ## Implemented
 
-2026-11-14 user: «удаляем ровно все то, что не нужно по дизайну ... оставил ровно то, что я
-последнее тыкал»; «все связанное с dupple оставь , остальное убери». Final design system only:
-Основы (index, doc-*, doc-brand), Компоненты (pipe-kit, kit, 404), Экраны (screen-pipe,
-scanner/blueprints) and their dependencies (wall/, pipeline/studio.js, textures.js, scanner data).
-Removed: archive, leak simulator screens and scenes, experiments, runtime, wall scanner screen and
-catalog, directions, icon variants, logo gallery, font/source shots, their audits and specs. All
-recoverable from git history before the removal commit. Copy follows the wall case; oil in the
-section flows. Plan and history: work/design/consolidation-plan.md, docs/design-decisions.md.
+DuckDB/CSV read repository, domain snapshot validation and inspection ranking, FastAPI API,
+React overview/workspace/priorities/data/model routes, real route geometry, SVG section,
+keyboard segment selection and URL range, exports and retryable errors. Selected pipe persists
+within the browser session. Compose mounts sources read-only and checks readiness. No paid keys,
+no training on startup. Model forecasts 525 + 1475 segments; no withheld target observations.
+Source merge 251a5ab, imported ML tip f3d7a42. Full plan: work/full-product-plan.md.
 
 ## Verification
 
-Wall browser script (24-view matrix, axe, overflow, nogl, context loss, reduced motion), field unit
-tests and a page sweep (375/1440, both themes, no overflow/page errors; axe = 16 pre-existing
-findings from 0310a8c). Hardware Chrome section view: frame median 8.3 ms. Details:
-work/audits/pipe-style/README.md. Limits: synthetic data only, no model or API.
+Frontend verify: 36 rules, types, lint, 366 tests, build passed. Backend ruff, formatting, mypy,
+128 unit/integration tests passed. Compose build and start passed; Chromium through production
+nginx: 9 e2e passed, 375/1440 both themes, axe, API outage/retry, reduced motion, WebGL unavailable,
+selection and exports. Zoom/reset, sort and kilometre filter checked separately. Export byte-equal
+to source. 28 screenshots and logs: work/audits/full-product/. Main URL http://localhost:18080;
+backend port 18010. Local dev servers also use 5179 and 8000.
 
-## Next
+## Limits and next
 
-Preview http://127.0.0.1:5178/work/design/ds/index.html (server on 5178). Branch feat/redesign-oil.
-Open: plan stages 3.3–3.4 (personalities ↔ scales, chart grammar on thickness), stage 4 transfer
-to frontend, the 16 old axe findings.
+Historical metrics are imported, not retrained. Target VTD is withheld. P10/P90 coverage is not
+calibrated. 1245/1475 case2 predictions equal 3.469 mm, not all predictions; ties use segment ID.
+The real product uses SVG schematic geometry and does not reproduce synthetic circumferential pits.
+No physical touch-device or cross-browser certification. Product docs describe current behavior.
+Setup has activated repository hooks; use the configured human Git identity for commits.
 
-## Latest integration
+## Completion audit
 
-2026-11-14 user: «спулллься полностью , подтяни в мою ветку другую ветку (ml-pipetwin-merge-case-2) и как бы я хочу чтобы у меня появились данные».
-Fetched all remotes; current branch was already up to date. Merged unrelated history
-origin/ml-pipetwin-merge-case-2 (f3d7a42) into feat/redesign-oil; merge SHA 251a5ab.
-Resolved only .gitattributes, .gitignore and README conflicts; ML README preserved as README-ML.md.
-Added six source CSVs, processed datasets, 29,896,704-byte DuckDB, models, reports and result.csv.
-Verified CSV readability, 2000 prediction rows, valid chart JSON and git diff --check.
-No training, database queries or application tests run. UI still uses synthetic catalog data.
-Next: connect ML data to API/UI if requested; incoming README metrics may be stale.
+Original five progress-review findings and the full-product acceptance checklist are verified.
+Historical comparison now joins chart_data.json to train_dataset.csv only after checking all
+observed values, unique keys, pipe IDs and split dates. Case1 exposes 55 pairs as a separate
+saved run, computed r2=.3434524851 and MAE=.3506181818; this is not selected-model r2=.5011.
+Case2 returns source_mismatch and no points because its archived observations do not agree.
+UI provides scatter/table and an honest unavailable state. No training or source replacement.
+
+Final verification: frontend 366 tests plus rules/types/lint/build; backend 128 tests,
+ruff/format/mypy; 9 Compose browser scenarios including scatter/table and immediate contrast.
+Segmented colour changes are immediate; only scale animates. Reports and proofs are in
+work/audits/full-product/progress-review.md and completion-checklist.md.
+Remaining limits are data/calibration and physical-device/browser coverage, not unfinished controls.
+Local stack remains at http://localhost:18080, API 18010. No commit, push or deployment performed.
+
+## Publication
+
+2026-11-15 user: «запушь все это дело».
+Publish all completed product, documentation and audit changes to origin/feat/redesign-oil.
+Publication is based on HEAD 1ef235d, branch feat/redesign-oil; final commit SHA is in Git history.
+Frontend verify, backend 128 tests and Compose 9 e2e are green. Hooks are enabled; no force push,
+no agent attribution and no deployment. Before new work inspect git status and the remote branch.

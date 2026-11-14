@@ -1,3 +1,4 @@
+import asyncio
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -10,8 +11,10 @@ from app.adapter.decision.system_one import SystemOneModel
 from app.adapter.log.stdlib import StdlibLogger
 from app.controller.errors import ErrorHandlers
 from app.controller.router import api_router_v1
+from app.repository.duckdb.source import DataPaths, DuckdbSnapshotSource
 from app.settings import ConfigError, DecisionProvider, LanguageProvider, Settings, load_settings
-from app.usecase.interface import DecisionModel, LanguageModel, Logger
+from app.usecase.catalog import ForecastCatalog
+from app.usecase.interface import DecisionModel, LanguageModel, Logger, SnapshotSource
 
 
 @dataclass(frozen=True, slots=True)
@@ -61,7 +64,7 @@ def _missing_llm_group(settings: Settings, exc: ModuleNotFoundError) -> ConfigEr
     )
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(settings: Settings | None = None, source: SnapshotSource | None = None) -> FastAPI:
     config = settings or load_settings(os.environ)
     language = build_language_model(config)
     logger = StdlibLogger("app")
@@ -72,12 +75,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             decision=build_decision_model(config), language=language, logger=logger
         )
         app.state.providers = providers
+        snapshots = source or DuckdbSnapshotSource(DataPaths.under(config.data_root))
+        catalog = ForecastCatalog(snapshots, logger)
+        await asyncio.to_thread(catalog.refresh)
+        app.state.catalog = catalog
         try:
             yield
         finally:
             await providers.aclose()
 
-    app = FastAPI(title="app", lifespan=lifespan)
+    app = FastAPI(title="duppel", lifespan=lifespan)
     ErrorHandlers(logger).register(app)
     app.include_router(api_router_v1)
     return app

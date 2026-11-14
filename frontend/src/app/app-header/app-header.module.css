@@ -11,12 +11,14 @@
 }
 
 .brand {
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   min-block-size: var(--target-min);
 }
 
 .controls {
+  flex: 0 0 auto;
   display: flex;
   flex-wrap: wrap;
   align-items: center;

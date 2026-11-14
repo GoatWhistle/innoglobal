@@ -42,3 +42,66 @@
   text-align: center;
   animation: var(--motion-fade-in);
 }
+
+.plainList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.chartCanvas {
+  display: block;
+  inline-size: 100%;
+  font-family: var(--font-sans);
+  user-select: none;
+}
+
+.secondaryNumber {
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-sm);
+  font-variant-numeric: var(--font-numeric);
+}
+
+.contourLine {
+  fill: none;
+  stroke: var(--border-ink);
+  stroke-width: var(--hairline);
+}
+
+.reliefLine {
+  fill: none;
+  stroke: var(--drawing-line);
+  stroke-width: var(--hairline);
+}
+
+.captionText {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.secondaryCaption {
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.controlRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.inverseHint {
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface-inverse);
+  color: var(--text-on-inverse);
+  font-size: var(--font-size-caption);
+}
+
+.controlFrame {
+  padding-inline: var(--space-12);
+  border-radius: var(--radius-control);
+  transition: var(--transition-control);
+}

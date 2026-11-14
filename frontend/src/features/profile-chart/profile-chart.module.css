@@ -1,0 +1,126 @@
+.frame {
+  position: relative;
+  min-inline-size: 0;
+  border-radius: var(--radius-md);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.svg {
+  composes: chartCanvas from "../../shared/styles/compose.module.css";
+
+  overflow: visible;
+  font-variant-numeric: var(--font-numeric);
+}
+
+.grid {
+  stroke: var(--chart-grid);
+  stroke-width: var(--hairline);
+}
+
+.axis {
+  stroke: var(--chart-axis);
+  stroke-width: var(--hairline);
+}
+
+.tick,
+.unitLabel {
+  fill: var(--text-muted);
+  font-size: var(--font-size-micro);
+}
+
+.reference {
+  fill: var(--text-secondary);
+  font-size: var(--font-size-micro);
+}
+
+.nominal {
+  stroke: var(--border-ink);
+  stroke-width: var(--hairline);
+  stroke-dasharray: 6 4;
+}
+
+.reject {
+  stroke: var(--status-danger);
+  stroke-width: var(--hairline);
+  stroke-dasharray: 2 3;
+}
+
+.band {
+  fill: var(--chart-band);
+}
+
+.bandEdge {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: var(--hairline);
+  stroke-dasharray: 1 3;
+}
+
+.forecast {
+  fill: none;
+  stroke: var(--text-secondary);
+  stroke-width: var(--chart-stroke);
+  stroke-dasharray: 5 3;
+  stroke-linejoin: round;
+}
+
+.runLatest {
+  color: var(--chart-measured);
+}
+
+.runEarlier {
+  color: var(--chart-model);
+}
+
+.defect {
+  fill: currentColor;
+}
+
+.modal {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--hairline);
+}
+
+.priority {
+  fill: var(--chart-warning);
+}
+
+.cursor {
+  stroke: var(--chart-crosshair);
+  stroke-width: var(--hairline);
+}
+
+.selected .cursor {
+  stroke: var(--text-primary);
+}
+
+.ring {
+  fill: var(--surface-raised);
+  stroke: var(--text-primary);
+  stroke-width: var(--chart-stroke);
+}
+
+.hover .ring {
+  stroke: var(--chart-crosshair);
+}
+
+.tagBox {
+  fill: var(--surface-inverse);
+}
+
+.tagText {
+  fill: var(--text-on-inverse);
+  font-size: var(--font-size-caption);
+  font-weight: var(--weight-medium);
+}
+
+.dragBox {
+  fill: var(--surface-range);
+}
+
+.overlay {
+  fill: transparent;
+  cursor: crosshair;
+  touch-action: pan-y;
+}

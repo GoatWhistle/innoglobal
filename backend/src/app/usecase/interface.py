@@ -3,6 +3,7 @@ from typing import Protocol
 
 from app.domain.decision import Decision, DecisionRequest
 from app.domain.inference import Completion, StructuredRequest, Vector
+from app.domain.snapshot import Snapshot
 
 type LogValue = str | int | float | bool | None
 
@@ -33,3 +34,7 @@ class DecisionModel(Protocol):
     async def decide(self, request: DecisionRequest) -> Decision: ...
 
     async def aclose(self) -> None: ...
+
+
+class SnapshotSource(Protocol):
+    def load(self) -> Snapshot: ...

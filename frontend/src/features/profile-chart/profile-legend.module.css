@@ -1,0 +1,61 @@
+.legend {
+  composes: secondaryCaption plainList from "../../shared/styles/compose.module.css";
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8) var(--space-16);
+}
+
+.item {
+  composes: controlRow from "../../shared/styles/compose.module.css";
+}
+
+.swatch {
+  display: inline-block;
+  inline-size: var(--space-16);
+  block-size: 0;
+  border-block-start: var(--chart-stroke) solid var(--text-secondary);
+}
+
+.forecast {
+  border-block-start-style: dashed;
+}
+
+.band {
+  block-size: var(--space-8);
+  border: var(--hairline) dotted var(--text-muted);
+  background-color: var(--chart-band);
+}
+
+.nominal {
+  border-block-start: var(--hairline) dashed var(--border-ink);
+}
+
+.reject {
+  border-block-start: var(--hairline) dotted var(--status-danger);
+}
+
+.priority {
+  block-size: var(--space-4);
+  border: 0;
+  background-color: var(--chart-warning);
+}
+
+.dot {
+  display: inline-block;
+  inline-size: var(--space-8);
+  block-size: var(--space-8);
+  border-radius: var(--radius-round);
+}
+
+.latest {
+  background-color: var(--chart-measured);
+}
+
+.earlier {
+  background-color: var(--chart-model);
+}
+
+.hollow {
+  border: var(--hairline) solid var(--chart-measured);
+}

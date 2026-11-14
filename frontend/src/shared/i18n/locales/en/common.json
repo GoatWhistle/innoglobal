@@ -4,7 +4,7 @@
     "tagline": "Digital twin of a pipeline"
   },
   "meta": {
-    "description": "A Darcy-Weisbach model computes pressure along a pipeline section right in the browser. When the sensors disagree with the model, duppel finds the leak in seconds and shows where it is."
+    "description": "Minimum residual pipeline wall thickness forecasts for 10 m segments and inspection priorities."
   },
   "shell": {
     "skip": "Skip to content"
@@ -15,7 +15,8 @@
     "close": "Close"
   },
   "state": {
-    "loading": "Loading"
+    "loading": "Loading",
+    "stale": "Refresh failed. Showing the previous snapshot."
   },
   "value": {
     "none": "not set",
@@ -25,15 +26,6 @@
     "legend": "Theme",
     "light": "Light theme",
     "dark": "Dark theme"
-  },
-  "language": {
-    "legend": "Interface language",
-    "ru": "Russian",
-    "en": "English",
-    "short": {
-      "ru": "RU",
-      "en": "EN"
-    }
   },
   "notFound": {
     "title": "Page not found",
@@ -48,5 +40,14 @@
   "toast": {
     "region": "Notifications",
     "dismiss": "Dismiss notification"
+  },
+  "nav": {
+    "home": "duppel home",
+    "label": "Main navigation",
+    "overview": "Overview",
+    "pipes": "Pipe",
+    "priorities": "Priorities",
+    "data": "Data",
+    "model": "Model"
   }
 }

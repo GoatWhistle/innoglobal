@@ -1,7 +1,5 @@
 .mutedCaption {
-  color: var(--text-muted);
-  font-size: var(--font-size-caption);
-  line-height: var(--line-height-caption);
+  composes: captionText from "../../../styles/compose.module.css";
 }
 
 .truncate {
@@ -9,4 +7,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.note {
+  composes: mutedCaption;
+  max-inline-size: var(--prose-measure);
+  margin: 0;
 }

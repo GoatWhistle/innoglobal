@@ -1,0 +1,59 @@
+{
+  "title": "Title",
+  "pageTitle": "Page title",
+  "description": "Description",
+  "loading": "Loading",
+  "checkedAt": "Checked at: {{date}}",
+  "checks": {
+    "title": "Title",
+    "description": "Description",
+    "failed": "Failed",
+    "found": "Found",
+    "info": "Info",
+    "meaning": "Meaning",
+    "name": "Name",
+    "passed": "Passed",
+    "ratio": "Ratio",
+    "result": "Result",
+    "rows": "Rows"
+  },
+  "layers": {
+    "title": "Title",
+    "description": "Description",
+    "rows": "Rows",
+    "table": "Table"
+  },
+  "quarantine": {
+    "title": "Title",
+    "description": "Description",
+    "duplicate": "Duplicate",
+    "duplicate_day_superseded": "Duplicate day superseded",
+    "duplicate_distance": "Duplicate distance",
+    "out_of_pipe_bounds": "Out of pipe bounds",
+    "reason": "Reason",
+    "rows": "Rows",
+    "table": "Table"
+  },
+  "runs": {
+    "title": "Title",
+    "description": "Description",
+    "date": "Date",
+    "excluded": "Excluded",
+    "features": "Features",
+    "minimum": "Minimum",
+    "pipe": "Pipe",
+    "replaced": "Replaced",
+    "status": "Status",
+    "used": "Used"
+  },
+  "summary": {
+    "days": "Days",
+    "errors": "Errors",
+    "errorsHint": "Errors hint",
+    "errorsValue": "Errors value: {{count}}",
+    "quarantine": "Quarantine",
+    "quarantineHint": "Quarantine hint",
+    "regime": "Regime",
+    "regimeSpan": "{{from}}–{{to}}"
+  }
+}

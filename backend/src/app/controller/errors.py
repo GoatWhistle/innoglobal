@@ -6,12 +6,24 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from starlette.exceptions import HTTPException
 
-from app.domain.errors import DomainError, InvalidQuestion, ModelFailure
+from app.domain.errors import (
+    DataUnavailable,
+    DomainError,
+    InvalidQuestion,
+    InvalidRange,
+    ModelFailure,
+    PipeNotFound,
+    SegmentNotFound,
+)
 from app.usecase.interface import Logger
 
 STATUS_BY_ERROR: dict[type[DomainError], HTTPStatus] = {
     InvalidQuestion: HTTPStatus.UNPROCESSABLE_ENTITY,
     ModelFailure: HTTPStatus.SERVICE_UNAVAILABLE,
+    DataUnavailable: HTTPStatus.SERVICE_UNAVAILABLE,
+    PipeNotFound: HTTPStatus.NOT_FOUND,
+    SegmentNotFound: HTTPStatus.NOT_FOUND,
+    InvalidRange: HTTPStatus.UNPROCESSABLE_ENTITY,
 }
 
 

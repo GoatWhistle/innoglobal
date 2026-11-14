@@ -1,4 +1,5 @@
 .box {
+  composes: controlFrame from "../../../styles/compose.module.css";
   --box-edge: var(--border-control);
   --box-edge-hover: var(--border-control-hover);
 
@@ -7,15 +8,12 @@
   gap: var(--space-8);
   inline-size: 100%;
   min-block-size: var(--control-height);
-  padding-inline: var(--space-12);
   border: var(--hairline) solid var(--box-edge);
-  border-radius: var(--radius-control);
   background-color: var(--surface-sunken);
   color: var(--text-muted);
   font-size: var(--font-size-body-sm);
   text-align: start;
   cursor: text;
-  transition: var(--transition-control);
 }
 
 .box:focus-within,

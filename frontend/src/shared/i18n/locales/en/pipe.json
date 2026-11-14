@@ -1,0 +1,61 @@
+{
+  "title": "Title: {{pipe}}",
+  "pageTitle": "Page title: {{pipe}}",
+  "subtitle": "{{direction}}, {{section}}",
+  "loading": "Loading",
+  "loadingMap": "Loading map",
+  "switchLabel": "Switch label",
+  "switchOption": "{{case}}: {{pipe}}",
+  "toPriorities": "To priorities",
+  "exportResult": "Export result",
+  "unit": {
+    "mmShort": "Mm short",
+    "mShort": "M short",
+    "mm": "Mm: {{value}}",
+    "m": "M: {{value}}",
+    "km": "Km: {{value}}",
+    "range": "Range: {{from}}, {{to}}",
+    "span": "{{from}}–{{to}}"
+  },
+  "case": {
+    "between": {
+      "title": "Title",
+      "short": "Short",
+      "start": "Start"
+    },
+    "commissioning": {
+      "title": "Title",
+      "short": "Short",
+      "start": "Start"
+    }
+  },
+  "passport": {
+    "target": "Target",
+    "size": "Size",
+    "sizeValue": "{{diameter}} × {{wall}}",
+    "commissioned": "Commissioned",
+    "length": "Length",
+    "segments": "Segments: {{count}}",
+    "thinnest": "Thinnest",
+    "thinnestAt": "Thinnest at: {{segment}}",
+    "cutoff": "Cutoff: {{percent}}",
+    "cutoffHint": "Cutoff hint: {{count}}",
+    "median": "Median",
+    "nominalHint": "Nominal hint: {{value}}"
+  },
+  "scene": {
+    "label": "Label",
+    "route": "Route",
+    "network": "Network",
+    "section": "Section"
+  },
+  "invalidSegment": {
+    "title": "Title",
+    "body": "Body: {{last}}"
+  },
+  "unknown": {
+    "title": "Title",
+    "description": "Description: {{pipe}}",
+    "back": "Back"
+  }
+}

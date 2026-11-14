@@ -21,7 +21,7 @@ function rule(css: string, selector: string): string {
 }
 
 function token(css: string, name: string): string | undefined {
-  return new RegExp(`${name}:\s*([^;]+);`).exec(css)?.[1]?.replace(/\s+/g, " ").trim()
+  return new RegExp(`${name}:s*([^;]+);`).exec(css)?.[1]?.replace(/\s+/g, " ").trim()
 }
 
 describe("BrandMark motion", () => {

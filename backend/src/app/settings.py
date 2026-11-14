@@ -1,6 +1,7 @@
 from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
+from pathlib import Path
 
 from app.adapter.decision.system_one import TYPESAFE_URL
 
@@ -20,6 +21,9 @@ class ConfigError(Exception):
     pass
 
 
+REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+
+
 @dataclass(frozen=True, slots=True)
 class Settings:
     decision_provider: DecisionProvider = DecisionProvider.LEXICAL
@@ -27,6 +31,7 @@ class Settings:
     decision_api_key: str | None = None
     decision_timeout_s: float = 10.0
     language_provider: LanguageProvider = LanguageProvider.NONE
+    data_root: Path = REPOSITORY_ROOT
 
 
 def load_settings(env: Mapping[str, str]) -> Settings:
@@ -38,6 +43,7 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         decision_api_key=env.get("DECISION_MODEL_API_KEY") or None,
         decision_timeout_s=_positive(env, "DECISION_MODEL_TIMEOUT_S", 10.0),
         language_provider=_choice(env, "LANGUAGE_MODEL", LanguageProvider, LanguageProvider.NONE),
+        data_root=Path(env.get("DATA_ROOT") or REPOSITORY_ROOT),
     )
 
 

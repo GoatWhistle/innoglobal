@@ -1,19 +1,18 @@
 # Open questions
 
-| ID | Question | Decision affected | Source to consult | Status |
-|---|---|---|---|---|
-| Q1 | What are the submission deadline, event identity and criterion weights? | Full product priorities and timing | Organizer/platform | open |
-| Q2 | Where are the two datasets and their exact field, coordinate and date definitions? | Preparation, real segmentation and API contract | Organizer data package | open |
-| Q3 | What historical inspections may be used for validation? | Split protocol and reported model evidence | Organizer | open |
-| Q4 | Is an engineering thickness threshold supplied? | Any future threshold-based status | Organizer/domain expert | open |
+| ID | Question | Decision affected | Status |
+| --- | --- | --- | --- |
+| Q1 | What are the submission deadline, event identity and criterion weights? | Submission timing | open |
+| Q3 | Which additional independent historical inspections may be used to assess generalization? | Model validation | open |
+| Q4 | May passport reject_wall_mm be treated as an operational safety rule? | Future engineering classification | open; displayed as a source reference line only |
 
-## Assumptions pending answers
+## Resolved source questions
 
-| ID | Assumption | Revisit when |
-|---|---|---|
-| Q2 | Current lengths, diameters, dates, forecasts and factors are synthetic UI specimens | Real data package arrives |
-| Q3 | The displayed P10–P90 spread is illustrative, not a calibrated interval | Validation is performed |
-| Q4 | Top 10% means lowest predicted thickness per pipe; it is a relative shortlist | A different engineering ranking is agreed |
+Real CSVs, warehouse, prediction artifacts and dates are documented in docs/data-contract.md.
+Targets: 1250022871 on 2023-12-01 and 1250009583 on 2022-07-01; mentor recording 11:04–11:34.
+P10/P90 are actual quantile-model outputs; their coverage remains uncalibrated.
+The shortlist is ceil(10% N) sorted by thickness then segment ID, not a failure classification.
+UI uses real API data, Russian only and both themes, with approved duppel branding.
 
-The user already approved HTML catalog, evolving the current style, RU only, both themes and the
-wall scanner. Those decisions do not require reconfirmation. Final naming remains a separate stream.
+Historical chart artifacts are separate from selected-model metrics. Case1 pairs are traceable;
+case2 historical observations do not match the current split and its graph is unavailable.

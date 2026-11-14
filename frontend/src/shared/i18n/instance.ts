@@ -19,4 +19,4 @@ export function createI18n(locale: Locale = readStoredLocale()): I18nInstance {
   return instance
 }
 
-export const i18n = createI18n()
+export const i18n = createI18n(DEFAULT_LOCALE)

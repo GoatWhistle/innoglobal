@@ -1,0 +1,36 @@
+.frame {
+  min-inline-size: 0;
+}
+
+.plot {
+  display: block;
+  inline-size: 100%;
+  max-block-size: 28rem;
+  font-family: var(--font-sans);
+}
+.grid {
+  stroke: var(--chart-grid);
+  stroke-width: var(--hairline);
+}
+.axis {
+  fill: none;
+  stroke: var(--chart-axis);
+  stroke-width: var(--hairline);
+}
+.identity {
+  stroke: var(--text-secondary);
+  stroke-width: var(--hairline);
+  stroke-dasharray: 5 4;
+}
+.point {
+  fill: var(--chart-measured);
+}
+.label {
+  fill: var(--text-secondary);
+  font-size: var(--font-size-caption);
+  font-variant-numeric: var(--font-numeric);
+}
+.title {
+  fill: var(--text-primary);
+  font-size: var(--font-size-label);
+}

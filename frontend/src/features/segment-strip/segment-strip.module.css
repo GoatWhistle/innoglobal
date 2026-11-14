@@ -1,0 +1,35 @@
+.frame {
+  min-inline-size: 0;
+}
+
+.svg {
+  composes: chartCanvas from "../../shared/styles/compose.module.css";
+}
+
+.caption {
+  fill: var(--text-muted);
+  font-size: var(--font-size-micro);
+}
+
+.relief {
+  composes: reliefLine from "../../shared/styles/compose.module.css";
+}
+
+.window {
+  composes: contourLine from "../../shared/styles/compose.module.css";
+}
+
+.marker {
+  stroke: var(--text-primary);
+  stroke-width: var(--chart-stroke);
+}
+
+.drag {
+  fill: var(--surface-range);
+}
+
+.overlay {
+  fill: transparent;
+  cursor: col-resize;
+  touch-action: pan-y;
+}

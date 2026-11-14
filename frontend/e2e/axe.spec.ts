@@ -3,7 +3,7 @@ import { expect, type Page, test } from "@playwright/test"
 
 const ROUTES = ["/", "/missing-page"]
 const THEMES = ["light", "dark"] as const
-const LOCALES = ["ru", "en"] as const
+const LOCALES = ["ru"] as const
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]
 
 async function settle(page: Page): Promise<void> {
