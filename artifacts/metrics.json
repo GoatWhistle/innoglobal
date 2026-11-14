@@ -16,13 +16,6 @@
     },
     {
       "case": "case1",
-      "model": "catboost",
-      "n": 55,
-      "pearson_r2": 0.1769,
-      "mae": 0.347
-    },
-    {
-      "case": "case1",
       "model": "lgbm",
       "n": 55,
       "pearson_r2": 0.1688,
@@ -46,36 +39,29 @@
       "case": "case1",
       "model": "ensemble",
       "n": 55,
-      "pearson_r2": 0.1709,
-      "mae": 0.392
+      "pearson_r2": 0.1613,
+      "mae": 0.415
     },
     {
       "case": "case1",
       "model": "ens_blend",
       "n": 55,
-      "pearson_r2": 0.2912,
-      "mae": 0.362
-    },
-    {
-      "case": "case1",
-      "model": "catboost_smooth5",
-      "n": 55,
-      "pearson_r2": 0.1819,
-      "mae": 0.347
+      "pearson_r2": 0.2893,
+      "mae": 0.376
     },
     {
       "case": "case1",
       "model": "ensemble_smooth5",
       "n": 55,
-      "pearson_r2": 0.2592,
-      "mae": 0.361
+      "pearson_r2": 0.2866,
+      "mae": 0.375
     },
     {
       "case": "case1",
       "model": "ens_blend_smooth5",
       "n": 55,
-      "pearson_r2": 0.3435,
-      "mae": 0.351
+      "pearson_r2": 0.3661,
+      "mae": 0.358
     },
     {
       "case": "case2",
