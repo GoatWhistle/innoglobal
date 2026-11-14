@@ -1,0 +1,83 @@
+[data-dir="glass"] {
+  --bg: #0a0908;
+  --surface: #ffffff0d;
+  --text: #f1efea;
+  --muted: #a9a59e;
+  --line: #ffffff24;
+  --accent: #ffb547;
+  --accent-ink: #1c1306;
+  --danger: #ff7a66;
+  --rim: #ffffff70;
+  --rim-soft: #ffffff1f;
+  --lens: #ffffff1a;
+  --shade: #00000099;
+  --radius: 28px;
+  --radius-sm: 16px;
+  --pad: 22px;
+}
+[data-dir="glass"][data-theme="light"] {
+  --bg: #e6e3dc;
+  --surface: #ffffff59;
+  --text: #161513;
+  --muted: #5f5b55;
+  --line: #00000017;
+  --accent: #b06400;
+  --accent-ink: #fff8ee;
+  --danger: #b0281d;
+  --rim: #ffffffe6;
+  --rim-soft: #ffffff80;
+  --lens: #ffffff8c;
+  --shade: #4a3b2a40;
+}
+[data-dir="glass"] .backdrop { display: block; position: fixed; inset: 0; z-index: -1; overflow: hidden; background: radial-gradient(40% 50% at 78% 30%, color-mix(in oklab, var(--accent) 34%, transparent), transparent 70%), radial-gradient(35% 45% at 12% 80%, color-mix(in oklab, var(--danger) 22%, transparent), transparent 70%), var(--bg); }
+[data-dir="glass"] .backdrop svg { width: 100%; height: 100%; }
+[data-dir="glass"] .b-fc { fill: none; stroke: var(--accent); stroke-width: 6; }
+[data-dir="glass"] .b-vtd { fill: none; stroke: var(--text); stroke-width: 2; opacity: 0.55; }
+[data-dir="glass"] .b-echo { fill: none; stroke: var(--text); stroke-width: 1; }
+[data-dir="glass"] .b-num { font: 200 460px/1 var(--font-ui); letter-spacing: -0.06em; fill: color-mix(in oklab, var(--text) 9%, transparent); }
+[data-dir="glass"] body { background: transparent; }
+[data-dir="glass"] .bar { margin: 12px auto 0; width: min(1416px, calc(100% - 32px)); border: 1px solid var(--rim-soft); border-radius: 999px; background: var(--lens); backdrop-filter: blur(20px) saturate(1.8); box-shadow: inset 0 1px 0 var(--rim), 0 20px 40px -24px var(--shade); top: 12px; }
+[data-dir="glass"] .theme { border-color: var(--rim-soft); background: var(--lens); }
+
+[data-dir="glass"] .card { border: 0; background: var(--surface); backdrop-filter: blur(14px) saturate(1.9) brightness(1.06) url(#refract); -webkit-backdrop-filter: blur(14px) saturate(1.9); box-shadow: inset 0 1px 0 var(--rim), inset 0 -24px 40px -32px var(--rim-soft), 0 30px 60px -30px var(--shade); isolation: isolate; }
+[data-dir="glass"] .card::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: 1px; pointer-events: none; background: linear-gradient(140deg, var(--rim), transparent 32%, transparent 64%, var(--rim-soft)); mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+[data-dir="glass"] .hero h1 { font-weight: 400; letter-spacing: -0.045em; }
+[data-dir="glass"] mark { color: var(--accent); }
+[data-dir="glass"] .badge { background: color-mix(in oklab, var(--accent) 22%, transparent); box-shadow: inset 0 1px 0 var(--rim-soft); }
+
+[data-dir="glass"] .ro-body { padding: 8px 0; }
+[data-dir="glass"] .ring-track { stroke: var(--lens); stroke-width: 14; }
+[data-dir="glass"] .ring-wall { stroke-width: 14; stroke-linecap: round; filter: drop-shadow(0 0 10px color-mix(in oklab, var(--accent) 60%, transparent)); }
+[data-dir="glass"] .ring-ticks { display: none; }
+[data-dir="glass"] .num { font-weight: 300; font-size: 52px; }
+[data-dir="glass"] .facts { padding: 14px 16px; border-radius: var(--radius-sm); background: var(--lens); box-shadow: inset 0 1px 0 var(--rim-soft); }
+
+[data-dir="glass"] .seg { padding: 4px; border-radius: 999px; background: var(--lens); box-shadow: inset 0 1px 2px var(--shade); }
+[data-dir="glass"] .seg button { border-radius: 999px; }
+[data-dir="glass"] .seg [aria-checked="true"] { background: var(--lens); color: var(--text); box-shadow: inset 0 1px 0 var(--rim), 0 6px 16px -8px var(--shade); backdrop-filter: blur(6px) brightness(1.3); }
+[data-dir="glass"] .field-box { border: 0; border-radius: var(--radius-sm); background: var(--lens); box-shadow: inset 0 1px 2px var(--shade), inset 0 -1px 0 var(--rim-soft); }
+[data-dir="glass"] .field-box:focus-within { box-shadow: inset 0 1px 2px var(--shade), 0 0 0 2px var(--accent); }
+[data-dir="glass"] .range input { height: 30px; }
+[data-dir="glass"] .range input::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--accent) var(--p), var(--lens) var(--p)); }
+[data-dir="glass"] .range input::-webkit-slider-thumb { width: 28px; height: 28px; margin-top: -11px; background: radial-gradient(circle at 35% 30%, #ffffffe0, #ffffff40 40%, #ffffff14 70%); box-shadow: inset 0 0 0 1px var(--rim), 0 6px 14px -4px var(--shade); backdrop-filter: blur(2px); }
+[data-dir="glass"] .range input::-moz-range-thumb { width: 28px; height: 28px; background: radial-gradient(circle at 35% 30%, #ffffffe0, #ffffff40 40%, #ffffff14 70%); }
+[data-dir="glass"] .switch-track { width: 46px; height: 26px; background: var(--lens); box-shadow: inset 0 1px 2px var(--shade); }
+[data-dir="glass"] .switch-track::after { top: 3px; left: 3px; width: 20px; height: 20px; background: #fff; box-shadow: 0 3px 8px -2px var(--shade); }
+[data-dir="glass"] .switch input:checked + .switch-track::after { translate: 20px 0; background: #fff; }
+
+[data-dir="glass"] .btn { border: 0; border-radius: 999px; padding: 11px 18px; background: var(--lens); box-shadow: inset 0 1px 0 var(--rim), 0 8px 18px -10px var(--shade); }
+[data-dir="glass"] .btn:hover { background: color-mix(in oklab, var(--lens) 100%, #fff 8%); }
+[data-dir="glass"] .btn.primary { background: color-mix(in oklab, var(--accent) 82%, transparent); color: var(--accent-ink); box-shadow: inset 0 1px 0 #ffffffa0, inset 0 -10px 18px -10px #00000040, 0 12px 26px -12px var(--accent); }
+
+[data-dir="glass"] .chart { height: 260px; }
+[data-dir="glass"] .c-band { fill: color-mix(in oklab, var(--accent) 24%, transparent); }
+[data-dir="glass"] .c-fc { stroke-dasharray: none; stroke-width: 2.4; filter: drop-shadow(0 0 6px var(--accent)); }
+[data-dir="glass"] .strip { gap: 2px; height: 30px; padding: 4px; border-radius: 999px; background: var(--lens); overflow: hidden; }
+[data-dir="glass"] .strip i:first-child { border-radius: 999px 0 0 999px; }
+[data-dir="glass"] .strip i:last-child { border-radius: 0 999px 999px 0; }
+[data-dir="glass"] .rows li { border-radius: var(--radius-sm); }
+[data-dir="glass"] .rows li[aria-current] { background: var(--lens); box-shadow: inset 0 1px 0 var(--rim-soft); }
+[data-dir="glass"] .r-bar { height: 6px; border-radius: 3px; }
+[data-dir="glass"] .note { border-radius: var(--radius-sm); background: color-mix(in oklab, var(--c) 14%, var(--lens)); box-shadow: inset 0 1px 0 var(--rim-soft); }
+[data-dir="glass"] .note .dot { box-shadow: 0 0 10px var(--c); }
+[data-dir="glass"] .sw { border-radius: 50%; box-shadow: inset 0 1px 0 var(--rim-soft); }

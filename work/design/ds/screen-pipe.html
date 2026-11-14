@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Труба | PipeTwin</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem('ds-theme') === 'light' ? 'light' : 'dark' } catch {}</script>
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="kit-base.css"><link rel="stylesheet" href="kit-button.css"><link rel="stylesheet" href="kit-tabs.css">
+<link rel="stylesheet" href="wall/tokens.css"><link rel="stylesheet" href="wall/components.css"><link rel="stylesheet" href="wall/drawing.css"><link rel="stylesheet" href="wall/layout.css"><link rel="stylesheet" href="site-nav.css">
+<script type="importmap">{"imports":{"three":"/frontend/node_modules/three/build/three.module.js","three/addons/":"/frontend/node_modules/three/examples/jsm/"}}</script>
+<script type="module" src="site-nav.js"></script>
+<script type="module" src="wall/main.js"></script>
+<script type="module" src="wall/renderer.js"></script>
+</head>
+<body class="pipe-page">
+<a class="skip-link" href="#main">К содержимому</a>
+<header class="pipe-header">
+<a class="pipe-brand" href="index.html">PipeTwin</a>
+<nav class="pipe-navigation site-nav" aria-label="Дизайн-система" data-site-nav></nav>
+<button class="button button-quiet" data-theme-toggle aria-label="Включить светлую тему"></button>
+</header>
+<main id="main" class="pipe-workspace">
+<div class="pipe-head">
+<div class="pipe-title"><h1 class="marking marking-title" data-marking></h1><p class="pipe-question"><span class="pipe-scale-name" data-scale-name></span><span data-question></span></p></div>
+<span class="demo-label"><svg class="icon" aria-hidden="true"><use href="icons.svg#help"/></svg>Синтетический пример, не данные организатора</span>
+</div>
+<div class="pipe-toolbar">
+<div class="segmented" role="radiogroup" aria-label="Трубопровод" data-pipelines><button role="radio" aria-checked="true" data-value="1">Труба 1</button><button role="radio" aria-checked="false" data-value="2">Труба 2</button></div>
+<div class="cam-keys" role="radiogroup" aria-label="Масштаб" data-cam>
+<button class="cam-key" role="radio" aria-checked="true" data-value="route" aria-keyshortcuts="1"><span class="cam-key-index" aria-hidden="true">1</span><svg class="cam-key-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 15.5h20M2 9.5h20"/><path d="M7 8v9M15 8v9" class="thin"/></svg><span>Трасса</span></button>
+<button class="cam-key" role="radio" aria-checked="false" data-value="unroll" aria-keyshortcuts="2"><span class="cam-key-index" aria-hidden="true">2</span><svg class="cam-key-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h14v12H3z"/><path d="M17 6c2.5 0 4 2.7 4 6s-1.5 6-4 6"/><path d="M3 12h14" class="thin"/></svg><span>Развёртка</span></button>
+<button class="cam-key" role="radio" aria-checked="false" data-value="section" aria-keyshortcuts="3"><span class="cam-key-index" aria-hidden="true">3</span><svg class="cam-key-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 6.5a5.5 5.5 0 1 1 0 11a5 5 0 1 1 0-11z" class="thin"/><path d="M12 3.5v4"/></svg><span>Сечение</span></button>
+</div>
+<p class="pipe-case" data-case></p><p class="pipe-date">Прогноз на <time data-date></time></p>
+</div>
+<section class="pipe-state" data-state-panel hidden aria-labelledby="state-title"><h2 id="state-title"></h2><p data-state-description></p><button class="button button-primary" data-recover><svg class="icon" aria-hidden="true"><use href="icons.svg#refresh"/></svg><span data-recover-label></span></button></section>
+<div class="pipe-content" data-content>
+<section class="pipe-stage" aria-label="Труба: трасса, развёртка и сечение">
+<div class="pipe-viewport" data-scene data-renderer="loading" data-mode="route">
+<canvas aria-label="Труба. Выбор доступен также через полосу сегментов и поле расстояния"></canvas>
+<div class="pipe-fallback" data-fallback></div>
+<div class="sheet-axes" data-axes hidden aria-hidden="true"></div>
+<div class="tag-layer" data-tags aria-hidden="true"></div>
+<div class="matte readout" data-readout aria-live="off"></div>
+<div class="wall-scale wall-scale-compact" aria-label="Шкала стенки: относительная толщина">
+<span class="wall-scale-bar" aria-hidden="true"></span><span class="wall-scale-ends"><span>Ближе к номиналу</span><span>Тоньше</span></span>
+</div>
+<span class="pipe-render-state" data-render-state>Подготавливаем 3D</span>
+</div>
+<div class="strip" data-strip role="slider" tabindex="0" aria-label="Полоса сегментов" aria-describedby="strip-help"></div>
+<div class="pipe-controls">
+<p class="pipe-help" id="strip-help">Стрелки двигают на сегмент, Page Up и Page Down на десять. Клавиши 1, 2, 3 меняют масштаб. Клик по пятну на развёртке разрезает трубу.</p>
+<form class="pipe-coordinate" data-coordinate><label for="distance">Расстояние от начала, м <output data-position></output></label><div class="pipe-coordinate-row"><button type="button" class="button button-secondary" data-prev aria-label="Предыдущий сегмент"><svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg></button><input id="distance" class="pipe-input" inputmode="decimal" autocomplete="off" aria-describedby="distance-error"><button type="button" class="button button-secondary" data-next aria-label="Следующий сегмент"><svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg></button><button class="button button-secondary">Перейти</button></div><p class="pipe-field-error" id="distance-error" role="alert"></p></form>
+</div>
+</section>
+<section class="pipe-profile" aria-labelledby="profile-title">
+<div class="pipe-section-heading"><h2 id="profile-title">Толщина вдоль трубы</h2><div class="pipe-legend"><span class="legend-observed" data-observed-legend>Предыдущий ВТД</span><span class="legend-forecast">Прогноз</span><span class="legend-band" data-band-legend>P10–P90</span></div></div>
+<div class="pipe-plot" data-plot></div>
+<p class="pipe-note">Профиль стоит на той же оси расстояния, что развёртка и полоса сегментов. Интервал иллюстративный.</p>
+</section>
+<div class="pipe-detail">
+<article class="drawing-sheet" aria-labelledby="sheet-title">
+<span class="crop crop-tl" aria-hidden="true"></span><span class="crop crop-tr" aria-hidden="true"></span><span class="crop crop-bl" aria-hidden="true"></span><span class="crop crop-br" aria-hidden="true"></span>
+<header class="drawing-sheet-head"><h2 id="sheet-title" data-sheet-title></h2><p data-sheet-point></p></header>
+<div class="drawing-sheet-body">
+<div class="drawing-sheet-figure" data-sheet-drawing></div>
+<div class="drawing-sheet-side">
+<p class="monument"><span data-sheet-number></span><span class="monument-unit">мм</span></p>
+<p class="monument-caption">Минимальная толщина стенки, прогноз</p>
+<dl class="sheet-facts" data-sheet-facts></dl>
+<p class="pipe-note">Толщина в сечении увеличена для читаемости. Цвет и штриховка не означают аварию: порога нет.</p>
+</div>
+</div>
+<footer data-stamp></footer>
+</article>
+<aside class="pipe-aside">
+<button class="button button-secondary pipe-priority-toggle" data-priority aria-pressed="false" aria-expanded="false" aria-controls="priority-panel"><svg class="icon" aria-hidden="true"><use href="icons.svg#sort-asc"/></svg>Проверить в первую очередь</button>
+<section id="priority-panel" class="pipe-priority" hidden aria-labelledby="priority-title"><h2 id="priority-title">10% самых тонких сегментов</h2><p data-priority-summary></p><p class="pipe-note">Ранжирование по прогнозной толщине, не вероятность отказа.</p><div class="pipe-priority-list" data-priority-list></div></section>
+<section class="pipe-evidence"><button class="pipe-disclosure" data-evidence-toggle aria-expanded="false" aria-controls="evidence-panel"><span><svg class="icon" aria-hidden="true"><use href="icons.svg#layers"/></svg>Откуда цифры</span><svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-down"/></svg></button><div id="evidence-panel" class="pipe-evidence-grid" hidden data-evidence></div></section>
+</aside>
+</div>
+</div>
+<footer class="pipe-footer"><span>Демонстрационные данные. Не для эксплуатационных решений.</span><a href="pipe-kit.html">Детали трубы</a></footer>
+<p class="visually-hidden" role="status" aria-live="polite" data-announcement></p>
+</main>
+</body></html>

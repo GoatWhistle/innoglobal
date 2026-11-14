@@ -1,208 +1,124 @@
 ---
 name: "duppel"
-description: "A precise operator console around a physical steel pipe, with warm graphite depth, thin Onest numerals and colour reserved for events"
+description: "A dimensioned wall scanner linking a physical pipe, minimum thickness and inspection evidence"
 ---
 
-# Design System: duppel
+# Design system: duppel
 
-A physical steel pipe with crude flowing inside is the visual centre of duppel. The interface
-around it uses quiet graphite planes, exact outlines and light Onest numerals. Its depth comes from
-the relation between surfaces; buttons do not imitate metal. Every screen must make one thing
-obvious within a second: is the line calm, suspicious or leaking.
+## Authority and entry points
 
-Source style, picked by the user: <https://styles.refero.design/style/3e52dd36-6ab1-48c6-bc40-47ef6d33abc2>,
-extracted from <https://monopo.vn/>. Full extraction, conflicts and decisions: `work/design/style.md`.
-Living reference with values read from the tokens: `work/design/ds/index.html` and the `doc-*.html`
-pages (build checklist, brand mark, two personalities, layout, density, numbers, real time, charts, alerts,
-feedback, forms, tables, keys, glossary), `kit.html` (controls and states), `screens.html`
-(product screens), `scene.html` (the pipe). Code mapping: `frontend/COMPONENTS.md`.
+The user chose to develop the current Onest, graphite and paper visual world, retaining the physical
+pipe. The original monopo reference is recorded in `work/design/style.md`; the current direction is
+the approved wall-scanner plan of 2026-11-14. Old leak-detection pages are experiments.
 
-Values live only in `src/shared/styles/tokens/`. This file names roles, usage and rules and never
-copies a hex, px or ms value: change the token, not this file. `npm run tokens:export -- --print`
-shows the current values.
+Pipe-led direction, 2026-11-14 (`work/design/pipe-style-plan.md`): the pipe is the interface.
+Main screen: `work/design/ds/screen-pipe.html` (route, unroll, section). Pipe components and the
+three-scale foundations: `work/design/ds/pipe-kit.html`. Code: `work/design/ds/wall/`.
+Previous single-scale scanner: `work/design/ds/screen-thickness.html`. Subject components and usage:
+`work/design/ds/scanner/catalog.html`. Future screen schematics: `scanner/blueprints.html`.
+Generic controls and state matrices: `work/design/ds/kit.html`. Foundations: `index.html` and `doc-*`.
+Code mapping: `COMPONENTS.md`. All values live in `src/shared/styles/tokens/`.
 
-## 1. Overview
+## Structure and signature
 
-- **Register:** product UI, an operator console. Density is calm: few numbers, each large and
-  tabular, because the jury reads the screen from a distance during the demo.
-- **Layout:** full screen width. The scene takes the stage; panels sit on top of or beside it.
-  Pages have no `max-width`; padding is `--space-page` and `--space-page-wide` from 75rem. Only prose
-  (`--prose-measure`) and a single field (`--field-max-width`) are capped.
-- **Breakpoints:** 30, 48, 64, 75, 90 and 120rem, the same values in `matchMedia`.
-- **Themes:** two equal personalities of one product, dark by default. Dark is the night control
-  room: warm black ground, graphite panels, lighter floating layers and oil in the pipe. Light is an
-  engineering drawing: warm paper, white work surfaces, ink in three weights and measured marks
-  inside schemes. Structure, components and meaning are shared; components never know the theme.
-- **Language:** Russian only (user decision, `work/design/style.md`, C6).
+The user moves a cross-section along the pipe. The profile and wall diagram select the same segment.
+A scanning ring, measured coordinate, dimension ticks and a nominal-wall outline carry the signature.
+These marks encode data or position; buttons do not imitate metal.
 
-## 2. Colors
+Desktop: pipe and coordinate ruler on the left, compact segment inspector on the right, full-width
+profile underneath. No dashboard KPI grid. Mobile: segment summary first, then pipe, profile and
+expandable evidence. The page scrolls naturally; there is no body scroll lock or nested mobile sheet.
 
-Palette tokens (`--ink-*`, `--leak-*`, `--amber-*`, `--crude-*`) stay inside `tokens/`. Components use
-semantic tokens only. Every semantic token exists in both themes.
+The subject is minimum thickness, not a reconstructed defect map. The wall diagram preserves the
+ratio of predicted to nominal thickness within an exaggerated wall ring. Its explanatory caption
+is always visible. The 3D pipe is a schematic physical object, not a surveyed route or asset passport.
 
-| Role | Token | Meaning | Where |
-| --- | --- | --- | --- |
-| Page | `--surface-base` | the ground: paper in light, black in dark | body, scene void |
-| Panel | `--surface-raised`, `--surface-raised-hover` | content above the page | panels, rows, cards |
-| Track | `--surface-sunken`, `--surface-selected` | recessed track and the chosen item in it | segmented, slider rail |
-| Float | `--surface-float` | layers above everything, with `--shadow-float` | popover, menu, dialog, toast |
-| Text | `--text-primary`, `--text-secondary`, `--text-muted` | reading, supporting, captions | body, hints, units, timestamps |
-| Action | `--action-primary`, `--action-primary-text` | the one main action, in ink | primary button, selection |
-| Lines | `--border-subtle`, `--border-strong`, `--border-control`, `--border-ink` | divider, outline, field edge, emphasis | panels, secondary button, inputs, rules |
-| Focus | `--focus-ring` | keyboard position | shared `:focus-visible` |
-| Suspicion | `--status-warning`, `--text-warning`, `--signal-warning-surface` | the model and the sensors drift apart | badge, row, banner |
-| Leak | `--status-danger`, `--text-danger`, `--signal-danger-surface`, `--action-danger` | a leak is confirmed | alarm, banner, shut-off action |
-| Scene | `--scene-*` | WebGL only: crude sheen, steel, leak | `scene/` |
+## Three scales and the mixing rule
 
-Rules:
+One pipe, three camera distances; the selected segment survives every change. Route answers where
+the thin places are; unroll answers what shape and size each thinning has; section answers how thin
+one point is. Each scale has one leading source and the others stay silent: scene for route,
+drawing over metal for unroll, drawing plus one editorial figure for section. Glass is only a matte
+panel over WebGL; the instrument source gives only the camera key and segment strip.
 
-- **Colour means an event.** Ink for everything; amber for suspicion, oxblood for a leak. Normal and
-  success stay neutral. `--crude-*` exists for the scene and never fills a control.
-- **Light is paper, not inverted dark.** The page is the warm `--ink-25`, panels are white above it,
-  tracks sink to `--ink-50`, text is `--ink-950`, not pure black. Layers read by tone and by line.
-- **Dark has distinct planes.** The warm black page stays continuous with the scene. Sunken tracks
-  sit below graphite panels; hovered rows, floating layers and selected items each have their own
-  tone. Captions retain reading contrast on the lightest of these planes.
-- **Lines have a job.** Subtle lines divide content, strong lines close an outline, control lines
-  identify interactive boundaries, ink lines mark the active or measured reference. Never outline
-  every nested region at the same strength.
-- **Status is an icon plus text.** Colour reinforces, never carries alone.
-- **Contrast:** `npm run rules` (`contrast`) keeps text at 4.5:1 and the focus ring at 3:1 on every
-  surface in both themes. The foundations page recomputes the full matrix live, including field
-  outlines and signal marks (3:1) and signal text on its own surface.
+Pipe components: tag on a clamp (replaces tooltip), stencil marking (replaces object title and
+breadcrumbs; mask-made stencil on Onest, Cyrillic preserved), wall scale, segment strip (slider),
+dimension line, camera key (radio group with travel), matte panel, sheet stamp (replaces footer).
+The wall scale `--wall-steel` → `--wall-rust` → `--wall-amber` is relative to the thinnest segment
+of the selected pipe; it is never a threshold. `wall/tokens.css` holds these proposed tokens until
+the React migration moves them into `src/shared/styles/tokens/`.
 
-## 3. Typography
+The unroll keeps the sheet, the segment strip and the profile on one distance axis (36 px left,
+18 px right inset). Circumference is labelled in clock hours, 12 at both sheet edges. The angular
+distribution is a synthetic rule of the example (loss centred near 6 o'clock), not a VTD map.
 
-- **Sans:** `--font-sans`, Onest, for every role. Tabular figures verified.
-- **Accent:** `--font-accent`, Raleway Italic, only for the one-letter swap in the scene headline.
-  Never a word, never body.
-- **Logo:** the wordmark `duppel` is Schibsted Grotesk 800 converted to outlines in `docs/brand/`;
-  that font never sets UI text and Onest never sets the logo. Always lowercase.
-- **Mono:** `--font-mono` for raw identifiers in developer views only; the UI shows tokens of the
-  domain (sensor ids, pipe grades) in Onest.
-- **Scale:** `micro`, `caption`, `label`, `body-sm`, `body`, `lead`, `subheading`, `heading`,
-  `heading-lg` (fluid), `display` (fluid), `readout`, `readout-sm`. Each has a matching
-  `--line-height-*`; fixed sizes land on a 4px line grid. `micro` is reserved for compact chart
-  annotations; ordinary captions use `caption` or larger.
-- **Weights:** `--weight-light` for anything at `lead` size and above and for readouts,
-  `--weight-regular` for text, `--weight-medium` for buttons and labels. Nothing heavier above
-  `subheading`.
-- **Numbers:** readouts are large and light, with `--tracking-readout`; units and labels remain
-  regular and quieter. `--font-numeric` wherever values line up or tick; formatted with `Intl` (`ru-RU`):
-  narrow no-break space in groups and before units, decimal comma.
+## Themes and colour
 
-## 4. Space, shape, elevation
+Components use semantic tokens only; both themes share roles and geometry.
 
-- **Rhythm:** 4px step, `--space-*`. Semantic aliases: `--space-page`, `--space-section`,
-  `--space-card`, `--space-element`.
-- **Corners:** square structural panels use `--radius-none`. Buttons, inputs and segmented
-  controls share `--radius-control`. `--radius-sm` belongs to small floating details, `--radius-md`
-  to menus and popovers, `--radius-lg` to dialogs. `--radius-pill` is reserved for status badges and
-  switches; `--radius-round` for dots and circular handles.
-- **Lines before shadows:** a panel is `--surface-raised` with a `--border-subtle` hairline.
-  `--shadow-ring` outlines secondary controls, `--shadow-raised` gives the selected segment a
-  restrained outline and contact shadow. `--shadow-float` combines outline, contact and ambient
-  depth for overlays. Panels stay flat; there are no bevels, gloss strips or chrome effects.
-- **Sizes:** `--control-height` and `--target-min` 44px, `--control-height-compact` only inside
-  dense toolbars with an enlarged hit area. Control padding uses `--space-control-inline` and
-  `--space-control-block`. Icons `--icon-sm` to `--icon-xl`, stroke `--icon-stroke`.
-- **Layers:** `--layer-*` only, from `--layer-raised` to `--layer-skip-link`.
+| Role | Tokens | Use |
+|---|---|---|
+| Ground / panel / float | `--surface-base`, `--surface-raised`, `--surface-float` | warm graphite depths in dark; paper and white in light |
+| Recess / selection | `--surface-sunken`, `--surface-selected` | fields, tracks and selected rows |
+| Reading hierarchy | `--text-primary`, `--text-secondary`, `--text-muted` | measurements, context and annotations |
+| Boundaries | `--border-subtle`, `--border-control`, `--border-ink` | structural separators, controls and selected marks |
+| Priority | `--status-warning`, `--text-warning`, `--signal-warning-surface` | relative inspection shortlist, always named |
+| Error / criterion | `--status-danger`, `--text-danger` | error or supplied violated criterion, never inferred failure |
+| Selection and focus | `--text-primary`, `--focus-ring` | scanner and chart cursor; keyboard focus is distinct |
+| Measured / forecast | `--chart-measured`, `--text-secondary` | solid measured line and dashed forecast |
+| Interval | `--chart-band`, `--text-muted` | labelled optional P10–P90 fill with a visible boundary |
 
-## 5. Motion
+Neutral does not mean safe. A missing value never becomes zero. The selected segment remains neutral
+even when it belongs to the priority list; a separate label supplies the priority meaning.
 
-Two tempos.
+## Type, form and rhythm
 
-- **UI:** `--ease-out`, `--dur-instant` to `--dur-slow`. Press scales to `--press-scale`; overlays
-  fade and scale from `--enter-scale` at the anchor and close faster than they open; content swaps
-  through `Swap`; screens change with View Transitions.
-- **Scene:** `--ease-viscous` with `--dur-scene` and `--dur-scene-long` for camera, lens and reveal
-  (`--motion-reveal`). Rare events only: inserting a leak, confirming it, resetting.
-- **Loops:** a static icon for an active leak indicator, `--motion-shimmer` for skeletons,
-  `--motion-spin` for spinners.
-- Values that tick (pressure, flow, timer) never animate. Reduced motion shrinks durations to 1ms
-  and turns movement into a short fade.
+The wordmark `duppel` is Schibsted Grotesk 800 converted to outlines in `docs/brand/`; that font
+never sets UI text and Onest never sets the logo. Always lowercase. `--font-accent` (Raleway Italic)
+is only for the one-letter swap in the scene headline.
 
-## 6. Components
+Onest is used throughout. Light weights belong to large headings and dimensioned readouts; regular
+to body and annotations; medium to actions. Tabular figures preserve alignment. Raleway remains a
+reserved legacy accent and is not introduced into the scanner. Monospace is for code only.
 
-Everything is built from `src/shared/ui`; a screen never writes its own variant of a primitive. The
-visual spec for controls and states is `work/design/ds/kit.html`.
+Use the existing semantic type, line-height and spacing scales. Structural areas remain square;
+controls use `--radius-control`; overlay radii follow their existing roles. Focus and field outlines
+retain their contrast in both themes. Components use the same tokens as React primitives.
 
-- **Button:** `--radius-control`, an exact outline and balanced label spacing. `primary` in ink
-  for the one main action, `secondary` with `--shadow-ring`,
-  `ghost` in toolbars, `danger` only for shutting off a section.
-- **Panel:** square, hairline, `--surface-raised`. No card grids of identical tiles.
-- **Readout (signature data component):** label in `caption` muted, value in `readout` light
-  tabular, unit in `body-sm` muted, model value beside the measured one. Uses amber or red on the residual and status badge when the detector reports an event.
-- **Status:** icon, word and colour together: calm, suspicion, leak, no data.
-- **States:** `Skeleton` after 200ms and held 300ms, `Spinner` after 400ms, `stale` dimming,
-  `EmptyState` with a 48px icon and the next action, `ErrorState` with "Повторить".
+Thickness uses millimetres, two decimals in the synthetic example; distance uses metres and integer
+segment boundaries. Dates identify the baseline or forecast explicitly. Russian formatting uses
+commas and grouped digits. Export formatting is a separate future contract.
 
-## 7. Do's and Don'ts
+## Component behavior
 
-### Do:
+- Pipe selection, range, coordinate input, profile and priority row share one selected segment.
+- Hover previews a possible pick. Click or drag selects. Camera orbit requires the explicit mode.
+- Previous/next and keyboard selection are immediate. A coordinate at the pipe endpoint selects the
+  final segment, including a partial one. Invalid fields retain the current selection and explain
+  the accepted range.
+- The top ten percent is calculated per pipe from predicted thickness ascending, ties by segment id.
+  The rule and rounding up of the segment count are documented alongside the data contract.
+- The inspector shows baseline, difference and optional interval. It never claims unseen VTD values.
+- The profile leaves missing observations disconnected. A withheld target fact is never drawn.
+- Evidence expands inline. Unavailable factors are explicit. Prototype schemas never look actionable.
 
-- Let the scene be the only colourful thing on screen until something happens.
-- Put the measured value next to the modelled one; let the difference be the story.
-- Write events as facts with a place and a number: "Утечка на 1 240–1 380 м".
-- Check 375 and 1440 in both themes before calling a screen done.
+Generic buttons, fields, segmented controls, tables, overlays and feedback continue to use their
+existing kit definitions. The subject catalog adds the scanner, wall section, thickness value,
+profile, source/date and priority row; it does not duplicate a generic primitive.
 
-### Don't:
+## Motion, resilience and verification
 
-- No gradients, glows, glass or gradient text; no emoji; no lucide or other stock icons.
-- No pill buttons or fields, no rounded structural panels, no decorative shadows or metal effects.
-- No amber or oxblood as decoration or hover. The one brand use is the dropped second stroke of
-  the mark (`--brand-accent`), which itself means a leak.
-- No caps-lock labels, no fake 01/02/03 numbering, no coloured side stripe.
-- No em dash, middle dot or pipe as a separator; no "Упс", no exclamation marks.
-- No colour as the only signal; no text below 4.5:1 in either theme.
+Two tempos: the scene is viscous (unroll 1250 ms, cut 1000 ms, segment change in section 800 ms),
+the interface answers in 80–320 ms. Reduced motion makes camera changes instant and shows the sheet
+flat. Numbers never tween. Pointer selection follows the input; keyboard selection is immediate. Camera
+motion uses the existing rig and honors reduced motion, without automatic drift. Rendering is
+requested only when needed and pauses in a hidden document. Frame cost can lower pixel density.
 
-## 8. Two personalities
+The 2D fallback and coordinate controls work if WebGL or the renderer module is unavailable. The
+catalog includes ready, missing, loading, empty, error and no-3D examples. A loading specimen is a
+labelled catalog state, not a fabricated network request.
 
-Rule of two layers: a signature detail is drawn as an ink layer and a fill layer. Light switches the
-ink on (hatch, contour, marks, trace, paper grid), dark switches the fill and the sheen on. A layer
-that is off resolves to `transparent`, so a component draws both and never branches on the theme.
-Focus stays one ring, `--focus-ring`, in both themes.
-
-| Detail | Tokens | Where | Never |
-| --- | --- | --- | --- |
-| Ink weights | `--ink-weight-contour`, `--ink-weight-line`, `--ink-weight-fine`; `--drawing-frame`, `--drawing-contour`, `--drawing-line`, `--drawing-fine` | schemes, title block, leaders, dimension lines | body text, buttons |
-| Hatching | `--hatch-neutral`, `--hatch-warning`, `--hatch-danger` over `--fill-warning`, `--fill-danger`; `--hatch-angle`, `--hatch-spacing`, `--hatch-width` | gap above threshold, leak interval, no-data zone | panel background, text |
-| Centre line | `--centerline-dash` | pipe axis, zero of the residual | section divider |
-| Dimension line, tick | `--dimension-tick`, `--drawing-line` | section length, location error, sensor spacing, list markers | instead of a chart axis |
-| Leader callout | `--leader-shelf`, `--drawing-line` | a reading at a place on the pipe or chart, at most three per view | legends |
-| Millimetre paper | `--paper-grid`, `--paper-grid-major`, `--paper-cell`, `--paper-cell-major` | plot area, scene, scheme | behind text, panels, dialogs |
-| Title block | `--drawing-frame` | screen header with real data: section, scale, parameter revision, last run | cards |
-| Selection marks | `--selection-mark`, `--mark-corner` | selected row, sensor, section | focus |
-| Hover trace | `--trace`, `--dur-panel` | clickable panels and scheme rows | buttons |
-| Sheen | `--sheen`, `--shadow-sheen`, inside `--shadow-float` | a restrained top edge on floating layers | panels, controls, metal imitation |
-
-Hatching in HTML is a pseudo-element filled with the hatch colour and masked with
-`repeating-linear-gradient` (gradients are allowed only in `mask-image`); in SVG it is a `<pattern>`
-with a unique id per chart, because a pattern takes custom properties from where it is defined.
-
-## 9. Layout, density, data
-
-- **Shell:** sticky header `--header-height` (`--header-height-compact` below 48rem), alarm banner
-  under it pushing content down, scene `minmax(0, 1fr)` beside the panel `--panel-width`
-  (`--panel-width-wide` from 120rem, `--panel-min` to `--panel-max`). Below 64rem the panel becomes a
-  bottom sheet with `--sheet-peek`. The scene screen does not scroll; regions do. Columns
-  `--columns-sm`, `--columns-md`, `--columns-lg` (4, 8, 12) with `--grid-gap`.
-- **Density:** comfortable by default (`--row-height`, `--control-height`, `--cell-padding`);
-  compact (`--row-height-compact`, `--control-height-compact`, `--cell-padding-compact`) only in
-  tables with a fine pointer from 64rem, through a `density` prop.
-- **Numbers:** pressure and residual in МПа with 2 decimals, residual always signed (`U+2212`), flow
-  in м³/ч with 0 decimals from 100, temperature °C with 1, location in м rounded to 10, detection
-  time in с with 1. Uncertainty as `6 840 ± 20 м` or "ошибка 20 м"; never more precise than the error.
-- **Charts:** measured `--chart-measured` solid `--chart-stroke`, model `--chart-model` dashed
-  `--chart-dash-model` at `--chart-stroke-model`, tolerance band `--chart-band`, grid `--chart-grid`,
-  axes `--chart-axis`, crosshair `--chart-crosshair`; amber and oxblood (`--chart-warning`,
-  `--chart-danger`) only on the segment, point or area of an event. One y-axis, direct labels, no
-  animation per tick. Sizes `--chart-height`, `--chart-height-sm`, `--sparkline-width`,
-  `--sparkline-height`, `--chart-marker`, `--chart-hit`.
-- **Real time:** live, delayed (2 ticks to 10 s), stale (over 10 s, `--opacity-stale`), offline
-  (30 s or browser offline, page banner), paused, replay. Readout text at most 4 Hz, charts 10 Hz.
-- **Alerts:** calm, watch, leak confirmed (banner `role="alert"`, tab title, favicon dot, optional
-  sound), accepted, resolved, false alarm. A leak is never a toast.
-
-The Segmented selection uses a background on the selected option itself. A separate moving sibling
-can cross underneath an unselected label and break its contrast; selection feedback is immediate.
+The pipe screen draws route, unroll and section as SVG without WebGL, after context loss or when
+the renderer module does not load within six seconds. Review widths 375, 768, 1280 and 1440 in both themes, focus and keyboard order, long labels, missing data,
+WebGL context loss and reduced motion. React checks do not cover the HTML example; its browser tests
+and screenshots are recorded separately in `work/audits/scanner/`.

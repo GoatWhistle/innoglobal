@@ -1,0 +1,45 @@
+.cut-drawing { display: block; inline-size: 100%; max-inline-size: 30rem; margin-inline: auto; overflow: visible; }
+.cut-hatch { opacity: 0; }
+.cut-oil { fill: var(--cut-oil); }
+.metal-a { stop-color: var(--metal-light); }
+.metal-b { stop-color: var(--metal-mid); }
+.metal-c { stop-color: var(--metal-dark); }
+.draw-hatch { stroke: var(--drawing-line); stroke-width: 0.8; }
+.draw-contour { fill: none; stroke: var(--drawing-contour); stroke-width: var(--ink-weight-contour); }
+.draw-nominal { fill: none; stroke: var(--drawing-line); stroke-width: var(--ink-weight-fine); stroke-dasharray: 3 4; }
+.draw-axis { fill: none; stroke: var(--drawing-line); stroke-width: var(--ink-weight-fine); stroke-dasharray: var(--centerline-dash); }
+.draw-fine { fill: none; stroke: var(--drawing-line); stroke-width: var(--ink-weight-fine); }
+.draw-hour { fill: var(--text-secondary); font-family: var(--font-sans); font-size: 11px; font-variant-numeric: var(--font-numeric); }
+.draw-point { fill: var(--surface-base); stroke: var(--text-primary); stroke-width: 1.5; }
+:root[data-theme="light"] .cut-metal { fill: var(--surface-raised); }
+:root[data-theme="light"] .cut-hatch { opacity: 1; }
+
+.flat-sheet, .flat-route { display: block; inline-size: 100%; block-size: auto; cursor: crosshair; }
+.flat-section { display: grid; place-items: center; block-size: 100%; padding: var(--space-16); }
+.flat-section .cut-drawing { max-block-size: 100%; inline-size: auto; }
+.sheet-grid { fill: none; stroke: var(--text-primary); stroke-opacity: 0.22; stroke-width: var(--ink-weight-fine); }
+.sheet-label { fill: var(--text-secondary); font-family: var(--font-sans); font-size: 11px; font-variant-numeric: var(--font-numeric); }
+.sheet-cursor { fill: none; stroke: var(--text-primary); stroke-width: 2; }
+.sheet-point { fill: none; stroke: var(--text-primary); stroke-width: 2; }
+.route-outline { fill: none; stroke: var(--drawing-contour); stroke-width: var(--ink-weight-line); }
+
+.drawing-sheet { position: relative; display: grid; gap: var(--space-20); padding: var(--space-24); background: var(--surface-raised); border: var(--hairline) solid var(--border-subtle); }
+:root[data-theme="light"] .drawing-sheet { border: var(--ink-weight-contour) solid var(--drawing-frame); outline: var(--hairline) solid var(--drawing-frame); outline-offset: calc(var(--sheet-frame-gap) * -1 - var(--ink-weight-contour)); }
+:root[data-theme="dark"] .drawing-sheet { background: radial-gradient(120% 90% at 20% 0%, var(--surface-float), var(--surface-raised) 60%); box-shadow: inset 0 var(--hairline) 0 var(--sheen); }
+.crop { position: absolute; inline-size: 12px; block-size: 12px; border-color: var(--drawing-line); border-style: solid; border-width: 0; }
+.crop-tl { inset: -18px auto auto -18px; border-inline-end-width: 1px; border-block-end-width: 1px; }
+.crop-tr { inset: -18px -18px auto auto; border-inline-start-width: 1px; border-block-end-width: 1px; }
+.crop-bl { inset: auto auto -18px -18px; border-inline-end-width: 1px; border-block-start-width: 1px; }
+.crop-br { inset: auto -18px -18px auto; border-inline-start-width: 1px; border-block-start-width: 1px; }
+:root[data-theme="dark"] .crop { display: none; }
+.drawing-sheet-head h2 { margin: 0 0 var(--space-4); font-size: var(--font-size-body); font-weight: var(--weight-medium); font-variant-numeric: var(--font-numeric); }
+.drawing-sheet-head p { margin: 0; font-size: var(--font-size-caption); color: var(--text-secondary); font-variant-numeric: var(--font-numeric); }
+.drawing-sheet-body { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--space-24); align-items: center; }
+.monument { display: flex; align-items: baseline; gap: var(--space-8); margin: 0; font-size: clamp(4rem, 2rem + 6vw, 8rem); line-height: 0.9; font-weight: var(--weight-light); letter-spacing: var(--tracking-display); font-variant-numeric: var(--font-numeric); }
+.monument-unit { font-size: var(--font-size-subheading); letter-spacing: normal; color: var(--text-secondary); }
+.monument-caption { margin: var(--space-8) 0 var(--space-16); font-size: var(--font-size-body-sm); color: var(--text-secondary); }
+.sheet-facts { display: grid; gap: var(--space-8); margin: 0; font-size: var(--font-size-body-sm); }
+.sheet-facts > div { display: flex; justify-content: space-between; gap: var(--space-12); padding-block-end: var(--space-8); border-block-end: var(--hairline) solid var(--border-subtle); }
+.sheet-facts dt { color: var(--text-secondary); }
+.sheet-facts dd { margin: 0; font-variant-numeric: var(--font-numeric); white-space: nowrap; }
+@media (max-width: 48rem) { .drawing-sheet-body { grid-template-columns: 1fr; } .drawing-sheet { padding: var(--space-16); } .crop { display: none; } }

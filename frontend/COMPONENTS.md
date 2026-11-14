@@ -324,3 +324,40 @@ render rows from the query, sort icons `sort`, `sort-asc`, `sort-desc` inside he
 - Write text in JSX or tests; write `—`, `·`, `|` or arrows as separators or icons.
 - Show a backend `message`, a "Loading…" text, or an error without a retry.
 - Add a UI kit, animation library or icon package.
+
+## 7. Wall-scanner handoff, 2026-11-14
+
+Current product semantics are in DESIGN.md and PRODUCT.md; they supersede legacy leak examples above.
+The Russian-only user decision remains active. The earlier shared dictionaries retain EN key parity
+for infrastructure, but a second product locale is not added in this stage.
+
+| Subject component | HTML implementation | React status |
+|---|---|---|
+| Wall section and thickness | scanner/section.js | spec; use data-display with numeric inputs |
+| Linked thickness profile | scanner/plot.js | spec; gap-aware measured, forecast, optional bounds |
+| Segment selector | scanner/main.js with shared kit controls | spec; coordinate, range, previous/next |
+| Priority row | scanner/view.js and components.css | spec; native button, pressed selection |
+| Evidence and source/date | scanner/view.js | spec; nullable data stays absent |
+
+All paths above are under work/design/ds. Existing React controls inherit the same token files.
+New geometry dimensions use `--scanner-*` tokens in space.css. The HTML example has its own tests;
+React accessibility tests alone are not evidence for it. Leak alarm animation remains disabled, and
+leaks are not toasts; the old alert recipe above is historical and must not be copied into new work.
+
+## 8. Pipe-led components, 2026-11-14
+
+Catalog with states in both themes: work/design/ds/pipe-kit.html. Screen: screen-pipe.html.
+
+| Pipe component | HTML implementation | Replaces | React status |
+|---|---|---|---|
+| Stencil marking | wall/components.css `.marking`, wall/view.js | object title, breadcrumbs | spec |
+| Tag | wall/stage.js, `.tag-picket`, `.tag-selected` | tooltip, callout | spec; projected, pointer-transparent |
+| Wall scale | wall/scale.js, `--wall-*` in wall/tokens.css | chart legend | spec |
+| Segment strip | wall/strip.js | range slider, minimap | spec; role slider, arrows, Page keys |
+| Dimension line | wall/drawing.js `dimension()` | value label | spec |
+| Camera key | `.cam-key` in screen-pipe.html, wall/main.js | tabs | spec; radio group, keys 1–3 |
+| Matte panel | `.matte` | card over the scene | spec; opaque fallback |
+| Sheet stamp | wall/drawing.js `stamp()` | screen footer | spec |
+
+All paths are under work/design/ds. The renderer (wall/engine.js) is loaded separately; the store
+(wall/state.js) owns selection, mode and picked hour.

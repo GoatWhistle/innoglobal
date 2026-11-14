@@ -1,0 +1,105 @@
+[data-dir="instrument"] {
+  --bg: #0e0e0d;
+  --surface: #1a1918;
+  --text: #ecebe7;
+  --muted: #8b8882;
+  --line: #2c2b29;
+  --accent: #ffb547;
+  --accent-ink: #1c1306;
+  --danger: #ff7a66;
+  --well: #090908;
+  --key-top: #2a2927;
+  --key-bottom: #1d1c1b;
+  --key-edge: #050505;
+  --bevel: inset 0 1px 0 #ffffff12, inset 0 -1px 0 #00000080, 0 1px 2px #00000080, 0 18px 34px -18px #000000b0;
+  --recess: inset 0 2px 4px #000000b0, inset 0 -1px 0 #ffffff0d;
+  --glow: 0 0 14px color-mix(in oklab, var(--accent) 55%, transparent);
+  --font-num: "JetBrains Mono", ui-monospace, monospace;
+  --font-label: "JetBrains Mono", ui-monospace, monospace;
+  --radius: 22px;
+  --radius-sm: 12px;
+}
+[data-dir="instrument"][data-theme="light"] {
+  --bg: #d6d5d1;
+  --surface: #e8e7e3;
+  --text: #171615;
+  --muted: #66635e;
+  --line: #c3c1bc;
+  --accent: #e57c00;
+  --accent-ink: #1c1306;
+  --danger: #c4291c;
+  --well: #cfceca;
+  --key-top: #f6f5f2;
+  --key-bottom: #e2e1dd;
+  --key-edge: #a9a7a2;
+  --bevel: inset 0 1px 0 #ffffff, inset 0 -1px 0 #00000014, 0 1px 2px #0000001f, 0 18px 30px -18px #00000040;
+  --recess: inset 0 2px 4px #00000026, inset 0 -1px 0 #ffffffb0;
+  --glow: 0 0 10px color-mix(in oklab, var(--accent) 40%, transparent);
+}
+[data-dir="instrument"] .card { border: 0; box-shadow: var(--bevel); }
+[data-dir="instrument"] .card::before,
+[data-dir="instrument"] .card::after { content: ""; position: absolute; top: 12px; width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(135deg, transparent 42%, var(--well) 42% 58%, transparent 58%), var(--line); box-shadow: inset 0 1px 1px #00000060; }
+[data-dir="instrument"] .card::before { left: 12px; }
+[data-dir="instrument"] .card::after { right: 12px; }
+[data-dir="instrument"] .card-head { padding: 0 14px; }
+[data-dir="instrument"] .label,
+[data-dir="instrument"] .eyebrow,
+[data-dir="instrument"] .field-label,
+[data-dir="instrument"] dt,
+[data-dir="instrument"] .legend,
+[data-dir="instrument"] .count { text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; }
+[data-dir="instrument"] .label::before { content: ""; align-self: center; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: var(--glow); }
+[data-dir="instrument"] .badge { font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px; border-radius: 4px; background: var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] .badge::before { content: "● "; animation: led 1.6s steps(2) infinite; }
+@keyframes led { 50% { opacity: 0.25; } }
+[data-dir="instrument"] h1 { font-weight: 600; letter-spacing: -0.045em; }
+[data-dir="instrument"] mark { text-shadow: var(--glow); }
+
+[data-dir="instrument"] .ro-body { padding: 18px; border-radius: 16px; background: radial-gradient(circle, color-mix(in oklab, var(--text) 9%, transparent) 0.8px, transparent 1.1px) 0 0 / 7px 7px, var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] .ring-track,
+[data-dir="instrument"] .ring-wall { display: none; }
+[data-dir="instrument"] .ring-ticks { stroke: var(--line); stroke-width: 3.4; opacity: 1; }
+[data-dir="instrument"] .ring-ticks .on { stroke: var(--accent); filter: drop-shadow(0 0 2px var(--accent)); }
+[data-dir="instrument"] .num { font-family: "Doto", var(--font-num); font-weight: 800; font-size: 50px; letter-spacing: -0.02em; color: var(--accent); text-shadow: var(--glow); }
+[data-dir="instrument"] .unit { font-family: var(--font-label); text-transform: uppercase; font-size: 11px; }
+[data-dir="instrument"] .facts { padding: 14px; border-radius: 14px; background: var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] dd { font-size: 14px; }
+
+[data-dir="instrument"] .seg { padding: 4px; border-radius: 14px; background: var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] .seg button { border-radius: 10px; font-family: var(--font-label); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+[data-dir="instrument"] .seg [aria-checked="true"] { background: linear-gradient(var(--key-top), var(--key-bottom)); box-shadow: 0 2px 0 var(--key-edge), inset 0 1px 0 #ffffff14; }
+[data-dir="instrument"] .field-box { border: 0; border-radius: 12px; background: var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] .field-box:focus-within { box-shadow: var(--recess), 0 0 0 2px var(--accent); }
+[data-dir="instrument"] .field-box input { color: var(--accent); font-size: 22px; letter-spacing: 0.04em; text-shadow: var(--glow); padding: 12px 14px; }
+[data-dir="instrument"] .range input { height: 32px; }
+[data-dir="instrument"] .range input::-webkit-slider-runnable-track { height: 8px; border-radius: 4px; background: var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] .range input::-webkit-slider-thumb { width: 18px; height: 30px; margin-top: -11px; border-radius: 5px; background: repeating-linear-gradient(0deg, transparent 0 3px, #00000030 3px 4px) 0 8px / 100% 14px no-repeat, linear-gradient(var(--key-top), var(--key-bottom)); box-shadow: 0 2px 0 var(--key-edge), 0 6px 10px -4px #00000080; }
+[data-dir="instrument"] .range input::-moz-range-track { height: 8px; border-radius: 4px; background: var(--well); }
+[data-dir="instrument"] .range input::-moz-range-thumb { width: 18px; height: 30px; border-radius: 5px; background: linear-gradient(var(--key-top), var(--key-bottom)); }
+[data-dir="instrument"] .range-scale { font-size: 10px; }
+[data-dir="instrument"] .switch-track { width: 44px; height: 24px; background: var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] .switch-track::after { top: 3px; left: 3px; width: 18px; height: 18px; background: linear-gradient(var(--key-top), var(--key-bottom)); box-shadow: 0 2px 0 var(--key-edge); }
+[data-dir="instrument"] .switch input:checked + .switch-track { background: var(--well); }
+[data-dir="instrument"] .switch input:checked + .switch-track::after { translate: 20px 0; background: radial-gradient(circle, var(--accent) 3px, transparent 3.5px), linear-gradient(var(--key-top), var(--key-bottom)); }
+
+[data-dir="instrument"] .btn { padding: 13px 16px; border: 0; border-radius: 12px; background: linear-gradient(var(--key-top), var(--key-bottom)); box-shadow: 0 3px 0 var(--key-edge), inset 0 1px 0 #ffffff14, 0 8px 14px -8px #00000080; font-family: var(--font-label); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+[data-dir="instrument"] .btn:active { translate: 0 3px; box-shadow: 0 0 0 var(--key-edge), inset 0 1px 0 #ffffff14; }
+[data-dir="instrument"] .btn.primary { background: linear-gradient(color-mix(in oklab, var(--accent) 100%, #fff 12%), var(--accent)); color: var(--accent-ink); box-shadow: 0 3px 0 color-mix(in oklab, var(--accent) 50%, #000), inset 0 1px 0 #ffffff60, 0 8px 18px -8px var(--accent); }
+[data-dir="instrument"] .btn.primary:active { box-shadow: 0 0 0 transparent, inset 0 1px 0 #ffffff60; }
+
+[data-dir="instrument"] .profile .chart { padding: 12px; border-radius: 14px; background: radial-gradient(circle, color-mix(in oklab, var(--text) 8%, transparent) 0.8px, transparent 1.1px) 0 0 / 10px 10px, var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] .c-grid { stroke-dasharray: 1 5; }
+[data-dir="instrument"] .c-fc { stroke-dasharray: none; stroke-width: 2; filter: drop-shadow(0 0 4px var(--accent)); }
+[data-dir="instrument"] .c-band { fill: color-mix(in oklab, var(--accent) 12%, transparent); }
+[data-dir="instrument"] .strip { gap: 2px; height: 34px; padding: 5px; border-radius: 10px; background: var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] .strip i { border-radius: 1px; }
+[data-dir="instrument"] .strip .hot { box-shadow: 0 0 6px var(--accent); }
+[data-dir="instrument"] .strip .pick { outline-color: var(--accent); }
+[data-dir="instrument"] .axis { font-size: 10px; text-transform: uppercase; }
+
+[data-dir="instrument"] .rows li { font-size: 13px; }
+[data-dir="instrument"] .rows li[aria-current] { background: var(--well); box-shadow: var(--recess); }
+[data-dir="instrument"] .r-bar { height: 8px; border-radius: 2px; background: repeating-linear-gradient(90deg, transparent 0 3px, var(--surface) 3px 4px), linear-gradient(90deg, var(--accent) var(--w), var(--line) var(--w)); }
+[data-dir="instrument"] .note { background: var(--well); box-shadow: var(--recess); border-radius: 12px; font-size: 13px; }
+[data-dir="instrument"] .note .dot { box-shadow: 0 0 8px var(--c); }
+[data-dir="instrument"] .theme { font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.06em; font-size: 11px; border: 0; background: linear-gradient(var(--key-top), var(--key-bottom)); box-shadow: 0 2px 0 var(--key-edge); }
