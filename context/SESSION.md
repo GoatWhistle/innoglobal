@@ -57,3 +57,14 @@ work/audits/pipe-style/README.md. Limits: synthetic data only, no model or API.
 Preview http://127.0.0.1:5178/work/design/ds/index.html (server on 5178). Branch feat/redesign-oil.
 Open: plan stages 3.3–3.4 (personalities ↔ scales, chart grammar on thickness), stage 4 transfer
 to frontend, the 16 old axe findings.
+
+## Latest integration
+
+2026-11-14 user: «спулллься полностью , подтяни в мою ветку другую ветку (ml-pipetwin-merge-case-2) и как бы я хочу чтобы у меня появились данные».
+Fetched all remotes; current branch was already up to date. Merged unrelated history
+origin/ml-pipetwin-merge-case-2 (f3d7a42) into feat/redesign-oil; merge SHA 251a5ab.
+Resolved only .gitattributes, .gitignore and README conflicts; ML README preserved as README-ML.md.
+Added six source CSVs, processed datasets, 29,896,704-byte DuckDB, models, reports and result.csv.
+Verified CSV readability, 2000 prediction rows, valid chart JSON and git diff --check.
+No training, database queries or application tests run. UI still uses synthetic catalog data.
+Next: connect ML data to API/UI if requested; incoming README metrics may be stale.
