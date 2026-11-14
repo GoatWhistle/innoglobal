@@ -19,15 +19,15 @@ from .train import aligned_stats_score, blend_prob, blend_stats, predict_bag
 # форму: на валидации ens_blend 0.501 без сглаживания против 0.287 со сглаживанием. Без
 # выравнивания (PIPETWIN_ALIGN=off/line) сглаживание по-прежнему полезно.
 #
-# Кейс 1 по умолчанию — ens_blend+stats: равный бленд ens_blend и aligned_stats (устойчивые
-# статистики выровненного прошлого пропуска, train.aligned_stats_score). Валидация 2022 -> 2023,
-# 55 сегментов: при измеренном сдвиге (PIPETWIN_ALIGN_ORACLE=1 — так у 22871, сдвиг известен на обоих
-# концах трубы) 0.646 против 0.543 у ens_blend; при сдвиге только от соседа 0.456 против 0.500.
-# aligned_stats один даёт 0.676 / 0.339 — выше при точном сдвиге, но хрупок к ошибке сдвига.
-# PIPETWIN_CASE1=ens_blend | aligned_stats | ens_blend+stats
+# Кейс 1 по умолчанию — aligned_stats: устойчивые статистики выровненного прошлого пропуска без
+# обучения (train.aligned_stats_score). Валидация 2022 -> 2023, 55 сегментов, при измеренном сдвиге
+# (PIPETWIN_ALIGN_ORACLE=1 — так у 22871, сдвиг известен на обоих концах трубы): 0.701 против 0.546
+# у ens_blend и 0.661 у бленда ens_blend+stats. При сдвиге только от соседа 0.273 / 0.558 / 0.462:
+# aligned_stats хрупок к ошибке сдвига, бленд устойчивее (notes/case1_stats_rationale.md).
+# PIPETWIN_CASE1=aligned_stats | ens_blend+stats | ens_blend
 import os as _os
 from . import align as _align
-_CASE1 = _os.environ.get("PIPETWIN_CASE1", "ens_blend+stats")
+_CASE1 = _os.environ.get("PIPETWIN_CASE1", "aligned_stats")
 PREDICTOR = {"case1": (_CASE1, None if _align.MODE == "profile" else 5),
              "case2": ("ensemble", None)}
 
