@@ -14,8 +14,8 @@ import numpy as np
 import pandas as pd
 import xgboost
 from catboost import CatBoostClassifier, CatBoostRegressor
-from lightgbm import LGBMRegressor
-from xgboost import XGBRegressor
+from lightgbm import LGBMClassifier, LGBMRegressor
+from xgboost import XGBClassifier, XGBRegressor
 
 from . import config as C
 from . import features as F
@@ -63,10 +63,24 @@ PARAM_GRID = tuple(
 # сид проседает 0.313 -> 0.301. gap_w=0.5 полезен при больших blend_w
 # (0.501 -> 0.512 на 3 сидах), при blend_w=1.0 вредил. Возврат CatBoost в
 # базу не подтверждён (4/8 сидов) — lab16 в силе.
+#
+# Серия 21 (lab21, на выровненных данных): кейс 1 r² 0.512 -> 0.618 на 8/8 сидах,
+# худший сид 0.313 -> 0.614 (сидовая хрупкость ушла):
+# - классификатор — ансамбль CatBoost+LGBM+XGB усреднением вероятностей (+0.059);
+# - AFT normal sigma 3.0 (мягче цензура; +0.024, в связке с быстрой базой лучше
+#   logistic 2.0);
+# - база и q05-пара — 300 деревьев / lr 0.1 (быстрый темп в связке даёт +0.007;
+#   без компенсации темпом 300 деревьев теряют 0.12).
+# Кейс 2 не трогать: 300 деревьев теряют 0.01 при любом lr, классификатор слеп.
+# Веса bw=2.0/gw=0.5 перепроверены свипом на новом конфиге: лучшее соседнее
+# 2.5/0.75 даёт +0.002 — в пределах отбора, оставлены.
 CASES = {
     "case1": dict(val_split="val_case1", train_kinds=("vtd2vtd", "comm2vtd"),
                   target="abs", families=("lgbm", "xgb"),
-                  aft=dict(dist="normal", sigma=2.0), blend_w=2.0, gap_w=0.5),
+                  params={f: dict(n_estimators=300, learning_rate=0.1)
+                          for f in ("lgbm", "xgb")},
+                  aft=dict(dist="normal", sigma=3.0, lr=0.1, rounds=300),
+                  blend_w=2.0, gap_w=0.5),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID),
@@ -94,14 +108,15 @@ def survival_labels(ds: pd.DataFrame) -> pd.DataFrame:
 
 
 def fit_aft(X: pd.DataFrame, lb: np.ndarray, ub: np.ndarray,
-            dist: str, sigma: float) -> xgboost.Booster:
+            dist: str, sigma: float, lr: float = 0.05,
+            rounds: int = 600) -> xgboost.Booster:
     dtr = xgboost.DMatrix(X)
     dtr.set_float_info("label_lower_bound", lb)
     dtr.set_float_info("label_upper_bound", ub)
     params = dict(objective="survival:aft", aft_loss_distribution=dist,
                   aft_loss_distribution_scale=sigma, tree_method="hist",
-                  learning_rate=0.05, max_depth=6, seed=C.SEED)
-    return xgboost.train(params, dtr, num_boost_round=600)
+                  learning_rate=lr, max_depth=6, seed=C.SEED)
+    return xgboost.train(params, dtr, num_boost_round=rounds)
 
 
 def fit_bag(X: pd.DataFrame, y: pd.Series, lb: np.ndarray, ub: np.ndarray,
@@ -134,7 +149,9 @@ def fit_bag(X: pd.DataFrame, y: pd.Series, lb: np.ndarray, ub: np.ndarray,
             if aft_cfg:
                 if "aft" not in shared:
                     shared["aft"] = fit_aft(X, lb, ub, dist=aft_cfg["dist"],
-                                            sigma=aft_cfg["sigma"])
+                                            sigma=aft_cfg["sigma"],
+                                            lr=aft_cfg.get("lr", 0.05),
+                                            rounds=aft_cfg.get("rounds", 600))
                 members["aft"] = shared["aft"]
             bag.append(members)
     finally:
@@ -187,17 +204,42 @@ def blend_prob(ens: np.ndarray, p: np.ndarray, w: float,
     return zscore(b) * float(np.std(ens)) + float(np.mean(ens))
 
 
-def fit_q05_pair(X: pd.DataFrame, y: pd.Series) -> list:
+def fit_q05_pair(X: pd.DataFrame, y: pd.Series, params: dict | None = None) -> list:
     """Пара LGBM+XGB на alpha=0.05 — спред до q05 для gap-члена бленда."""
-    return [make_model(f, alpha=0.05).fit(X, y) for f in ("lgbm", "xgb")]
+    params = params or {}
+    return [make_model(f, dict(params.get(f, {})), alpha=0.05).fit(X, y)
+            for f in ("lgbm", "xgb")]
 
 
-def fit_clf(X: pd.DataFrame, had_defect: pd.Series) -> CatBoostClassifier:
+class AvgClf:
+    """Ансамбль классификаторов дефекта: усреднение вероятностей CatBoost+LGBM+XGB.
+
+    Одиночный CatBoost хрупок к сиду (на сиде 1 бленд падал до 0.31); усреднение
+    трёх семейств гасит дисперсию формы и добавляет +0.059 к r² бленда (lab21).
+    """
+
+    def __init__(self, models: list):
+        self.models = models
+
+    def predict_proba(self, X) -> np.ndarray:
+        p = np.mean([m.predict_proba(X)[:, 1] for m in self.models], axis=0)
+        return np.column_stack([1.0 - p, p])
+
+
+def fit_clf(X: pd.DataFrame, had_defect: pd.Series) -> AvgClf:
     """Классификатор «в сегменте будет дефект» — источник формы для бленда."""
-    clf = CatBoostClassifier(iterations=600, learning_rate=0.05, depth=6,
-                             random_seed=C.SEED, verbose=0)
-    clf.fit(X, had_defect.astype(int))
-    return clf
+    y = had_defect.astype(int)
+    models = [
+        CatBoostClassifier(iterations=600, learning_rate=0.05, depth=6,
+                           random_seed=C.SEED, verbose=0),
+        LGBMClassifier(n_estimators=600, learning_rate=0.05, num_leaves=31,
+                       random_state=C.SEED, verbosity=-1),
+        XGBClassifier(n_estimators=600, learning_rate=0.05, max_depth=6,
+                      random_state=C.SEED, verbosity=0),
+    ]
+    for m in models:
+        m.fit(X, y)
+    return AvgClf(models)
 
 
 def make_model(family: str, params: dict | None = None, alpha: float = 0.5):
@@ -299,7 +341,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                 mae=round(float(np.mean(np.abs(y_va - p.values))), 3)))
 
         best_params = {fam: (tune(fam, X_tr, y_tr, groups, tune_trials)
-                             if tune_trials else {}) for fam in MODEL_FAMILIES}
+                             if tune_trials else dict(cfg.get("params", {}).get(fam, {})))
+                       for fam in MODEL_FAMILIES}
         grid = (cfg.get("param_grid") if not tune_trials else None) or (best_params,)
         val_bag = [m for p in grid for m in fit_bag(
             X_tr, y_tr, tr["aft_lb"].values, tr["aft_ub"].values, p, cfg["aft"],
@@ -308,7 +351,7 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         if cfg.get("blend_w"):
             p_va = fit_clf(X_tr, tr["had_defect"]).predict_proba(va[feats])[:, 1]
             q05_va = np.mean([m.predict(va[feats])
-                              for m in fit_q05_pair(X_tr, y_tr)], axis=0)
+                              for m in fit_q05_pair(X_tr, y_tr, cfg.get("params"))], axis=0)
             val_preds["ens_blend"] = blend_prob(
                 val_preds["ensemble"], p_va, cfg["blend_w"],
                 gap=val_preds["ensemble"] - q05_va, gap_w=cfg.get("gap_w", 0.0))
@@ -336,7 +379,7 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         final["bag"] = bag
         if cfg.get("blend_w"):
             final["clf"] = fit_clf(X_all, subset["had_defect"])
-            final["q05_pair"] = fit_q05_pair(X_all, y_all)
+            final["q05_pair"] = fit_q05_pair(X_all, y_all, cfg.get("params"))
         for alpha, tag in ((0.05, "p05"), (0.1, "p10"), (0.9, "p90"), (0.95, "p95")):
             m = make_model("catboost", dict(best_params["catboost"]), alpha=alpha)
             m.fit(X_all, y_all)
