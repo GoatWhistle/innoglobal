@@ -142,20 +142,34 @@ def uzt_features(uzt: pd.DataFrame, passport: pd.DataFrame, pipe_id: int,
 
 
 # -------------------------------------------------------------- гравиметрия
-def gravimetry_by_direction() -> pd.DataFrame:
-    """Образцы-свидетели по направлениям. Имя направления нормализовано в хранилище
-    к паспортному ('Куст-1 -> т.вр. ДНС-1' -> 'Куст-1 - ДНС-1'); раньше join
-    не совпадал ни разу, и все трубы получали глобальное среднее."""
+def gravimetry_by_pipe() -> pd.DataFrame:
+    """Образцы-свидетели, привязанные к участкам (core.corrosion_coupon.link_*).
+
+    Привязка по топологии сети сделана в хранилище (warehouse/README.md). Для трубы
+    берутся образцы своего участка (linked_pipe_id), если их нет — образцы её
+    направления (linked_direction). Слабые связи (только зона защиты ингибитором)
+    и водоводы КНС не берутся. Трубы без образцов получают NaN — среднее подставит
+    build_rows."""
     return W.query("""
-        select pipe_direction as direction,
+        with c as (
+            select * from core.corrosion_coupon
+            where link_level not in ('protection_zone', 'water_line', 'unlinked')
+        ),
+        own as (
+            select p.pipe_id, c.* from core.pipe p join c on c.linked_pipe_id = p.pipe_id
+        ),
+        dir as (
+            select p.pipe_id, c.* from core.pipe p join c on c.linked_direction = p.direction
+            where p.pipe_id not in (select pipe_id from own)
+        ),
+        x as (select * from own union all by name select * from dir)
+        select pipe_id as id,
                avg(rate_avg_mm_y)          as grav_rate_mean,
                max(rate_max_mm_y)          as grav_rate_max,
                -- Cl- рушит плёнку FeCO3: corr с rate +0.30 (experiments/lab5)
                median(cl_mg_l)             as grav_cl,
                median(mineralization_mg_l) as grav_mineralization
-        from core.corrosion_coupon
-        where pipe_direction is not null
-        group by 1 order by 1""")
+        from x group by 1 order by 1""")
 
 
 # ------------------------------------------------------- прошлое ВТД / старт
@@ -276,8 +290,7 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
         df["wt_nom"] = pas.loc[pipe_id, "wt_nom"]
         df["d_mm"] = pas.loc[pipe_id, "d_mm"]
         df["coated"] = int(pas.loc[pipe_id, "coated"])
-        direction = pas.loc[pipe_id, "direction"]
-        gr = grav[grav["direction"] == direction]
+        gr = grav[grav["id"] == pipe_id]
         for col in ("grav_rate_mean", "grav_rate_max", "grav_cl", "grav_mineralization"):
             df[col] = gr[col].iloc[0] if len(gr) else grav[col].mean()
 
@@ -327,7 +340,7 @@ def build_all(extended: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
     runs = prepare.build_runs(vtd)
     regime = load_regime()
     geom = geometry_features(altitudes, nseg)
-    grav = gravimetry_by_direction()
+    grav = gravimetry_by_pipe()
 
     ctx = dict(vtd=vtd, runs=runs, nseg=nseg, passport=passport,
                altitudes=altitudes, regime=regime, geom=geom, grav=grav,
