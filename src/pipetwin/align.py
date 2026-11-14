@@ -62,6 +62,7 @@ def _best_shift(a: np.ndarray, b: np.ndarray, lo: int = -MAX_SHIFT, hi: int = MA
 MATCH_DX, MATCH_DA = 0.15, 12.0   # м и градусы: допуск «тот же дефект» в двух пропусках
 MATCH_STEP = 0.05                  # м, шаг поиска сдвига в окне
 MATCH_MIN, MATCH_PEAK = 8, 2.0     # мин. число совпадений и во сколько раз пик выше медианы сетки
+MATCH_WIN = 60.0                   # м, окно: локализует скачки одометра (1250011604: +7.5 -> +12.7 м около 340 м)
 
 
 def _xa(d: pd.DataFrame) -> np.ndarray:
@@ -112,9 +113,9 @@ def window_shifts_match(vtd: pd.DataFrame, pipe_id: int, run_a, run_b) -> list[t
     if k0 is None:
         return []
     length = float(max(A[-1, 0], B[-1, 0]))
-    win = min(250.0, length + 1)
+    win = min(MATCH_WIN, length + 1)
     pts = []
-    for w0 in np.arange(0, max(length - win, 0) + 1, win / 2):
+    for w0 in np.arange(0, max(length - win / 2, 0) + 1, win / 2):
         m = (A[:, 0] >= w0) & (A[:, 0] < w0 + win)
         k = _match_shift(A[m], B, k0 - LOCAL, k0 + LOCAL)
         if k is not None:
@@ -165,6 +166,20 @@ def _fit(x: np.ndarray, y: np.ndarray):
     return lambda d: k * np.asarray(d, dtype=float) + b
 
 
+def _interp(x: np.ndarray, y: np.ndarray):
+    """Кусочно-линейный сдвиг по окнам (метод match): сохраняет скачки одометра, которые прямая
+    размазывает; за крайними окнами — постоянное значение."""
+    if len(x) == 0:
+        return lambda d: np.zeros_like(np.asarray(d, dtype=float))
+    o = np.argsort(x)
+    x, y = np.asarray(x, dtype=float)[o], np.asarray(y, dtype=float)[o]
+    return lambda d: np.interp(np.asarray(d, dtype=float), x, y)
+
+
+def _shift_fn(x, y, method):
+    return _interp(x, y) if (method or SHIFT_METHOD) == "match" else _fit(x, y)
+
+
 def raw_offsets() -> pd.Series:
     """Начало трубы в координате нитки: Distance_raw − Distance (одно на трубу)."""
     if "raw" not in _cache:
@@ -176,7 +191,7 @@ def raw_offsets() -> pd.Series:
 
 def own_shift(vtd, pipe_id, run_a, run_b, method=None):
     pts = window_shifts(vtd, pipe_id, run_a, run_b, method)
-    return _fit(np.array([p[0] for p in pts]), np.array([p[1] for p in pts]))
+    return _shift_fn(np.array([p[0] for p in pts]), np.array([p[1] for p in pts]), method)
 
 
 def line_shift(vtd, passport, pipe_id, run_a, run_b, method=None):
@@ -191,7 +206,7 @@ def line_shift(vtd, passport, pipe_id, run_a, run_b, method=None):
         for x, s in window_shifts(vtd, nb, run_a, run_b, method):
             xs.append(x + off[nb])
             ys.append(s)
-    f = _fit(np.array(xs), np.array(ys))
+    f = _shift_fn(np.array(xs), np.array(ys), method)
     o = off.get(pipe_id, 0.0)
     return lambda d: f(np.asarray(d, dtype=float) + o)
 
