@@ -2,3 +2,5 @@ __pycache__/
 *.py[cod]
 catboost_info/
 .venv/
+logs/
+data/processed/lab/
