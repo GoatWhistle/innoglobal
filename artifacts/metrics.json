@@ -424,21 +424,21 @@
       "case": "case2",
       "model": "ens_prior",
       "n": 525,
-      "pearson_r2": 0.1946,
-      "r2d": 0.094,
-      "mae": 0.856,
-      "rmse": 1.056,
-      "mape": 11.94
+      "pearson_r2": 0.2003,
+      "r2d": 0.0975,
+      "mae": 0.853,
+      "rmse": 1.054,
+      "mape": 11.89
     },
     {
       "case": "case2",
       "model": "ens_prior_cal",
       "n": 525,
-      "pearson_r2": 0.1946,
-      "r2d": 0.094,
-      "mae": 0.815,
-      "rmse": 0.997,
-      "mape": 12.11
+      "pearson_r2": 0.2003,
+      "r2d": 0.0975,
+      "mae": 0.789,
+      "rmse": 0.95,
+      "mape": 11.58
     },
     {
       "case": "case2",
@@ -464,9 +464,9 @@
       "case": "case2_strict",
       "model": "ens_prior",
       "n": 525,
-      "pearson_r2": 0.048,
+      "pearson_r2": 0.0489,
       "r2d": NaN,
-      "mae": 0.94,
+      "mae": 0.939,
       "rmse": NaN,
       "mape": NaN
     },
@@ -474,9 +474,9 @@
       "case": "case2_strict",
       "model": "ens_prior_cal",
       "n": 525,
-      "pearson_r2": 0.048,
+      "pearson_r2": 0.0489,
       "r2d": NaN,
-      "mae": 0.866,
+      "mae": 0.856,
       "rmse": NaN,
       "mape": NaN
     }

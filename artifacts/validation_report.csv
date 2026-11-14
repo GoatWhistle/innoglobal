@@ -41,9 +41,9 @@ case2,b1_nominal_minus_rate,525,0.0,0.0,1.028,1.171,16.64
 case2,b2_prev_smoothed,525,0.0,0.0,1.18,1.554,20.01
 case2,lgbm,525,0.1902,0.0997,0.854,1.058,11.89
 case2,ensemble,525,0.1902,0.0997,0.854,1.058,11.89
-case2,ens_prior,525,0.1946,0.094,0.856,1.056,11.94
-case2,ens_prior_cal,525,0.1946,0.094,0.815,0.997,12.11
+case2,ens_prior,525,0.2003,0.0975,0.853,1.054,11.89
+case2,ens_prior_cal,525,0.2003,0.0975,0.789,0.95,11.58
 case2,ensemble_smooth5,525,0.1625,0.0937,0.863,1.067,12.03
 case2_strict,ensemble,525,0.0296,,0.945,,
-case2_strict,ens_prior,525,0.048,,0.94,,
-case2_strict,ens_prior_cal,525,0.048,,0.866,,
+case2_strict,ens_prior,525,0.0489,,0.939,,
+case2_strict,ens_prior_cal,525,0.0489,,0.856,,
