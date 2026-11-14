@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Знаки и названия</title>
+<link rel="stylesheet" href="../../frontend/node_modules/@fontsource-variable/onest/index.css">
+<style>
+:root { --page: #e7e6e3; --card: #f6f5f3; --text: #151514; --muted: #6d6b66; --line: #d3d1cc; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --page: #0b0a09; --card: #151413; --text: #e7e6e3; --muted: #8f8c86; --line: #2a2826; color-scheme: dark; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--text); font: 15px/1.45 "Onest Variable", system-ui, sans-serif; }
+header.top { display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; padding: 32px 32px 8px; }
+h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.02em; }
+.lead { margin: 4px 0 0; color: var(--muted); max-width: 70ch; }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; }
+.tools button, .tools select { font: inherit; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+.tools button[aria-pressed="true"] { background: var(--text); color: var(--page); }
+main { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 560px), 1fr)); gap: 16px; padding: 16px 32px 32px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.card[hidden] { display: none; }
+.head { display: flex; align-items: baseline; gap: 10px; padding: 14px 16px 10px; }
+.num { font-weight: 600; font-variant-numeric: tabular-nums; min-width: 2.2em; }
+.name { font-weight: 600; }
+.arch { color: var(--muted); font-size: 13px; }
+.fav { margin-left: auto; border: 1px solid var(--line); background: none; color: var(--text); border-radius: 6px; padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+.fav[aria-pressed="true"] { background: #6b4219; border-color: #6b4219; color: #f7efe4; }
+.idea { margin: 0; padding: 0 16px 12px; color: var(--muted); font-size: 13px; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; }
+.tile { display: grid; place-items: center; min-height: 150px; padding: 20px; color: var(--ink); }
+.t-light { background: #f0efed; --ink: #151514; --acc: #8a5420; }
+.t-dark { background: #0f0e0d; --ink: #e7e6e3; --acc: #d4934a; }
+.t-accent { background: #6b4219; --ink: #f7efe4; --acc: #f7efe4; }
+.t-mono { background: #ffffff; --ink: #000000; --acc: #000000; }
+.t-inv { background: #000000; --ink: #ffffff; --acc: #ffffff; }
+.tile, .sizes > div { color: var(--ink); }
+.sizes { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+.sizes > div { display: flex; align-items: end; gap: 14px; padding: 14px 16px; overflow: hidden; }
+.sizes svg { display: block; flex: none; }
+.lock { display: inline-flex; align-items: center; gap: 0.32em; }
+.wm { font-weight: 600; letter-spacing: -0.035em; line-height: 1; white-space: nowrap; }
+.wm svg { height: 0.542em; width: auto; vertical-align: -0.007em; overflow: visible; margin-inline: -0.04em; }
+.mark { overflow: visible; width: 100%; height: 100%; display: block; }
+.strip { padding: 8px 32px 48px; }
+.strip h2 { font-size: 20px; margin: 0 0 12px; font-weight: 600; }
+.scenes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px; }
+.scene { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-height: 170px; }
+.tab { background: #dcdad6; padding: 8px 8px 0; color: #151514; }
+.tab span { display: inline-flex; align-items: center; gap: 8px; background: #f0efed; padding: 8px 14px; border-radius: 8px 8px 0 0; font-size: 13px; }
+.tab .url { background: #f0efed; padding: 10px 12px; font-size: 12px; color: #6d6b66; }
+.app { background: #0f0e0d; color: #e7e6e3; --ink: #e7e6e3; --acc: #d4934a; display: flex; align-items: center; gap: 20px; padding: 16px; font-size: 13px; border-bottom: 1px solid #2a2826; }
+.app nav { display: flex; gap: 14px; color: #8f8c86; }
+.deck { background: #0f0e0d; color: #e7e6e3; --ink: #e7e6e3; --acc: #d4934a; display: grid; align-content: end; gap: 10px; padding: 28px; min-height: 220px; }
+.deck p, .readme p { margin: 0; color: inherit; opacity: 0.7; }
+.readme { background: #ffffff; color: #151514; --ink: #151514; --acc: #8a5420; padding: 28px; display: grid; gap: 10px; }
+@media (max-width: 640px) { header.top, main, .strip { padding-inline: 16px; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Знаки и названия</h1>
+    <p class="lead">22 варианта для десяти названий. Номера постоянные: назови номер, и я доведу знак. Звёздочка сохраняет избранное в этом браузере. Внизу выбранный знак показан во вкладке, в шапке, на обложке и в README.</p>
+  </div>
+  <div class="tools">
+    <button type="button" data-filter aria-pressed="false">Только избранное</button>
+    <select data-pick aria-label="Вариант для примеров"></select>
+  </div>
+</header>
+<main data-grid></main>
+<section class="strip">
+  <h2>Как живёт в продукте</h2>
+  <div class="scenes" data-scenes></div>
+</section>
+<script src="logo-marks.js"></script>
+<script src="logo-gallery.js"></script>
+</body>
+</html>
