@@ -11,6 +11,15 @@
              (позиции дефектов скрытого пропуска) информацию в обучение. Валидационные пары — как в base.
 Оценка — train.run на датасете (отчёт в logs/lab80/<var>/validation_report.csv).
 Запуск: python experiments/lab80_audit_leaks.py <var> build|eval
+
+Результат (case1 r² / MAE; сосед | measured):
+  base     ens_blend 0.297 | 0.290, dens_quant_cal 0.2886/0.337 | 0.7475/0.227
+  oracle0  ens_blend 0.5505 (УТЕЧКА: train-строки труб валидации через 2023), dens_quant_cal 0.7475
+  oracle1  (с фиксом) ens_blend 0.2898, dens_quant_cal 0.7475/0.227 — ровно блок measured базы
+  geo2     ens_blend 0.300 | 0.206; dens_quant_cal MAE 0.358 | 0.257 (r² тот же — предиктор без обучения)
+  geo      ens_blend 0.305 | 0.309; dens_quant_cal MAE 0.352 | 0.263 (портит и законное выравнивание 22871)
+Фикс: features.honest_val_rows работает и при ORACLE. Геометрия 2023 другой валидационной трубы
+(geo2) — MAE кейса 1 на 0.02-0.03 мм оптимистичен, r² прод-предиктора не задет; не фиксилось.
 """
 import os
 import sys
