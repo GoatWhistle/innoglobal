@@ -83,7 +83,8 @@ CASES = {
                   blend_w=2.0, gap_w=0.5),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
-                  param_grid=PARAM_GRID, calibrate=True),
+                  param_grid=PARAM_GRID, calibrate=True,
+                  prior_w=0.5, prior_pipe=C.CASE2_ID),
 }
 
 
@@ -214,6 +215,30 @@ def analog_rates(rows: pd.DataFrame, direction: str, dir_of: dict) -> np.ndarray
     return ((a["wt_nom"] - a["y"]) / a["age_end"]).to_numpy(float)
 
 
+def fit_relief_prior(rows: pd.DataFrame, C_reg: float = 0.1):
+    """Рельефный приор дефекта (lab39): логистическая регрессия had_defect на
+    относительных признаках рельефа (features.PRIOR_FEATS), обученная на трубах
+    режима целевой (для 9583 — направление ДНС-1→ЦППН-1, нефть товарная).
+
+    LOPO по трубам ЦППН AUC 0.66/0.64/0.50/0.65, перенос на 22871 AUC 0.58; знаки:
+    дефекты на затяжных подъёмах и выше локального дна (z_rel, lowness_250m,
+    climb_rise > 0; sag_31, pocket_depth < 0). Детерминирован (сид не влияет)."""
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+    m = make_pipeline(StandardScaler(), LogisticRegression(C=C_reg, max_iter=2000))
+    return m.fit(rows[F.PRIOR_FEATS].fillna(0.0), rows["had_defect"].astype(int))
+
+
+def prior_blend(ens: np.ndarray, p: np.ndarray, w: float) -> np.ndarray:
+    """z(ens) + w·z(−P) в уровне ens. Если ens на трубе константа (у 9583 так: бустинг
+    не различает её сегменты), форму целиком даёт приор; масштаб потом ставит
+    calibrate_level по физическим якорям."""
+    if float(np.std(ens)) > 1e-9:
+        return blend_prob(ens, p, w)
+    return float(np.mean(ens)) + zscore(-p)
+
+
 def calibrate_level(pred: np.ndarray, wt_nom: float, age: float,
                     rates: np.ndarray) -> np.ndarray:
     """Аффинная калибровка уровня/масштаба профиля кейса 2 по физике (lab37, R3).
@@ -337,6 +362,26 @@ def baseline_predictions(ds: pd.DataFrame) -> dict[str, pd.Series]:
     }
 
 
+def _case2_shape(ens: np.ndarray, tr: pd.DataFrame, va: pd.DataFrame, cfg: dict,
+                 dir_of: dict) -> dict[str, np.ndarray]:
+    """Кейс 2 поверх бустинга: рельефный приор (lab39) и калибровка уровня (lab37).
+
+    Приор учится на трубах режима целевой 9583 (направление ДНС-1→ЦППН-1), калибровка —
+    на аналогах направления валидационной трубы; всё только из train."""
+    out, base = {}, ens
+    if cfg.get("prior_w"):
+        pdir = dir_of[cfg["prior_pipe"]]
+        prior = fit_relief_prior(tr[tr["id"].map(dir_of) == pdir])
+        p_va = prior.predict_proba(va[F.PRIOR_FEATS].fillna(0.0))[:, 1]
+        base = out["ens_prior"] = prior_blend(ens, p_va, cfg["prior_w"])
+    if cfg.get("calibrate"):
+        name = "ens_prior_cal" if cfg.get("prior_w") else "ensemble_cal"
+        out[name] = calibrate_level(base, float(va["wt_nom"].iloc[0]),
+                                    float(va["age_end"].iloc[0]),
+                                    analog_rates(tr, dir_of[int(va["id"].iloc[0])], dir_of))
+    return out
+
+
 def run(tune_trials: int = 0) -> pd.DataFrame:
     ds = pd.read_csv(C.PROCESSED_DIR / "train_dataset.csv", parse_dates=["start", "end"])
     ds = survival_labels(ds)
@@ -390,18 +435,28 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                 .groupby("id")["p"]
                 .transform(lambda s: s.rolling(5, center=True, min_periods=1).median())
                 .values)
-        if cfg.get("calibrate"):
-            # кейс 2: уровень/масштаб по аналогам направления (lab37); на валидации —
-            # только обучающие пары, как у 9583 при прогнозе
-            val_preds["ensemble_cal"] = calibrate_level(
-                val_preds["ensemble"], float(va["wt_nom"].iloc[0]),
-                float(va["age_end"].iloc[0]),
-                analog_rates(tr, dir_of[int(va["id"].iloc[0])], dir_of))
+        if cfg.get("prior_w") or cfg.get("calibrate"):
+            val_preds.update(_case2_shape(val_preds["ensemble"], tr, va, cfg, dir_of))
         for name, p in val_preds.items():
             report_rows.append(dict(
                 case=case, model=name, n=len(va),
                 pearson_r2=round(pearson_r2(y_va, p), 4),
                 mae=round(float(np.mean(np.abs(y_va - p))), 3)))
+        if case == "case2" and os.environ.get("PIPETWIN_VAL2_STRICT") != "1":
+            # строгая проверка рядом (как PIPETWIN_VAL2_STRICT=1): валидационная труба
+            # исключена из обучения целиком — у 9583 своих пропусков нет вовсе;
+            # разрыв с официальной = вклад «своей» трубы (её пропуск 2022 в train)
+            tr_s = tr[~tr["id"].isin(va["id"].unique())]
+            sbag = [m for p in grid for m in fit_bag(
+                tr_s[feats], tr_s["y"], tr_s["aft_lb"].values, tr_s["aft_ub"].values, p,
+                cfg["aft"], families=cfg["families"])]
+            sp = {"ensemble": predict_bag(sbag, va[feats], va["wt_nom"].values)["ensemble"]}
+            sp.update(_case2_shape(sp["ensemble"], tr_s, va, cfg, dir_of))
+            for name, p in sp.items():
+                report_rows.append(dict(
+                    case="case2_strict", model=name, n=len(va),
+                    pearson_r2=round(pearson_r2(y_va, p), 4),
+                    mae=round(float(np.mean(np.abs(y_va - p))), 3)))
 
         # финальные модели кейса: дообучение на train + val этого кейса
         X_all = subset[feats]
@@ -418,11 +473,15 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             m = make_model("catboost", dict(best_params["catboost"]), alpha=alpha)
             m.fit(X_all, y_all)
             final[tag] = m
+        if cfg.get("prior_w"):
+            final["relief_prior"] = fit_relief_prior(
+                subset[subset["id"].map(dir_of) == dir_of[cfg["prior_pipe"]]])
         if cfg.get("calibrate"):
             final["analog_rows"] = subset[["id", "wt_nom", "y", "age_end"]].reset_index(drop=True)
         bundle["cases"][case] = dict(models=final, features=feats,
                                      params=best_params, target=cfg["target"],
                                      blend_w=cfg.get("blend_w"),
+                                     prior_w=cfg.get("prior_w"),
                                      gap_w=cfg.get("gap_w", 0.0))
 
     report = pd.DataFrame(report_rows)

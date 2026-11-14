@@ -5,7 +5,8 @@ import pandas as pd
 
 from . import config as C
 from .prepare import load_passport
-from .train import analog_rates, blend_prob, calibrate_level, predict_bag
+from . import features as F
+from .train import analog_rates, blend_prob, calibrate_level, predict_bag, prior_blend
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
 # на всех 3 сидах по r² и sm5):
@@ -21,10 +22,12 @@ from .train import analog_rates, blend_prob, calibrate_level, predict_bag
 # выравнивания (PIPETWIN_ALIGN=off/line) сглаживание по-прежнему полезно.
 from . import align as _align
 PREDICTOR = {"case1": ("ens_blend", None if _align.MODE == "profile" else 5),
-             "case2": ("ensemble_cal", None)}
-# case2: ансамбль + калибровка уровня/масштаба по аналогам направления (lab37, R3):
-# среднее = номинал − средняя скорость потери труб того же направления × возраст,
-# p99 = номинал. Аффинно — r² не меняется; полка 3.740 -> 4.395 мм.
+             "case2": ("ens_prior_cal", None)}
+# case2 (lab36-39): LGBM-сетка без абсолютной отметки z + рельефный приор дефекта
+# (логрегрессия на рельефе, обучена на трубах ЦППН — режим 9583) блендом z(ens)+0.5·z(−P),
+# затем калибровка уровня/масштаба по аналогам направления (R3): среднее = номинал −
+# средняя скорость потери труб того же направления × возраст, p99 = номинал. Аффинно.
+# У 9583 бустинг без z даёт константу — форма целиком от приора, полки нет.
 
 
 def run() -> pd.DataFrame:
@@ -53,9 +56,11 @@ def run() -> pd.DataFrame:
             pred = blend_prob(preds["ensemble"], p_def, b["blend_w"],
                               gap=preds["ensemble"] - q05,
                               gap_w=b.get("gap_w", 0.0))
-        elif name == "ensemble_cal":
+        elif name == "ens_prior_cal":
+            p_def = models["relief_prior"].predict_proba(grp[F.PRIOR_FEATS].fillna(0.0))[:, 1]
+            shaped = prior_blend(preds["ensemble"], p_def, b["prior_w"])
             rates = analog_rates(models["analog_rows"], dir_of[int(pipe_id)], dir_of)
-            pred = calibrate_level(preds["ensemble"], float(grp["wt_nom"].iloc[0]),
+            pred = calibrate_level(shaped, float(grp["wt_nom"].iloc[0]),
                                    float(grp["age_end"].iloc[0]), rates)
         else:
             pred = preds[name]
@@ -65,7 +70,7 @@ def run() -> pd.DataFrame:
         grp["thickness_pred"] = pred
         for tag in ("p05", "p10", "p90", "p95"):
             q = models[tag].predict(X) * scale
-            if name == "ensemble_cal":
+            if name == "ens_prior_cal":
                 # конверт переносится за прогнозом с сырой шириной (калибровка
                 # сжимает разброс профиля, но не неопределённость сегмента)
                 q = pred + (q - preds["ensemble"])

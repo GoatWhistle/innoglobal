@@ -10,6 +10,11 @@ case1,ensemble_smooth5,55,0.4032,0.329
 case1,ens_blend_smooth5,55,0.3808,0.325
 case2,b1_nominal_minus_rate,525,0.0,1.028
 case2,b2_prev_smoothed,525,0.0,1.18
-case2,lgbm,525,0.1813,0.861
-case2,ensemble,525,0.1813,0.861
-case2,ensemble_smooth5,525,0.1524,0.87
+case2,lgbm,525,0.1902,0.854
+case2,ensemble,525,0.1902,0.854
+case2,ensemble_smooth5,525,0.1625,0.863
+case2,ens_prior,525,0.1946,0.856
+case2,ens_prior_cal,525,0.1946,0.815
+case2_strict,ensemble,525,0.0296,0.945
+case2_strict,ens_prior,525,0.048,0.94
+case2_strict,ens_prior_cal,525,0.048,0.866
