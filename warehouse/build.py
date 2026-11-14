@@ -142,6 +142,32 @@ CHECKS = [
      "select count(*) from core.pipe where abs(length_passport_m - profile_length_m)"
      " / length_passport_m > 0.02",
      "select count(*) from core.pipe", "длина по паспорту и по профилю расходятся > 2%"),
+    # --- полнота и привязки (добавлено при доведении core до полного состава)
+    ("recon.pipe_attribute", "error",
+     "select abs((select count(*) from (unpivot (select * exclude (_row_num, _source_file, _loaded_at)"
+     " from raw.pot_south) on columns(*) into name a value v) where trim(v) <> '')"
+     " - (select count(*) from core.pipe_attribute))",
+     "select count(*) from core.pipe_attribute", "все непустые ячейки паспорта есть в pipe_attribute"),
+    ("pk.pipe_attribute", "error",
+     "select count(*) - count(distinct (pipe_id, attribute_no)) from core.pipe_attribute",
+     "select count(*) from core.pipe_attribute", "ячейка паспорта уникальна"),
+    ("fk.coupon.linked_pipe", "error",
+     "select count(*) from core.corrosion_coupon where linked_pipe_id is not null"
+     " and linked_pipe_id not in (select pipe_id from core.pipe)",
+     "select count(*) from core.corrosion_coupon where linked_pipe_id is not null",
+     "привязанный участок есть в паспорте"),
+    ("coupon.unlinked", "info",
+     "select count(*) from core.corrosion_coupon where link_level = 'unlinked'",
+     "select count(*) from core.corrosion_coupon", "образец не привязан ни к одной трубе паспорта"),
+    ("coupon.weak_link", "info",
+     "select count(*) from core.corrosion_coupon where link_level = 'protection_zone'",
+     "select count(*) from core.corrosion_coupon", "привязан только по зоне защиты ингибитором"),
+    ("coupon.section_id_missing", "info",
+     "select count(*) from core.corrosion_coupon where section_id is null",
+     "select count(*) from core.corrosion_coupon", "ID участка в отчёте пуст; см. section_id_filled"),
+    ("ili.reference_point_off_pipe", "info",
+     "select count(*) from core.ili_reference_point where not is_on_pipe",
+     "select count(*) from core.ili_reference_point", "опорная точка вне участка или разброс оценок > 20 м"),
     ("segment.z_null", "error",
      "select count(*) from core.segment where z_center_m is null",
      "select count(*) from core.segment", "у сегмента есть высота"),
