@@ -83,7 +83,7 @@ CASES = {
                   blend_w=2.0, gap_w=0.5),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
-                  param_grid=PARAM_GRID),
+                  param_grid=PARAM_GRID, calibrate=True),
 }
 
 
@@ -204,6 +204,31 @@ def blend_prob(ens: np.ndarray, p: np.ndarray, w: float,
     return zscore(b) * float(np.std(ens)) + float(np.mean(ens))
 
 
+def analog_rates(rows: pd.DataFrame, direction: str, dir_of: dict) -> np.ndarray:
+    """Скорости потери (мм/год) обучающих пар «ввод→ВТД» того же направления.
+
+    Аналог по направлению = та же среда (нефть товарная ЦППН / сырая Куст-1).
+    Нет аналогов — все пары."""
+    a = rows[rows["id"].map(dir_of) == direction]
+    a = a if len(a) else rows
+    return ((a["wt_nom"] - a["y"]) / a["age_end"]).to_numpy(float)
+
+
+def calibrate_level(pred: np.ndarray, wt_nom: float, age: float,
+                    rates: np.ndarray) -> np.ndarray:
+    """Аффинная калибровка уровня/масштаба профиля кейса 2 по физике (lab37, R3).
+
+    Два якоря: среднее профиля = номинал − средняя скорость потери аналогов × возраст,
+    верх профиля (p99) = номинал (нетронутая стенка). Пирсон инвариантен
+    (положительный аффинный сдвиг), меняются MAE/RMSE и физичность уровня.
+    V1 MAE 0.861 -> 0.818, строгая V2 0.936 -> 0.922; у 9583 полка 3.740 -> 4.395 мм
+    (аналоги ЦППН теряют 0.003 мм/год, а не 0.026, как подразумевала полка 3.740)."""
+    m_t = wt_nom - float(np.mean(rates)) * age
+    hi, mu = float(np.quantile(pred, 0.99)), float(np.mean(pred))
+    b = max((wt_nom - m_t) / (hi - mu) if hi - mu > 1e-9 else 0.0, 0.0)
+    return m_t + b * (pred - mu)
+
+
 def fit_q05_pair(X: pd.DataFrame, y: pd.Series, params: dict | None = None) -> list:
     """Пара LGBM+XGB на alpha=0.05 — спред до q05 для gap-члена бленда."""
     params = params or {}
@@ -316,6 +341,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
     ds = pd.read_csv(C.PROCESSED_DIR / "train_dataset.csv", parse_dates=["start", "end"])
     ds = survival_labels(ds)
 
+    from .prepare import load_passport
+    dir_of = dict(load_passport()[["id", "direction"]].itertuples(index=False))
     report_rows = []
     bundle = {"cases": {}}
     for case, cfg in CASES.items():
@@ -363,6 +390,13 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                 .groupby("id")["p"]
                 .transform(lambda s: s.rolling(5, center=True, min_periods=1).median())
                 .values)
+        if cfg.get("calibrate"):
+            # кейс 2: уровень/масштаб по аналогам направления (lab37); на валидации —
+            # только обучающие пары, как у 9583 при прогнозе
+            val_preds["ensemble_cal"] = calibrate_level(
+                val_preds["ensemble"], float(va["wt_nom"].iloc[0]),
+                float(va["age_end"].iloc[0]),
+                analog_rates(tr, dir_of[int(va["id"].iloc[0])], dir_of))
         for name, p in val_preds.items():
             report_rows.append(dict(
                 case=case, model=name, n=len(va),
@@ -384,6 +418,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             m = make_model("catboost", dict(best_params["catboost"]), alpha=alpha)
             m.fit(X_all, y_all)
             final[tag] = m
+        if cfg.get("calibrate"):
+            final["analog_rows"] = subset[["id", "wt_nom", "y", "age_end"]].reset_index(drop=True)
         bundle["cases"][case] = dict(models=final, features=feats,
                                      params=best_params, target=cfg["target"],
                                      blend_w=cfg.get("blend_w"),

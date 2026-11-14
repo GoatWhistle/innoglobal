@@ -4,7 +4,8 @@ import numpy as np
 import pandas as pd
 
 from . import config as C
-from .train import blend_prob, predict_bag
+from .prepare import load_passport
+from .train import analog_rates, blend_prob, calibrate_level, predict_bag
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
 # на всех 3 сидах по r² и sm5):
@@ -20,7 +21,10 @@ from .train import blend_prob, predict_bag
 # выравнивания (PIPETWIN_ALIGN=off/line) сглаживание по-прежнему полезно.
 from . import align as _align
 PREDICTOR = {"case1": ("ens_blend", None if _align.MODE == "profile" else 5),
-             "case2": ("ensemble", None)}
+             "case2": ("ensemble_cal", None)}
+# case2: ансамбль + калибровка уровня/масштаба по аналогам направления (lab37, R3):
+# среднее = номинал − средняя скорость потери труб того же направления × возраст,
+# p99 = номинал. Аффинно — r² не меняется; полка 3.740 -> 4.395 мм.
 
 
 def run() -> pd.DataFrame:
@@ -29,6 +33,7 @@ def run() -> pd.DataFrame:
 
     # каждой целевой трубе — модель своего кейса
     case_of_id = {C.CASE1_ID: "case1", C.CASE2_ID: "case2"}
+    dir_of = dict(load_passport()[["id", "direction"]].itertuples(index=False))
     parts = []
     for pipe_id, grp in pred_ds.groupby("id"):
         case = case_of_id[int(pipe_id)]
@@ -48,6 +53,10 @@ def run() -> pd.DataFrame:
             pred = blend_prob(preds["ensemble"], p_def, b["blend_w"],
                               gap=preds["ensemble"] - q05,
                               gap_w=b.get("gap_w", 0.0))
+        elif name == "ensemble_cal":
+            rates = analog_rates(models["analog_rows"], dir_of[int(pipe_id)], dir_of)
+            pred = calibrate_level(preds["ensemble"], float(grp["wt_nom"].iloc[0]),
+                                   float(grp["age_end"].iloc[0]), rates)
         else:
             pred = preds[name]
         if smooth:
@@ -55,7 +64,12 @@ def run() -> pd.DataFrame:
                     .rolling(smooth, center=True, min_periods=1).median().values)
         grp["thickness_pred"] = pred
         for tag in ("p05", "p10", "p90", "p95"):
-            grp[tag] = models[tag].predict(X) * scale
+            q = models[tag].predict(X) * scale
+            if name == "ensemble_cal":
+                # конверт переносится за прогнозом с сырой шириной (калибровка
+                # сжимает разброс профиля, но не неопределённость сегмента)
+                q = pred + (q - preds["ensemble"])
+            grp[tag] = q
         parts.append(grp)
     pred_ds = pd.concat(parts, ignore_index=True)
 
