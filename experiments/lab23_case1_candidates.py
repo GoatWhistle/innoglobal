@@ -65,6 +65,7 @@ def blend_w(w):
 
 preds = {"ens_blend": ens_blend, "ens_blend+stats": T.blend_stats(ens_blend, stats),
          "aligned_stats": stats, "aligned_stats_cal": T.stats_at_level(ens_blend, stats),
+         "quant_cal": T.stats_at_level(ens_blend, T.quant_score(va)),
          **{f"blend w={w}": blend_w(w) for w in (0.25, 0.5, 2.0)}}
 y = va["y"].to_numpy()
 

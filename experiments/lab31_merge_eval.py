@@ -99,6 +99,8 @@ def eval_case1(ds, tag, seeds, modes, rows):
                          mae=mae(y_va, p)))
 
     add("aligned_stats", 0, stats)
+    if "prev_q02" in va:  # lab66: quant (= quant_cal по r²), ml-pipetwin-lab24
+        add("quant", 0, T.quant_score(va))
 
     def smooth(p, k):
         return (pd.DataFrame({"id": va["id"].values, "p": p}).groupby("id")["p"]

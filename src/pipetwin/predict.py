@@ -7,7 +7,7 @@ from . import config as C
 from .prepare import load_passport
 from . import features as F
 from .train import (aligned_stats_score, analog_rates, blend_prob, blend_stats, calibrate_level,
-                    predict_bag, prior_blend, stats_at_level)
+                    case1_stat_predictors, predict_bag, prior_blend, quant_score, stats_at_level)
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
 # на всех 3 сидах по r² и sm5):
@@ -22,19 +22,19 @@ from .train import (aligned_stats_score, analog_rates, blend_prob, blend_stats, 
 # форму: на валидации ens_blend 0.501 без сглаживания против 0.287 со сглаживанием. Без
 # выравнивания (PIPETWIN_ALIGN=off/line) сглаживание по-прежнему полезно.
 #
-# Кейс 1 по умолчанию — aligned_stats_cal: форма aligned_stats (устойчивые статистики выровненного
-# прошлого пропуска, train.aligned_stats_score) в уровне и разбросе ens_blend. Выбор по трём
-# валидациям (experiments/lab23_case1_candidates.py, notes/case1_stats_rationale.md, раздел 8):
-#                       от соседа (55)   сдвиг измерен (55)   сама 22871 2018->2022 (525)
-#   ens_blend               0.693             0.599                 0.011
-#   ens_blend+stats         0.546             0.690                 0.060
-#   aligned_stats_cal       0.273             0.701                 0.215
-# Режим «от соседа» даёт сдвигу 1250011604 ошибку 6-11 м, которой в прогнозе 22871 нет (сдвиг измерен
-# на обоих концах); в двух других aligned_stats_cal лучший по r², MAE, RMSE, Спирмену и топ-10%.
-# PIPETWIN_CASE1=aligned_stats_cal | aligned_stats | ens_blend+stats | ens_blend
+# Кейс 1 по умолчанию — quant_cal: квантильная формула из nedra (ветка case1-improve)
+# (q02 + q10 + q10 по ±1 сегменту) / 3 выровненного прошлого пропуска в уровне и разбросе ens_blend
+# (train.quant_score / stats_at_level). r² на валидации 2022 -> 2023, 55 сегментов:
+#                       от соседа (case1)   сдвиг измерен (case1_measured)   сама 22871 2018->2022 (525)
+#   ens_blend               0.693                 0.599                          0.011
+#   aligned_stats_cal       0.273                 0.701                          0.235
+#   quant_cal               0.212                 0.731                          0.182
+# quant_cal лучший при измеренном сдвиге (как у 22871) и по MAE (0.233), но формула подобрана на этих
+# 55 сегментах; на самой 22871 aligned_stats_cal переносится лучше (notes/case1_stats_rationale.md, раздел 9).
+# PIPETWIN_CASE1=quant_cal | aligned_stats_cal | ens_blend+quant | ens_blend+stats | ens_blend | quant | aligned_stats
 import os as _os
 from . import align as _align
-_CASE1 = _os.environ.get("PIPETWIN_CASE1", "aligned_stats_cal")
+_CASE1 = _os.environ.get("PIPETWIN_CASE1", "quant_cal")
 PREDICTOR = {"case1": (_CASE1, None if _align.MODE == "profile" else 5),
              "case2": ("ens_prior_cal", None)}
 # case2 (lab36-39, exp/case2): LGBM-сетка без абсолютной отметки z + рельефный приор дефекта
@@ -62,7 +62,8 @@ def run() -> pd.DataFrame:
         scale = grp["wt_nom"].values if b.get("target") == "rel" else 1.0
         # бэг, усреднённый по сидам/сетке (train.BAG_SEEDS / PARAM_GRID)
         preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale)
-        if name in ("ens_blend", "ens_blend+stats", "aligned_stats_cal"):
+        if name in ("ens_blend", "ens_blend+stats", "aligned_stats_cal",
+                    "quant_cal", "ens_blend+quant"):
             # формы классификатора дефекта и спреда до q05 вклеиваются
             # в профиль этой трубы (lab13-19)
             p_def = models["clf"].predict_proba(X)[:, 1]
@@ -72,10 +73,10 @@ def run() -> pd.DataFrame:
                               gap_w=b.get("gap_w", 0.0))
             if name == "ens_blend+stats":
                 pred = blend_stats(pred, aligned_stats_score(grp))
-            elif name == "aligned_stats_cal":
-                pred = stats_at_level(pred, aligned_stats_score(grp))
-        elif name == "aligned_stats":
-            pred = aligned_stats_score(grp)
+            elif name in ("aligned_stats_cal", "quant_cal", "ens_blend+quant"):
+                pred = case1_stat_predictors(grp, pred)[name]
+        elif name in ("aligned_stats", "quant"):
+            pred = aligned_stats_score(grp) if name == "aligned_stats" else quant_score(grp)
         elif name == "ens_prior_cal":
             p_def = models["relief_prior"].predict_proba(grp[F.PRIOR_FEATS].fillna(0.0))[:, 1]
             shaped = prior_blend(preds["ensemble"], p_def, b["prior_w"])
