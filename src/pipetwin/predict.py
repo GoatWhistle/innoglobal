@@ -13,7 +13,14 @@ from .train import blend_prob, predict_bag
 # case2: «ансамбль» = LGBM по сетке PARAM_GRID (0.175/0.148 против
 #        0.157/0.127 у 4-членного ансамбля); классификатор там слеп
 #        (AUC 0.56), бленд не положен, сглаживание стабильно чуть хуже.
-PREDICTOR = {"case1": ("ens_blend", 5), "case2": ("ensemble", None)}
+#
+# Сглаживание кейса 1 компенсировало сдвиг одометра между пропусками ВТД (до 8 м при сегменте
+# 10 м). После выравнивания пропусков в координаты профиля (align.py, режим profile) оно размывает
+# форму: на валидации ens_blend 0.501 без сглаживания против 0.287 со сглаживанием. Без
+# выравнивания (PIPETWIN_ALIGN=off/line) сглаживание по-прежнему полезно.
+from . import align as _align
+PREDICTOR = {"case1": ("ens_blend", None if _align.MODE == "profile" else 5),
+             "case2": ("ensemble", None)}
 
 
 def run() -> pd.DataFrame:

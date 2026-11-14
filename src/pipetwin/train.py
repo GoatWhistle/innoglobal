@@ -7,6 +7,7 @@
     усреднённый по сетке PARAM_GRID (lab15, совет ментора).
 """
 import json
+import os
 
 import joblib
 import numpy as np
@@ -273,6 +274,10 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         subset = ds[ds["kind"].isin(cfg["train_kinds"])]
         tr = subset[subset["split"] == "train"]
         va = ds[ds["split"] == cfg["val_split"]]
+        if case == "case2" and os.environ.get("PIPETWIN_VAL2_STRICT") == "1":
+            # у целевой трубы кейса 2 нет ни одного пропуска: валидационная труба тоже
+            # не должна попадать в обучение другими своими пропусками (ввод -> 2022, 2023)
+            tr = tr[~tr["id"].isin(va["id"].unique())]
         rel = cfg["target"] == "rel"
         X_tr = tr[feats]
         y_tr = tr["y"] / tr["wt_nom"] if rel else tr["y"]
