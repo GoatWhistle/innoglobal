@@ -197,9 +197,6 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
         df["prev_maxdepth"] = 0.0
         df["prev_loss_rate"] = 0.0
         df["has_prev"] = 0
-        for c in ("prev_q10", "prev_q25", "prev_qmed"):
-            df[c] = wt_nom
-        df["prev_mean_depth"] = 0.0
         return df
 
     tgt = prepare.segment_targets(vtd, runs, nseg, pipe_id, start)
@@ -225,12 +222,6 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
     age = max(start_age_years, 1e-6)
     df["prev_loss_rate"] = (wt_nom - df["prev_min"]).clip(lower=0) / age  # мм/год
     df["has_prev"] = 1
-    # распределение дефектов внутри сегмента (experiments/lab55): не только минимум, но и
-    # квантили остаточной толщины и средняя глубина — насколько «изъеден» сегмент целиком
-    rw = sub.dropna(subset=["Residual Wall Thickness"]).groupby("segment_id")
-    for c, q in (("prev_q10", 0.10), ("prev_q25", 0.25), ("prev_qmed", 0.5)):
-        df[c] = df["segment_id"].map(rw["Residual Wall Thickness"].quantile(q)).fillna(wt_nom)
-    df["prev_mean_depth"] = df["segment_id"].map(rw["Defect Depth in %"].mean()).fillna(0.0)
     return df
 
 
@@ -248,8 +239,7 @@ CHEM_FEATS = ["grav_cl", "grav_mineralization"]
 REGIME_SHARE_FEATS = ["rg_share_laminar", "rg_share_trans", "rg_share_turb"]
 CLIMB_FEATS = ["climb_len", "climb_rise", "climb_pos", "rise_500m"]
 TP_FEATS = ["t_at", "p_at"]
-QUANT_FEATS = ["prev_q10", "prev_q25", "prev_qmed", "prev_mean_depth"]
-OPTIONAL_FEATS = (QUANT_FEATS + UZT_FEATS + PROF_FEATS + INTER_FEATS + ERA_FEATS + POCKET_FEATS
+OPTIONAL_FEATS = (UZT_FEATS + PROF_FEATS + INTER_FEATS + ERA_FEATS + POCKET_FEATS
                   + CHEM_FEATS + REGIME_SHARE_FEATS + CLIMB_FEATS + TP_FEATS)
 
 
@@ -257,13 +247,11 @@ def case_features(ds: pd.DataFrame, case: str) -> list[str]:
     """Наборы по кейсам: case1 — база + доли режимов течения + интерполяция T/P;
     case2 — база + УЗТ + эпохи ингибирования (скорость коррозии по гравиметрии
     упала на порядок после 2012-2013) + затяжные подъёмы + интерполяция T.
-    Режимы/подъёмы — experiments/lab8; t_at/p_at — lab12 (p_at кейсу 2 вредит).
-    Квантили дефектов прошлого пропуска (lab55/58) — только кейсу 1: у кейса 2 прошлого
-    пропуска нет, колонки константны."""
+    Режимы/подъёмы — experiments/lab8; t_at/p_at — lab12 (p_at кейсу 2 вредит)."""
     base = [c for c in feature_columns(ds) if c not in OPTIONAL_FEATS]
     if case == "case2":
         return base + UZT_FEATS + ERA_FEATS + CLIMB_FEATS + ["t_at"]
-    return base + REGIME_SHARE_FEATS + TP_FEATS + QUANT_FEATS
+    return base + REGIME_SHARE_FEATS + TP_FEATS
 
 
 def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
