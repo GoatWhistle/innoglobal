@@ -519,6 +519,7 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
     from .prepare import load_passport
     dir_of = dict(load_passport()[["id", "direction"]].itertuples(index=False))
     report_rows = []
+    val_frames = []  # посегментные валидационные прогнозы -> artifacts/val_predictions.csv (графики отчёта)
     bundle = {"cases": {}}
     for case, cfg in CASES.items():
         feats = F.case_features(ds, case)
@@ -607,6 +608,10 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             yv = v["y"].values
             hd = v["had_defect"].values.astype(bool)
             vp = val_predictions(v)
+            val_frames.append(pd.DataFrame({"case": label, "id": v["id"].values,
+                                            "segment_id": v["segment_id"].values, "y": yv,
+                                            **{k: np.round(np.asarray(p, float), 4)
+                                               for k, p in vp.items()}}))
             if case == "case1":
                 # конформные полуширины (lab43) — по невязкам прод-предиктора; блок measured
                 # (сдвиг измерен, как у 22871) перекрывает блок «от соседа», если он есть
@@ -678,6 +683,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
     C.ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
     joblib.dump(bundle, C.ARTIFACTS_DIR / "models.joblib")
     report.to_csv(C.ARTIFACTS_DIR / "validation_report.csv", index=False)
+    pd.concat(val_frames, ignore_index=True).to_csv(C.ARTIFACTS_DIR / "val_predictions.csv",
+                                                    index=False)
     (C.ARTIFACTS_DIR / "metrics.json").write_text(json.dumps(
         dict(report=report.to_dict("records"),
              params={c: b["params"] for c, b in bundle["cases"].items()},
