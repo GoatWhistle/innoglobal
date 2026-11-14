@@ -1,4 +1,6 @@
 """Этап 2: признаки сегментов — геометрия трассы, режим, прошлое ВТД, гравиметрия."""
+import os
+
 import numpy as np
 import pandas as pd
 
@@ -106,8 +108,14 @@ def regime_features(regime: pd.DataFrame, pipe_id: int,
 
 # --------------------------------------------------------------------- УЗТ
 def load_uzt() -> pd.DataFrame:
-    """Только правдоподобные замеры УЗТ (толщина ≤ номинал·1.15). В текущих данных
-    все 67 замеров толще номинала в 1.6-2.7 раза, поэтому таблица пуста."""
+    """Только правдоподобные замеры УЗТ (толщина ≤ номинал·1.15). Сырые 67 замеров толще
+    номинала на постоянные ~7 мм (сдвиг нуля прибора, core.ut_measurement.ut_offset_mm);
+    PIPETWIN_UZT=corr (по умолчанию) берёт толщину за вычетом сдвига, raw — сырую (таблица
+    пуста). Кейс 2: r² 0.181 -> 0.193, строгая проверка 0.010 -> 0.016."""
+    if os.environ.get("PIPETWIN_UZT", "corr") == "corr":
+        return W.query("""
+            select pipe_id as id, dist_m as dist, measured_at as date, thickness_corr_mm as thick
+            from core.ut_measurement where is_plausible_corr""")
     return W.query("""
         select pipe_id as id, dist_m as dist, measured_at as date, thickness_mm as thick
         from core.ut_measurement where is_plausible""")
