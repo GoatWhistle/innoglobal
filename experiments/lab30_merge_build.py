@@ -7,6 +7,8 @@ ml-pipetwin-merge-case-2 на базе lab20-21.
 LAB_JITTER=<м> — к сдвигу прошлого пропуска (2022) валидационных труб кейса 1 добавляется
 постоянная ошибка (с оракулом — модель «сдвиг известен с точностью δ», как у 22871, где сдвиг
 интерполируется между измеренными концами; отклонение окон от линии до ~1.2 м).
+LAB_MATCH_OLD=1 — прежний match-сдвиг (окна 250 м + одна прямая), для сравнения с 60 м-окнами
+и кусочно-линейной интерполяцией (коммит 0a296d9 ветки коллеги).
 Пишет train_dataset.csv / predict_dataset.csv в out_dir, data/processed не трогает.
 """
 import os
@@ -18,6 +20,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from pipetwin import config as C  # noqa: E402
 from pipetwin import features  # noqa: E402
+
+if os.environ.get("LAB_MATCH_OLD") == "1":
+    features.align.MATCH_WIN = 250.0
+    features.align._shift_fn = lambda x, y, method: features.align._fit(x, y)
 
 JITTER = float(os.environ.get("LAB_JITTER", "0"))
 if JITTER:
