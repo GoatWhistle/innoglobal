@@ -46,8 +46,8 @@
       "case": "case1",
       "model": "ens_blend",
       "n": 55,
-      "pearson_r2": 0.4937,
-      "mae": 0.292
+      "pearson_r2": 0.5366,
+      "mae": 0.276
     },
     {
       "case": "case1",
@@ -60,8 +60,8 @@
       "case": "case1",
       "model": "ens_blend_smooth5",
       "n": 55,
-      "pearson_r2": 0.253,
-      "mae": 0.33
+      "pearson_r2": 0.219,
+      "mae": 0.334
     },
     {
       "case": "case2",

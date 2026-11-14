@@ -56,10 +56,17 @@ PARAM_GRID = tuple(
 #   4-членный ансамбль (0.175/0.148 против 0.157/0.127 на всех сидах,
 #   lab15; подтверждено перебором 29 комбинаций в lab16); классификатор
 #   там слеп (AUC 0.56), бленд не применяется.
+# Пересвип бленда после выравнивания пропусков (align.py, profile): оптимум
+# blend_w сдвинулся 1.0 -> плато 2.0-2.5 (на выровненных данных форма
+# классификатора ценнее уровня базы; подтверждено на 8 сидах, 7/8 побед,
+# средний прирост +0.026). Взято 2.0: 2.5 даёт +0.0008 к среднему, но худший
+# сид проседает 0.313 -> 0.301. gap_w=0.5 полезен при больших blend_w
+# (0.501 -> 0.512 на 3 сидах), при blend_w=1.0 вредил. Возврат CatBoost в
+# базу не подтверждён (4/8 сидов) — lab16 в силе.
 CASES = {
     "case1": dict(val_split="val_case1", train_kinds=("vtd2vtd", "comm2vtd"),
                   target="abs", families=("lgbm", "xgb"),
-                  aft=dict(dist="normal", sigma=2.0), blend_w=1.0, gap_w=0.5),
+                  aft=dict(dist="normal", sigma=2.0), blend_w=2.0, gap_w=0.5),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID),
