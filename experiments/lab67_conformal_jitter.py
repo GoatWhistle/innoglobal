@@ -7,7 +7,8 @@ case1_measured (artifacts/val_predictions.csv; уровень от сдвига 
 (train.CASES case1 quant_scale, lab73),
 клип [0.5, номинал] — как в predict.py.
 ИТОГ (полуширины 0.315/0.408 по case1_measured): |δ|<=1 м 78-82% / 89-91%, сосед 56%/69%.
-После аудита lab81 (максимум по блокам, 0.526/0.804): |δ|<=1 м 95-96% / 98%, |δ|=2 94-95%, сосед ~78%/89%.
+После аудита lab81 (максимум по блокам, 0.526/0.804), разброс 1.2·std(ens): |δ|<=1 м 95-96% / 98%,
+|δ|=2 89-96%, сосед 84%/91%.
 Запуск: python experiments/lab67_conformal_jitter.py <ds_root> --tags d_m60_or,d_jit-1,...
 """
 import argparse
