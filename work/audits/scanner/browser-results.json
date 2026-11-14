@@ -1,0 +1,17 @@
+[
+  "selection: range, keyboard, coordinate validation, partial segment, priority focus, case and theme passed",
+  "plot click and drag passed; scene selection 238",
+  "real WebGL context loss: fallback and selection passed",
+  "loading/empty/error recovery, absent data, 2D selection, reduced motion passed",
+  "scanner 375 dark: axe and overflow passed",
+  "scanner 1280 dark: axe and overflow passed",
+  "scanner 1440 dark: axe and overflow passed",
+  "scanner 375 light: axe and overflow passed",
+  "scanner 1280 light: axe and overflow passed",
+  "scanner 1440 light: axe and overflow passed",
+  "scanner/catalog.html: theme and width matrix passed",
+  "scanner/blueprints.html: theme and width matrix passed",
+  "kit.html: theme and width matrix passed",
+  "index.html: theme and width matrix passed",
+  "renderer module unavailable: UI and selection remain usable"
+]

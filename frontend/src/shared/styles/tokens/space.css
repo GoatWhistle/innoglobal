@@ -97,4 +97,11 @@
   --mark-corner: 8px;
   --paper-cell: 8px;
   --paper-cell-major: 40px;
+  --scanner-panel: 320px;
+  --scanner-panel-min: 280px;
+  --scanner-scene-min: 200px;
+  --scanner-scene-max: 360px;
+  --scanner-scene-mobile: 260px;
+  --scanner-section-height: 140px;
+  --scanner-list-height: 300px;
 }
