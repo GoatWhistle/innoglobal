@@ -99,3 +99,8 @@ report.html пересобран (lab69_report_data.py + правки цифр).
 - Воспроизводимость: два прогона run_all подряд — result.csv, validation_report, uncertainty, metrics, top_risk,
   degradation_curve, val_predictions, train/predict_dataset побайтно совпадают (models.joblib/duckdb — бинарные,
   байты пиклов/файла БД не детерминированы, содержимое то же).
+
+## 8. Кандидат ml-pipetwin-stable (3e602cd, lab25): ens_blend + 2·aligned_stats — ОТКАЗ (lab68, honest, 3 сида)
+z(ens_blend)+2·z(aligned_stats) против dens_quant_cal: оракул δ −2/−1/−0.5/0/+0.5/+1/+2 0.577/0.601/0.611/0.652/0.644/0.649/0.601
+против 0.669/0.713/0.713/0.748/0.729/0.735/0.640 (r2d 0.22-0.34 против 0.36-0.51); сосед 0.298 / r2d 0.080 против 0.289 / 0.082
+(паритет); self22 0.144 против 0.224. Заявленные «сосед 0.456» — на утёкшем ens_blend (честно 0.30). Не принимаем.

@@ -119,7 +119,8 @@ def eval_case1(ds, tag, seeds, modes, rows):
             C.SEED = 42
             bag = T.fit_bag(tr[fb], y_tr, tr["aft_lb"].values, tr["aft_ub"].values,
                             cfg["params"], cfg["aft"], families=cfg["families"])
-            ens = T.predict_bag(bag, va[fb], va["wt_nom"].values)["ensemble"]
+            ens = T.predict_bag(bag, va[fb], va["wt_nom"].values,
+                                agg=cfg.get("member_agg", "mean"))["ensemble"]
             q05 = np.mean([m.predict(va[fb])
                            for m in T.fit_q05_pair(tr[fb], y_tr, cfg["params"])], axis=0)
             cache[in_base] = (ens, q05)
