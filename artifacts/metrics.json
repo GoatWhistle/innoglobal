@@ -18,36 +18,36 @@
       "case": "case1",
       "model": "lgbm",
       "n": 55,
-      "pearson_r2": 0.3387,
-      "mae": 0.397
+      "pearson_r2": 0.2376,
+      "mae": 0.39
     },
     {
       "case": "case1",
       "model": "xgb",
       "n": 55,
-      "pearson_r2": 0.1409,
-      "mae": 0.446
+      "pearson_r2": 0.154,
+      "mae": 0.418
     },
     {
       "case": "case1",
       "model": "aft",
       "n": 55,
-      "pearson_r2": 0.5028,
-      "mae": 0.427
+      "pearson_r2": 0.2402,
+      "mae": 0.434
     },
     {
       "case": "case1",
       "model": "ensemble",
       "n": 55,
-      "pearson_r2": 0.4805,
-      "mae": 0.297
+      "pearson_r2": 0.2858,
+      "mae": 0.336
     },
     {
       "case": "case1",
       "model": "ens_blend",
       "n": 55,
-      "pearson_r2": 0.6931,
-      "mae": 0.248
+      "pearson_r2": 0.2783,
+      "mae": 0.312
     },
     {
       "case": "case1",
@@ -61,28 +61,28 @@
       "model": "aligned_stats_cal",
       "n": 55,
       "pearson_r2": 0.2733,
-      "mae": 0.345
+      "mae": 0.339
     },
     {
       "case": "case1",
       "model": "ens_blend+stats",
       "n": 55,
-      "pearson_r2": 0.546,
-      "mae": 0.285
+      "pearson_r2": 0.292,
+      "mae": 0.324
     },
     {
       "case": "case1",
       "model": "ensemble_smooth5",
       "n": 55,
-      "pearson_r2": 0.4006,
-      "mae": 0.33
+      "pearson_r2": 0.26,
+      "mae": 0.363
     },
     {
       "case": "case1",
       "model": "ens_blend_smooth5",
       "n": 55,
-      "pearson_r2": 0.3686,
-      "mae": 0.324
+      "pearson_r2": 0.2149,
+      "mae": 0.345
     },
     {
       "case": "case2",

@@ -82,11 +82,15 @@ def run() -> pd.DataFrame:
     # уровень прогноза выше номинала трубы (экстраполяция на более тонкую
     # трубу), опускаем весь профиль так, чтобы p99 лёг на номинал — иначе
     # клиппинг срезал бы профиль в константу и обнулил корреляцию.
+    # Только кейс 2 (уровень экстраполирован на более тонкую трубу). Кейс 1 — клиппинг без сдвига
+    # (lab33): z-бленды кейса 1 могут вынести ~1% чистых сегментов за номинал, и сдвиг p99 опустил
+    # бы весь профиль (у ens_blend+stats на 22871 — на 0.49 мм), хотя уровень ансамбля на валидации
+    # несмещён (+0.02..0.03 мм). У дефолта aligned_stats_cal p99 ниже номинала — сдвига и так нет.
     parts = []
-    for _, grp in pred_ds.groupby("id"):
+    for pid, grp in pred_ds.groupby("id"):
         grp = grp.copy()
-        shift = max(0.0, float(np.quantile(grp["thickness_pred"], 0.99))
-                    - float(grp["wt_nom"].iloc[0]))
+        shift = 0.0 if case_of_id[int(pid)] == "case1" else max(
+            0.0, float(np.quantile(grp["thickness_pred"], 0.99)) - float(grp["wt_nom"].iloc[0]))
         for col in ("thickness_pred", "p05", "p10", "p90", "p95"):
             grp[col] = grp[col] - shift
         parts.append(grp)

@@ -9,6 +9,10 @@ LAB_JITTER=<м> — к сдвигу прошлого пропуска (2022) в�
 интерполируется между измеренными концами; отклонение окон от линии до ~1.2 м).
 LAB_MATCH_OLD=1 — прежний match-сдвиг (окна 250 м + одна прямая), для сравнения с 60 м-окнами
 и кусочно-линейной интерполяцией (коммит 0a296d9 ветки коллеги).
+LAB_HONEST=1 — честное выравнивание (утечка из exp/newmodels lab54): у валидационных труб кейса 1
+все пропуски, кроме целевого 2023, выравниваются без 2023 (exclude), иначе train-строки «… -> 2022»
+получают координаты через скрытый пропуск. Сдвиг прошлого пропуска валидационной пары не трогается
+(по умолчанию он и так без 2023; в оракуле — намеренно по 2023).
 Пишет train_dataset.csv / predict_dataset.csv в out_dir, data/processed не трогает.
 """
 import os
@@ -24,6 +28,23 @@ from pipetwin import features  # noqa: E402
 if os.environ.get("LAB_MATCH_OLD") == "1":
     features.align.MATCH_WIN = 250.0
     features.align._shift_fn = lambda x, y, method: features.align._fit(x, y)
+
+if os.environ.get("LAB_HONEST") == "1":
+    import pandas as _pd
+
+    _tp0 = features.align.to_profile
+    _END = _pd.Timestamp(C.VAL_CASE1_END)
+    _START = _pd.Timestamp(C.VAL_CASE1_START)
+
+    def _honest(vtd, passport, pipe_id, run, exclude=None, method=None):
+        val = set(vtd.loc[vtd["run_date"] == _END, "id"].unique()) - {C.CASE1_ID}
+        run = _pd.Timestamp(run)
+        is_val_start = method is not None and run == _START  # стартовый пропуск валидационной пары
+        if pipe_id in val and run != _END and exclude is None and not is_val_start:
+            exclude = _END
+        return _tp0(vtd, passport, pipe_id, run, exclude, method=method)
+
+    features.align.to_profile = _honest
 
 JITTER = float(os.environ.get("LAB_JITTER", "0"))
 if JITTER:
