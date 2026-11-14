@@ -1,17 +1,11 @@
 {
   "buttons": [
     {
-      "name": "live",
-      "label": "Открыть стенд",
-      "icon": "external-link",
-      "href": "https://{{DOMAIN}}",
-      "primary": true
-    },
-    {
       "name": "run",
       "label": "Запустить локально",
       "icon": "terminal",
-      "href": "#запуск"
+      "href": "#запуск",
+      "primary": true
     },
     {
       "name": "docs",
@@ -22,9 +16,9 @@
   ],
   "status": [
     {
-      "label": "{{M1}}",
-      "value": "{{значение на n}}",
-      "href": "#результаты",
+      "label": "расчёт",
+      "value": "в браузере",
+      "href": "#как-это-работает",
       "tone": "accent"
     },
     {
@@ -34,7 +28,7 @@
     },
     {
       "label": "тесты",
-      "value": "{{N пройдено}}",
+      "value": "334 пройдено",
       "href": "docs/running.md"
     },
     {
@@ -53,16 +47,12 @@
       "value": "React 19 и TypeScript"
     },
     {
+      "label": "симулятор",
+      "value": "Web Worker"
+    },
+    {
       "label": "API",
-      "value": "{{FastAPI}}"
-    },
-    {
-      "label": "хранилище",
-      "value": "{{PostgreSQL 16}}"
-    },
-    {
-      "label": "модель",
-      "value": "{{название, локально}}"
+      "value": "FastAPI"
     },
     {
       "label": "запуск",
@@ -96,8 +86,7 @@
     },
     {
       "value": "Ограничения",
-      "href": "#ограничения",
-      "tone": "warning"
+      "href": "#ограничения"
     }
   ]
 }

@@ -106,9 +106,9 @@ body {
   height: 18px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke-width: var(--icon-stroke, 1.5);
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
 }
 
 .badge {
@@ -180,7 +180,7 @@ body {
     <span class="wordmark">duppel</span>
     <span class="mark" data-mark></span>
   </div>
-  <p class="promise">{{Обещание одной фразой}}, <em>{{вторая половина тезиса}}</em></p>
+  <p class="promise">Цифровой двойник трубопровода, <em>который находит утечку по расхождению с замером</em></p>
 </div>
 
 <span class="mark" data-asset="mark" data-mark style="width: 32px; height: 32px"></span>
@@ -188,11 +188,11 @@ body {
 <div id="generated"></div>
 
 <div id="icons">
-  <svg data-icon="external-link" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-  <svg data-icon="terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6M12 19h8"/></svg>
-  <svg data-icon="book-open" viewBox="0 0 24 24"><path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
-  <svg data-icon="play" viewBox="0 0 24 24"><path d="M6 3l14 9-14 9z"/></svg>
-  <svg data-icon="file-text" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zM14 2v4a2 2 0 0 0 2 2h4M16 13H8M16 17H8M10 9H8"/></svg>
+  <svg data-icon="external-link" viewBox="0 0 24 24"><path d="M14.25 3.75h6v6M20.25 3.75l-9 9M17.25 14.25v6H3.75V6.75h6"/></svg>
+  <svg data-icon="terminal" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.25v7.5L15.75 12z"/></svg>
+  <svg data-icon="book-open" viewBox="0 0 24 24"><path d="M5.25 3h13.5v18H5.25zM8.25 7.5h7.5M8.25 11.25h7.5M8.25 15h4.5"/></svg>
+  <svg data-icon="play" viewBox="0 0 24 24"><path d="M7.5 4.5v15l12-7.5z"/></svg>
+  <svg data-icon="file-text" viewBox="0 0 24 24"><path d="M5.25 3h13.5v18H5.25zM8.25 7.5h7.5M8.25 11.25h7.5M8.25 15h4.5"/></svg>
 </div>
 
 </body>

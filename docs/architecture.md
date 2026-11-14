@@ -13,7 +13,7 @@
 ## Кто что делает в системе?
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"primaryColor":"#ffffff","primaryTextColor":"#1a1a1e","primaryBorderColor":"#3d5bd9","secondaryColor":"#ececee","tertiaryColor":"#f6f6f7","lineColor":"#686872","textColor":"#1a1a1e","noteBkgColor":"#ececee","noteTextColor":"#54545c","actorBkg":"#ffffff","actorBorder":"#3d5bd9","fontFamily":"Inter Variable"}}}%%
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#ffffff","primaryTextColor":"#0f0e0d","primaryBorderColor":"#0f0e0d","secondaryColor":"#f0efed","tertiaryColor":"#f7f6f4","lineColor":"#65615c","textColor":"#0f0e0d","noteBkgColor":"#f0efed","noteTextColor":"#555451","actorBkg":"#ffffff","actorBorder":"#0f0e0d","fontFamily":"Onest Variable"}}}%%
 flowchart LR
     U1["{{Роль 1}}<br/>{{действие}}"] --> M1["{{Механика 1}}"]
     U2["{{Роль 2}}<br/>{{действие}}"] --> M2["{{Механика 2}}"]
@@ -33,7 +33,7 @@ flowchart LR
 ## Из каких частей собран стенд?
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"primaryColor":"#ffffff","primaryTextColor":"#1a1a1e","primaryBorderColor":"#3d5bd9","secondaryColor":"#ececee","tertiaryColor":"#f6f6f7","lineColor":"#686872","textColor":"#1a1a1e","noteBkgColor":"#ececee","noteTextColor":"#54545c","actorBkg":"#ffffff","actorBorder":"#3d5bd9","fontFamily":"Inter Variable"}}}%%
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#ffffff","primaryTextColor":"#0f0e0d","primaryBorderColor":"#0f0e0d","secondaryColor":"#f0efed","tertiaryColor":"#f7f6f4","lineColor":"#65615c","textColor":"#0f0e0d","noteBkgColor":"#f0efed","noteTextColor":"#555451","actorBkg":"#ffffff","actorBorder":"#0f0e0d","fontFamily":"Onest Variable"}}}%%
 flowchart LR
     B["Браузер"] -->|":{{порт}}"| FE["frontend<br/>nginx и React SPA"]
     FE -->|"/api"| BE["backend<br/>FastAPI"]
@@ -55,7 +55,7 @@ flowchart LR
 ## Как проходит основной сценарий?
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"primaryColor":"#ffffff","primaryTextColor":"#1a1a1e","primaryBorderColor":"#3d5bd9","secondaryColor":"#ececee","tertiaryColor":"#f6f6f7","lineColor":"#686872","textColor":"#1a1a1e","noteBkgColor":"#ececee","noteTextColor":"#54545c","actorBkg":"#ffffff","actorBorder":"#3d5bd9","fontFamily":"Inter Variable"}}}%%
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#ffffff","primaryTextColor":"#0f0e0d","primaryBorderColor":"#0f0e0d","secondaryColor":"#f0efed","tertiaryColor":"#f7f6f4","lineColor":"#65615c","textColor":"#0f0e0d","noteBkgColor":"#f0efed","noteTextColor":"#555451","actorBkg":"#ffffff","actorBorder":"#0f0e0d","fontFamily":"Onest Variable"}}}%%
 sequenceDiagram
     actor U as {{Пользователь}}
     participant FE as frontend

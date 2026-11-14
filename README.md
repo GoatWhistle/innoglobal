@@ -19,44 +19,42 @@ HTML-прототипы экранов: симулятор в Web Worker счи�
 
 <p align="center">
   <!-- readme:buttons -->
-  <a href="https://{{DOMAIN}}"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/cta-live.dark.png"><img src="docs/readme/cta-live.light.png" alt="Открыть стенд" width="172" height="44"></picture></a>
-  <a href="#запуск"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/cta-run.dark.png"><img src="docs/readme/cta-run.light.png" alt="Запустить локально" width="212" height="44"></picture></a>
-  <a href="docs/README.md"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/cta-docs.dark.png"><img src="docs/readme/cta-docs.light.png" alt="Документация" width="173" height="44"></picture></a>
+  <a href="#запуск"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/cta-run.dark.png"><img src="docs/readme/cta-run.light.png" alt="Запустить локально" width="220" height="44"></picture></a>
+  <a href="docs/README.md"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/cta-docs.dark.png"><img src="docs/readme/cta-docs.light.png" alt="Документация" width="176" height="44"></picture></a>
   <!-- /readme:buttons -->
 </p>
 
 <p align="center">
   <!-- readme:status -->
-  <a href="#результаты"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-1.dark.png"><img src="docs/readme/badge-status-1.light.png" alt="{{M1}}: {{значение на n}}" width="180" height="28"></picture></a>
-  <a href="#запуск"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-2.dark.png"><img src="docs/readme/badge-status-2.light.png" alt="офлайн: без ключей" width="159" height="28"></picture></a>
+  <a href="#как-это-работает"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-1.dark.png"><img src="docs/readme/badge-status-1.light.png" alt="расчёт: в браузере" width="156" height="28"></picture></a>
+  <a href="#запуск"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-2.dark.png"><img src="docs/readme/badge-status-2.light.png" alt="офлайн: без ключей" width="162" height="28"></picture></a>
   <br>
-  <a href="docs/running.md"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-3.dark.png"><img src="docs/readme/badge-status-3.light.png" alt="тесты: {{N пройдено}}" width="167" height="28"></picture></a>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-4.dark.png"><img src="docs/readme/badge-status-4.light.png" alt="интерфейс: RU и EN" width="155" height="28"></picture>
-  <a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-5.dark.png"><img src="docs/readme/badge-status-5.light.png" alt="лицензия: MIT" width="121" height="28"></picture></a>
+  <a href="docs/running.md"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-3.dark.png"><img src="docs/readme/badge-status-3.light.png" alt="тесты: 334 пройдено" width="169" height="28"></picture></a>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-4.dark.png"><img src="docs/readme/badge-status-4.light.png" alt="интерфейс: RU и EN" width="162" height="28"></picture>
+  <a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-status-5.dark.png"><img src="docs/readme/badge-status-5.light.png" alt="лицензия: MIT" width="124" height="28"></picture></a>
   <!-- /readme:status -->
 </p>
 
 <p align="center">
   <!-- readme:stack -->
-  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-stack-1.dark.png"><img src="docs/readme/badge-stack-1.light.png" alt="фронтенд: React 19 и TypeScript" width="227" height="28"></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-stack-2.dark.png"><img src="docs/readme/badge-stack-2.light.png" alt="API: {{FastAPI}}" width="122" height="28"></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-stack-3.dark.png"><img src="docs/readme/badge-stack-3.light.png" alt="хранилище: {{PostgreSQL 16}}" width="212" height="28"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-stack-1.dark.png"><img src="docs/readme/badge-stack-1.light.png" alt="фронтенд: React 19 и TypeScript" width="243" height="28"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-stack-2.dark.png"><img src="docs/readme/badge-stack-2.light.png" alt="симулятор: Web Worker" width="186" height="28"></picture>
   <br>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-stack-4.dark.png"><img src="docs/readme/badge-stack-4.light.png" alt="модель: {{название, локально}}" width="225" height="28"></picture>
-  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-stack-5.dark.png"><img src="docs/readme/badge-stack-5.light.png" alt="запуск: Docker Compose" width="181" height="28"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-stack-3.dark.png"><img src="docs/readme/badge-stack-3.light.png" alt="API: FastAPI" width="110" height="28"></picture>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-stack-4.dark.png"><img src="docs/readme/badge-stack-4.light.png" alt="запуск: Docker Compose" width="190" height="28"></picture>
   <!-- /readme:stack -->
 </p>
 
 <p align="center">
   <!-- readme:nav -->
-  <a href="#зачем-это"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-1.dark.png"><img src="docs/readme/badge-nav-1.light.png" alt="Зачем это" width="86" height="26"></picture></a>
-  <a href="#как-это-работает"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-2.dark.png"><img src="docs/readme/badge-nav-2.light.png" alt="Как это работает" width="128" height="26"></picture></a>
+  <a href="#зачем-это"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-1.dark.png"><img src="docs/readme/badge-nav-1.light.png" alt="Зачем это" width="90" height="26"></picture></a>
+  <a href="#как-это-работает"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-2.dark.png"><img src="docs/readme/badge-nav-2.light.png" alt="Как это работает" width="134" height="26"></picture></a>
   <a href="#попробовать-за-две-минуты"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-3.dark.png"><img src="docs/readme/badge-nav-3.light.png" alt="Попробовать" width="109" height="26"></picture></a>
   <br>
-  <a href="#результаты"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-4.dark.png"><img src="docs/readme/badge-nav-4.light.png" alt="Результаты" width="94" height="26"></picture></a>
-  <a href="#запуск"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-5.dark.png"><img src="docs/readme/badge-nav-5.light.png" alt="Запуск" width="67" height="26"></picture></a>
-  <a href="#устройство"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-6.dark.png"><img src="docs/readme/badge-nav-6.light.png" alt="Устройство" width="95" height="26"></picture></a>
-  <a href="#ограничения"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-7.dark.png"><img src="docs/readme/badge-nav-7.light.png" alt="Ограничения" width="108" height="26"></picture></a>
+  <a href="#результаты"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-4.dark.png"><img src="docs/readme/badge-nav-4.light.png" alt="Результаты" width="98" height="26"></picture></a>
+  <a href="#запуск"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-5.dark.png"><img src="docs/readme/badge-nav-5.light.png" alt="Запуск" width="70" height="26"></picture></a>
+  <a href="#устройство"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-6.dark.png"><img src="docs/readme/badge-nav-6.light.png" alt="Устройство" width="99" height="26"></picture></a>
+  <a href="#ограничения"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/readme/badge-nav-7.dark.png"><img src="docs/readme/badge-nav-7.light.png" alt="Ограничения" width="109" height="26"></picture></a>
   <!-- /readme:nav -->
 </p>
 
@@ -84,7 +82,7 @@ HTML-прототипы экранов: симулятор в Web Worker счи�
 ## Как это работает
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"primaryColor":"#ffffff","primaryTextColor":"#1a1a1e","primaryBorderColor":"#3d5bd9","secondaryColor":"#ececee","tertiaryColor":"#f6f6f7","lineColor":"#686872","textColor":"#1a1a1e","noteBkgColor":"#ececee","noteTextColor":"#54545c","actorBkg":"#ffffff","actorBorder":"#3d5bd9","fontFamily":"Inter Variable"}}}%%
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#ffffff","primaryTextColor":"#0f0e0d","primaryBorderColor":"#0f0e0d","secondaryColor":"#f0efed","tertiaryColor":"#f7f6f4","lineColor":"#65615c","textColor":"#0f0e0d","noteBkgColor":"#f0efed","noteTextColor":"#555451","actorBkg":"#ffffff","actorBorder":"#0f0e0d","fontFamily":"Onest Variable"}}}%%
 flowchart LR
     A["{{Вход}}<br/>{{что приходит}}"] --> B["{{Механизм 1}}"]
     B --> C["{{Механизм 2}}"]
