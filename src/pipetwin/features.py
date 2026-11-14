@@ -247,6 +247,7 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
         df["prev_q02"] = wt_nom
         df["prev_q10_nb3"] = wt_nom
         df["prev_lnn_nb3"] = 0.0
+        df["prev_ndef_w5"] = 0.0
         df["has_prev"] = 0
         return df
 
@@ -283,6 +284,10 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
     df["prev_q02"] = df["segment_id"].map(q02).fillna(df["prev_min"])
     df["prev_q10_nb3"] = df["prev_q10"].rolling(3, center=True, min_periods=1).mean()
     df["prev_lnn_nb3"] = np.log1p(df["prev_ndef"]).rolling(3, center=True, min_periods=1).mean()
+    # плотность дефектов в окне ±2 сегмента (линейно, на 1000 дефектов пропуска): слагаемое
+    # предиктора dens_quant (train.dens_quant_score, experiments/lab56b); окна ±1/±5 — то же (плато)
+    df["prev_ndef_w5"] = (df["prev_ndef"].rolling(5, center=True, min_periods=1).sum()
+                          / total_def * 1000.0)
     df["has_prev"] = 1
     return df
 
@@ -302,7 +307,7 @@ REGIME_SHARE_FEATS = ["rg_share_laminar", "rg_share_trans", "rg_share_turb"]
 CLIMB_FEATS = ["climb_len", "climb_rise", "climb_pos", "rise_500m"]
 TP_FEATS = ["t_at", "p_at"]
 # только для предиктора aligned_stats, в бустинги не идут (их состав не меняется)
-STAT_FEATS = ["prev_q10", "prev_q02", "prev_q10_nb3", "prev_lnn_nb3"]
+STAT_FEATS = ["prev_q10", "prev_q02", "prev_q10_nb3", "prev_lnn_nb3", "prev_ndef_w5"]
 # только для рельефного приора кейса 2 (train.fit_relief_prior), не в бустингах
 RELIEF_FEATS = ["sag_5", "sag_11", "sag_31", "sag_101", "curv", "vbottom", "catch_left",
                 "catch_right", "dist_to_min", "pocket_10", "pocket_25", "pocket_100",
@@ -332,9 +337,9 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
                passport, altitudes, regime, geom, grav, uzt,
                honest_ex=None, measured: bool = False) -> pd.DataFrame:
     """honest_ex — дата пропуска, который запрещено использовать для выравнивания
-    (честная валидация кейса 1, см. honest_val_rows). measured=True — у валидационной пары
-    кейса 1 сдвиг прошлого пропуска оценивается по самой паре (как в прогнозе 22871, где сдвиг
-    измерен на обоих концах), а не от соседа."""
+    (честная валидация кейса 1, см. honest_val_rows).
+    measured=True — у валидационной пары кейса 1 сдвиг прошлого пропуска оценивается по самой
+    паре (как в прогнозе 22871, где сдвиг измерен на обоих концах), а не от соседа."""
     pas = passport.set_index("id")
     frames = []
     for _, p in pairs.iterrows():
@@ -481,7 +486,6 @@ def build_all(extended: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
     pairs = prepare.build_pairs(runs, passport, extended=extended)
     train = build_rows(pairs, with_target=True, **ctx)
     train = assign_split(train)
-    train = pd.concat([train, honest_val_rows(pairs, train, ctx)], ignore_index=True)
     if not align.ORACLE:
         # второй блок валидации кейса 1: те же пары со сдвигом, измеренным по самой паре.
         # В обучение не идёт (split != "train"), только в отчёт как case1_measured; модели
@@ -491,6 +495,7 @@ def build_all(extended: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
             vm = build_rows(vp, with_target=True, measured=True, **ctx)
             vm["split"] = "val_case1_measured"
             train = pd.concat([train, vm], ignore_index=True)
+    train = pd.concat([train, honest_val_rows(pairs, train, ctx)], ignore_index=True)
     predict = build_rows(prepare.prediction_pairs(passport), with_target=False, **ctx)
 
     C.PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
