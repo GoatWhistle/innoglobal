@@ -40,14 +40,16 @@ def run() -> pd.DataFrame:
         name, smooth = PREDICTOR[case]
         scale = grp["wt_nom"].values if b.get("target") == "rel" else 1.0
         # бэг, усреднённый по сидам/сетке (train.BAG_SEEDS / PARAM_GRID)
-        preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale)
+        agg = b.get("member_agg", "mean")
+        preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale, agg=agg)
         if name == "ens_blend":
             # формы классификатора дефекта и спреда до q05 вклеиваются
             # в профиль этой трубы (lab13-19)
             p_def = models["clf"].predict_proba(X)[:, 1]
             q05 = np.mean([m.predict(X) for m in models["q05_pair"]], axis=0)
             # форма — база на денойзнутом таргете (lab60), уровень — база на минимуме
-            shape = (predict_bag(models["shape_bag"], X, grp["wt_nom"].values)["ensemble"]
+            shape = (predict_bag(models["shape_bag"], X, grp["wt_nom"].values,
+                                 agg=agg)["ensemble"]
                      if "shape_bag" in models else preds["ensemble"])
             pred = blend_prob(shape, p_def, b["blend_w"],
                               gap=shape - q05,

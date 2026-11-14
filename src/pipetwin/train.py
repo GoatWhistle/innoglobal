@@ -82,7 +82,9 @@ CASES = {
                   aft=dict(dist="normal", sigma=3.0, lr=0.1, rounds=300),
                   # calib="prev" (lab41) и shrink=dict(lam=0.5, win=5) (lab60) выключены:
                   # на честной валидации (exp/honest-val) оба вредят, см. lab63
-                  blend_w=2.0, gap_w=0.5, calib=None, shrink=None),
+                  blend_w=2.0, gap_w=0.5, calib=None, shrink=None,
+                  # lab63: медиана LGBM/XGB/AFT вместо среднего (honest 8/8 по r², r2d, MAE)
+                  member_agg="median"),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID),
@@ -165,7 +167,7 @@ def fit_bag(X: pd.DataFrame, y: pd.Series, lb: np.ndarray, ub: np.ndarray,
 
 
 def predict_bag(bag: list[dict], X: pd.DataFrame, wt_nom: np.ndarray,
-                scale=1.0) -> dict[str, np.ndarray]:
+                scale=1.0, agg: str = "mean") -> dict[str, np.ndarray]:
     """Прогноз толщины: члены ансамбля усреднены по сидам + общий ансамбль.
 
     Состав членов берётся из самого бэга (кейс 2 — только LGBM, без AFT).
@@ -176,7 +178,9 @@ def predict_bag(bag: list[dict], X: pd.DataFrame, wt_nom: np.ndarray,
     if "aft" in bag[0]:
         dm = xgboost.DMatrix(X)
         out["aft"] = wt_nom - np.mean([m["aft"].predict(dm) for m in bag], axis=0)
-    out["ensemble"] = np.mean(list(out.values()), axis=0)
+    # agg="median" — медиана членов (lab63, кейс 1): на честной валидации r² бленда
+    # 0.226 -> 0.256, r2d 0.063 -> 0.102, MAE 0.335 -> 0.322 (8/8 сидов)
+    out["ensemble"] = (np.median if agg == "median" else np.mean)(list(out.values()), axis=0)
     return out
 
 
@@ -421,7 +425,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         val_bag = [m for p in grid for m in fit_bag(
             X_tr, y_tr, tr["aft_lb"].values, tr["aft_ub"].values, p, cfg["aft"],
             families=cfg["families"])]
-        val_preds = predict_bag(val_bag, va[feats], va["wt_nom"].values, va_scale)
+        val_preds = predict_bag(val_bag, va[feats], va["wt_nom"].values, va_scale,
+                                agg=cfg.get("member_agg", "mean"))
         shr = cfg.get("shrink")
         if cfg.get("blend_w"):
             p_va = fit_clf(X_tr, tr["had_defect"]).predict_proba(va[feats])[:, 1]
@@ -432,7 +437,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                 ens_shape = predict_bag(fit_bag(
                     X_tr, ys_tr, lab["aft_lb"].values, lab["aft_ub"].values,
                     best_params, cfg["aft"], families=cfg["families"]),
-                    va[feats], va["wt_nom"].values)["ensemble"]
+                    va[feats], va["wt_nom"].values,
+                    agg=cfg.get("member_agg", "mean"))["ensemble"]
                 val_preds["ensemble_shrink"] = ens_shape
             q05_va = np.mean([m.predict(va[feats])
                               for m in fit_q05_pair(X_tr, ys_tr, cfg.get("params"))], axis=0)
@@ -495,7 +501,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                                      params=best_params, target=cfg["target"],
                                      blend_w=cfg.get("blend_w"),
                                      gap_w=cfg.get("gap_w", 0.0),
-                                     calib=cfg.get("calib"))
+                                     calib=cfg.get("calib"),
+                                     member_agg=cfg.get("member_agg", "mean"))
 
     report = pd.DataFrame(report_rows)
     C.ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
