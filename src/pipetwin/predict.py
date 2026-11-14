@@ -56,8 +56,17 @@ def run() -> pd.DataFrame:
             pred = (pd.Series(pred)
                     .rolling(smooth, center=True, min_periods=1).median().values)
         grp["thickness_pred"] = pred
-        for tag in ("p05", "p10", "p90", "p95"):
-            grp[tag] = models[tag].predict(X) * scale
+        conf = b.get("conformal")
+        if conf:
+            # кейс 1: конформный интервал вокруг прогноза (lab43), покрытие 80%/90%;
+            # центр — уже в физических рамках (невязки считались по клиппированному)
+            center = np.clip(pred, 0.5, grp["wt_nom"].values)
+            for lo, hi, key in (("p10", "p90", "p10_p90"), ("p05", "p95", "p05_p95")):
+                grp[lo] = center - conf[key]
+                grp[hi] = center + conf[key]
+        else:
+            for tag in ("p05", "p10", "p90", "p95"):
+                grp[tag] = models[tag].predict(X) * scale
         parts.append(grp)
     pred_ds = pd.concat(parts, ignore_index=True)
 

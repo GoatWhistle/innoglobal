@@ -223,6 +223,20 @@ def calibrate_mm(blend: np.ndarray, ens: np.ndarray, prev_min: np.ndarray) -> np
     return zscore(blend) * scale + float(np.median(ens))
 
 
+def conformal_halfwidths(resid: np.ndarray) -> dict[str, float]:
+    """Сплит-конформные полуширины |невязки| для уровней 80% (p10-p90) и 90% (p05-p95).
+
+    lab43: квантильный конверт CatBoost p10-p90 на валидации кейса 1 покрывал 13%
+    (ширина 0.13 мм), с монотонностью вокруг прогноза — 31%; симметричный конформный
+    интервал (кросс-фит по блокам валидации) — 83% при ширине 0.86 мм, уже CQR (80%/0.97)
+    и асимметричного (86%/1.01).
+    """
+    a = np.sort(np.abs(resid))
+    n = len(a)
+    return {tag: float(a[min(n - 1, int(np.ceil((n + 1) * lvl)) - 1)])
+            for tag, lvl in (("p10_p90", 0.8), ("p05_p95", 0.9))}
+
+
 def fit_q05_pair(X: pd.DataFrame, y: pd.Series, params: dict | None = None) -> list:
     """Пара LGBM+XGB на alpha=0.05 — спред до q05 для gap-члена бленда."""
     params = params or {}
@@ -383,6 +397,9 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             # прод-путь (predict.py): физические рамки [0.5 мм, номинал]
             val_preds["ens_blend_phys"] = np.clip(
                 val_preds["ens_blend"], 0.5, va["wt_nom"].values)
+            # конформные полуширины интервала (lab43): по невязкам прод-пути на
+            # 2023-парах соседей; p10-p90 CatBoost покрывали лишь 13% валидации
+            conf = conformal_halfwidths(y_va - val_preds["ens_blend_phys"])
         for base_name in ("catboost", "ensemble", "ens_blend"):
             if base_name not in val_preds:
                 continue
@@ -414,7 +431,9 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             m = make_model("catboost", dict(best_params["catboost"]), alpha=alpha)
             m.fit(X_all, y_all)
             final[tag] = m
-        bundle["cases"][case] = dict(models=final, features=feats,
+        if not cfg.get("blend_w"):
+            conf = None
+        bundle["cases"][case] = dict(conformal=conf, models=final, features=feats,
                                      params=best_params, target=cfg["target"],
                                      blend_w=cfg.get("blend_w"),
                                      gap_w=cfg.get("gap_w", 0.0),
@@ -426,7 +445,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
     report.to_csv(C.ARTIFACTS_DIR / "validation_report.csv", index=False)
     (C.ARTIFACTS_DIR / "metrics.json").write_text(json.dumps(
         dict(report=report.to_dict("records"),
-             params={c: b["params"] for c, b in bundle["cases"].items()}),
+             params={c: b["params"] for c, b in bundle["cases"].items()},
+             conformal={c: b.get("conformal") for c, b in bundle["cases"].items()}),
         ensure_ascii=False, indent=2, default=str))
 
     for case, b in bundle["cases"].items():
