@@ -24,9 +24,9 @@ from . import align as _align
 PREDICTOR = {"case1": ("ens_blend", None if _align.MODE == "profile" else 5),
              "case2": ("ens_prior_cal", None)}
 # case2 (lab36-39): LGBM-сетка без абсолютной отметки z + рельефный приор дефекта
-# (логрегрессия на рельефе, обучена на трубах ЦППН — режим 9583) блендом z(ens)+0.5·z(−P),
+# (логрегрессия на рельефе, обучена на трубах ЦППН — режим 9583) блендом z(ens)+0.5·z(−логит P),
 # затем калибровка уровня/масштаба по аналогам направления (R3): среднее = номинал −
-# средняя скорость потери труб того же направления × возраст, p99 = номинал. Аффинно.
+# средняя скорость потери труб того же направления × возраст, максимум = номинал. Аффинно.
 # У 9583 бустинг без z даёт константу — форма целиком от приора, полки нет.
 
 
@@ -57,7 +57,7 @@ def run() -> pd.DataFrame:
                               gap=preds["ensemble"] - q05,
                               gap_w=b.get("gap_w", 0.0))
         elif name == "ens_prior_cal":
-            p_def = models["relief_prior"].predict_proba(grp[F.PRIOR_FEATS].fillna(0.0))[:, 1]
+            p_def = models["relief_prior"].decision_function(grp[F.PRIOR_FEATS].fillna(0.0))
             shaped = prior_blend(preds["ensemble"], p_def, b["prior_w"])
             rates = analog_rates(models["analog_rows"], dir_of[int(pipe_id)], dir_of)
             pred = calibrate_level(shaped, float(grp["wt_nom"].iloc[0]),

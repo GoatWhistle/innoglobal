@@ -13,8 +13,8 @@ case2,b2_prev_smoothed,525,0.0,1.18
 case2,lgbm,525,0.1902,0.854
 case2,ensemble,525,0.1902,0.854
 case2,ensemble_smooth5,525,0.1625,0.863
-case2,ens_prior,525,0.1946,0.856
-case2,ens_prior_cal,525,0.1946,0.815
+case2,ens_prior,525,0.2003,0.853
+case2,ens_prior_cal,525,0.2003,0.789
 case2_strict,ensemble,525,0.0296,0.945
-case2_strict,ens_prior,525,0.048,0.94
-case2_strict,ens_prior_cal,525,0.048,0.866
+case2_strict,ens_prior,525,0.0489,0.939
+case2_strict,ens_prior_cal,525,0.0489,0.856

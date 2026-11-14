@@ -102,15 +102,15 @@
       "case": "case2",
       "model": "ens_prior",
       "n": 525,
-      "pearson_r2": 0.1946,
-      "mae": 0.856
+      "pearson_r2": 0.2003,
+      "mae": 0.853
     },
     {
       "case": "case2",
       "model": "ens_prior_cal",
       "n": 525,
-      "pearson_r2": 0.1946,
-      "mae": 0.815
+      "pearson_r2": 0.2003,
+      "mae": 0.789
     },
     {
       "case": "case2_strict",
@@ -123,15 +123,15 @@
       "case": "case2_strict",
       "model": "ens_prior",
       "n": 525,
-      "pearson_r2": 0.048,
-      "mae": 0.94
+      "pearson_r2": 0.0489,
+      "mae": 0.939
     },
     {
       "case": "case2_strict",
       "model": "ens_prior_cal",
       "n": 525,
-      "pearson_r2": 0.048,
-      "mae": 0.866
+      "pearson_r2": 0.0489,
+      "mae": 0.856
     }
   ],
   "params": {
