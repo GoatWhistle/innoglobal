@@ -18,50 +18,50 @@
       "case": "case1",
       "model": "catboost",
       "n": 55,
-      "pearson_r2": 0.21,
-      "mae": 0.353
+      "pearson_r2": 0.1769,
+      "mae": 0.347
     },
     {
       "case": "case1",
       "model": "lgbm",
       "n": 55,
-      "pearson_r2": 0.185,
-      "mae": 0.36
+      "pearson_r2": 0.1688,
+      "mae": 0.356
     },
     {
       "case": "case1",
       "model": "xgb",
       "n": 55,
-      "pearson_r2": 0.0785,
-      "mae": 0.412
+      "pearson_r2": 0.084,
+      "mae": 0.469
     },
     {
       "case": "case1",
       "model": "aft",
       "n": 55,
-      "pearson_r2": 0.1341,
-      "mae": 0.551
+      "pearson_r2": 0.1768,
+      "mae": 0.479
     },
     {
       "case": "case1",
       "model": "ensemble",
       "n": 55,
-      "pearson_r2": 0.1728,
-      "mae": 0.385
+      "pearson_r2": 0.1709,
+      "mae": 0.392
     },
     {
       "case": "case1",
       "model": "catboost_smooth5",
       "n": 55,
-      "pearson_r2": 0.2105,
-      "mae": 0.342
+      "pearson_r2": 0.1819,
+      "mae": 0.347
     },
     {
       "case": "case1",
       "model": "ensemble_smooth5",
       "n": 55,
-      "pearson_r2": 0.2126,
-      "mae": 0.354
+      "pearson_r2": 0.2592,
+      "mae": 0.361
     },
     {
       "case": "case2",
@@ -81,50 +81,50 @@
       "case": "case2",
       "model": "catboost",
       "n": 525,
-      "pearson_r2": 0.0841,
-      "mae": 0.922
+      "pearson_r2": 0.097,
+      "mae": 0.915
     },
     {
       "case": "case2",
       "model": "lgbm",
       "n": 525,
-      "pearson_r2": 0.035,
-      "mae": 0.931
+      "pearson_r2": 0.1748,
+      "mae": 0.864
     },
     {
       "case": "case2",
       "model": "xgb",
       "n": 525,
-      "pearson_r2": 0.0334,
-      "mae": 0.928
+      "pearson_r2": 0.1077,
+      "mae": 0.885
     },
     {
       "case": "case2",
       "model": "aft",
       "n": 525,
-      "pearson_r2": 0.135,
-      "mae": 0.845
+      "pearson_r2": 0.146,
+      "mae": 0.83
     },
     {
       "case": "case2",
       "model": "ensemble",
       "n": 525,
-      "pearson_r2": 0.1077,
-      "mae": 0.888
+      "pearson_r2": 0.1639,
+      "mae": 0.864
     },
     {
       "case": "case2",
       "model": "catboost_smooth5",
       "n": 525,
-      "pearson_r2": 0.0697,
-      "mae": 0.924
+      "pearson_r2": 0.0849,
+      "mae": 0.917
     },
     {
       "case": "case2",
       "model": "ensemble_smooth5",
       "n": 525,
-      "pearson_r2": 0.0808,
-      "mae": 0.895
+      "pearson_r2": 0.1339,
+      "mae": 0.872
     }
   ],
   "params": {

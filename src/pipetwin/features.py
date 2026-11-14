@@ -59,6 +59,7 @@ def load_regime() -> pd.DataFrame:
         select pipe_id as id, calc_date, watercut_pct as watercut,
                v_liquid_m_s as v_liquid_true, v_mix_m_s as v_mix, gas_content_rate,
                p_start_atm as p_start, t_start_c as t_start, t_mix_c as t_mix,
+               p_end_atm as p_end, t_end_c as t_end,
                pit_corrosion_intensity, q_liquid as q, flow_regime
         from core.regime_daily order by pipe_id, calc_date""")
 
@@ -93,6 +94,12 @@ def regime_features(regime: pd.DataFrame, pipe_id: int,
         rg_share_laminar=sh("Ламинарный"),
         rg_share_trans=sh("Переходный"),
         rg_share_turb=sh("Турбулентный"),
+        # граничные T/P участка — сырьё для интерполяции вдоль дистанции
+        # (experiments/lab12); из датасета удаляются в build_rows
+        tp_t_start=w["t_start"].mean(),
+        tp_t_end=w["t_end"].mean(),
+        tp_p_start=w["p_start"].mean(),
+        tp_p_end=w["p_end"].mean(),
     )
 
 
@@ -216,18 +223,20 @@ POCKET_FEATS = ["pocket_depth"]
 CHEM_FEATS = ["grav_cl", "grav_mineralization"]
 REGIME_SHARE_FEATS = ["rg_share_laminar", "rg_share_trans", "rg_share_turb"]
 CLIMB_FEATS = ["climb_len", "climb_rise", "climb_pos", "rise_500m"]
+TP_FEATS = ["t_at", "p_at"]
 OPTIONAL_FEATS = (UZT_FEATS + PROF_FEATS + INTER_FEATS + ERA_FEATS + POCKET_FEATS
-                  + CHEM_FEATS + REGIME_SHARE_FEATS + CLIMB_FEATS)
+                  + CHEM_FEATS + REGIME_SHARE_FEATS + CLIMB_FEATS + TP_FEATS)
 
 
 def case_features(ds: pd.DataFrame, case: str) -> list[str]:
-    """Наборы по кейсам: case1 — база + доли режимов течения; case2 — база + УЗТ +
-    эпохи ингибирования (скорость коррозии по гравиметрии упала на порядок после
-    2012-2013) + затяжные подъёмы. Режимы/подъёмы — experiments/lab8 (3 сида)."""
+    """Наборы по кейсам: case1 — база + доли режимов течения + интерполяция T/P;
+    case2 — база + УЗТ + эпохи ингибирования (скорость коррозии по гравиметрии
+    упала на порядок после 2012-2013) + затяжные подъёмы + интерполяция T.
+    Режимы/подъёмы — experiments/lab8; t_at/p_at — lab12 (p_at кейсу 2 вредит)."""
     base = [c for c in feature_columns(ds) if c not in OPTIONAL_FEATS]
     if case == "case2":
-        return base + UZT_FEATS + ERA_FEATS + CLIMB_FEATS
-    return base + REGIME_SHARE_FEATS
+        return base + UZT_FEATS + ERA_FEATS + CLIMB_FEATS + ["t_at"]
+    return base + REGIME_SHARE_FEATS + TP_FEATS
 
 
 def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
@@ -244,6 +253,12 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
 
         for k, v in regime_features(regime, pipe_id, start, end).items():
             df[k] = v
+        # пространственная интерполяция техрежима (experiments/lab12): режим
+        # дан одним расчётом на участок, но граничные T/P дают линейный
+        # профиль вдоль дистанции — единственная вариация режима по трубе
+        df["t_at"] = df["tp_t_start"] + df["dist_frac"] * (df["tp_t_end"] - df["tp_t_start"])
+        df["p_at"] = df["tp_p_start"] + df["dist_frac"] * (df["tp_p_end"] - df["tp_p_start"])
+        df = df.drop(columns=["tp_t_start", "tp_t_end", "tp_p_start", "tp_p_end"])
         df = df.merge(uzt_features(uzt, passport, pipe_id, end, len(df)),
                       on="segment_id")
         # физические взаимодействия: вода стоит в низинах при медленном потоке
