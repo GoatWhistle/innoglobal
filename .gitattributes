@@ -1,0 +1,4 @@
+*.duckdb binary
+*.joblib binary
+*.gz binary
+*.pdf binary
