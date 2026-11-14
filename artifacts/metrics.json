@@ -5,98 +5,144 @@
       "model": "b1_nominal_minus_rate",
       "n": 55,
       "pearson_r2": 0.0,
-      "mae": 1.319
+      "mae": 1.319,
+      "rmse": 1.379,
+      "mape": 22.78
     },
     {
       "case": "case1",
       "model": "b2_prev_smoothed",
       "n": 55,
       "pearson_r2": 0.014,
-      "mae": 0.476
+      "mae": 0.476,
+      "rmse": 0.633,
+      "mape": 8.22
     },
     {
       "case": "case1",
       "model": "lgbm",
       "n": 55,
       "pearson_r2": 0.2428,
-      "mae": 0.393
+      "mae": 0.393,
+      "rmse": 0.521,
+      "mape": 6.44
     },
     {
       "case": "case1",
       "model": "xgb",
       "n": 55,
       "pearson_r2": 0.099,
-      "mae": 0.492
+      "mae": 0.492,
+      "rmse": 0.606,
+      "mape": 8.36
     },
     {
       "case": "case1",
       "model": "aft",
       "n": 55,
       "pearson_r2": 0.3872,
-      "mae": 0.435
+      "mae": 0.435,
+      "rmse": 0.554,
+      "mape": 7.52
     },
     {
       "case": "case1",
       "model": "ensemble",
       "n": 55,
       "pearson_r2": 0.3739,
-      "mae": 0.33
+      "mae": 0.33,
+      "rmse": 0.448,
+      "mape": 5.62
     },
     {
       "case": "case1",
       "model": "ens_blend",
       "n": 55,
       "pearson_r2": 0.6172,
-      "mae": 0.278
+      "mae": 0.267,
+      "rmse": 0.356,
+      "mape": 4.66
+    },
+    {
+      "case": "case1",
+      "model": "ens_blend_uncal",
+      "n": 55,
+      "pearson_r2": 0.6172,
+      "mae": 0.278,
+      "rmse": 0.375,
+      "mape": 4.89
+    },
+    {
+      "case": "case1",
+      "model": "ens_blend_phys",
+      "n": 55,
+      "pearson_r2": 0.6128,
+      "mae": 0.254,
+      "rmse": 0.35,
+      "mape": 4.5
     },
     {
       "case": "case1",
       "model": "ensemble_smooth5",
       "n": 55,
       "pearson_r2": 0.4032,
-      "mae": 0.329
+      "mae": 0.329,
+      "rmse": 0.458,
+      "mape": 5.62
     },
     {
       "case": "case1",
       "model": "ens_blend_smooth5",
       "n": 55,
       "pearson_r2": 0.3808,
-      "mae": 0.325
+      "mae": 0.314,
+      "rmse": 0.464,
+      "mape": 5.28
     },
     {
       "case": "case2",
       "model": "b1_nominal_minus_rate",
       "n": 525,
       "pearson_r2": 0.0,
-      "mae": 1.028
+      "mae": 1.028,
+      "rmse": 1.171,
+      "mape": 16.64
     },
     {
       "case": "case2",
       "model": "b2_prev_smoothed",
       "n": 525,
       "pearson_r2": 0.0,
-      "mae": 1.18
+      "mae": 1.18,
+      "rmse": 1.554,
+      "mape": 20.01
     },
     {
       "case": "case2",
       "model": "lgbm",
       "n": 525,
       "pearson_r2": 0.1813,
-      "mae": 0.861
+      "mae": 0.861,
+      "rmse": 1.066,
+      "mape": 11.97
     },
     {
       "case": "case2",
       "model": "ensemble",
       "n": 525,
       "pearson_r2": 0.1813,
-      "mae": 0.861
+      "mae": 0.861,
+      "rmse": 1.066,
+      "mape": 11.97
     },
     {
       "case": "case2",
       "model": "ensemble_smooth5",
       "n": 525,
       "pearson_r2": 0.1524,
-      "mae": 0.87
+      "mae": 0.87,
+      "rmse": 1.077,
+      "mape": 12.1
     }
   ],
   "params": {

@@ -80,7 +80,7 @@ CASES = {
                   params={f: dict(n_estimators=300, learning_rate=0.1)
                           for f in ("lgbm", "xgb")},
                   aft=dict(dist="normal", sigma=3.0, lr=0.1, rounds=300),
-                  blend_w=2.0, gap_w=0.5),
+                  blend_w=2.0, gap_w=0.5, calib="prev"),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID),
@@ -202,6 +202,25 @@ def blend_prob(ens: np.ndarray, p: np.ndarray, w: float,
     if gap is not None and gap_w:
         b = b + gap_w * zscore(gap)
     return zscore(b) * float(np.std(ens)) + float(np.mean(ens))
+
+
+def calibrate_mm(blend: np.ndarray, ens: np.ndarray, prev_min: np.ndarray) -> np.ndarray:
+    """Калибровка бленда в мм (lab41): форма z(бленда), уровень — медиана ens,
+    разброс — разброс минимумов прошлого пропуска этой трубы.
+
+    Пирсон к аффинному преобразованию инвариантен — r² не меняется. Бленд
+    наследовал разброс ens (0.31 мм на валидации), а реальный разброс толщин
+    за 1.4 года почти тот же, что у прошлого пропуска (0.55 против 0.50):
+    прогноз был сжат к среднему. Масштаб std(prev_min) — правило без подбора
+    (прошлый профиль известен в момент прогноза), медиана — уровень под MAE.
+    Валидация, 8/8 сидов: MAE 0.279 -> 0.267, RMSE 0.374 -> 0.356, MAPE 4.90 -> 4.66%.
+    Внутренний CV по train-парам 2018->2022 для калибровки непригоден:
+    модель там без навыка (r² 0.00-0.05), подогнанный наклон ломает и r², и MAE.
+    """
+    scale = float(np.std(prev_min))
+    if scale < 1e-12:
+        scale = float(np.std(ens))
+    return zscore(blend) * scale + float(np.median(ens))
 
 
 def fit_q05_pair(X: pd.DataFrame, y: pd.Series, params: dict | None = None) -> list:
@@ -338,7 +357,9 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             report_rows.append(dict(
                 case=case, model=name, n=len(va),
                 pearson_r2=round(pearson_r2(y_va, p.values), 4),
-                mae=round(float(np.mean(np.abs(y_va - p.values))), 3)))
+                mae=round(float(np.mean(np.abs(y_va - p.values))), 3),
+                rmse=round(float(np.sqrt(np.mean((y_va - p.values) ** 2))), 3),
+                mape=round(float(np.mean(np.abs(y_va - p.values) / y_va) * 100), 2)))
 
         best_params = {fam: (tune(fam, X_tr, y_tr, groups, tune_trials)
                              if tune_trials else dict(cfg.get("params", {}).get(fam, {})))
@@ -355,6 +376,13 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             val_preds["ens_blend"] = blend_prob(
                 val_preds["ensemble"], p_va, cfg["blend_w"],
                 gap=val_preds["ensemble"] - q05_va, gap_w=cfg.get("gap_w", 0.0))
+            if cfg.get("calib") == "prev":
+                val_preds["ens_blend_uncal"] = val_preds["ens_blend"]
+                val_preds["ens_blend"] = calibrate_mm(
+                    val_preds["ens_blend"], val_preds["ensemble"], va["prev_min"].values)
+            # прод-путь (predict.py): физические рамки [0.5 мм, номинал]
+            val_preds["ens_blend_phys"] = np.clip(
+                val_preds["ens_blend"], 0.5, va["wt_nom"].values)
         for base_name in ("catboost", "ensemble", "ens_blend"):
             if base_name not in val_preds:
                 continue
@@ -367,7 +395,9 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             report_rows.append(dict(
                 case=case, model=name, n=len(va),
                 pearson_r2=round(pearson_r2(y_va, p), 4),
-                mae=round(float(np.mean(np.abs(y_va - p))), 3)))
+                mae=round(float(np.mean(np.abs(y_va - p))), 3),
+                rmse=round(float(np.sqrt(np.mean((y_va - p) ** 2))), 3),
+                mape=round(float(np.mean(np.abs(y_va - p) / y_va) * 100), 2)))
 
         # финальные модели кейса: дообучение на train + val этого кейса
         X_all = subset[feats]
@@ -387,7 +417,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         bundle["cases"][case] = dict(models=final, features=feats,
                                      params=best_params, target=cfg["target"],
                                      blend_w=cfg.get("blend_w"),
-                                     gap_w=cfg.get("gap_w", 0.0))
+                                     gap_w=cfg.get("gap_w", 0.0),
+                                     calib=cfg.get("calib"))
 
     report = pd.DataFrame(report_rows)
     C.ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)

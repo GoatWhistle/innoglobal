@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from . import config as C
-from .train import blend_prob, predict_bag
+from .train import blend_prob, calibrate_mm, predict_bag
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
 # на всех 3 сидах по r² и sm5):
@@ -48,6 +48,8 @@ def run() -> pd.DataFrame:
             pred = blend_prob(preds["ensemble"], p_def, b["blend_w"],
                               gap=preds["ensemble"] - q05,
                               gap_w=b.get("gap_w", 0.0))
+            if b.get("calib") == "prev":
+                pred = calibrate_mm(pred, preds["ensemble"], grp["prev_min"].values)
         else:
             pred = preds[name]
         if smooth:
@@ -63,9 +65,16 @@ def run() -> pd.DataFrame:
     # уровень прогноза выше номинала трубы (экстраполяция на более тонкую
     # трубу), опускаем весь профиль так, чтобы p99 лёг на номинал — иначе
     # клиппинг срезал бы профиль в константу и обнулил корреляцию.
+    # Только кейс 2: у кейса 1 труба та же 8 мм, что в обучении, а p99 профиля
+    # выше номинала дают бездефектные сегменты (z бленда 5-6) — до lab42 это
+    # правило сдвигало весь профиль 1250022871 вниз на 1.04 мм (среднее 5.94 -> 4.90
+    # при прошлом пропуске 6.29: ~1 мм/год против ~0.25 на валидации 2022->2023).
     parts = []
-    for _, grp in pred_ds.groupby("id"):
+    for pipe_id, grp in pred_ds.groupby("id"):
         grp = grp.copy()
+        if case_of_id[int(pipe_id)] != "case2":
+            parts.append(grp)
+            continue
         shift = max(0.0, float(np.quantile(grp["thickness_pred"], 0.99))
                     - float(grp["wt_nom"].iloc[0]))
         for col in ("thickness_pred", "p05", "p10", "p90", "p95"):
