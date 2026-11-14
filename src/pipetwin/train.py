@@ -96,11 +96,14 @@ def survival_labels(ds: pd.DataFrame) -> pd.DataFrame:
     """
     ds = ds.copy()
     loss = (ds["wt_nom"] - ds["y"]).clip(lower=AFT_EPS)
-    det = (ds[ds["had_defect"]].groupby(["id", "end"])
+    # split в ключе: строки train_honest (те же труба/пропуск, иное выравнивание)
+    # не должны менять порог исходных строк
+    keys = ["id", "end", "split"] if "split" in ds else ["id", "end"]
+    det = (ds[ds["had_defect"]].groupby(keys)
            .apply(lambda g: max(0.3, float((g["wt_nom"] - g["y"])
                                            .clip(lower=AFT_EPS).min())),
                   include_groups=False))
-    thr = ds.set_index(["id", "end"]).index.map(det).to_numpy().astype(float)
+    thr = ds.set_index(keys).index.map(det).to_numpy().astype(float)
     thr = np.where(np.isnan(thr), 0.3, thr)
     ds["aft_lb"] = np.where(ds["had_defect"], loss, AFT_EPS)
     ds["aft_ub"] = np.where(ds["had_defect"], loss, thr)
@@ -321,7 +324,19 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
     for case, cfg in CASES.items():
         feats = F.case_features(ds, case)
         subset = ds[ds["kind"].isin(cfg["train_kinds"])]
+        honest = subset[subset["split"] == "train_honest"]
+        subset = subset[subset["split"] != "train_honest"]
         tr = subset[subset["split"] == "train"]
+        if case == "case1" and len(honest):
+            # честная валидация: строки труб валидации, выровненные без пропуска 2023
+            # (features.honest_val_rows); замена на тех же позициях — порядок строк
+            # влияет на бустинги, финальное обучение ниже — на исходных строках
+            key = ["id", "start", "end", "kind", "segment_id"]
+            mask = tr["id"].isin(honest["id"].unique()).to_numpy()
+            rep = honest.set_index(key).loc[pd.MultiIndex.from_frame(tr.loc[mask, key])]
+            tr = tr.copy()
+            for c in rep.columns.drop("split"):
+                tr.loc[mask, c] = rep[c].to_numpy()
         va = ds[ds["split"] == cfg["val_split"]]
         if case == "case2" and os.environ.get("PIPETWIN_VAL2_STRICT") == "1":
             # у целевой трубы кейса 2 нет ни одного пропуска: валидационная труба тоже
