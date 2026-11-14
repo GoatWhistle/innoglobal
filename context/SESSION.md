@@ -78,3 +78,5 @@ circumferential rule. Details: work/audits/pipe-style/README.md. Next: user revi
 shared nav ds/site-nav.{js,css}, archive ds/archive.html, copy rewritten to wall case, «Сигналы»
 and «Свежесть данных». Checks: wall browser script, field tests, 14-page sweep (no overflow/errors;
 axe = same 16 pre-existing as 0310a8c). Next: user review; plan stages 3.3–3.4 and 4.
+2026-11-14: user «запушь все это дело»: rebased onto the user's duppel brand commits (3ed6412) and
+pushed feat/redesign-oil. Oil in the section now flows (laminar, dark theme, motion allowed).
