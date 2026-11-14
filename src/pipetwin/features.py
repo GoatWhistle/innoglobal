@@ -276,7 +276,10 @@ def case_features(ds: pd.DataFrame, case: str) -> list[str]:
 
 
 def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
-               passport, altitudes, regime, geom, grav, uzt) -> pd.DataFrame:
+               passport, altitudes, regime, geom, grav, uzt,
+               honest_ex=None) -> pd.DataFrame:
+    """honest_ex — дата пропуска, который запрещено использовать для выравнивания
+    (честная валидация кейса 1, см. honest_val_rows)."""
     pas = passport.set_index("id")
     frames = []
     for _, p in pairs.iterrows():
@@ -290,7 +293,7 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
             # всё в координатах профиля; у валидационной пары кейса 1 целевой пропуск не
             # используется для оценки сдвига прошлого (как при настоящем прогнозе)
             ex = (pd.Timestamp(end) if align.is_case1_val(pipe_id, start, end) and not align.ORACLE
-                  else None)
+                  else honest_ex)
             # кейс 1 (валидация 2022 -> 2023 и прогноз целевой трубы) — сдвиг по совпавшим дефектам
             case1 = (align.is_case1_val(pipe_id, start, end)
                      or (not with_target and pipe_id == C.CASE1_ID))
@@ -302,7 +305,8 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
                                               int(nseg.loc[pipe_id]))
             if with_target:
                 vtd_end = align.shifted_vtd(vtd, pipe_id, end,
-                                            align.to_profile(vtd, passport, pipe_id, end),
+                                            align.to_profile(vtd, passport, pipe_id, end,
+                                                             honest_ex),
                                             int(nseg.loc[pipe_id]))
         elif kind == "vtd2vtd":
             # дистанции прошлого пропуска -> координаты целевого (сбой одометра, align.py)
@@ -376,6 +380,31 @@ def assign_split(ds: pd.DataFrame) -> pd.DataFrame:
     return ds[~leak].reset_index(drop=True)
 
 
+def honest_val_rows(pairs: pd.DataFrame, train: pd.DataFrame, ctx: dict) -> pd.DataFrame:
+    """Строки труб валидации кейса 1 с выравниванием БЕЗ целевого пропуска валидации.
+
+    align.to_profile выравнивает пропуск цепочкой к более позднему пропуску той же трубы с
+    высотами. Для труб валидации (соседи цели, пара 2022 -> 2023) это пропуск 2023 — скрытый
+    таргет валидации: обучающие строки «… -> 2022» получали координаты из него (таргет 2022 в
+    таких координатах коррелирует с таргетом валидации r²=0.59, честно — 0.12), и бустинги
+    запоминали профиль по позиционным признакам (experiments lab54, ветка exp/newmodels).
+    Эти строки заменяют исходные ТОЛЬКО в модели валидации кейса 1 (split=train_honest);
+    финальные модели и боевой прогноз (у 22871 пропуска 2023 нет) не меняются.
+    """
+    if align.MODE != "profile" or align.ORACLE:
+        return train.iloc[0:0]
+    end = pd.Timestamp(C.VAL_CASE1_END)
+    vids = train.loc[train["split"] == "val_case1", "id"].unique()
+    keep = train[(train["split"] == "train") & train["id"].isin(vids)][["id", "start", "end", "kind"]]
+    sel = pairs.merge(keep.drop_duplicates(), on=["id", "start", "end", "kind"])
+    sel = sel[sel["end"] != end]
+    if sel.empty:
+        return train.iloc[0:0]
+    rows = build_rows(sel, with_target=True, honest_ex=end, **ctx)
+    rows["split"] = "train_honest"
+    return rows[train.columns]
+
+
 def feature_columns(ds: pd.DataFrame) -> list[str]:
     return [c for c in ds.columns if c not in META_COLS]
 
@@ -394,9 +423,10 @@ def build_all(extended: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
     ctx = dict(vtd=vtd, runs=runs, nseg=nseg, passport=passport,
                altitudes=altitudes, regime=regime, geom=geom, grav=grav,
                uzt=load_uzt())
-    train = build_rows(prepare.build_pairs(runs, passport, extended=extended),
-                       with_target=True, **ctx)
+    pairs = prepare.build_pairs(runs, passport, extended=extended)
+    train = build_rows(pairs, with_target=True, **ctx)
     train = assign_split(train)
+    train = pd.concat([train, honest_val_rows(pairs, train, ctx)], ignore_index=True)
     predict = build_rows(prepare.prediction_pairs(passport), with_target=False, **ctx)
 
     C.PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
