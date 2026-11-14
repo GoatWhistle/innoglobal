@@ -113,6 +113,24 @@ figcaption{font-family:var(--head);font-size:15px;font-weight:600;margin-bottom:
 .bdg{font-size:10px;border:1px solid var(--grid);border-radius:4px;padding:0 4px;color:var(--muted);margin-left:5px;vertical-align:1px}
 @media (max-width:520px){.bar{grid-template-columns:110px 1fr 40px}}
 
+/* архитектура: потоки данных */
+.arch{margin:18px 0}
+.arow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12.5px;min-width:0;flex:1 1 150px;max-width:230px}
+.chip b{display:block;font-family:var(--head);font-size:12.5px}
+.chip span{color:var(--ink2);font-size:11.5px;line-height:1.35;display:block}
+.chip.dead{opacity:.55;border-style:dashed}
+.down{text-align:center;color:var(--muted);font-size:15px;margin:6px 0}
+.acases{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:4px}
+.acase{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;min-width:0}
+.acase h3{margin:0 0 2px;font-size:15px}
+.acase .who{font-size:11.5px;color:var(--muted);margin-bottom:10px}
+.astep{border:1px solid var(--grid);border-radius:7px;padding:8px 11px;font-size:12.5px;background:var(--bg)}
+.astep b{font-family:var(--head);font-size:12.5px}
+.astep span{display:block;color:var(--ink2);font-size:11.5px;line-height:1.4}
+.acase .down{margin:3px 0}
+.archfoot{margin-top:12px}
+.archfoot .chip{max-width:none}
 .note{border-left:3px solid var(--s1);background:var(--surface);border-radius:0 8px 8px 0;padding:10px 14px;margin:14px 0;font-size:13.5px;color:var(--ink2);max-width:76ch}
 footer{margin-top:60px;padding-top:16px;border-top:1px solid var(--grid);font-size:12.5px;color:var(--muted)}
 @media print{#tip{display:none!important}}
@@ -223,6 +241,52 @@ survival-модель XGBoost AFT: она предсказывает потер�
 лёг на номинал. Без сдвига клиппинг по номиналу срезал бы профиль в константу и r² = 0 —
 валидация этого не ловит, труба валидации толстая.</div>
 
+<h2>Архитектура: потоки данных</h2>
+<p class="sub">Кто что берёт и куда отдаёт: от источников через группы признаков к двум ансамблям
+и их пост-обработке. К1/К2 — в какой кейс идёт группа.</p>
+<div class="arch">
+  <div class="arow">
+    <div class="chip"><b>Геодезия трассы</b><span>высотные отметки через ~5 м</span></div>
+    <div class="chip"><b>Техрежим</b><span>гидрорасчёт по скважинам и насосам, 1 расчёт/сутки</span></div>
+    <div class="chip"><b>ВТД</b><span>снаряд-дефектоскоп: дефекты с координатой</span></div>
+    <div class="chip"><b>Паспорт</b><span>номинал, диаметр, даты, покрытие</span></div>
+    <div class="chip"><b>Гравиметрия</b><span>купоны-свидетели по направлениям</span></div>
+    <div class="chip dead"><b>УЗТ</b><span>забракован DQ — в модель не идёт</span></div>
+  </div>
+  <div class="down">↓ DuckDB: raw → core (очистка) → признаки на каждый 10-метровый сегмент ↓</div>
+  <div class="arow">
+    <div class="chip"><b>Геометрия · К1 К2</b><span>низины, карманы, уклон, подъёмы, позиция — меняются по сегментам</span></div>
+    <div class="chip"><b>Режим · К1 К2</b><span>агрегаты за горизонт — константы трубы; t_at/p_at — интерполяция по позиции</span></div>
+    <div class="chip"><b>Прошлый профиль · К1</b><span>prev_min и дефектность из последнего ВТД, посегментно</span></div>
+    <div class="chip"><b>Паспорт/календарь · К1 К2</b><span>номинал, возраст, горизонт, эпохи ингибирования</span></div>
+    <div class="chip"><b>Купоны · К1 К2</b><span>скорость коррозии направления</span></div>
+  </div>
+  <div class="down">↓ два независимых конвейера ↓</div>
+  <div class="acases">
+    <div class="acase">
+      <h3>Кейс 1 — есть прошлое ВТД</h3>
+      <div class="who">труба 1250022871 · 40 признаков · обучение: все пары, ~3.4 тыс. строк</div>
+      <div class="astep"><b>Ансамбль × 5 сидов</b><span>CatBoost (квантиль 0.5) ×5 + LightGBM + XGBoost + XGB AFT (survival: потеря металла, цензура бездефектных) — 8 моделей</span></div>
+      <div class="down">↓ среднее четырёх семейств ↓</div>
+      <div class="astep"><b>Роллинг-медиана 5 сегментов</b><span>сглаживание 50 м — убирает несинфазную «пилу»</span></div>
+      <div class="down">↓</div>
+      <div class="astep"><b>Профиль на 01.12.2023</b><span>525 сегментов → result.csv</span></div>
+    </div>
+    <div class="acase">
+      <h3>Кейс 2 — ВТД нет</h3>
+      <div class="who">труба 1250009583 · 45 признаков · обучение: только пары «ввод → ВТД», ~2.8 тыс. строк</div>
+      <div class="astep"><b>Ансамбль × 5 сидов × 6 сеток</b><span>6 наборов глубина×темп, в каждом CatBoost ×5 + LightGBM + XGBoost + AFT — 48 моделей; двойной бэггинг стабилизирует форму (0.76 → 0.95)</span></div>
+      <div class="down">↓ среднее ↓</div>
+      <div class="astep"><b>Аффинный сдвиг + клип</b><span>профиль опускается, чтобы p99 лёг на номинал 4.5 (труба тоньше всех обучающих); клип [0.5, номинал]</span></div>
+      <div class="down">↓</div>
+      <div class="astep"><b>Профиль на 01.07.2022</b><span>1475 сегментов → result.csv</span></div>
+    </div>
+  </div>
+  <div class="arow archfoot">
+    <div class="chip"><b>Параллельно: CatBoost α=0.1 и α=0.9</b><span>те же признаки, несимметричный штраф → пессимистичная/оптимистичная границы: полоса p10–p90 на графиках и топ-10% рисковых сегментов по p10</span></div>
+  </div>
+</div>
+
 <h2>Признаки</h2>
 <p>Отбор по абляциям с проверкой на трёх сидах; группы подключаются по кейсам.
 Кейс 1 — база + доли режимов течения + интерполяция T и P вдоль трубы; кейс 2 — база +
@@ -277,6 +341,21 @@ survival-модель XGBoost AFT: она предсказывает потер�
 <p class="sub">Выделены предикторы, выбранные для сдачи — по стабильности между независимыми
 прогонами, а не по максимуму одной таблицы (валидация кейса 1 — всего 55 сегментов).
 AFT в кейсе 2 одиночно сильнее ансамбля, но его преимущество не воспроизводилось между прогонами.</p>
+
+<h3>Все метрики сданных предикторов</h3>
+<p>Главная метрика организаторов — квадрат корреляции Пирсона, но менторы смотрят и
+«классическую четвёрку» (MAE, RMSE, MAPE, R²), плюс физичность кривой деградации.
+Ниже — полный набор на честной валидации, считается из тех же кривых, что на графиках:</p>
+<div class="twrap" id="mtable"></div>
+<p class="sub" style="font-size:12.5px">
+<b>r² Пирсона</b> — совпадение формы профиля, нечувствителен к сдвигу и масштабу: главная метрика.
+<b>R²</b> — доля объяснённой дисперсии; наказывает и за промах уровня, поэтому у кейса 2 (уровень
+не калибровался — труба валидации толще) он отрицательный: прогноз уровня хуже константы, и это
+ожидаемо — уровень чинится аффинным сдвигом, который на метрику формы не влияет.
+<b>MAE</b> — средний промах в миллиметрах. <b>RMSE</b> — то же с квадратичным штрафом: сильнее
+реагирует на редкие большие промахи (глубокие язвы). <b>MAPE</b> — средний промах в процентах
+от факта. Качественные критерии сверх таблицы: физичность (толщина не растёт со временем,
+скорость деградации правдоподобна) и стабильность формы между независимыми прогонами (0.95).</p>
 
 <h3>Почему r² именно такой</h3>
 <p>Потолок задают сами данные. Два пропуска ВТД по одной и той же трубе с интервалом в год дают
@@ -583,10 +662,37 @@ lineChart('c_fin2', { xLabel:'км', xNd:1, hline:{y:4.5},
   band:{x:f2.km, lo:f2.p10, hi:f2.p90, color:css('--s2')||'#eb6834'},
   series:[ {name:'прогноз 01.07.2022', color:S2, x:f2.km, y:f2.pred} ]});
 
+function metricsTable(){
+  function calc(series){
+    const y = series.flatMap(s=>s.vtd), p = series.flatMap(s=>s.pred), n = y.length;
+    const my = y.reduce((a,b)=>a+b)/n, mp = p.reduce((a,b)=>a+b)/n;
+    let cov=0, vy=0, vp=0, se=0, ae=0, ape=0;
+    for (let i=0;i<n;i++){
+      cov += (y[i]-my)*(p[i]-mp); vy += (y[i]-my)**2; vp += (p[i]-mp)**2;
+      const e = y[i]-p[i]; se += e*e; ae += Math.abs(e); ape += Math.abs(e)/y[i];
+    }
+    return { pearson: (cov*cov)/(vy*vp), r2det: 1 - se/vy,
+             mae: ae/n, rmse: Math.sqrt(se/n), mape: ape/n*100, n };
+  }
+  const m1 = calc(DATA.val_case1.series), m2 = calc(DATA.val_case2.series);
+  const rows = [
+    ['r² Пирсона (форма) — главная', m1.pearson, m2.pearson, 3],
+    ['R² (детерминация, с уровнем)', m1.r2det, m2.r2det, 3],
+    ['MAE, мм', m1.mae, m2.mae, 2],
+    ['RMSE, мм', m1.rmse, m2.rmse, 2],
+    ['MAPE, %', m1.mape, m2.mape, 1],
+  ];
+  document.getElementById('mtable').innerHTML =
+    `<table><tr><th>Метрика</th><th class="num">кейс 1 (n=${m1.n})</th><th class="num">кейс 2 (n=${m2.n})</th></tr>` +
+    rows.map(r=>`<tr><td>${r[0]}</td><td class="num">${fmt(r[1],r[3])}</td><td class="num">${fmt(r[2],r[3])}</td></tr>`).join('') +
+    '</table>';
+}
+
 bars('imp1', DATA.imp_case1);
 bars('imp2', DATA.imp_case2);
 renderGloss();
 reportTable();
+metricsTable();
 </script>
 </body>
 </html>
