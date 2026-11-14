@@ -239,6 +239,23 @@ from (
 ) t
 where t.rk = 1 and c.coupon_row_id = t.coupon_row_id and c.link_level is null;
 
+-- 9. ID трубы там, где его не было: образец стоит выше по потоку, на трассе направления, которой нет в паспорте
+--    целиком. Поток входит в паспортную часть через её первый участок — тот, к которому правило 5 уже привязало
+--    образцы «выше по потоку» (с него начинается паспортная часть направления). Уровень связи не меняется, поэтому
+--    слабые привязки (protection_zone) по-прежнему не попадают в гравиметрию модели.
+update core.corrosion_coupon c
+set linked_pipe_id = e.pipe_id, linked_position_m = 0,
+    section_id_filled = e.pipe_id, section_id_source = 'assigned_entry_of_direction',
+    link_evidence = c.link_evidence || '. ID присвоен: образец выше по потоку, на трассе ' || c.linked_direction
+                    || ' до паспортной части; поток входит в неё через участок ' || e.pipe_id
+                    || (case when c.link_level = 'protection_zone' then ' (предположительно: связь только по зоне защиты)' else '' end)
+from (
+    select linked_direction as direction, min(linked_pipe_id) as pipe_id
+    from core.corrosion_coupon where link_level = 'upstream_node' and linked_pipe_id is not null group by 1
+) e
+where c.linked_pipe_id is null and c.linked_direction = e.direction
+  and c.link_level in ('upstream_via', 'upstream_segment', 'protection_zone');
+
 update core.corrosion_coupon set link_level = 'unlinked', link_evidence = 'Связь с трубами паспорта не найдена'
 where link_level is null;
 
