@@ -205,6 +205,7 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
         df["prev_maxdepth"] = 0.0
         df["prev_loss_rate"] = 0.0
         df["prev_q10"] = wt_nom
+        df["prev_q02"] = wt_nom
         df["prev_q10_nb3"] = wt_nom
         df["prev_lnn_nb3"] = 0.0
         df["has_prev"] = 0
@@ -238,6 +239,9 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
     q10 = sub.dropna(subset=["Residual Wall Thickness"]).groupby("segment_id")[
         "Residual Wall Thickness"].quantile(0.1)
     df["prev_q10"] = df["segment_id"].map(q10).fillna(df["prev_min"])
+    q02 = sub.dropna(subset=["Residual Wall Thickness"]).groupby("segment_id")[
+        "Residual Wall Thickness"].quantile(0.02)
+    df["prev_q02"] = df["segment_id"].map(q02).fillna(df["prev_min"])
     df["prev_q10_nb3"] = df["prev_q10"].rolling(3, center=True, min_periods=1).mean()
     df["prev_lnn_nb3"] = np.log1p(df["prev_ndef"]).rolling(3, center=True, min_periods=1).mean()
     df["has_prev"] = 1
@@ -259,7 +263,7 @@ REGIME_SHARE_FEATS = ["rg_share_laminar", "rg_share_trans", "rg_share_turb"]
 CLIMB_FEATS = ["climb_len", "climb_rise", "climb_pos", "rise_500m"]
 TP_FEATS = ["t_at", "p_at"]
 # только для предиктора aligned_stats, в бустинги не идут (их состав не меняется)
-STAT_FEATS = ["prev_q10", "prev_q10_nb3", "prev_lnn_nb3"]
+STAT_FEATS = ["prev_q10", "prev_q02", "prev_q10_nb3", "prev_lnn_nb3"]
 OPTIONAL_FEATS = (UZT_FEATS + PROF_FEATS + INTER_FEATS + ERA_FEATS + POCKET_FEATS
                   + CHEM_FEATS + REGIME_SHARE_FEATS + CLIMB_FEATS + TP_FEATS + STAT_FEATS)
 
@@ -276,7 +280,9 @@ def case_features(ds: pd.DataFrame, case: str) -> list[str]:
 
 
 def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
-               passport, altitudes, regime, geom, grav, uzt) -> pd.DataFrame:
+               passport, altitudes, regime, geom, grav, uzt, measured: bool = False) -> pd.DataFrame:
+    """measured=True — у валидационной пары кейса 1 сдвиг прошлого пропуска оценивается по самой
+    паре (как в прогнозе 22871, где сдвиг измерен на обоих концах), а не от соседа."""
     pas = passport.set_index("id")
     frames = []
     for _, p in pairs.iterrows():
@@ -289,8 +295,8 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
         if align.MODE == "profile":
             # всё в координатах профиля; у валидационной пары кейса 1 целевой пропуск не
             # используется для оценки сдвига прошлого (как при настоящем прогнозе)
-            ex = (pd.Timestamp(end) if align.is_case1_val(pipe_id, start, end) and not align.ORACLE
-                  else None)
+            ex = (pd.Timestamp(end) if align.is_case1_val(pipe_id, start, end)
+                  and not (align.ORACLE or measured) else None)
             # кейс 1 (валидация 2022 -> 2023 и прогноз целевой трубы) — сдвиг по совпавшим дефектам
             case1 = (align.is_case1_val(pipe_id, start, end)
                      or (not with_target and pipe_id == C.CASE1_ID))
@@ -397,6 +403,14 @@ def build_all(extended: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
     train = build_rows(prepare.build_pairs(runs, passport, extended=extended),
                        with_target=True, **ctx)
     train = assign_split(train)
+    if not align.ORACLE:
+        # второй блок валидации кейса 1: те же пары со сдвигом, измеренным по самой паре.
+        # В обучение не идёт (split != "train"), только в отчёт как case1_measured
+        vp = train.loc[train["split"] == "val_case1", ["id", "start", "end", "kind"]].drop_duplicates()
+        if len(vp):
+            vm = build_rows(vp, with_target=True, measured=True, **ctx)
+            vm["split"] = "val_case1_measured"
+            train = pd.concat([train, vm], ignore_index=True)
     predict = build_rows(prepare.prediction_pairs(passport), with_target=False, **ctx)
 
     C.PROCESSED_DIR.mkdir(parents=True, exist_ok=True)

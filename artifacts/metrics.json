@@ -72,6 +72,27 @@
     },
     {
       "case": "case1",
+      "model": "quant",
+      "n": 55,
+      "pearson_r2": 0.2115,
+      "mae": 0.712
+    },
+    {
+      "case": "case1",
+      "model": "quant_cal",
+      "n": 55,
+      "pearson_r2": 0.2115,
+      "mae": 0.363
+    },
+    {
+      "case": "case1",
+      "model": "ens_blend+quant",
+      "n": 55,
+      "pearson_r2": 0.5178,
+      "mae": 0.295
+    },
+    {
+      "case": "case1",
       "model": "ensemble_smooth5",
       "n": 55,
       "pearson_r2": 0.4006,
@@ -83,6 +104,97 @@
       "n": 55,
       "pearson_r2": 0.3686,
       "mae": 0.324
+    },
+    {
+      "case": "case1_measured",
+      "model": "lgbm",
+      "n": 55,
+      "pearson_r2": 0.4249,
+      "mae": 0.377
+    },
+    {
+      "case": "case1_measured",
+      "model": "xgb",
+      "n": 55,
+      "pearson_r2": 0.2171,
+      "mae": 0.417
+    },
+    {
+      "case": "case1_measured",
+      "model": "aft",
+      "n": 55,
+      "pearson_r2": 0.3131,
+      "mae": 0.454
+    },
+    {
+      "case": "case1_measured",
+      "model": "ensemble",
+      "n": 55,
+      "pearson_r2": 0.3986,
+      "mae": 0.313
+    },
+    {
+      "case": "case1_measured",
+      "model": "ens_blend",
+      "n": 55,
+      "pearson_r2": 0.5989,
+      "mae": 0.267
+    },
+    {
+      "case": "case1_measured",
+      "model": "aligned_stats",
+      "n": 55,
+      "pearson_r2": 0.7012,
+      "mae": 0.375
+    },
+    {
+      "case": "case1_measured",
+      "model": "aligned_stats_cal",
+      "n": 55,
+      "pearson_r2": 0.7012,
+      "mae": 0.24
+    },
+    {
+      "case": "case1_measured",
+      "model": "ens_blend+stats",
+      "n": 55,
+      "pearson_r2": 0.6899,
+      "mae": 0.242
+    },
+    {
+      "case": "case1_measured",
+      "model": "quant",
+      "n": 55,
+      "pearson_r2": 0.7306,
+      "mae": 0.683
+    },
+    {
+      "case": "case1_measured",
+      "model": "quant_cal",
+      "n": 55,
+      "pearson_r2": 0.7306,
+      "mae": 0.233
+    },
+    {
+      "case": "case1_measured",
+      "model": "ens_blend+quant",
+      "n": 55,
+      "pearson_r2": 0.7205,
+      "mae": 0.238
+    },
+    {
+      "case": "case1_measured",
+      "model": "ensemble_smooth5",
+      "n": 55,
+      "pearson_r2": 0.3512,
+      "mae": 0.357
+    },
+    {
+      "case": "case1_measured",
+      "model": "ens_blend_smooth5",
+      "n": 55,
+      "pearson_r2": 0.3439,
+      "mae": 0.338
     },
     {
       "case": "case2",
