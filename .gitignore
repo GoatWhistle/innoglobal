@@ -4,3 +4,4 @@ catboost_info/
 .venv/
 logs/
 data/processed/lab/
+experiments/data/lab40_cache.joblib

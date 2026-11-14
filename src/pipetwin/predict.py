@@ -4,11 +4,12 @@ import numpy as np
 import pandas as pd
 
 from . import config as C
+from . import curve
 from .prepare import load_passport
 from . import features as F
 from .train import (aligned_stats_score, analog_rates, blend_prob, blend_stats, calibrate_level,
-                    case1_stat_predictors, dens_quant_score, predict_bag, prior_blend,
-                    quant_score, stats_at_level)
+                    calibrate_mm, case1_stat_predictors, dens_quant_score, predict_bag,
+                    prior_blend, quant_score, stats_at_level)
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
 # на всех 3 сидах по r² и sm5):
@@ -67,16 +68,23 @@ def run() -> pd.DataFrame:
         name, smooth = PREDICTOR[case]
         scale = grp["wt_nom"].values if b.get("target") == "rel" else 1.0
         # бэг, усреднённый по сидам/сетке (train.BAG_SEEDS / PARAM_GRID)
-        preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale)
+        agg = b.get("member_agg", "mean")
+        preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale, agg=agg)
         if name in ("ens_blend", "ens_blend+stats", "aligned_stats_cal",
                     "quant_cal", "ens_blend+quant", "dens_quant_cal"):
             # формы классификатора дефекта и спреда до q05 вклеиваются
             # в профиль этой трубы (lab13-19)
             p_def = models["clf"].predict_proba(X)[:, 1]
             q05 = np.mean([m.predict(X) for m in models["q05_pair"]], axis=0)
-            pred = blend_prob(preds["ensemble"], p_def, b["blend_w"],
-                              gap=preds["ensemble"] - q05,
+            # форма — база на денойзнутом таргете (lab60), уровень — база на минимуме
+            shape = (predict_bag(models["shape_bag"], X, grp["wt_nom"].values,
+                                 agg=agg)["ensemble"]
+                     if "shape_bag" in models else preds["ensemble"])
+            pred = blend_prob(shape, p_def, b["blend_w"],
+                              gap=shape - q05,
                               gap_w=b.get("gap_w", 0.0))
+            if b.get("calib") == "prev":
+                pred = calibrate_mm(pred, preds["ensemble"], grp["prev_min"].values)
             if name == "ens_blend+stats":
                 pred = blend_stats(pred, aligned_stats_score(grp))
             elif name in ("aligned_stats_cal", "quant_cal", "ens_blend+quant", "dens_quant_cal"):
@@ -96,13 +104,22 @@ def run() -> pd.DataFrame:
             pred = (pd.Series(pred)
                     .rolling(smooth, center=True, min_periods=1).median().values)
         grp["thickness_pred"] = pred
-        for tag in ("p05", "p10", "p90", "p95"):
-            q = models[tag].predict(X) * scale
-            if name == "ens_prior_cal":
-                # конверт переносится за прогнозом с сырой шириной (калибровка
-                # сжимает разброс профиля, но не неопределённость сегмента)
-                q = pred + (q - preds["ensemble"])
-            grp[tag] = q
+        conf = b.get("conformal")
+        if conf:
+            # кейс 1: конформный интервал вокруг прогноза (lab43), покрытие 80%/90%;
+            # центр — уже в физических рамках (невязки считались по клиппированному)
+            center = np.clip(pred, 0.5, grp["wt_nom"].values)
+            for lo, hi, key in (("p10", "p90", "p10_p90"), ("p05", "p95", "p05_p95")):
+                grp[lo] = center - conf[key]
+                grp[hi] = center + conf[key]
+        else:
+            for tag in ("p05", "p10", "p90", "p95"):
+                q = models[tag].predict(X) * scale
+                if name == "ens_prior_cal":
+                    # конверт переносится за прогнозом с сырой шириной (калибровка
+                    # сжимает разброс профиля, но не неопределённость сегмента)
+                    q = pred + (q - preds["ensemble"])
+                grp[tag] = q
         parts.append(grp)
     pred_ds = pd.concat(parts, ignore_index=True)
 
@@ -132,6 +149,18 @@ def run() -> pd.DataFrame:
     pred_ds["p90"] = np.maximum(pred_ds["p90"], pred_ds["thickness_pred"])
     pred_ds["p05"] = np.minimum(pred_ds["p05"], pred_ds["p10"])
     pred_ds["p95"] = np.maximum(pred_ds["p95"], pred_ds["p90"])
+
+    # кривая деградации по сегментам (физичная, монотонная) — для отчёта/демо
+    curves = []
+    for pipe_id, grp in pred_ds.groupby("id"):
+        end = pd.Timestamp(grp["end"].iloc[0])
+        date_in = end - grp["age_end"].iloc[0] * curve.YEAR
+        date_prev = grp["start"].iloc[0] if grp["kind"].iloc[0] == "vtd2vtd" else None
+        curves.append(curve.degradation_curve(grp, date_in.normalize(), date_prev, end))
+    curves = pd.concat(curves, ignore_index=True)
+    n_bad = curve.check_monotone(curves)
+    assert n_bad == 0, f"кривая деградации растёт у {n_bad} сегментов"
+    curves.to_csv(C.ARTIFACTS_DIR / "degradation_curve.csv", index=False)
 
     result = pred_ds[["id", "segment_id", "thickness_pred"]].copy()
     result["thickness_pred"] = result["thickness_pred"].round(3)

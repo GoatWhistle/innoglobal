@@ -80,7 +80,11 @@ CASES = {
                   params={f: dict(n_estimators=300, learning_rate=0.1)
                           for f in ("lgbm", "xgb")},
                   aft=dict(dist="normal", sigma=3.0, lr=0.1, rounds=300),
-                  blend_w=2.0, gap_w=0.5),
+                  # calib="prev" (lab41) и shrink=dict(lam=0.5, win=5) (lab60) выключены:
+                  # на честной валидации (exp/honest-val) оба вредят, см. lab63
+                  blend_w=2.0, gap_w=0.5, calib=None, shrink=None,
+                  # lab63: медиана LGBM/XGB/AFT вместо среднего (honest 8/8 по r², r2d, MAE)
+                  member_agg="median"),
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID, calibrate=True,
@@ -164,7 +168,7 @@ def fit_bag(X: pd.DataFrame, y: pd.Series, lb: np.ndarray, ub: np.ndarray,
 
 
 def predict_bag(bag: list[dict], X: pd.DataFrame, wt_nom: np.ndarray,
-                scale=1.0) -> dict[str, np.ndarray]:
+                scale=1.0, agg: str = "mean") -> dict[str, np.ndarray]:
     """Прогноз толщины: члены ансамбля усреднены по сидам + общий ансамбль.
 
     Состав членов берётся из самого бэга (кейс 2 — только LGBM, без AFT).
@@ -175,7 +179,9 @@ def predict_bag(bag: list[dict], X: pd.DataFrame, wt_nom: np.ndarray,
     if "aft" in bag[0]:
         dm = xgboost.DMatrix(X)
         out["aft"] = wt_nom - np.mean([m["aft"].predict(dm) for m in bag], axis=0)
-    out["ensemble"] = np.mean(list(out.values()), axis=0)
+    # agg="median" — медиана членов (lab63, кейс 1): на честной валидации r² бленда
+    # 0.226 -> 0.256, r2d 0.063 -> 0.102, MAE 0.335 -> 0.322 (8/8 сидов)
+    out["ensemble"] = (np.median if agg == "median" else np.mean)(list(out.values()), axis=0)
     return out
 
 
@@ -255,6 +261,59 @@ def calibrate_level(pred: np.ndarray, wt_nom: float, age: float,
     hi, mu = float(np.quantile(pred, 0.99)), float(np.mean(pred))
     b = max((wt_nom - m_t) / (hi - mu) if hi - mu > 1e-9 else 0.0, 0.0)
     return m_t + b * (pred - mu)
+
+
+def calibrate_mm(blend: np.ndarray, ens: np.ndarray, prev_min: np.ndarray) -> np.ndarray:
+    """Калибровка бленда в мм (lab41): форма z(бленда), уровень — медиана ens,
+    разброс — разброс минимумов прошлого пропуска этой трубы.
+
+    Пирсон к аффинному преобразованию инвариантен — r² не меняется. Бленд
+    наследовал разброс ens (0.31 мм на валидации), а реальный разброс толщин
+    за 1.4 года почти тот же, что у прошлого пропуска (0.55 против 0.50):
+    прогноз был сжат к среднему. Масштаб std(prev_min) — правило без подбора
+    (прошлый профиль известен в момент прогноза), медиана — уровень под MAE.
+    Валидация, 8/8 сидов: MAE 0.279 -> 0.267, RMSE 0.374 -> 0.356, MAPE 4.90 -> 4.66%.
+    ВЫКЛЮЧЕНО (calib=None): на честной валидации MAE 0.335 -> 0.357 — честная корреляция
+    0.47, MSE-оптимальный разброс r·σy = 0.26 мм меньше std(ens) 0.335, растягивать нельзя.
+    Внутренний CV по train-парам 2018->2022 для калибровки непригоден:
+    модель там без навыка (r² 0.00-0.05), подогнанный наклон ломает и r², и MAE.
+    """
+    scale = float(np.std(prev_min))
+    if scale < 1e-12:
+        scale = float(np.std(ens))
+    return zscore(blend) * scale + float(np.median(ens))
+
+
+def shrink_target(df: pd.DataFrame, lam: float, win: int) -> pd.Series:
+    """Денойз таргета (lab60): y -> (1−lam)·y + lam·медиана y по окну win сегментов пары.
+
+    Минимум сегмента — крайняя статистика шумных замеров (корреляция остатка
+    2022<->2023 по совпавшим дефектам 0.34): обучение формы на усреднённом к соседям
+    минимуме убирает шум метки. База формы (бленд) учится на нём, уровень мм — от
+    базы на реальном минимуме. ВЫКЛЮЧЕНО (shrink=None): на честной валидации r² 0.225 -> 0.209,
+    r2d 0.063 -> 0.039 — выигрыш ниже был отбором по утечке выравнивания.
+    Старая (утёкшая) валидация, парный джиттер базы 5×3: r² 0.602 -> 0.618,
+    r2d (только дефектные) 0.200 -> 0.229, MAE 0.266 -> 0.256 — 15/15 по всем трём.
+    """
+    grp = ["id", "start", "end"]
+    med = (df.sort_values(grp + ["segment_id"]).groupby(grp)["y"]
+           .transform(lambda v: v.rolling(win, center=True, min_periods=1).median())
+           .reindex(df.index))
+    return (1 - lam) * df["y"] + lam * med
+
+
+def conformal_halfwidths(resid: np.ndarray) -> dict[str, float]:
+    """Сплит-конформные полуширины |невязки| для уровней 80% (p10-p90) и 90% (p05-p95).
+
+    lab43: квантильный конверт CatBoost p10-p90 на валидации кейса 1 покрывал 13%
+    (ширина 0.13 мм), с монотонностью вокруг прогноза — 31%; симметричный конформный
+    интервал (кросс-фит по блокам валидации) — 83% при ширине 0.86 мм, уже CQR (80%/0.97)
+    и асимметричного (86%/1.01).
+    """
+    a = np.sort(np.abs(resid))
+    n = len(a)
+    return {tag: float(a[min(n - 1, int(np.ceil((n + 1) * lvl)) - 1)])
+            for tag, lvl in (("p10_p90", 0.8), ("p05_p95", 0.9))}
 
 
 def fit_q05_pair(X: pd.DataFrame, y: pd.Series, params: dict | None = None) -> list:
@@ -449,6 +508,10 @@ def _case2_shape(ens: np.ndarray, tr: pd.DataFrame, va: pd.DataFrame, cfg: dict,
     return out
 
 
+# предиктор кейса 1 в predict.py (для прод-строки отчёта и конформных интервалов)
+CASE1_PROD = os.environ.get("PIPETWIN_CASE1", "dens_quant_cal")
+
+
 def run(tune_trials: int = 0) -> pd.DataFrame:
     ds = pd.read_csv(C.PROCESSED_DIR / "train_dataset.csv", parse_dates=["start", "end"])
     ds = survival_labels(ds)
@@ -461,8 +524,9 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         feats = F.case_features(ds, case)
         subset = ds[ds["kind"].isin(cfg["train_kinds"])]
         honest = subset[subset["split"] == "train_honest"]
-        # train_honest и val_case1_measured — копии уже имеющихся строк с иным выравниванием,
-        # в финальное обучение не идут (иначе пары валидации задублированы)
+        # train_honest — замена строк только для модели валидации; val_case1_measured — дубль
+        # валидационных пар с иным выравниванием, только для отчёта (в финальное обучение
+        # не идёт, иначе 55 пар учатся дважды)
         subset = subset[~subset["split"].isin(["train_honest", "val_case1_measured"])]
         tr = subset[subset["split"] == "train"]
         if case == "case1" and len(honest):
@@ -487,11 +551,15 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         groups = tr["id"].astype(str) + "_" + tr["end"].astype(str)
 
         y_va = va["y"].values
+        hd_va = va["had_defect"].values.astype(bool)
         for name, p in baseline_predictions(va).items():
             report_rows.append(dict(
                 case=case, model=name, n=len(va),
                 pearson_r2=round(pearson_r2(y_va, p.values), 4),
-                mae=round(float(np.mean(np.abs(y_va - p.values))), 3)))
+                r2d=round(pearson_r2(y_va[hd_va], p.values[hd_va]), 4),
+                mae=round(float(np.mean(np.abs(y_va - p.values))), 3),
+                rmse=round(float(np.sqrt(np.mean((y_va - p.values) ** 2))), 3),
+                mape=round(float(np.mean(np.abs(y_va - p.values) / y_va) * 100), 2)))
 
         best_params = {fam: (tune(fam, X_tr, y_tr, groups, tune_trials)
                              if tune_trials else dict(cfg.get("params", {}).get(fam, {})))
@@ -502,10 +570,13 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             families=cfg["families"])]
         clf_va = fit_clf(X_tr, tr["had_defect"]) if cfg.get("blend_w") else None
         q05_models = fit_q05_pair(X_tr, y_tr, cfg.get("params")) if cfg.get("blend_w") else None
+        agg = cfg.get("member_agg", "mean")
+        # calib="prev" (lab41) и shrink (lab60) на честной валидации отвергнуты и из пути
+        # валидации убраны (lab63); функции оставлены для экспериментов
 
         def val_predictions(v: pd.DataFrame) -> dict[str, np.ndarray]:
             vp = predict_bag(val_bag, v[feats], v["wt_nom"].values,
-                             v["wt_nom"].values if rel else 1.0)
+                             v["wt_nom"].values if rel else 1.0, agg=agg)
             if clf_va is not None:
                 q05_v = np.mean([m.predict(v[feats]) for m in q05_models], axis=0)
                 vp["ens_blend"] = blend_prob(
@@ -513,6 +584,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                     gap=vp["ensemble"] - q05_v, gap_w=cfg.get("gap_w", 0.0))
             if case == "case1":
                 vp.update(case1_stat_predictors(v, vp["ens_blend"]))
+                # прод-путь (predict.py): предиктор кейса 1 + физические рамки [0.5 мм, номинал]
+                vp[f"{CASE1_PROD}_phys"] = np.clip(vp[CASE1_PROD], 0.5, v["wt_nom"].values)
             if cfg.get("prior_w") or cfg.get("calibrate"):
                 vp.update(_case2_shape(vp["ensemble"], tr, v, cfg, dir_of))
             for base_name in ("catboost", "ensemble", "ens_blend"):
@@ -532,11 +605,21 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                 blocks.append(("case1_measured", vm))
         for label, v in blocks:
             yv = v["y"].values
-            for name, p in val_predictions(v).items():
+            hd = v["had_defect"].values.astype(bool)
+            vp = val_predictions(v)
+            if case == "case1":
+                # конформные полуширины (lab43) — по невязкам прод-предиктора; блок measured
+                # (сдвиг измерен, как у 22871) перекрывает блок «от соседа», если он есть
+                conf = conformal_halfwidths(yv - vp[f"{CASE1_PROD}_phys"])
+            for name, p in vp.items():
                 report_rows.append(dict(
                     case=label, model=name, n=len(v),
                     pearson_r2=round(pearson_r2(yv, p), 4),
-                    mae=round(float(np.mean(np.abs(yv - p))), 3)))
+                    # r² только по дефектным сегментам (2 чистых сегмента валидации тянут r²)
+                    r2d=round(pearson_r2(yv[hd], p[hd]), 4),
+                    mae=round(float(np.mean(np.abs(yv - p))), 3),
+                    rmse=round(float(np.sqrt(np.mean((yv - p) ** 2))), 3),
+                    mape=round(float(np.mean(np.abs(yv - p) / yv) * 100), 2)))
         if case == "case2" and os.environ.get("PIPETWIN_VAL2_STRICT") != "1":
             # строгая проверка рядом (как PIPETWIN_VAL2_STRICT=1): валидационная труба
             # исключена из обучения целиком — у 9583 своих пропусков нет вовсе;
@@ -563,7 +646,15 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         final["bag"] = bag
         if cfg.get("blend_w"):
             final["clf"] = fit_clf(X_all, subset["had_defect"])
-            final["q05_pair"] = fit_q05_pair(X_all, y_all, cfg.get("params"))
+            ys_all = y_all
+            shr = cfg.get("shrink")
+            if shr:
+                ys_all = shrink_target(subset, **shr)
+                lab = survival_labels(subset.assign(y=ys_all))
+                final["shape_bag"] = fit_bag(
+                    X_all, ys_all, lab["aft_lb"].values, lab["aft_ub"].values,
+                    best_params, cfg["aft"], families=cfg["families"])
+            final["q05_pair"] = fit_q05_pair(X_all, ys_all, cfg.get("params"))
         for alpha, tag in ((0.05, "p05"), (0.1, "p10"), (0.9, "p90"), (0.95, "p95")):
             m = make_model("catboost", dict(best_params["catboost"]), alpha=alpha)
             m.fit(X_all, y_all)
@@ -573,11 +664,15 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                 subset[subset["id"].map(dir_of) == dir_of[cfg["prior_pipe"]]])
         if cfg.get("calibrate"):
             final["analog_rows"] = subset[["id", "wt_nom", "y", "age_end"]].reset_index(drop=True)
-        bundle["cases"][case] = dict(models=final, features=feats,
+        if not cfg.get("blend_w"):
+            conf = None
+        bundle["cases"][case] = dict(conformal=conf, models=final, features=feats,
                                      params=best_params, target=cfg["target"],
                                      blend_w=cfg.get("blend_w"),
+                                     gap_w=cfg.get("gap_w", 0.0),
                                      prior_w=cfg.get("prior_w"),
-                                     gap_w=cfg.get("gap_w", 0.0))
+                                     calib=cfg.get("calib"),
+                                     member_agg=cfg.get("member_agg", "mean"))
 
     report = pd.DataFrame(report_rows)
     C.ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -585,7 +680,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
     report.to_csv(C.ARTIFACTS_DIR / "validation_report.csv", index=False)
     (C.ARTIFACTS_DIR / "metrics.json").write_text(json.dumps(
         dict(report=report.to_dict("records"),
-             params={c: b["params"] for c, b in bundle["cases"].items()}),
+             params={c: b["params"] for c, b in bundle["cases"].items()},
+             conformal={c: b.get("conformal") for c, b in bundle["cases"].items()}),
         ensure_ascii=False, indent=2, default=str))
 
     for case, b in bundle["cases"].items():
