@@ -84,7 +84,8 @@ CASES = {
                   # на честной валидации (exp/honest-val) оба вредят, см. lab63
                   blend_w=2.0, gap_w=0.5, calib=None, shrink=None,
                   # lab63: медиана LGBM/XGB/AFT вместо среднего (honest 8/8 по r², r2d, MAE)
-                  member_agg="median"),
+                  member_agg="median",
+                  quant_scale="prev"),  # lab70: разброс quant_cal = std(prev_min)
     "case2": dict(val_split="val_case2", train_kinds=("comm2vtd",),
                   target="abs", families=("lgbm",), aft=None,
                   param_grid=PARAM_GRID),
@@ -378,14 +379,15 @@ def aligned_stats_score(ds: pd.DataFrame) -> np.ndarray:
     return zscore(s) * float(np.std(base)) + float(np.mean(base))
 
 
-def stats_at_level(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
+def stats_at_level(ens: np.ndarray, stats: np.ndarray, scale: float | None = None) -> np.ndarray:
     """Форма aligned_stats в уровне и разбросе ансамбля (aligned_stats_cal).
 
     r² тот же, что у aligned_stats (Пирсон инвариантен к аффинному), а MAE как у ансамбля:
     снаряд 2023 года показывает глубже, и уровень прошлого пропуска для мм не годится
     (валидация с измеренным сдвигом: MAE 0.375 -> 0.240 мм, experiments/lab23).
     """
-    return zscore(stats) * float(np.std(ens)) + float(np.mean(ens))
+    sd = float(np.std(ens)) if scale is None else float(scale)
+    return zscore(stats) * sd + float(np.mean(ens))
 
 
 def quant_score(ds: pd.DataFrame) -> np.ndarray:
@@ -397,12 +399,24 @@ def quant_score(ds: pd.DataFrame) -> np.ndarray:
     return ((ds["prev_q02"] + ds["prev_q10"] + ds["prev_q10_nb3"]) / 3).to_numpy(dtype=float)
 
 
-def case1_stat_predictors(ds: pd.DataFrame, ens_blend: np.ndarray) -> dict[str, np.ndarray]:
-    """Предикторы кейса 1 поверх выровненного прошлого пропуска (без обучения) и их бленды с ансамблем."""
+def case1_stat_predictors(ds: pd.DataFrame, ens_blend: np.ndarray,
+                          quant_scale: str = "ens") -> dict[str, np.ndarray]:
+    """Предикторы кейса 1 поверх выровненного прошлого пропуска (без обучения) и их бленды с ансамблем.
+
+    quant_scale="prev" (lab70, вариант σprev): разброс quant_cal = std(prev_min) трубы вместо std(ens_blend).
+    MSE-оптимальный разброс r·σy при измеренном сдвиге (r ≈ 0.81-0.85) — 0.45-0.47 мм, а std(ens)
+    на валидации 0.33: прогноз сжат к среднему. Оракул с ошибкой сдвига δ0 ∈ {0, ±0.5, ±1, ±2}:
+    MAE 7/7 лучше (|δ0|≤1: 0.236 -> 0.217), RMSE 0.328 -> 0.302, r² не меняется. При сдвиге «от
+    соседа» (ошибка 6-11 м, r 0.46) растягивание вредит (MAE +0.01..0.02) — эта геометрия у 22871
+    не возникает (сдвиг измерен на обоих концах). На 22871 std(prev_min) 0.62 против std(ens) 0.525
+    (×1.19). quant_cal_ens — прежний разброс, для сравнения.
+    """
     st, qt = aligned_stats_score(ds), quant_score(ds)
+    sp = float(np.std(ds["prev_min"].values)) if quant_scale == "prev" else None
     return {"aligned_stats": st, "aligned_stats_cal": stats_at_level(ens_blend, st),
             "ens_blend+stats": blend_stats(ens_blend, st),
-            "quant": qt, "quant_cal": stats_at_level(ens_blend, qt),
+            "quant": qt, "quant_cal": stats_at_level(ens_blend, qt, sp),
+            "quant_cal_ens": stats_at_level(ens_blend, qt),
             "ens_blend+quant": blend_stats(ens_blend, qt)}
 
 
@@ -494,7 +508,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                     vp["ensemble"], clf_va.predict_proba(v[feats])[:, 1], cfg["blend_w"],
                     gap=vp["ensemble"] - q05_v, gap_w=cfg.get("gap_w", 0.0))
             if case == "case1":
-                vp.update(case1_stat_predictors(v, vp["ens_blend"]))
+                vp.update(case1_stat_predictors(v, vp["ens_blend"],
+                                                cfg.get("quant_scale", "ens")))
                 # прод-путь (predict.py): предиктор кейса 1 + физические рамки [0.5 мм, номинал]
                 vp[f"{CASE1_PROD}_phys"] = np.clip(vp[CASE1_PROD], 0.5, v["wt_nom"].values)
             for base_name in ("catboost", "ensemble", "ens_blend"):
@@ -560,7 +575,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                                      blend_w=cfg.get("blend_w"),
                                      gap_w=cfg.get("gap_w", 0.0),
                                      calib=cfg.get("calib"),
-                                     member_agg=cfg.get("member_agg", "mean"))
+                                     member_agg=cfg.get("member_agg", "mean"),
+                                     quant_scale=cfg.get("quant_scale", "ens"))
 
     report = pd.DataFrame(report_rows)
     C.ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)

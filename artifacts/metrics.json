@@ -116,6 +116,16 @@
       "n": 55,
       "pearson_r2": 0.2115,
       "r2d": 0.0212,
+      "mae": 0.389,
+      "rmse": 0.547,
+      "mape": 6.61
+    },
+    {
+      "case": "case1",
+      "model": "quant_cal_ens",
+      "n": 55,
+      "pearson_r2": 0.2115,
+      "r2d": 0.0212,
       "mae": 0.358,
       "rmse": 0.498,
       "mape": 6.08
@@ -134,11 +144,11 @@
       "case": "case1",
       "model": "quant_cal_phys",
       "n": 55,
-      "pearson_r2": 0.2115,
-      "r2d": 0.0212,
-      "mae": 0.358,
-      "rmse": 0.498,
-      "mape": 6.08
+      "pearson_r2": 0.2054,
+      "r2d": 0.021,
+      "mae": 0.386,
+      "rmse": 0.544,
+      "mape": 6.57
     },
     {
       "case": "case1",
@@ -256,6 +266,16 @@
       "n": 55,
       "pearson_r2": 0.7306,
       "r2d": 0.4602,
+      "mae": 0.208,
+      "rmse": 0.288,
+      "mape": 3.68
+    },
+    {
+      "case": "case1_measured",
+      "model": "quant_cal_ens",
+      "n": 55,
+      "pearson_r2": 0.7306,
+      "r2d": 0.4602,
       "mae": 0.23,
       "rmse": 0.319,
       "mape": 3.95
@@ -274,11 +294,11 @@
       "case": "case1_measured",
       "model": "quant_cal_phys",
       "n": 55,
-      "pearson_r2": 0.7306,
+      "pearson_r2": 0.7297,
       "r2d": 0.4602,
-      "mae": 0.23,
-      "rmse": 0.319,
-      "mape": 3.95
+      "mae": 0.206,
+      "rmse": 0.288,
+      "mape": 3.65
     },
     {
       "case": "case1_measured",
@@ -371,8 +391,8 @@
   },
   "conformal": {
     "case1": {
-      "p10_p90": 0.3433834322876317,
-      "p05_p95": 0.6123126132283279
+      "p10_p90": 0.32557412169316713,
+      "p05_p95": 0.3791968856003969
     },
     "case2": null
   }
