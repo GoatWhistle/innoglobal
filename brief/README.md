@@ -12,6 +12,7 @@ cite «ТЗ, раздел X, с. N».
 | Need | File |
 |---|---|
 | The task statement verbatim, with pages | [TASK.md](TASK.md) |
+| Prior PipeTwin brief, retained after the case changed | [pipetwin-original.md](pipetwin-original.md) |
 | Organizer answers verbatim, with source and date | [QA.md](QA.md) |
 | What the submission platform requires, limits, deadlines | [PLATFORM.md](PLATFORM.md) |
 | Requirements, jury criteria and weights, timeline, bonuses | [requirements.md](requirements.md) |
