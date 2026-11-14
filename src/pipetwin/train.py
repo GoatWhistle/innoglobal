@@ -254,12 +254,13 @@ def calibrate_level(pred: np.ndarray, wt_nom: float, age: float,
     """Аффинная калибровка уровня/масштаба профиля кейса 2 по физике (lab37, R3).
 
     Два якоря: среднее профиля = номинал − средняя скорость потери аналогов × возраст,
-    верх профиля (p99) = номинал (нетронутая стенка). Пирсон инвариантен
+    максимум профиля = номинал (нетронутая стенка; якорь p99 клипал верхний 1% и с
+    насыщенным приором сжимал полтрубы 9583 к номиналу — lab39c). Пирсон инвариантен
     (положительный аффинный сдвиг), меняются MAE/RMSE и физичность уровня.
     V1 MAE 0.861 -> 0.818, строгая V2 0.936 -> 0.922; у 9583 полка 3.740 -> 4.395 мм
     (аналоги ЦППН теряют 0.003 мм/год, а не 0.026, как подразумевала полка 3.740)."""
     m_t = wt_nom - float(np.mean(rates)) * age
-    hi, mu = float(np.quantile(pred, 0.99)), float(np.mean(pred))
+    hi, mu = float(np.max(pred)), float(np.mean(pred))
     b = max((wt_nom - m_t) / (hi - mu) if hi - mu > 1e-9 else 0.0, 0.0)
     return m_t + b * (pred - mu)
 
@@ -519,7 +520,9 @@ def _case2_shape(ens: np.ndarray, tr: pd.DataFrame, va: pd.DataFrame, cfg: dict,
     if cfg.get("prior_w"):
         pdir = dir_of[cfg["prior_pipe"]]
         prior = fit_relief_prior(tr[tr["id"].map(dir_of) == pdir])
-        p_va = prior.predict_proba(va[F.PRIOR_FEATS].fillna(0.0))[:, 1]
+        # логит, а не вероятность: сигмоида насыщается у низинной половины 9583 и давала
+        # полку у номинала (55% сегментов в 4.49-4.50, lab39c); логит её снимает
+        p_va = prior.decision_function(va[F.PRIOR_FEATS].fillna(0.0))
         base = out["ens_prior"] = prior_blend(ens, p_va, cfg["prior_w"])
     if cfg.get("calibrate"):
         name = "ens_prior_cal" if cfg.get("prior_w") else "ensemble_cal"
