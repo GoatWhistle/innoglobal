@@ -18,78 +18,78 @@
       "case": "case1",
       "model": "catboost",
       "n": 55,
-      "pearson_r2": 0.3273,
-      "mae": 0.325
+      "pearson_r2": 0.3504,
+      "mae": 0.321
     },
     {
       "case": "case1",
       "model": "lgbm",
       "n": 55,
-      "pearson_r2": 0.2748,
-      "mae": 0.394
+      "pearson_r2": 0.2932,
+      "mae": 0.389
     },
     {
       "case": "case1",
       "model": "xgb",
       "n": 55,
-      "pearson_r2": 0.0709,
-      "mae": 0.468
+      "pearson_r2": 0.0813,
+      "mae": 0.459
     },
     {
       "case": "case1",
       "model": "aft",
       "n": 55,
-      "pearson_r2": 0.388,
-      "mae": 0.427
+      "pearson_r2": 0.4332,
+      "mae": 0.418
     },
     {
       "case": "case1",
       "model": "ensemble",
       "n": 55,
-      "pearson_r2": 0.3384,
-      "mae": 0.331
+      "pearson_r2": 0.3716,
+      "mae": 0.325
     },
     {
       "case": "case1",
       "model": "ens_blend",
       "n": 55,
-      "pearson_r2": 0.5365,
-      "mae": 0.283
+      "pearson_r2": 0.5581,
+      "mae": 0.279
     },
     {
       "case": "case1",
       "model": "aligned_stats",
       "n": 55,
-      "pearson_r2": 0.3392,
-      "mae": 0.467
+      "pearson_r2": 0.2733,
+      "mae": 0.483
     },
     {
       "case": "case1",
       "model": "ens_blend+stats",
       "n": 55,
-      "pearson_r2": 0.4976,
-      "mae": 0.297
+      "pearson_r2": 0.4615,
+      "mae": 0.301
     },
     {
       "case": "case1",
       "model": "catboost_smooth5",
       "n": 55,
-      "pearson_r2": 0.189,
-      "mae": 0.352
+      "pearson_r2": 0.2472,
+      "mae": 0.346
     },
     {
       "case": "case1",
       "model": "ensemble_smooth5",
       "n": 55,
-      "pearson_r2": 0.2511,
-      "mae": 0.351
+      "pearson_r2": 0.3197,
+      "mae": 0.342
     },
     {
       "case": "case1",
       "model": "ens_blend_smooth5",
       "n": 55,
-      "pearson_r2": 0.2708,
-      "mae": 0.336
+      "pearson_r2": 0.315,
+      "mae": 0.331
     },
     {
       "case": "case2",
