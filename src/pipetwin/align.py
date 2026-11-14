@@ -227,6 +227,53 @@ def shift_for_pair(vtd, passport, pipe_id, start, end, has_target: bool):
     return line_shift(vtd, passport, pipe_id, start, end)
 
 
+# Сдвиг 2022 -> профиль у 22871 известен только на концах (соседи), внутри — прямая. Композиция
+# (lab71): нелинейная часть сдвига 2018 -> 2022 этой же трубы переносится в сдвиг 2022 -> профиль —
+# скользит снаряд 2022 (у 1250011604 пропуски 2018 и 2023 согласованы: 2018 -> 2023 ≈ +11.0..11.5 м,
+# а 2022 даёт скачок +5 м около 370 м и в 2018 -> 2022, и в 2022 -> 2023). Симуляция «сдвиг известен
+# только на концах» на 1250011604: ошибка сдвига RMSE 2.17 -> 0.83 м, quant r² 0.738 -> 0.758
+# (оракул 0.764), r2d 0.409 -> 0.438 (оракул 0.451). PIPETWIN_CASE1_COMPOSE=0 — выключить.
+COMPOSE = os.environ.get("PIPETWIN_CASE1_COMPOSE", "1") == "1"
+
+
+INSIDE_MED, INSIDE_ANCHOR = 5, 3  # медиана по окнам; число крайних окон для опорной прямой
+
+
+def inside_dev(vtd, pipe_id, run_a, run_b):
+    """Нелинейная часть сдвига run_a -> run_b по окнам match (функция координаты run_b).
+
+    Окна сглажены медианой INSIDE_MED (у 22871 пропуск 2018 редкий: соседние окна расходятся
+    в среднем на 0.65 м, одиночные выбросы до 9 м), опорная прямая — через медианы
+    INSIDE_ANCHOR крайних окон с каждой стороны (сами крайние окна шумные). Вне окон — края."""
+    pts = window_shifts(vtd, pipe_id, run_a, run_b, "match")
+    k = INSIDE_ANCHOR
+    if len(pts) < 2 * k:
+        return None
+    x = np.array([p[0] + p[1] for p in pts])  # центр окна в координатах run_b
+    s = np.array([p[1] for p in pts])
+    o = np.argsort(x)
+    x = x[o]
+    s = pd.Series(s[o]).rolling(INSIDE_MED, center=True, min_periods=1).median().to_numpy()
+    x0, x1 = x[:k].mean(), x[-k:].mean()
+    y0, y1 = np.median(s[:k]), np.median(s[-k:])
+    dev = s - (y0 + (y1 - y0) * (x - x0) / max(x1 - x0, 1e-9))
+    # на концах трубы сдвиг известен (соседи) — поправка сходит к нулю на краях
+    sub = vtd[(vtd["id"] == pipe_id) & (vtd["run_date"] == run_b)]
+    length = float(sub["Distance"].max()) if len(sub) else float(x[-1])
+    xs = np.concatenate([[min(0.0, x[0] - 1)], x, [max(length, x[-1] + 1)]])
+    ds = np.concatenate([[0.0], dev, [0.0]])
+    return lambda d: np.interp(np.asarray(d, dtype=float), xs, ds)
+
+
+def compose_inside(vtd, pipe_id, runs, run, ls):
+    """Сдвиг run -> профиль = ls (прямая по соседям) − нелинейная часть сдвига (предыдущий пропуск -> run)."""
+    prev = [r for r in runs if r < run]
+    dev = inside_dev(vtd, pipe_id, prev[-1], run) if prev else None
+    if dev is None:
+        return ls
+    return lambda d: ls(d) - dev(d)
+
+
 def has_heights() -> set:
     """Пропуски, записанные в координатах профиля трассы: у дефектов есть высота, и она
     совпадает с профилем при нулевом сдвиге (проверено для всех пропусков 2023 года)."""
@@ -264,7 +311,12 @@ def to_profile(vtd, passport, pipe_id, run, exclude=None, method=None):
     if (pipe_id, cur) not in hs:
         if not ref:
             return zero
-        steps.append(line_shift(vtd, passport, pipe_id, cur, ref[-1], method))
+        ls = line_shift(vtd, passport, pipe_id, cur, ref[-1], method)
+        # только путь кейса 1 (method=match: прогноз 22871); строки обучения и кейс 2 — как были
+        if (COMPOSE and method == "match" and pipe_id == C.CASE1_ID
+                and cur == pd.Timestamp(C.CASE1_PREV_RUN)):
+            ls = compose_inside(vtd, pipe_id, runs, cur, ls)
+        steps.append(ls)
     if not steps:
         return zero
 

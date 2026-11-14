@@ -71,7 +71,8 @@ def run() -> pd.DataFrame:
         agg = b.get("member_agg", "mean")
         preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale, agg=agg)
         if name in ("ens_blend", "ens_blend+stats", "aligned_stats_cal",
-                    "quant_cal", "ens_blend+quant", "dens_quant_cal"):
+                    "quant_cal", "quant_cal_ens", "ens_blend+quant", "dens_quant_cal",
+                    "dens_quant_cal_ens"):
             # формы классификатора дефекта и спреда до q05 вклеиваются
             # в профиль этой трубы (lab13-19)
             p_def = models["clf"].predict_proba(X)[:, 1]
@@ -87,8 +88,9 @@ def run() -> pd.DataFrame:
                 pred = calibrate_mm(pred, preds["ensemble"], grp["prev_min"].values)
             if name == "ens_blend+stats":
                 pred = blend_stats(pred, aligned_stats_score(grp))
-            elif name in ("aligned_stats_cal", "quant_cal", "ens_blend+quant", "dens_quant_cal"):
-                pred = case1_stat_predictors(grp, pred)[name]
+            elif name in ("aligned_stats_cal", "quant_cal", "quant_cal_ens", "ens_blend+quant",
+                          "dens_quant_cal", "dens_quant_cal_ens"):
+                pred = case1_stat_predictors(grp, pred, b.get("quant_scale", "ens"))[name]
         elif name in ("aligned_stats", "quant", "dens_quant"):
             pred = {"aligned_stats": aligned_stats_score, "quant": quant_score,
                     "dens_quant": dens_quant_score}[name](grp)

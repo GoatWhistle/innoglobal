@@ -116,6 +116,16 @@
       "n": 55,
       "pearson_r2": 0.2115,
       "r2d": 0.0212,
+      "mae": 0.389,
+      "rmse": 0.547,
+      "mape": 6.61
+    },
+    {
+      "case": "case1",
+      "model": "quant_cal_ens",
+      "n": 55,
+      "pearson_r2": 0.2115,
+      "r2d": 0.0212,
       "mae": 0.358,
       "rmse": 0.498,
       "mape": 6.08
@@ -146,6 +156,16 @@
       "n": 55,
       "pearson_r2": 0.2886,
       "r2d": 0.0816,
+      "mae": 0.357,
+      "rmse": 0.507,
+      "mape": 6.07
+    },
+    {
+      "case": "case1",
+      "model": "dens_quant_cal_ens",
+      "n": 55,
+      "pearson_r2": 0.2886,
+      "r2d": 0.0816,
       "mae": 0.337,
       "rmse": 0.468,
       "mape": 5.69
@@ -154,11 +174,11 @@
       "case": "case1",
       "model": "dens_quant_cal_phys",
       "n": 55,
-      "pearson_r2": 0.2886,
+      "pearson_r2": 0.2871,
       "r2d": 0.0816,
-      "mae": 0.337,
-      "rmse": 0.468,
-      "mape": 5.69
+      "mae": 0.357,
+      "rmse": 0.507,
+      "mape": 6.06
     },
     {
       "case": "case1",
@@ -276,6 +296,16 @@
       "n": 55,
       "pearson_r2": 0.7306,
       "r2d": 0.4602,
+      "mae": 0.208,
+      "rmse": 0.288,
+      "mape": 3.68
+    },
+    {
+      "case": "case1_measured",
+      "model": "quant_cal_ens",
+      "n": 55,
+      "pearson_r2": 0.7306,
+      "r2d": 0.4602,
       "mae": 0.23,
       "rmse": 0.319,
       "mape": 3.95
@@ -306,6 +336,16 @@
       "n": 55,
       "pearson_r2": 0.7475,
       "r2d": 0.5103,
+      "mae": 0.202,
+      "rmse": 0.279,
+      "mape": 3.53
+    },
+    {
+      "case": "case1_measured",
+      "model": "dens_quant_cal_ens",
+      "n": 55,
+      "pearson_r2": 0.7475,
+      "r2d": 0.5103,
       "mae": 0.227,
       "rmse": 0.313,
       "mape": 3.87
@@ -316,9 +356,9 @@
       "n": 55,
       "pearson_r2": 0.7475,
       "r2d": 0.5103,
-      "mae": 0.227,
-      "rmse": 0.313,
-      "mape": 3.87
+      "mae": 0.202,
+      "rmse": 0.279,
+      "mape": 3.53
     },
     {
       "case": "case1_measured",
@@ -461,8 +501,8 @@
   },
   "conformal": {
     "case1": {
-      "p10_p90": 0.3179760517049015,
-      "p05_p95": 0.4909478616598273
+      "p10_p90": 0.3146561695512773,
+      "p05_p95": 0.40786974706640944
     },
     "case2": null
   }
