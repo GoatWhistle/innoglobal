@@ -12,18 +12,18 @@ const FRONTS = [
   ["--text-primary", 4.5, "Основной"],
   ["--text-secondary", 4.5, "Второй план"],
   ["--text-muted", 4.5, "Подписи"],
-  ["--text-danger", 4.5, "Утечка"],
+  ["--text-danger", 4.5, "Приоритет"],
   ["--text-warning", 4.5, "Подозрение"],
   ["Метки и контуры, норма 3", 3, null],
   ["--border-control", 3, "Контур поля"],
-  ["--status-danger", 3, "Метка утечки"],
+  ["--status-danger", 3, "Метка приоритета"],
   ["--status-warning", 3, "Метка подозрения"],
   ["--focus-ring", 3, "Фокус"],
 ]
 const PAIRS = [
   ["--action-primary-text", "--action-primary", "Главная кнопка"],
   ["--action-danger-text", "--action-danger", "Опасная кнопка"],
-  ["--text-danger", "--signal-danger-surface", "Текст утечки на её фоне"],
+  ["--text-danger", "--signal-danger-surface", "Текст приоритета на его фоне"],
   ["--text-warning", "--signal-warning-surface", "Текст подозрения на его фоне"],
   ["--text-on-inverse", "--surface-inverse", "Инверсия"],
 ]

@@ -1,4 +1,5 @@
-import { combobox, dateRange } from "./kit-combobox.js"
+import { combobox } from "./kit-combobox.js"
+import { dateRange } from "./controls/calendar.js"
 import {
   busyButton,
   copyButton,
@@ -57,6 +58,7 @@ async function boot() {
   const html = await Promise.all(PARTS.map((p) => fetch(`kit-part-${p}.html`).then((r) => (r.ok ? r.text() : ""))))
   main.innerHTML = html.join("")
   await iconSheet(document.querySelector("[data-icon-sheet]"))
+  main.insertAdjacentHTML("afterbegin", `<section class="kit-section" id="forecast-components" data-group="Труба"><div class="kit-head"><h2>Детали трубы</h2><p>Бирка, маркировка, шкала стенки, полоса сегментов, размерная линия, клавиша камеры, матовая панель, штамп.</p></div><div class="kit-demo"><a class="button button-primary" href="pipe-kit.html">Детали трубы</a><a class="button button-secondary" href="screen-pipe.html">Экран трубы</a></div><p>Ниже общие контролы со всеми состояниями. Примеры взяты из кейса стенки: сегменты, обследования ВТД и прогноз на дату T.</p></section>`)
   nav()
   themeSwitch(document.querySelector("[data-theme-switch]"))
   each("[data-segmented]", segmented)

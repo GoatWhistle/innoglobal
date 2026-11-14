@@ -27,7 +27,7 @@ function profile(host) {
   const x = scale([0, 12000], [box.x0, box.x1])
   const y = scale([3.8, 5.1], [box.y1, box.y0])
   paper(svg, defs, box)
-  yAxis(svg, box, y, small ? [4, 4.5, 5] : [3.8, 4.2, 4.6, 5], 1, "МПа")
+  yAxis(svg, box, y, small ? [4, 4.5, 5] : [3.8, 4.2, 4.6, 5], 1, "мм")
   xAxis(svg, box, x, small ? [0, 6000, 12000] : [0, 2000, 4000, 6000, 8000, 10000, 12000], (t) => (t === 12000 ? "12 км" : num(t / 1000)))
   const xs = Array.from({ length: 61 }, (_, i) => i * 200)
   const gap = xs.filter((v) => drop(v) >= THRESHOLD)
@@ -39,8 +39,8 @@ function profile(host) {
   el("path", { class: "ch-measured", d: path(points, x, y) }, svg)
   for (const [v, p] of points) el("circle", { class: "ch-dot", cx: x(v), cy: y(p), r: 4 }, svg)
   el("line", { class: "ch-event-danger", x1: x(LEAK_M), x2: x(LEAK_M), y1: box.y0, y2: box.y1 }, svg)
-  leader(svg, [x(LEAK_M), y(measured(LEAK_M)) + 6], [x(LEAK_M) - 24, box.y1 - 30], ["Утечка на 6 330 м", "найдено 6 340 ± 50 м"])
-  label(svg, box.x1 + 8, y(model(12000)) - 6, "Модель")
+  leader(svg, [x(LEAK_M), y(measured(LEAK_M)) + 6], [x(LEAK_M) - 24, box.y1 - 30], ["Самый тонкий, 6 300 м", "найдено 6 340 ± 50 м"])
+  label(svg, box.x1 + 8, y(model(12000)) - 6, "Прогноз")
   label(svg, box.x1 + 8, y(measured(12000)) + 12, "Замер")
 }
 
@@ -50,7 +50,7 @@ function residualChart(host) {
   const y = scale([-0.35, 0.1], [box.y1, box.y0])
   paper(svg, defs, box)
   el("rect", { class: "ch-band", x: box.x0, width: box.x1 - box.x0, y: y(THRESHOLD), height: y(-THRESHOLD) - y(THRESHOLD) }, svg)
-  yAxis(svg, box, y, [-0.3, -0.2, -0.1, 0, 0.1], 1, "МПа")
+  yAxis(svg, box, y, [-0.3, -0.2, -0.1, 0, 0.1], 1, "мм")
   xAxis(svg, box, x, [0, 5, 10, 15, 20, 25, 30], (t) => (t === 30 ? "30 с" : num(t)))
   el("line", { class: "ch-zero", x1: box.x0, x2: box.x1, y1: y(0), y2: y(0) }, svg)
   const ts = Array.from({ length: 301 }, (_, i) => i / 10)
@@ -65,10 +65,10 @@ function residualChart(host) {
   el("line", { class: "ch-event", x1: x(INSERT_S), x2: x(INSERT_S), y1: box.y0, y2: box.y1 }, svg)
   el("line", { class: "ch-event-danger", x1: x(CONFIRM_S), x2: x(CONFIRM_S), y1: box.y0, y2: box.y1 }, svg)
   label(svg, x(INSERT_S) - 6, box.y0 + 12, "Вставлена", "ch-text ch-end")
-  label(svg, x(CONFIRM_S) + 6, box.y0 + 12, "Обнаружено за 2,0 с")
-  leader(svg, [x(CROSS_S + 0.2), y(-THRESHOLD)], [x(CROSS_S) - 30, y(-0.31)], ["выдержка 0,4 с", "и второй датчик"])
+  label(svg, x(CONFIRM_S) + 6, box.y0 + 12, "В списке с 2024")
+  leader(svg, [x(CROSS_S + 0.2), y(-THRESHOLD)], [x(CROSS_S) - 30, y(-0.31)], ["выдержка 0,4 с", "и соседний сегмент"])
   label(svg, box.x1 + 8, y(THRESHOLD) + 4, "порог", "ch-text")
-  label(svg, box.x1 + 8, y(residual(30)) + 4, "Д-04")
+  label(svg, box.x1 + 8, y(residual(30)) + 4, "631")
 }
 
 function timeline(host) {
@@ -80,8 +80,8 @@ function timeline(host) {
   el("rect", { class: "ch-seg-danger", x: x(CONFIRM_S), y: mid - 4, width: x(30) - x(CONFIRM_S), height: 8 }, svg)
   const marks = [
     [INSERT_S, "Вставлена", "ch-event", "end"],
-    [CONFIRM_S, "Утечка подтверждена", "ch-event-danger", "start"],
-    [24.1, "Принята оператором", "ch-event", "start"],
+    [CONFIRM_S, "В списке проверки", "ch-event-danger", "start"],
+    [24.1, "Принят в план", "ch-event", "start"],
   ]
   marks.forEach(([t, text, cls, anchor], i) => {
     el("line", { class: cls, x1: x(t), x2: x(t), y1: mid - 12 - (i === 2 ? 14 : 0), y2: mid + 12 }, svg)

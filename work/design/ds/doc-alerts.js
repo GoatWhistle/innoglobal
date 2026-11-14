@@ -6,45 +6,45 @@ const button = (cls, id, text) =>
 
 const STATES = {
   calm: {
-    title: "Участок Север | duppel",
-    badge: badge("", "check", "Утечек нет"),
+    title: "Труба 1 | duppel",
+    badge: badge("", "check", "Список проверки пуст"),
     banner: "",
-    row: ["", "check", "Норма", "Д-04, 7 200 м", "−0,01"],
-    scene: "Сцена спокойна, нефть течёт",
+    row: ["", "check", "Норма", "Сегмент 631, 6 310 м", "5,62"],
+    scene: "Стенка ровная, срез трубы спокоен",
   },
   watch: {
-    title: "Участок Север | duppel",
-    badge: badge("warning", "warning", "Наблюдение"),
+    title: "Труба 1 | duppel",
+    badge: badge("warning", "warning", "Внимание"),
     banner: "",
-    row: ["warning", "warning", "Наблюдение 0,2 с", "Д-04, 7 200 м", "−0,05"],
-    scene: "Кольцо янтаря у Д-04, без звука",
+    row: ["warning", "warning", "Утонение выше среднего", "Сегмент 631, 6 310 м", "4,98"],
+    scene: "Янтарное пятно на развёртке у 6 ч",
   },
   leak: {
-    title: "Утечка 6 340 м | duppel",
-    badge: badge("danger", "alarm", "Утечка"),
-    banner: `<div class="banner" data-tone="danger" role="alert">${icon("alarm")}<p class="banner-text"><b>Утечка на 6 340 м ± 50 м.</b> Обнаружено за 2,0 с по Д-03 и Д-04.</p><div class="banner-actions">${button("button-secondary", "check", "Принять")}${button("button-danger", "shut", "Перекрыть участок")}</div></div>`,
-    row: ["danger", "alarm", "Утечка", "Д-04, 7 200 м", "−0,28"],
-    scene: "Место утечки, выноска, нефть на грунте",
+    title: "Сегмент 630 | duppel",
+    badge: badge("danger", "alarm", "В списке проверки"),
+    banner: `<div class="banner" data-tone="danger" role="alert">${icon("alarm")}<p class="banner-text"><b>Сегмент 630: 4,86 мм на дату T.</b> В 10% самых тонких.</p><div class="banner-actions">${button("button-secondary", "check", "Принять в план")}${button("button-quiet", "pipe", "Открыть сегмент")}</div></div>`,
+    row: ["danger", "alarm", "Приоритет", "Сегмент 630, 6 300 м", "4,86"],
+    scene: "Срез на 6 300 м, выноска толщины",
   },
   accepted: {
-    title: "Утечка 6 340 м | duppel",
-    badge: badge("danger", "alarm", "Утечка принята"),
-    banner: `<div class="banner" data-tone="danger" role="status">${icon("check")}<p class="banner-text"><b>Утечка на 6 340 м принята в 14:02:31.</b> Решение о перекрытии за оператором.</p><div class="banner-actions">${button("button-danger", "shut", "Перекрыть участок")}${button("button-quiet", "x", "Ложная тревога")}</div></div>`,
-    row: ["danger", "alarm", "Принята", "Д-04, 7 200 м", "−0,28"],
-    scene: "Место утечки без пульсации",
+    title: "Сегмент 630 | duppel",
+    badge: badge("danger", "alarm", "В плане ВТД"),
+    banner: `<div class="banner" data-tone="danger" role="status">${icon("check")}<p class="banner-text"><b>Сегмент 630 в плане с 14.11.</b> Срок проверки выбирает инженер.</p><div class="banner-actions">${button("button-quiet", "x", "Убрать из плана")}</div></div>`,
+    row: ["danger", "alarm", "В плане", "Сегмент 630, 6 300 м", "4,86"],
+    scene: "Отметка на трассе без пульсации",
   },
   closed: {
-    title: "Участок Север | duppel",
-    badge: badge("", "check", "Утечек нет"),
-    banner: `<div class="toast toast-static" role="status">${icon("check")}<p class="toast-text"><b>Утечка на 6 340 м устранена</b><span>Запись в журнале, 14:09:02.</span></p></div>`,
-    row: ["", "check", "Устранена", "Д-04, 7 200 м", "−0,01"],
-    scene: "Отметка в журнале, на сцене ничего",
+    title: "Труба 1 | duppel",
+    badge: badge("", "check", "Список проверки пуст"),
+    banner: `<div class="toast toast-static" role="status">${icon("check")}<p class="toast-text"><b>Контрольное ВТД загружено</b><span>Замер 4,91 мм, прогноз 4,86 мм. Запись в журнале.</span></p></div>`,
+    row: ["", "check", "Проверен", "Сегмент 630, 6 300 м", "4,91"],
+    scene: "Замер рядом с прогнозом на профиле",
   },
   false: {
-    title: "Участок Север | duppel",
-    badge: badge("", "check", "Утечек нет"),
-    banner: `<div class="toast toast-static" role="status">${icon("info")}<p class="toast-text"><b>Отмечено как ложная тревога</b><span>Причина в журнале. Порог не меняется сам.</span></p></div>`,
-    row: ["", "info", "Ложная", "Д-04, 7 200 м", "−0,01"],
+    title: "Труба 1 | duppel",
+    badge: badge("", "check", "Список проверки пуст"),
+    banner: `<div class="toast toast-static" role="status">${icon("info")}<p class="toast-text"><b>Сегмент снят с проверки</b><span>Причина в журнале. Правило отбора не меняется само.</span></p></div>`,
+    row: ["", "info", "Снят", "Сегмент 630, 6 300 м", "4,86"],
     scene: "Отметка в журнале",
   },
 }
@@ -54,12 +54,12 @@ function apply(key) {
   const [tone, rowIcon, rowText, place, delta] = state.row
   for (const view of document.querySelectorAll("[data-life-view]")) {
     view.querySelector("[data-life-title]").textContent = state.title
-    view.querySelector("[data-life-dot]").hidden = !state.title.startsWith("Утечка")
+    view.querySelector("[data-life-dot]").hidden = !state.title.startsWith("Сегмент")
     view.querySelector("[data-life-badge]").innerHTML = state.badge
     view.querySelector("[data-life-banner]").innerHTML = state.banner
     const row = view.querySelector("[data-life-row]")
     row.dataset.tone = tone
-    row.innerHTML = `<span>${place}</span><span class="fig">${delta}&nbsp;МПа</span>${badge(tone, rowIcon, rowText)}`
+    row.innerHTML = `<span>${place}</span><span class="fig">${delta}&nbsp;мм</span>${badge(tone, rowIcon, rowText)}`
     view.querySelector("[data-life-scene]").textContent = state.scene
   }
   for (const pick of document.querySelectorAll("[data-life]"))

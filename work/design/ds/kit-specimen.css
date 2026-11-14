@@ -142,3 +142,7 @@
 @media (hover: hover) and (pointer: fine) {
   .glyph:hover { background: var(--surface-raised-hover); }
 }
+
+.states > * { grid-template-columns: minmax(0, 1fr); }
+.states .crumbs { min-inline-size: 0; }
+.states .crumbs ol { flex-wrap: wrap; }

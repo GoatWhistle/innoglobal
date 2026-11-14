@@ -1,6 +1,7 @@
 const PAGES = [
   ["index.html", "Основы", [
     ["principles", "Принципы"],
+    ["pipe-style", "Стиль от трубы"],
     ["build", "Как собрать экран"],
     ["color", "Цвет"],
     ["type", "Типографика"],
@@ -34,14 +35,14 @@ const PAGES = [
   ]],
   ["doc-data.html", "Данные", [
     ["numbers", "Числа и показания"],
-    ["live", "Реальное время"],
+    ["live", "Свежесть данных"],
   ]],
   ["doc-charts.html", "Графики", [
     ["charts", "Грамматика графиков"],
     ["chart-states", "Состояния графика"],
   ]],
-  ["doc-alerts.html", "Тревоги", [
-    ["alerts", "Жизнь тревоги"],
+  ["doc-alerts.html", "Сигналы", [
+    ["alerts", "Жизнь сигнала"],
     ["feedback", "Обратная связь"],
   ]],
   ["doc-forms.html", "Формы и таблицы", [
@@ -56,9 +57,9 @@ const PAGES = [
 ]
 const TOP = [
   ["index.html", "Основы"],
-  ["kit.html", "Компоненты"],
-  ["screens.html", "Экраны"],
-  ["scene.html", "Сцена"],
+  ["pipe-kit.html", "Компоненты"],
+  ["screen-pipe.html", "Экраны"],
+  ["archive.html", "Архив"],
 ]
 
 const here = location.pathname.split("/").pop() || "index.html"

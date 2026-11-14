@@ -212,3 +212,8 @@
     scale: 1.1;
   }
 }
+
+@media (max-width: 30rem) {
+  .stepper { grid-auto-flow: row; gap: var(--space-16); }
+  .stepper li::after { display: none; }
+}

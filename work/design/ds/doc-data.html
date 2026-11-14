@@ -29,23 +29,23 @@
 <section class="chapter chapter-first" id="numbers">
   <header class="chapter-head">
     <h2 class="chapter-title">Числа и показания</h2>
-    <p class="chapter-lead">Точность задаёт величина, а не экран. Замер всегда рядом с моделью, расхождение со знаком.</p>
+    <p class="chapter-lead">Точность задаёт величина, а не экран. Замер всегда рядом с прогнозом, расхождение со знаком.</p>
   </header>
   <div class="anatomy">
     <div class="duo" data-pair>
       <div data-view>
         <p class="view-name" data-view-name></p>
         <div class="ro">
-          <p class="ro-head"><span class="ro-label"><svg class="icon" aria-hidden="true"><use href="icons.svg#pressure"/></svg>Давление, Д-03</span><span class="ro-fresh"><svg class="icon" aria-hidden="true"><use href="icons.svg#clock"/></svg>1 с назад</span></p>
-          <p class="ro-value"><span class="ro-num">4,60</span><span class="ro-unit">МПа</span></p>
-          <p class="ro-model">Модель 4,65 МПа</p>
-          <p class="ro-delta"><span class="badge badge-sm" data-tone="warning"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg><span>Наблюдение</span></span><span>−0,05 МПа</span></p>
+          <p class="ro-head"><span class="ro-label"><svg class="icon" aria-hidden="true"><use href="icons.svg#pressure"/></svg>Замер, сегмент 630</span><span class="ro-fresh"><svg class="icon" aria-hidden="true"><use href="icons.svg#clock"/></svg>1 с назад</span></p>
+          <p class="ro-value"><span class="ro-num">4,60</span><span class="ro-unit">мм</span></p>
+          <p class="ro-model">Прогноз 4,65 мм</p>
+          <p class="ro-delta"><span class="badge badge-sm" data-tone="warning"><svg class="icon" aria-hidden="true"><use href="icons.svg#warning"/></svg><span>Внимание</span></span><span>−0,05 мм</span></p>
         </div>
       </div>
     </div>
     <ol>
       <li><b>Значение</b> в <code>readout</code>, начертание 300, цифры моноширинные.</li>
-      <li><b>Расхождение с моделью</b>: замер минус модель, со знаком, рядом статус иконкой и словом.</li>
+      <li><b>Расхождение с прогнозом</b>: замер минус прогноз, со знаком, рядом статус иконкой и словом.</li>
       <li><b>Единица</b> после неразрывного пробела, <code>body-sm</code>, приглушённая.</li>
       <li><b>Подпись</b>: величина и место, <code>caption</code>.</li>
       <li><b>Свежесть</b>: возраст показания, справа от подписи.</li>
@@ -55,13 +55,13 @@
     <table class="copy">
       <thead><tr><th scope="col">Величина</th><th scope="col">Единица</th><th scope="col">Знаков</th><th scope="col">Пишем</th><th scope="col">Не пишем</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Давление</th><td>МПа</td><td>2</td><td>4,65&nbsp;МПа</td><td class="no">4.6512 MPa</td></tr>
-        <tr><th scope="row">Расхождение</th><td>МПа</td><td>2, знак всегда</td><td>−0,05&nbsp;МПа, +0,01&nbsp;МПа, 0,00&nbsp;МПа</td><td class="no">-0,05 МПа с дефисом, 0.05</td></tr>
-        <tr><th scope="row">Расход</th><td>м³/ч</td><td>0 от 100, 1 ниже</td><td>1&nbsp;500&nbsp;м³/ч, 87,3&nbsp;м³/ч</td><td class="no">1500.00 м3/ч</td></tr>
+        <tr><th scope="row">Толщина</th><td>мм</td><td>2</td><td>4,65&nbsp;мм</td><td class="no">4.6512 MPa</td></tr>
+        <tr><th scope="row">Расхождение</th><td>мм</td><td>2, знак всегда</td><td>−0,05&nbsp;мм, +0,01&nbsp;мм, 0,00&nbsp;мм</td><td class="no">-0,05 мм с дефисом, 0.05</td></tr>
+        <tr><th scope="row">Скорость утонения</th><td>мм/год</td><td>2</td><td>0,14&nbsp;мм/год, 0,08&nbsp;мм/год</td><td class="no">0.14 mm/y</td></tr>
         <tr><th scope="row">Температура</th><td>°C</td><td>1</td><td>51,8&nbsp;°C</td><td class="no">51.83°</td></tr>
         <tr><th scope="row">Место на участке</th><td>м</td><td>0, шаг 10&nbsp;м</td><td>на 6&nbsp;340&nbsp;м</td><td class="no">6,34 км от начала</td></tr>
         <tr><th scope="row">Длина участка</th><td>км</td><td>0 или 1</td><td>12&nbsp;км, 2,4&nbsp;км</td><td class="no">12000 м участок</td></tr>
-        <tr><th scope="row">Время обнаружения</th><td>с</td><td>1</td><td>за 3,4&nbsp;с</td><td class="no">3412 мс</td></tr>
+        <tr><th scope="row">Возраст ВТД</th><td>год</td><td>1</td><td>2,4&nbsp;года</td><td class="no">2.4 г.</td></tr>
         <tr><th scope="row">Длительность</th><td>с, мин</td><td>0</td><td>48&nbsp;с, 2&nbsp;мин 05&nbsp;с</td><td class="no">125 сек.</td></tr>
         <tr><th scope="row">Момент</th><td></td><td></td><td>14:02:11, вчера в 23:40</td><td class="no">2:02 PM, 2026-11-12T14:02</td></tr>
       </tbody>
@@ -78,46 +78,46 @@
 
 <section class="chapter" id="live">
   <header class="chapter-head">
-    <h2 class="chapter-title">Реальное время</h2>
-    <p class="chapter-lead">Шесть состояний потока. Экран всегда говорит, насколько свежи цифры и работает ли детекция.</p>
+    <h2 class="chapter-title">Свежесть данных</h2>
+    <p class="chapter-lead">Шесть состояний данных. Экран всегда говорит, по какому ВТД посчитан прогноз и насколько он свежий.</p>
   </header>
-  <div class="live-picker" role="group" aria-label="Состояние потока">
-    <button type="button" data-live-pick="live">Живые</button>
-    <button type="button" data-live-pick="delayed">Задержка</button>
-    <button type="button" data-live-pick="stale">Устарело</button>
+  <div class="live-picker" role="group" aria-label="Состояние данных">
+    <button type="button" data-live-pick="live">Свежий</button>
+    <button type="button" data-live-pick="delayed">Пересчёт</button>
+    <button type="button" data-live-pick="stale">Старое ВТД</button>
     <button type="button" data-live-pick="offline">Нет связи</button>
     <button type="button" data-live-pick="paused">Пауза</button>
-    <button type="button" data-live-pick="replay">Повтор</button>
+    <button type="button" data-live-pick="replay">Сравнение</button>
   </div>
   <div class="duo" data-pair>
     <div data-view data-live-view>
       <p class="view-name" data-view-name></p>
       <div class="ro-grid">
-        <div class="ro"><p class="ro-head"><span class="ro-label">Давление, Д-03</span><span class="ro-fresh" data-fresh></span></p><p class="ro-value"><span class="ro-num">4,60</span><span class="ro-unit">МПа</span></p><p class="ro-model">Модель 4,65 МПа</p></div>
-        <div class="ro"><p class="ro-head"><span class="ro-label">Расход на входе</span><span class="ro-fresh" data-fresh></span></p><p class="ro-value"><span class="ro-num">1 500</span><span class="ro-unit">м³/ч</span></p><p class="ro-model">Модель 1 500 м³/ч</p></div>
+        <div class="ro"><p class="ro-head"><span class="ro-label">Замер, сегмент 630</span><span class="ro-fresh" data-fresh></span></p><p class="ro-value"><span class="ro-num">4,60</span><span class="ro-unit">мм</span></p><p class="ro-model">Прогноз 4,65 мм</p></div>
+        <div class="ro"><p class="ro-head"><span class="ro-label">Длина трубы</span><span class="ro-fresh" data-fresh></span></p><p class="ro-value"><span class="ro-num">12 000</span><span class="ro-unit">м</span></p><p class="ro-model">Сегментов 1 200</p></div>
       </div>
       <p class="live-line" data-live-line role="status"></p>
     </div>
   </div>
-  <div class="scroll" tabindex="0" role="region" aria-label="Состояния потока">
+  <div class="scroll" tabindex="0" role="region" aria-label="Состояния данных">
     <table class="copy">
-      <thead><tr><th scope="col">Состояние</th><th scope="col">Когда</th><th scope="col">Что видно</th><th scope="col">Детекция</th></tr></thead>
+      <thead><tr><th scope="col">Состояние</th><th scope="col">Когда</th><th scope="col">Что видно</th><th scope="col">Прогноз</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Живые</th><td>Последний такт не старше двух тактов</td><td>Возраст «1&nbsp;с назад», без акцента</td><td>Работает</td></tr>
-        <tr><th scope="row">Задержка</th><td>От двух тактов до 10&nbsp;с</td><td>Иконка таймера и возраст в подписи</td><td>Работает</td></tr>
-        <tr><th scope="row">Устарело</th><td>Старше 10&nbsp;с</td><td>Значения приглушены <code>--opacity-stale</code>, время вместо возраста</td><td>Стоит, сказано словами</td></tr>
-        <tr><th scope="row">Нет связи</th><td>Нет ответа 30&nbsp;с или браузер офлайн</td><td>Баннер страницы, последнее время, сами переподключаемся</td><td>Стоит</td></tr>
-        <tr><th scope="row">Пауза</th><td>Оператор нажал паузу</td><td>Метка «пауза», таймеры стоят, вставка утечки закрыта</td><td>Стоит</td></tr>
-        <tr><th scope="row">Повтор</th><td>Просмотр записи</td><td>Шкала времени, метка «повтор», действия закрыты, звука нет</td><td>Показывает записанное</td></tr>
+        <tr><th scope="row">Свежий</th><td>Посчитан по последнему загруженному ВТД</td><td>Дата расчёта в подписи, без акцента</td><td>Актуален</td></tr>
+        <tr><th scope="row">Пересчёт</th><td>Загружено новое ВТД, расчёт идёт</td><td>Иконка таймера, прошлый прогноз виден до конца расчёта</td><td>Прошлый</td></tr>
+        <tr><th scope="row">Старое ВТД</th><td>Прошлому обследованию больше трёх лет</td><td>Значения приглушены <code>--opacity-stale</code>, год ВТД вместо даты</td><td>Есть, разброс шире</td></tr>
+        <tr><th scope="row">Нет связи</th><td>Сервер не ответил 30&nbsp;с или браузер офлайн</td><td>Баннер страницы, прогноз из кеша, сами переподключаемся</td><td>Из кеша</td></tr>
+        <tr><th scope="row">Пауза</th><td>Инженер нажал паузу</td><td>Метка «пауза», пересчёт стоит, выбор сегмента открыт</td><td>Стоит</td></tr>
+        <tr><th scope="row">Сравнение</th><td>Прогноз на прошлую дату против её замера</td><td>Метка «сравнение», замер рядом с прогнозом, действия закрыты</td><td>Исторический</td></tr>
       </tbody>
     </table>
   </div>
   <ul class="facts">
-    <li><b>Каждый такт</b> меняется только текст цифр. Ни перехода, ни подсветки, ни счётчика с прокруткой. Цифры моноширинные, ширина поля не дрожит.</li>
-    <li><b>Частота.</b> Текст показаний не чаще 4 раз в секунду, график не чаще 10. Возраст «N&nbsp;с назад» раз в секунду, после минуты время «в 14:02:11».</li>
-    <li><b>Движется только событие:</b> смена статуса, появление тревоги, переход в «устарело» одним затуханием.</li>
-    <li><b>Пауза и повтор.</b> Клавиша <kbd class="kbd">P</kbd> ставит и снимает паузу. Повтор не меняет данные и журнал, выход из него возвращает к живым.</li>
-    <li><b>Экранный диктор.</b> Показания не объявляются. Смена статуса через <code>aria-live="polite"</code>, утечка через <code>role="alert"</code>.</li>
+    <li><b>Дата всегда рядом.</b> У каждого прогноза видны дата T и год ВТД, по которому он посчитан. Без даты число не показывается.</li>
+    <li><b>Пересчёт</b> меняет только текст цифр. Ни перехода, ни подсветки, ни счётчика с прокруткой. Цифры моноширинные, ширина поля не дрожит.</li>
+    <li><b>Движется только событие:</b> смена статуса, вход сегмента в список, переход в «старое ВТД» одним затуханием.</li>
+    <li><b>Пауза и сравнение.</b> Клавиша <kbd class="kbd">P</kbd> ставит и снимает паузу. Сравнение не меняет данные и журнал, выход из него возвращает к текущему прогнозу.</li>
+    <li><b>Экранный диктор.</b> Значения не объявляются. Смена статуса через <code>aria-live="polite"</code>, вход в список проверки через <code>role="alert"</code>.</li>
   </ul>
 </section>
 </main>

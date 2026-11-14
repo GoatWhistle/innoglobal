@@ -84,7 +84,7 @@
   <div class="icon-sizes" data-icon-sizes></div>
   <ul class="facts">
     <li>Сетка 24&nbsp;px, поле 2&nbsp;px, штрих <span data-raw="--icon-stroke"></span>.</li>
-    <li>Рубленые концы и точные стыки повторяют инженерную графику. Окружности обозначают датчики и состояния.</li>
+    <li>Рубленые концы и точные стыки повторяют инженерную графику. Окружности обозначают сечения и состояния.</li>
     <li>Иконка в статусе всегда стоит рядом со словом. Иконка без подписи только в кнопке с <code>aria-label</code> и подсказкой.</li>
   </ul>
   <p class="more"><a href="kit.html#icons">Весь набор<svg class="icon" aria-hidden="true"><use href="icons.svg#arrow-right"/></svg></a></p>
@@ -100,11 +100,11 @@
     <li>Фокус один на всё: кольцо <span data-px="--focus-ring-width"></span>&nbsp;px цвета <code>--focus-ring</code> с отступом <span data-px="--focus-ring-offset"></span>&nbsp;px. Не анимируется.</li>
     <li>Цель касания не меньше <span data-px="--target-min"></span>&nbsp;px, даже если кнопка выглядит меньше.</li>
     <li>Состояние не передаётся одним цветом: рядом всегда иконка и слово.</li>
-    <li>Всё управляется с клавиатуры. Тревога объявляется через <code>role="alert"</code>, остальное через <code>aria-live="polite"</code>.</li>
+    <li>Всё управляется с клавиатуры. Список проверки объявляется через <code>role="alert"</code>, остальное через <code>aria-live="polite"</code>.</li>
   </ul>
 </section>
 
-<section class="chapter"><h2>Движение в симуляторе</h2><p>Постоянное мигание тревог отключено. Значения обновляются без анимации. Фактура нефти движется независимо от расчёта и останавливается при скрытой вкладке или reduced motion. Для вставки и принятия важны немедленная метка и смена текста.</p></section></main>
+<section class="chapter"><h2>Движение на экране трубы</h2><p>Постоянное мигание отключено. Значения обновляются без анимации. Фактура нефти движется независимо от расчёта и останавливается при скрытой вкладке или reduced motion. Для выбора и принятия важны немедленная метка и смена текста.</p></section></main>
 </div>
 <script type="module" src="doc-shell.js"></script>
 <script type="module" src="page.js"></script>

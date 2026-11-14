@@ -138,7 +138,11 @@ export function copyButton(button) {
   button.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(button.dataset.copy)
-    } catch {}
+    } catch {
+      button.dataset.tip = "Не удалось скопировать"
+      button.setAttribute("aria-label", "Не удалось скопировать. Повторить")
+      return
+    }
     button.dataset.copied = ""
     button.dataset.tip = "Скопировано"
     button.setAttribute("aria-label", "Скопировано")

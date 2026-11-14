@@ -124,3 +124,11 @@
 .range-time .input {
   min-block-size: var(--control-height);
 }
+
+@media (max-width: 48rem) {
+  .range { grid-template-columns: minmax(0, 1fr); inline-size: calc(100vw - 2 * var(--space-8)); }
+  .range-presets { border-inline-end: 0; border-block-end: var(--hairline) solid var(--border-subtle); display: flex; overflow-x: auto; }
+  .range-presets .option { flex: none; }
+  .cal { padding-inline: var(--space-12); }
+  .cal-grid { grid-template-columns: repeat(7, minmax(var(--target-min), 1fr)); }
+}

@@ -34,16 +34,16 @@
     <div data-view>
       <p class="view-name" data-view-name></p>
       <header class="sheet">
-        <div class="sheet-title"><h3>Участок Север, км 0–12</h3></div>
-        <dl class="sheet-meta"><div><dt>Масштаб</dt><dd>1 : 50 000</dd></div><div><dt>Ред.</dt><dd>14</dd></div><div><dt>Модель</dt><dd>14:02:11</dd></div><div><dt>Датчики</dt><dd>6 из 6</dd></div></dl>
+        <div class="sheet-title"><h3>Труба 1, км 0–12</h3></div>
+        <dl class="sheet-meta"><div><dt>Масштаб</dt><dd>1 : 50 000</dd></div><div><dt>Ред.</dt><dd>14</dd></div><div><dt>Прогноз</dt><dd>14:02:11</dd></div><div><dt>Сегменты</dt><dd>6 из 6</dd></div></dl>
       </header>
       <div class="paper spec">
-        <svg class="ink ink-demo" viewBox="0 0 560 150" role="img" aria-label="Участок 12 000 м, датчик Д-03 показывает 4,65 МПа">
+        <svg class="ink ink-demo" viewBox="0 0 560 150" role="img" aria-label="Труба 12 000 м, сегмент 630 с прогнозом 4,65 мм">
           <path class="axis" d="M16 70H544"/>
           <path class="contour" d="M40 52H520M40 88H520"/>
           <path class="line" d="M40 46V52M136 46V52M232 46V52M328 46V52M424 46V52M520 46V52"/>
           <path class="fine" d="M232 46L262 18H392"/>
-          <text class="strong" x="268" y="13">Д-03</text><text x="310" y="13">4,65 МПа</text>
+          <text class="strong" x="268" y="13">Сегмент 630</text><text x="310" y="13">4,65 мм</text>
           <path class="fine" d="M40 94V134M520 94V134"/>
           <path class="line" d="M40 126H520M36 130L44 122M516 130L524 122"/>
           <text x="280" y="118" text-anchor="middle">12 000 м</text>
@@ -89,8 +89,8 @@
       </svg>
       <div class="swatches">
         <figure><div class="hatch"></div><figcaption>Нет данных</figcaption></figure>
-        <figure><div class="hatch" data-tone="warning"></div><figcaption>Наблюдение</figcaption></figure>
-        <figure><div class="hatch" data-tone="danger"></div><figcaption>Утечка</figcaption></figure>
+        <figure><div class="hatch" data-tone="warning"></div><figcaption>Внимание</figcaption></figure>
+        <figure><div class="hatch" data-tone="danger"></div><figcaption>Приоритет</figcaption></figure>
       </div>
       <div class="paper paper-demo"><span class="muted">Миллиметровка: поле графика и сцены</span></div>
     </div>
@@ -99,10 +99,10 @@
     <table class="copy">
       <thead><tr><th scope="col">Знак</th><th scope="col">Где</th><th scope="col">Никогда</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Штриховка</th><td>Невязка над порогом, интервал утечки на профиле, зона без данных, отключённый участок</td><td class="no">Фон панели, кнопка, текст</td></tr>
-        <tr><th scope="row">Размерная линия</th><td>Длина участка, ошибка места утечки, шаг датчиков</td><td class="no">Вместо оси графика</td></tr>
-        <tr><th scope="row">Осевая</th><td>Ось трубы на схеме, нулевая линия невязки</td><td class="no">Разделитель секций</td></tr>
-        <tr><th scope="row">Выноска</th><td>Показание датчика на схеме, подпись события на графике</td><td class="no">Больше трёх на одном виде</td></tr>
+        <tr><th scope="row">Штриховка</th><td>Утонение выше среднего, интервал списка на профиле, зона без ВТД, отремонтированный участок</td><td class="no">Фон панели, кнопка, текст</td></tr>
+        <tr><th scope="row">Размерная линия</th><td>Длина трубы, ширина P10–P90, шаг сегментов</td><td class="no">Вместо оси графика</td></tr>
+        <tr><th scope="row">Осевая</th><td>Ось трубы на схеме, нулевая линия расхождения</td><td class="no">Разделитель секций</td></tr>
+        <tr><th scope="row">Выноска</th><td>Толщина сегмента на схеме, подпись ВТД на графике</td><td class="no">Больше трёх на одном виде</td></tr>
         <tr><th scope="row">Миллиметровка</th><td>Поле графика, сцена, схема</td><td class="no">За текстом, в панели, в диалоге</td></tr>
         <tr><th scope="row">Засечка</th><td>Маркер перечня, деление шкалы</td><td class="no">Нумерация шагов</td></tr>
       </tbody>
@@ -121,18 +121,18 @@
     <div data-view>
       <p class="view-name" data-view-name></p>
       <ul class="picks spec" data-picks>
-        <li><button type="button" class="marked" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-03, 4 800 м</span><span class="fig">4,65 МПа</span></button></li>
-        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-04, 7 200 м</span><span class="fig">4,46 МПа</span></button></li>
-        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>Д-05, 9 600 м</span><span class="fig">4,28 МПа</span></button></li>
+        <li><button type="button" class="marked" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>630, 4 800 м</span><span class="fig">4,65 мм</span></button></li>
+        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>631, 7 200 м</span><span class="fig">4,46 мм</span></button></li>
+        <li><button type="button" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="icons.svg#sensor"/></svg><span>632, 9 600 м</span><span class="fig">4,28 мм</span></button></li>
       </ul>
       <div class="cards">
-        <a class="card-link trace" href="#signature"><small>Расход на входе</small><b>1 500 м³/ч</b></a>
+        <a class="card-link trace" href="#signature"><small>Длина трубы</small><b>1 500 м³/ч</b></a>
         <a class="card-link trace" href="#signature"><small>Температура на входе</small><b>51,8 °C</b></a>
       </div>
       <ul class="ticks">
-        <li>Порог 0,07 МПа</li>
+        <li>Среднее 5,61 мм</li>
         <li>Выдержка 0,4 с</li>
-        <li>Подтверждают два датчика</li>
+        <li>Нижние 10% по трубе</li>
       </ul>
     </div>
   </div>

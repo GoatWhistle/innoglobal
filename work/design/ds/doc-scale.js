@@ -1,16 +1,16 @@
 import { make, num, px, raw } from "./doc-read.js"
 
 const SCALE = [
-  ["display", "light", "display", "Нефть течёт"],
+  ["display", "light", "display", "Стенка 4,86 мм"],
   ["heading-lg", "light", "display", "Участок 6 290–6 390 м"],
-  ["heading", "light", "tight", "Журнал событий датчиков"],
-  ["subheading", "regular", "normal", "Давление ниже модели на 0,28 МПа"],
-  ["lead", "light", "normal", "Модель сравнивает расчётное давление с замеренным."],
+  ["heading", "light", "tight", "Журнал обследований"],
+  ["subheading", "regular", "normal", "Прогноз толщины стенки: 4,86 мм"],
+  ["lead", "light", "normal", "Модель сравнивает прогноз толщины с замером ВТД."],
   ["body", "regular", "normal", "Шероховатость стенки и вязкость задаются в параметрах участка."],
-  ["body-sm", "regular", "normal", "Порог 0,07 МПа, выдержка 0,4 с, минимум два датчика."],
+  ["body-sm", "regular", "normal", "Сегмент 630, от 6 300 до 6 310 м. Пример данных."],
   ["label", "medium", "normal", "Диаметр трубы, мм"],
   ["caption", "regular", "normal", "Обновлено 4 с назад"],
-  ["micro", "regular", "wide", "Д-03"],
+  ["micro", "regular", "wide", "630"],
   ["readout", "light", "tight", "4,29"],
   ["readout-sm", "regular", "normal", "1 245,8"],
 ]

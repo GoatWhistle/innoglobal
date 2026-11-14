@@ -28,12 +28,14 @@
 <link rel="stylesheet" href="kit-state.css">
 <link rel="stylesheet" href="kit-error.css">
 <link rel="stylesheet" href="kit-specimen.css">
+<link rel="stylesheet" href="site-nav.css">
+<script type="module" src="site-nav.js"></script>
 <script type="module" src="kit-main.js"></script>
 </head>
 <body>
 <header class="kit-bar">
   <a class="kit-brand brand" href="index.html" aria-label="duppel, дизайн-система"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg></a>
-  <p class="kit-title">Набор компонентов <a href="index.html">Дизайн-система</a></p>
+  <nav class="site-nav" aria-label="Дизайн-система" data-site-nav></nav>
   <div class="segmented segmented-icons" role="radiogroup" aria-label="Тема" data-segmented data-theme-switch>
     <button type="button" role="radio" aria-checked="true" data-value="dark" aria-label="Тёмная тема" data-tip="Тёмная тема"><svg class="icon" aria-hidden="true"><use href="icons.svg#moon"/></svg></button>
     <button type="button" role="radio" aria-checked="false" data-value="light" aria-label="Светлая тема" data-tip="Светлая тема"><svg class="icon" aria-hidden="true"><use href="icons.svg#sun"/></svg></button>

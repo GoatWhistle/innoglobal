@@ -1,0 +1,15 @@
+.archive { display: grid; gap: var(--space-48, 48px); max-inline-size: 76rem; padding: var(--space-48, 48px) var(--space-page) var(--space-64, 64px); }
+.archive-intro h1 { margin: 0; font-size: var(--font-size-display, 3rem); font-weight: var(--weight-light); letter-spacing: var(--tracking-display, -0.03em); line-height: 1; }
+.archive-intro p { max-inline-size: 60ch; margin: var(--space-16) 0 0; color: var(--text-secondary); text-wrap: pretty; }
+.archive-group { display: grid; gap: var(--space-12); padding-block-start: var(--space-24); border-block-start: var(--hairline) solid var(--border-subtle); }
+.archive-group h2 { margin: 0; font-size: var(--font-size-heading, 1.5rem); font-weight: var(--weight-regular); letter-spacing: var(--tracking-tight); }
+.archive-why { max-inline-size: 70ch; margin: 0 0 var(--space-8); color: var(--text-secondary); font-size: var(--font-size-body-sm); text-wrap: pretty; }
+.archive-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: var(--space-12); }
+.archive-card { display: grid; gap: var(--space-4); align-content: start; padding: var(--space-16); border: var(--hairline) solid var(--border-subtle); border-radius: var(--radius-panel, 8px); background: var(--surface-raised); color: inherit; text-decoration: none; transition: border-color var(--dur-fast, 120ms) var(--ease-out, ease), background-color var(--dur-fast, 120ms) var(--ease-out, ease); }
+.archive-card:hover { border-color: var(--border-strong, var(--text-secondary)); background: var(--surface-raised-hover); }
+.archive-card:focus-visible { outline: var(--focus-width, 2px) solid var(--focus-ring, var(--text-primary)); outline-offset: 2px; }
+.archive-date { font-size: var(--font-size-micro, 0.75rem); color: var(--text-muted); font-variant-numeric: var(--font-numeric); }
+.archive-name { font-weight: var(--weight-medium); }
+.archive-what { font-size: var(--font-size-caption); color: var(--text-secondary); }
+.archive-live .archive-date { color: var(--text-warning); }
+@media (max-width: 40rem) { .archive { padding: var(--space-32) var(--space-16) var(--space-48, 48px); } }

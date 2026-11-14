@@ -1,14 +1,14 @@
 import { control, icon, roving } from "./kit-layer.js"
 
 const SENSORS = [
-  ["Д-01", "Насосная станция, 0 м", "Норма"],
-  ["Д-02", "Участок 1, 420 м", "Норма"],
-  ["Д-03", "Участок 2, 4 800 м", "Утечка"],
-  ["Д-04", "Участок 2, 1 380 м", "Нет сигнала"],
-  ["Д-05", "Переход под рекой Сосновка, 2 050 м", "Норма"],
-  ["Д-06", "Участок 3, 2 610 м", "Наблюдение"],
-  ["Д-07", "Узел задвижки З-2, 3 120 м", "Норма"],
-  ["Д-08", "Конечный пункт, 3 900 м", "Норма"],
+  ["Сегмент 1", "Начало трубы, 0 м", "Норма"],
+  ["Сегмент 43", "Труба 1, 420 м", "Норма"],
+  ["Сегмент 481", "Труба 1, 4 800 м", "Приоритет"],
+  ["Сегмент 139", "Труба 1, 1 380 м", "Нет данных ВТД"],
+  ["Сегмент 206", "Переход под рекой Сосновка, 2 050 м", "Норма"],
+  ["Сегмент 262", "Труба 1, 2 610 м", "Внимание"],
+  ["Сегмент 313", "Отвод у км 3, 3 120 м", "Норма"],
+  ["Сегмент 391", "Конец трубы, 3 900 м", "Норма"],
 ]
 
 const escape = (s) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`)
@@ -50,7 +50,7 @@ export function combobox(root) {
               `<div class="option" role="option" id="${list.id}-${i}" aria-selected="false">${icon("sensor")}<span class="option-label">${mark(id, q)}, ${mark(where, q)}</span><span class="option-meta">${state}</span></div>`,
           )
           .join("")
-      : `<div class="layer-note" role="status">${icon("search")}Нет датчиков по запросу «${escape(q)}». Проверьте номер: Д и две цифры.</div>`
+      : `<div class="layer-note" role="status">${icon("search")}Нет сегментов по запросу «${escape(q)}». Номер сегмента — расстояние от начала трубы в десятках метров.</div>`
     list.querySelectorAll(".option").forEach((o, i) => {
       o.addEventListener("pointerdown", (e) => e.preventDefault())
       o.addEventListener("click", () => choose(i))
@@ -87,70 +87,4 @@ export function combobox(root) {
     } else if (e.key === "Tab") ui.close(false)
   })
   box.addEventListener("click", () => input.focus())
-}
-
-const MONTH = "Ноябрь 2026"
-const DAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-
-function calendar(grid) {
-  let start = 10
-  let end = 12
-  const today = 12
-  const cells = DAYS.map((d) => `<span aria-hidden="true">${d}</span>`)
-  for (let i = 26; i <= 31; i++) cells.push(`<button class="cal-day" data-out tabindex="-1" disabled>${i}</button>`)
-  for (let d = 1; d <= 30; d++) {
-    const label = `${d} ноября 2026`
-    cells.push(
-      `<button class="cal-day" data-day="${d}" aria-label="${label}"${d === today ? ' data-today aria-current="date"' : ""}${d > today ? " disabled" : ""}>${d}</button>`,
-    )
-  }
-  for (let d = 1; d <= 6; d++) cells.push(`<button class="cal-day" data-out tabindex="-1" disabled>${d}</button>`)
-  grid.innerHTML = cells.join("")
-  const paint = () => {
-    for (const b of grid.querySelectorAll("[data-day]")) {
-      const d = Number(b.dataset.day)
-      b.toggleAttribute("data-edge", d === start || d === end)
-      b.toggleAttribute("data-in", d > start && d < end)
-      b.setAttribute("aria-pressed", String(d >= start && d <= end))
-    }
-  }
-  let picking = false
-  grid.addEventListener("click", (e) => {
-    const b = e.target.closest("[data-day]")
-    if (!b) return
-    const d = Number(b.dataset.day)
-    if (!picking) [start, end, picking] = [d, d, true]
-    else {
-      ;[start, end] = d < start ? [d, start] : [start, d]
-      picking = false
-    }
-    paint()
-  })
-  paint()
-}
-
-export function dateRange(root) {
-  const trigger = root.querySelector(".select-trigger")
-  const layer = document.getElementById(trigger.getAttribute("aria-controls"))
-  const value = trigger.querySelector(".select-value")
-  layer.querySelector(".cal-head span").textContent = MONTH
-  calendar(layer.querySelector(".cal-grid"))
-  const presets = [...layer.querySelectorAll('[role="option"]')]
-  for (const p of presets) p.insertAdjacentHTML("afterbegin", icon("check", "icon option-check"))
-  const ui = control(trigger, layer, {
-    keepOnTab: true,
-    onOpen: () => layer.querySelector('[aria-selected="true"]')?.focus({ preventScroll: true }),
-  })
-  trigger.addEventListener("click", ui.toggle)
-  for (const p of presets)
-    p.addEventListener("click", () => {
-      for (const x of presets) x.setAttribute("aria-selected", String(x === p))
-      value.textContent = p.querySelector(".option-label").textContent
-      ui.close(true)
-    })
-  layer.querySelector("[data-apply]").addEventListener("click", () => {
-    value.textContent = "10–12 ноября, 14:00–14:30"
-    ui.close(true)
-  })
-  layer.querySelector("[data-close]").addEventListener("click", () => ui.close(true))
 }

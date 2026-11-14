@@ -40,9 +40,9 @@ const ROLES = [
   ["--status-warning", "Подозрение, метка"],
   ["--text-warning", "Подозрение, текст"],
   ["--signal-warning-surface", "Подозрение, фон"],
-  ["--status-danger", "Утечка, метка"],
-  ["--text-danger", "Утечка, текст"],
-  ["--signal-danger-surface", "Утечка, фон"],
+  ["--status-danger", "Ошибка, метка"],
+  ["--text-danger", "Ошибка, текст"],
+  ["--signal-danger-surface", "Ошибка, фон"],
 ]
 
 function fillLive() {
