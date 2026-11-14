@@ -9,7 +9,16 @@ avg3 — либо из кэша lab40 (неизменный), либо пере�
 r2d — r² только по 53 дефектным сегментам; MAE — прод-путь (калибровка + клип).
 
 ИТОГ (ref: r² 0.618, r2d 0.228, MAE 0.254; 3 сида клф):
-ПРИНЯТО — shrink-таргет для базы формы: y_shape = 0.5·y + 0.5·медиана y по 5 сегментам
+!!! ЧЕСТНАЯ ВАЛИДАЦИЯ (LAB_PROC=logs/proc_honest, LAB60_CAL=0; ref r² 0.225 / r2d 0.063 / MAE 0.336):
+  shrink 0.5/5 lvlref 0.209 / 0.039 / 0.339 — ОТКАЧЕНО (shrink=None); сетка shrink рваная
+  (λ0.5/w3 0.242/0.064, λ0.75/w3 0.236/0.065 — по r2d в пределах шума); q10/q25/q10nb3 0.17/0.16/0.19
+  (r2d ≤ 0.03); nb3 0.249/0.056; multi y+nb3 0.246/0.066 (MAE 0.343 хуже).
+  Веса на honest: все хуже по r2d (vtd2vtd ×0.25/×0.5/×2 0.19-0.20, свежесть τ5 0.222/0.053
+  (MAE 0.334, 3/3, но r2d хуже), τ10 0.209, 6 мм ×0.5 0.206, ndef 0.202).
+  Отбор пар на honest: без vtd2vtd 0.155 (MAE 0.92), без ->2018 0.245 но r2d 0.054 (хуже),
+  только 8 мм 0.197. Ничего не принято.
+(ниже — итог на старой, утёкшей валидации; не действителен)
+ПРИНЯТО (на утёкшей) — shrink-таргет для базы формы: y_shape = 0.5·y + 0.5·медиана y по 5 сегментам
   пары; база формы (LGBM+XGB+AFT, q05-пара) учится на y_shape, уровень мм — от базы на y
   («lvlref»). 8 сидов: r² 0.617 -> 0.646, r2d 0.227 -> 0.293, MAE 0.255 -> 0.247,
   RMSE 0.350 -> 0.333, MAPE 4.51 -> 4.36, 8/8 по всем. Парный джиттер базы (5 подвыборок
@@ -72,6 +81,9 @@ def targets(ds):
     return t
 
 
+AGG = {"v": None}  # агрегат членов базы для варианта: None/"mean" | "median"
+
+
 def fit_ens(tr, Xv, wt_v, target, w):
     """База кейса 1 (как fit_bag/predict_bag для детерминированных членов) + q05."""
     X, prm = tr[CFG_FEATS], CFG["params"]
@@ -95,7 +107,7 @@ def fit_ens(tr, Xv, wt_v, target, w):
         m = T.make_model(f, dict(prm[f]), alpha=0.05)
         m.fit(X, target, sample_weight=w)
         q05.append(m.predict(Xv))
-    agg = np.median if os.environ.get("LAB60_AGG") == "median" else np.mean
+    agg = np.median if (AGG["v"] or os.environ.get("LAB60_AGG")) == "median" else np.mean
     return agg(preds, axis=0), np.mean(q05, axis=0)
 
 
@@ -202,6 +214,11 @@ SETS = {
                          ("multi_y+sh0.5_w5", ("y", "sh0.5_w5"), False),
                          ("sh0.5_w3", "sh0.5_w3", False))
     },
+    # lab63: медиана членов (LGBM, XGB, AFT) вместо среднего — уровень/форма под MAE
+    "aggjit": {
+        f"{v} j{j}": ("y", w_none, ("jit", j), False, False, a)
+        for j in range(5) for v, a in (("ref", "mean"), ("median", "median"))
+    },
     "pairs": {
         "ref": ("y", w_none, None, False),
         "no vtd2vtd": ("y", w_none, lambda t: t["kind"] != "vtd2vtd", False),
@@ -239,6 +256,7 @@ def main():
             tr = tr_all[filt(tr_all)] if filt else tr_all
         w = wf(tr)
         tcols = tcol if isinstance(tcol, tuple) else (tcol,)
+        AGG["v"] = opt[1] if len(opt) > 1 else None
         fits = [fit_ens(tr, Xv, wt, tgt[c].loc[tr.index].values, w) for c in tcols]
         ens = np.mean([f[0] for f in fits], axis=0)
         q05 = np.mean([f[1] for f in fits], axis=0)
@@ -250,7 +268,7 @@ def main():
                              **evaluate(y, ens, q05, p, pm, wt, hd, lvl)))
         print(name, "готово", flush=True)
     df = pd.DataFrame(rows)
-    if os.environ.get("LAB60_SET") == "jitter":
+    if os.environ.get("LAB60_SET") in ("jitter", "aggjit"):
         df["jit"] = df.variant.str.extract(r" j(\d)$")[0].astype(int)
         df["variant"] = df.variant.str.replace(r" j\d$", "", regex=True)
         base = df[df.variant == "ref"].set_index(["jit", "seed"])

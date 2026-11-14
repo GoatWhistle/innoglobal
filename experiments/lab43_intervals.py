@@ -14,6 +14,9 @@
   raw CatBoost p10-p90: покрытие 12.7% при ширине 0.13 мм (!); с монотонностью
       вокруг прогноза (как predict.py) — 30.9% / 0.33 мм;
   cqr_xfit 80.0% / 0.97 мм; abs_xfit 83.0% / 0.86 мм; asym_xfit 86.1% / 1.01 мм.
+ЧЕСТНАЯ ВАЛИДАЦИЯ (LAB43_CAL=0, без калибровки): raw 12.7% / 0.18 мм (у CatBoost p90 < p10
+местами — средняя ширина «сырых» −0.02), cqr 83.6% / 1.10, abs 83.6% / 0.99, asym 87.3% / 1.49 —
+вывод тот же. Прод-полуширины с honest-невязок: 0.462 (p10-p90), 0.939 (p05-p95).
 ПРИНЯТО: abs (симметричный сплит-конформный) — лучшая пара покрытие/ширина.
 В прод: train.conformal_halfwidths по невязкам валидации (полуширина 0.409 мм
 для p10-p90, 0.607 для p05-p95), predict.py строит интервал кейса 1 вокруг
@@ -59,7 +62,8 @@ def main():
     rows = []
     for seed in (42, 7, 2024):
         b = T.blend_prob(ens, c[f"p_{seed}"], 2.0, gap=ens - c["q05"], gap_w=0.5)
-        pred = np.clip(T.calibrate_mm(b, ens, pm), 0.5, 8.0)
+        pred = np.clip(T.calibrate_mm(b, ens, pm) if os.environ.get("LAB43_CAL", "1") == "1"
+                       else b, 0.5, 8.0)
         lo, hi = np.minimum(q[0.1], pred), np.maximum(q[0.9], pred)
         res = {"raw": (lo, hi)}
         n = len(y)
