@@ -24,7 +24,7 @@ Updated: 2026-11-15, MSK
 
 2026-11-14 user: «work/audits/full-product/progress-review.md добей цель до конца друг».
 Complete product scope supersedes the design-only phase. RU only, both themes, duppel, Onest.
-Branch feat/redesign-oil, HEAD 1ef235d; product implementation is uncommitted in the shared tree.
+Branch feat/redesign-oil; product commit 98e7841 is published to origin/feat/redesign-oil.
 
 Previous user instructions retained:
 User: «давай тогда пробуй и начинай менять дизайн по трубе, брат. делай с помощью субагентов sol 6.1 high fast».
@@ -73,12 +73,18 @@ ruff/format/mypy; 9 Compose browser scenarios including scatter/table and immedi
 Segmented colour changes are immediate; only scale animates. Reports and proofs are in
 work/audits/full-product/progress-review.md and completion-checklist.md.
 Remaining limits are data/calibration and physical-device/browser coverage, not unfinished controls.
-Local stack remains at http://localhost:18080, API 18010. No commit, push or deployment performed.
+Local stack remains at http://localhost:18080, API 18010. Product commit and push are complete; no deployment.
 
 ## Publication
 
 2026-11-15 user: «запушь все это дело».
 Publish all completed product, documentation and audit changes to origin/feat/redesign-oil.
-Publication is based on HEAD 1ef235d, branch feat/redesign-oil; final commit SHA is in Git history.
+Product publication commit: 98e7841, branch feat/redesign-oil; push succeeded without force.
 Frontend verify, backend 128 tests and Compose 9 e2e are green. Hooks are enabled; no force push,
 no agent attribution and no deployment. Before new work inspect git status and the remote branch.
+
+The pre-push hook rejected bodies in imported ML commits. Their messages were reduced to subjects
+in the pending branch history; author identities and every file tree were preserved. Remote source
+branches were not changed. Original local tip: refs/backups/full-product-before-push (2d92a63).
+Snapshot screenshots remain local under the repository screenshots/ ignore rule; source, docs,
+plans and textual audit logs are published. No pending product work; inspect Git before new tasks.
