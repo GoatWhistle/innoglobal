@@ -603,14 +603,18 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             vm = ds[ds["split"] == "val_case1_measured"]
             if len(vm):
                 blocks.append(("case1_measured", vm))
+        confs = []
         for label, v in blocks:
             yv = v["y"].values
             hd = v["had_defect"].values.astype(bool)
             vp = val_predictions(v)
             if case == "case1":
-                # конформные полуширины (lab43) — по невязкам прод-предиктора; блок measured
-                # (сдвиг измерен, как у 22871) перекрывает блок «от соседа», если он есть
-                conf = conformal_halfwidths(yv - vp[f"{CASE1_PROD}_phys"])
+                confs.append(conformal_halfwidths(yv - vp[f"{CASE1_PROD}_phys"]))
+                # аудит lab81: блок measured — оракул геометрии (сдвиг по самой паре через 2023),
+                # его полуширины 0.32/0.49 на блоке «от соседа» покрывают 60%/78% вместо 80%/90%.
+                # У 22871 сдвиг интерполирован по соседям (ошибка ~1 м, между блоками), поэтому
+                # берём консервативный максимум по блокам (0.53/0.79: 82%/93% и 95%/98%)
+                conf = {k: max(c[k] for c in confs) for k in confs[0]}
             for name, p in vp.items():
                 report_rows.append(dict(
                     case=label, model=name, n=len(v),
