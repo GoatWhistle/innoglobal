@@ -34,8 +34,8 @@ def run() -> pd.DataFrame:
             pred = (pd.Series(pred)
                     .rolling(smooth, center=True, min_periods=1).median().values)
         grp["thickness_pred"] = pred
-        grp["p10"] = models["p10"].predict(X) * scale
-        grp["p90"] = models["p90"].predict(X) * scale
+        for tag in ("p05", "p10", "p90", "p95"):
+            grp[tag] = models[tag].predict(X) * scale
         parts.append(grp)
     pred_ds = pd.concat(parts, ignore_index=True)
 
@@ -48,22 +48,25 @@ def run() -> pd.DataFrame:
         grp = grp.copy()
         shift = max(0.0, float(np.quantile(grp["thickness_pred"], 0.99))
                     - float(grp["wt_nom"].iloc[0]))
-        for col in ("thickness_pred", "p10", "p90"):
+        for col in ("thickness_pred", "p05", "p10", "p90", "p95"):
             grp[col] = grp[col] - shift
         parts.append(grp)
     pred_ds = pd.concat(parts, ignore_index=True)
 
-    for col in ("thickness_pred", "p10", "p90"):
+    for col in ("thickness_pred", "p05", "p10", "p90", "p95"):
         # физические рамки: не тоньше 0.5 мм, не толще номинала
         pred_ds[col] = pred_ds[col].clip(lower=0.5, upper=pred_ds["wt_nom"])
+    # монотонность квантилей: p05 <= p10 <= прогноз <= p90 <= p95
     pred_ds["p10"] = np.minimum(pred_ds["p10"], pred_ds["thickness_pred"])
     pred_ds["p90"] = np.maximum(pred_ds["p90"], pred_ds["thickness_pred"])
+    pred_ds["p05"] = np.minimum(pred_ds["p05"], pred_ds["p10"])
+    pred_ds["p95"] = np.maximum(pred_ds["p95"], pred_ds["p90"])
 
     result = pred_ds[["id", "segment_id", "thickness_pred"]].copy()
     result["thickness_pred"] = result["thickness_pred"].round(3)
     result.to_csv(C.ROOT / "result.csv", index=False)
 
-    pred_ds[["id", "segment_id", "thickness_pred", "p10", "p90"]].round(3).to_csv(
+    pred_ds[["id", "segment_id", "thickness_pred", "p05", "p10", "p90", "p95"]].round(3).to_csv(
         C.ARTIFACTS_DIR / "uncertainty.csv", index=False)
 
     top = pd.concat([

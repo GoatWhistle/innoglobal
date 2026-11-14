@@ -255,7 +255,7 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
             X_all, y_all, subset["aft_lb"].values, subset["aft_ub"].values, p, cfg["aft"])]
         final = dict(bag[0])  # первый сид — для важностей признаков
         final["bag"] = bag
-        for alpha, tag in ((0.1, "p10"), (0.9, "p90")):
+        for alpha, tag in ((0.05, "p05"), (0.1, "p10"), (0.9, "p90"), (0.95, "p95")):
             m = make_model("catboost", dict(best_params["catboost"]), alpha=alpha)
             m.fit(X_all, y_all)
             final[tag] = m
