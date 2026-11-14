@@ -1,11 +1,10 @@
 const ROOT = new URL('./', import.meta.url)
-const DOCS = ['index.html', 'doc-drawing.html', 'doc-base.html', 'doc-layout.html', 'doc-data.html', 'doc-charts.html', 'doc-alerts.html', 'doc-forms.html', 'doc-words.html']
+const DOCS = ['index.html', 'doc-drawing.html', 'doc-base.html', 'doc-layout.html', 'doc-data.html', 'doc-charts.html', 'doc-alerts.html', 'doc-forms.html', 'doc-words.html', 'doc-brand.html']
 
 export const SECTIONS = [
   { label: 'Основы', href: 'index.html', pages: DOCS.map((file) => [file]) },
   { label: 'Компоненты', href: 'pipe-kit.html', pages: [['pipe-kit.html', 'Детали трубы'], ['kit.html', 'Общий набор']] },
   { label: 'Экраны', href: 'screen-pipe.html', pages: [['screen-pipe.html', 'Труба'], ['scanner/blueprints.html', 'Будущие экраны']] },
-  { label: 'Архив', href: 'archive.html', pages: [['archive.html']] },
 ]
 
 const url = (file) => new URL(file, ROOT).pathname

@@ -1,6 +1,6 @@
 strip keyboard, coordinate input and validation passed
 mouse chain route (click selected 630) -> unroll -> click spot -> section 636 passed; sheet aligned with profile
-unroll transition frames: 10, median 116.7 ms, p95 316.7 ms (headless SwiftShader, not a hardware GPU measurement)
+unroll transition frames: 10, median 133.3 ms, p95 316.6 ms (headless SwiftShader, not a hardware GPU measurement)
 keyboard chain via camera keys and 1/2/3 passed, selection kept across scales
 theme keeps selection; case 2 partial segment and priority list passed
 real WebGL context loss switches to 2D scheme

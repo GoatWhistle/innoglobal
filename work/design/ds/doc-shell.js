@@ -59,7 +59,6 @@ const TOP = [
   ["index.html", "Основы"],
   ["pipe-kit.html", "Компоненты"],
   ["screen-pipe.html", "Экраны"],
-  ["archive.html", "Архив"],
 ]
 
 const here = location.pathname.split("/").pop() || "index.html"

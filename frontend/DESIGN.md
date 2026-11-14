@@ -9,13 +9,12 @@ description: "A dimensioned wall scanner linking a physical pipe, minimum thickn
 
 The user chose to develop the current Onest, graphite and paper visual world, retaining the physical
 pipe. The original monopo reference is recorded in `work/design/style.md`; the current direction is
-the approved wall-scanner plan of 2026-11-14. Old leak-detection pages are experiments.
+the pipe-led system of 2026-11-14. Old leak-detection pages were removed from the system.
 
 Pipe-led direction, 2026-11-14 (`work/design/pipe-style-plan.md`): the pipe is the interface.
 Main screen: `work/design/ds/screen-pipe.html` (route, unroll, section). Pipe components and the
 three-scale foundations: `work/design/ds/pipe-kit.html`. Code: `work/design/ds/wall/`.
-Previous single-scale scanner: `work/design/ds/screen-thickness.html`. Subject components and usage:
-`work/design/ds/scanner/catalog.html`. Future screen schematics: `scanner/blueprints.html`.
+Future screen schematics: `work/design/ds/scanner/blueprints.html`. Brand mark: `doc-brand.html`.
 Generic controls and state matrices: `work/design/ds/kit.html`. Foundations: `index.html` and `doc-*`.
 Code mapping: `COMPONENTS.md`. All values live in `src/shared/styles/tokens/`.
 
@@ -121,4 +120,4 @@ labelled catalog state, not a fabricated network request.
 The pipe screen draws route, unroll and section as SVG without WebGL, after context loss or when
 the renderer module does not load within six seconds. Review widths 375, 768, 1280 and 1440 in both themes, focus and keyboard order, long labels, missing data,
 WebGL context loss and reduced motion. React checks do not cover the HTML example; its browser tests
-and screenshots are recorded separately in `work/audits/scanner/`.
+and screenshots are recorded separately in `work/audits/pipe-style/`.
