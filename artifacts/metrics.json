@@ -102,13 +102,43 @@
     },
     {
       "case": "case1",
-      "model": "aligned_stats_cal_phys",
+      "model": "quant",
       "n": 55,
-      "pearson_r2": 0.2733,
-      "r2d": 0.0434,
-      "mae": 0.339,
+      "pearson_r2": 0.2115,
+      "r2d": 0.0212,
+      "mae": 0.712,
+      "rmse": 0.826,
+      "mape": 12.45
+    },
+    {
+      "case": "case1",
+      "model": "quant_cal",
+      "n": 55,
+      "pearson_r2": 0.2115,
+      "r2d": 0.0212,
+      "mae": 0.358,
+      "rmse": 0.498,
+      "mape": 6.08
+    },
+    {
+      "case": "case1",
+      "model": "ens_blend+quant",
+      "n": 55,
+      "pearson_r2": 0.2732,
+      "r2d": 0.0833,
+      "mae": 0.326,
       "rmse": 0.474,
-      "mape": 5.76
+      "mape": 5.52
+    },
+    {
+      "case": "case1",
+      "model": "quant_cal_phys",
+      "n": 55,
+      "pearson_r2": 0.2115,
+      "r2d": 0.0212,
+      "mae": 0.358,
+      "rmse": 0.498,
+      "mape": 6.08
     },
     {
       "case": "case1",
@@ -129,6 +159,146 @@
       "mae": 0.338,
       "rmse": 0.508,
       "mape": 5.63
+    },
+    {
+      "case": "case1_measured",
+      "model": "lgbm",
+      "n": 55,
+      "pearson_r2": 0.3162,
+      "r2d": 0.0459,
+      "mae": 0.377,
+      "rmse": 0.494,
+      "mape": 6.25
+    },
+    {
+      "case": "case1_measured",
+      "model": "xgb",
+      "n": 55,
+      "pearson_r2": 0.2535,
+      "r2d": 0.1616,
+      "mae": 0.375,
+      "rmse": 0.506,
+      "mape": 6.42
+    },
+    {
+      "case": "case1_measured",
+      "model": "aft",
+      "n": 55,
+      "pearson_r2": 0.1042,
+      "r2d": 0.0136,
+      "mae": 0.505,
+      "rmse": 0.673,
+      "mape": 8.73
+    },
+    {
+      "case": "case1_measured",
+      "model": "ensemble",
+      "n": 55,
+      "pearson_r2": 0.2757,
+      "r2d": 0.1006,
+      "mae": 0.34,
+      "rmse": 0.472,
+      "mape": 5.76
+    },
+    {
+      "case": "case1_measured",
+      "model": "ens_blend",
+      "n": 55,
+      "pearson_r2": 0.2898,
+      "r2d": 0.0827,
+      "mae": 0.326,
+      "rmse": 0.467,
+      "mape": 5.51
+    },
+    {
+      "case": "case1_measured",
+      "model": "aligned_stats",
+      "n": 55,
+      "pearson_r2": 0.7012,
+      "r2d": 0.4066,
+      "mae": 0.375,
+      "rmse": 0.465,
+      "mape": 6.54
+    },
+    {
+      "case": "case1_measured",
+      "model": "aligned_stats_cal",
+      "n": 55,
+      "pearson_r2": 0.7012,
+      "r2d": 0.4066,
+      "mae": 0.233,
+      "rmse": 0.329,
+      "mape": 4.02
+    },
+    {
+      "case": "case1_measured",
+      "model": "ens_blend+stats",
+      "n": 55,
+      "pearson_r2": 0.58,
+      "r2d": 0.2693,
+      "mae": 0.264,
+      "rmse": 0.369,
+      "mape": 4.52
+    },
+    {
+      "case": "case1_measured",
+      "model": "quant",
+      "n": 55,
+      "pearson_r2": 0.7306,
+      "r2d": 0.4602,
+      "mae": 0.683,
+      "rmse": 0.753,
+      "mape": 11.93
+    },
+    {
+      "case": "case1_measured",
+      "model": "quant_cal",
+      "n": 55,
+      "pearson_r2": 0.7306,
+      "r2d": 0.4602,
+      "mae": 0.23,
+      "rmse": 0.319,
+      "mape": 3.95
+    },
+    {
+      "case": "case1_measured",
+      "model": "ens_blend+quant",
+      "n": 55,
+      "pearson_r2": 0.6407,
+      "r2d": 0.3499,
+      "mae": 0.252,
+      "rmse": 0.349,
+      "mape": 4.31
+    },
+    {
+      "case": "case1_measured",
+      "model": "quant_cal_phys",
+      "n": 55,
+      "pearson_r2": 0.7306,
+      "r2d": 0.4602,
+      "mae": 0.23,
+      "rmse": 0.319,
+      "mape": 3.95
+    },
+    {
+      "case": "case1_measured",
+      "model": "ensemble_smooth5",
+      "n": 55,
+      "pearson_r2": 0.3443,
+      "r2d": 0.1102,
+      "mae": 0.351,
+      "rmse": 0.458,
+      "mape": 5.93
+    },
+    {
+      "case": "case1_measured",
+      "model": "ens_blend_smooth5",
+      "n": 55,
+      "pearson_r2": 0.3623,
+      "r2d": 0.1316,
+      "mae": 0.339,
+      "rmse": 0.487,
+      "mape": 5.66
     },
     {
       "case": "case2",
@@ -201,8 +371,8 @@
   },
   "conformal": {
     "case1": {
-      "p10_p90": 0.5122531726240078,
-      "p05_p95": 0.7721930967410797
+      "p10_p90": 0.3433834322876317,
+      "p05_p95": 0.6123126132283279
     },
     "case2": null
   }

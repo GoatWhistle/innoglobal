@@ -388,6 +388,24 @@ def stats_at_level(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
     return zscore(stats) * float(np.std(ens)) + float(np.mean(ens))
 
 
+def quant_score(ds: pd.DataFrame) -> np.ndarray:
+    """Квантильная формула из nedra (ветка case1-improve): (q02 + q10 + q10 по ±1 сегменту) / 3, мм.
+
+    Устойчивые квантили остатка прошлого выровненного пропуска вместо минимума: снаряд шумит,
+    минимум сегмента — крайняя статистика шумных замеров.
+    """
+    return ((ds["prev_q02"] + ds["prev_q10"] + ds["prev_q10_nb3"]) / 3).to_numpy(dtype=float)
+
+
+def case1_stat_predictors(ds: pd.DataFrame, ens_blend: np.ndarray) -> dict[str, np.ndarray]:
+    """Предикторы кейса 1 поверх выровненного прошлого пропуска (без обучения) и их бленды с ансамблем."""
+    st, qt = aligned_stats_score(ds), quant_score(ds)
+    return {"aligned_stats": st, "aligned_stats_cal": stats_at_level(ens_blend, st),
+            "ens_blend+stats": blend_stats(ens_blend, st),
+            "quant": qt, "quant_cal": stats_at_level(ens_blend, qt),
+            "ens_blend+quant": blend_stats(ens_blend, qt)}
+
+
 def blend_stats(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
     """Равный бленд формы ансамбля и aligned_stats в уровне ансамбля."""
     b = zscore(ens) + zscore(stats)
@@ -403,6 +421,10 @@ def baseline_predictions(ds: pd.DataFrame) -> dict[str, pd.Series]:
     }
 
 
+# предиктор кейса 1 в predict.py (для прод-строки отчёта и конформных интервалов)
+CASE1_PROD = os.environ.get("PIPETWIN_CASE1", "quant_cal")
+
+
 def run(tune_trials: int = 0) -> pd.DataFrame:
     ds = pd.read_csv(C.PROCESSED_DIR / "train_dataset.csv", parse_dates=["start", "end"])
     ds = survival_labels(ds)
@@ -413,7 +435,10 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         feats = F.case_features(ds, case)
         subset = ds[ds["kind"].isin(cfg["train_kinds"])]
         honest = subset[subset["split"] == "train_honest"]
-        subset = subset[subset["split"] != "train_honest"]
+        # train_honest — замена строк только для модели валидации; val_case1_measured — дубль
+        # валидационных пар с иным выравниванием, только для отчёта (в финальное обучение
+        # не идёт, иначе 55 пар учатся дважды)
+        subset = subset[~subset["split"].isin(["train_honest", "val_case1_measured"])]
         tr = subset[subset["split"] == "train"]
         if case == "case1" and len(honest):
             # честная валидация: строки труб валидации, выровненные без пропуска 2023
@@ -454,58 +479,56 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         val_bag = [m for p in grid for m in fit_bag(
             X_tr, y_tr, tr["aft_lb"].values, tr["aft_ub"].values, p, cfg["aft"],
             families=cfg["families"])]
-        val_preds = predict_bag(val_bag, va[feats], va["wt_nom"].values, va_scale,
-                                agg=cfg.get("member_agg", "mean"))
-        shr = cfg.get("shrink")
-        if cfg.get("blend_w"):
-            p_va = fit_clf(X_tr, tr["had_defect"]).predict_proba(va[feats])[:, 1]
-            ens_shape, ys_tr = val_preds["ensemble"], y_tr
-            if shr:  # база формы на денойзнутом таргете (lab60)
-                ys_tr = shrink_target(tr, **shr)
-                lab = survival_labels(tr.assign(y=ys_tr))
-                ens_shape = predict_bag(fit_bag(
-                    X_tr, ys_tr, lab["aft_lb"].values, lab["aft_ub"].values,
-                    best_params, cfg["aft"], families=cfg["families"]),
-                    va[feats], va["wt_nom"].values,
-                    agg=cfg.get("member_agg", "mean"))["ensemble"]
-                val_preds["ensemble_shrink"] = ens_shape
-            q05_va = np.mean([m.predict(va[feats])
-                              for m in fit_q05_pair(X_tr, ys_tr, cfg.get("params"))], axis=0)
-            val_preds["ens_blend"] = blend_prob(
-                ens_shape, p_va, cfg["blend_w"],
-                gap=ens_shape - q05_va, gap_w=cfg.get("gap_w", 0.0))
-            if cfg.get("calib") == "prev":
-                val_preds["ens_blend_uncal"] = val_preds["ens_blend"]
-                val_preds["ens_blend"] = calibrate_mm(
-                    val_preds["ens_blend"], val_preds["ensemble"], va["prev_min"].values)
+        clf_va = fit_clf(X_tr, tr["had_defect"]) if cfg.get("blend_w") else None
+        q05_models = fit_q05_pair(X_tr, y_tr, cfg.get("params")) if cfg.get("blend_w") else None
+        agg = cfg.get("member_agg", "mean")
+        # calib="prev" (lab41) и shrink (lab60) на честной валидации отвергнуты и из пути
+        # валидации убраны (lab63); функции оставлены для экспериментов
+
+        def val_predictions(v: pd.DataFrame) -> dict[str, np.ndarray]:
+            vp = predict_bag(val_bag, v[feats], v["wt_nom"].values,
+                             v["wt_nom"].values if rel else 1.0, agg=agg)
+            if clf_va is not None:
+                q05_v = np.mean([m.predict(v[feats]) for m in q05_models], axis=0)
+                vp["ens_blend"] = blend_prob(
+                    vp["ensemble"], clf_va.predict_proba(v[feats])[:, 1], cfg["blend_w"],
+                    gap=vp["ensemble"] - q05_v, gap_w=cfg.get("gap_w", 0.0))
+            if case == "case1":
+                vp.update(case1_stat_predictors(v, vp["ens_blend"]))
+                # прод-путь (predict.py): предиктор кейса 1 + физические рамки [0.5 мм, номинал]
+                vp[f"{CASE1_PROD}_phys"] = np.clip(vp[CASE1_PROD], 0.5, v["wt_nom"].values)
+            for base_name in ("catboost", "ensemble", "ens_blend"):
+                if base_name in vp:
+                    vp[f"{base_name}_smooth5"] = (
+                        pd.DataFrame({"id": v["id"].values, "p": vp[base_name]})
+                        .groupby("id")["p"]
+                        .transform(lambda s: s.rolling(5, center=True, min_periods=1).median())
+                        .values)
+            return vp
+
+        blocks = [(case, va)]
         if case == "case1":
-            val_preds["aligned_stats"] = aligned_stats_score(va)
-            val_preds["aligned_stats_cal"] = stats_at_level(val_preds["ens_blend"],
-                                                            val_preds["aligned_stats"])
-            val_preds["ens_blend+stats"] = blend_stats(val_preds["ens_blend"],
-                                                       val_preds["aligned_stats"])
-            # прод-путь (predict.py): предиктор кейса 1 + физические рамки [0.5 мм, номинал];
-            # конформные полуширины интервала (lab43) — по его невязкам на 2023-парах соседей
-            prod = os.environ.get("PIPETWIN_CASE1", "aligned_stats_cal")
-            val_preds[f"{prod}_phys"] = np.clip(val_preds[prod], 0.5, va["wt_nom"].values)
-            conf = conformal_halfwidths(y_va - val_preds[f"{prod}_phys"])
-        for base_name in ("catboost", "ensemble", "ens_blend"):
-            if base_name not in val_preds:
-                continue
-            val_preds[f"{base_name}_smooth5"] = (
-                pd.DataFrame({"id": va["id"].values, "p": val_preds[base_name]})
-                .groupby("id")["p"]
-                .transform(lambda s: s.rolling(5, center=True, min_periods=1).median())
-                .values)
-        for name, p in val_preds.items():
-            report_rows.append(dict(
-                case=case, model=name, n=len(va),
-                pearson_r2=round(pearson_r2(y_va, p), 4),
-                # r² только по дефектным сегментам: 0.617 держится на 2 чистых (11604 #36-37)
-                r2d=round(pearson_r2(y_va[hd_va], p[hd_va]), 4),
-                mae=round(float(np.mean(np.abs(y_va - p))), 3),
-                rmse=round(float(np.sqrt(np.mean((y_va - p) ** 2))), 3),
-                mape=round(float(np.mean(np.abs(y_va - p) / y_va) * 100), 2)))
+            # тот же val со сдвигом, измеренным по самой паре (features.build_all, measured=True)
+            vm = ds[ds["split"] == "val_case1_measured"]
+            if len(vm):
+                blocks.append(("case1_measured", vm))
+        for label, v in blocks:
+            yv = v["y"].values
+            hd = v["had_defect"].values.astype(bool)
+            vp = val_predictions(v)
+            if case == "case1":
+                # конформные полуширины (lab43) — по невязкам прод-предиктора; блок measured
+                # (сдвиг измерен, как у 22871) перекрывает блок «от соседа», если он есть
+                conf = conformal_halfwidths(yv - vp[f"{CASE1_PROD}_phys"])
+            for name, p in vp.items():
+                report_rows.append(dict(
+                    case=label, model=name, n=len(v),
+                    pearson_r2=round(pearson_r2(yv, p), 4),
+                    # r² только по дефектным сегментам (2 чистых сегмента валидации тянут r²)
+                    r2d=round(pearson_r2(yv[hd], p[hd]), 4),
+                    mae=round(float(np.mean(np.abs(yv - p))), 3),
+                    rmse=round(float(np.sqrt(np.mean((yv - p) ** 2))), 3),
+                    mape=round(float(np.mean(np.abs(yv - p) / yv) * 100), 2)))
 
         # финальные модели кейса: дообучение на train + val этого кейса
         X_all = subset[feats]
@@ -518,6 +541,7 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         if cfg.get("blend_w"):
             final["clf"] = fit_clf(X_all, subset["had_defect"])
             ys_all = y_all
+            shr = cfg.get("shrink")
             if shr:
                 ys_all = shrink_target(subset, **shr)
                 lab = survival_labels(subset.assign(y=ys_all))
