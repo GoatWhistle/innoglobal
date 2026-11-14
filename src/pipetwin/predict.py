@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from . import config as C
-from .train import aligned_stats_score, blend_prob, blend_stats, predict_bag
+from .train import aligned_stats_score, blend_prob, blend_stats, predict_bag, stats_at_level
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
 # на всех 3 сидах по r² и sm5):
@@ -19,15 +19,19 @@ from .train import aligned_stats_score, blend_prob, blend_stats, predict_bag
 # форму: на валидации ens_blend 0.501 без сглаживания против 0.287 со сглаживанием. Без
 # выравнивания (PIPETWIN_ALIGN=off/line) сглаживание по-прежнему полезно.
 #
-# Кейс 1 по умолчанию — aligned_stats: устойчивые статистики выровненного прошлого пропуска без
-# обучения (train.aligned_stats_score). Валидация 2022 -> 2023, 55 сегментов, при измеренном сдвиге
-# (PIPETWIN_ALIGN_ORACLE=1 — так у 22871, сдвиг известен на обоих концах трубы): 0.701 против 0.546
-# у ens_blend и 0.661 у бленда ens_blend+stats. При сдвиге только от соседа 0.273 / 0.558 / 0.462:
-# aligned_stats хрупок к ошибке сдвига, бленд устойчивее (notes/case1_stats_rationale.md).
-# PIPETWIN_CASE1=aligned_stats | ens_blend+stats | ens_blend
+# Кейс 1 по умолчанию — aligned_stats_cal: форма aligned_stats (устойчивые статистики выровненного
+# прошлого пропуска, train.aligned_stats_score) в уровне и разбросе ens_blend. Выбор по трём
+# валидациям (experiments/lab23_case1_candidates.py, notes/case1_stats_rationale.md, раздел 8):
+#                       от соседа (55)   сдвиг измерен (55)   сама 22871 2018->2022 (525)
+#   ens_blend               0.693             0.599                 0.011
+#   ens_blend+stats         0.546             0.690                 0.060
+#   aligned_stats_cal       0.273             0.701                 0.215
+# Режим «от соседа» даёт сдвигу 1250011604 ошибку 6-11 м, которой в прогнозе 22871 нет (сдвиг измерен
+# на обоих концах); в двух других aligned_stats_cal лучший по r², MAE, RMSE, Спирмену и топ-10%.
+# PIPETWIN_CASE1=aligned_stats_cal | aligned_stats | ens_blend+stats | ens_blend
 import os as _os
 from . import align as _align
-_CASE1 = _os.environ.get("PIPETWIN_CASE1", "aligned_stats")
+_CASE1 = _os.environ.get("PIPETWIN_CASE1", "aligned_stats_cal")
 PREDICTOR = {"case1": (_CASE1, None if _align.MODE == "profile" else 5),
              "case2": ("ensemble", None)}
 
@@ -49,7 +53,7 @@ def run() -> pd.DataFrame:
         scale = grp["wt_nom"].values if b.get("target") == "rel" else 1.0
         # бэг, усреднённый по сидам/сетке (train.BAG_SEEDS / PARAM_GRID)
         preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale)
-        if name in ("ens_blend", "ens_blend+stats"):
+        if name in ("ens_blend", "ens_blend+stats", "aligned_stats_cal"):
             # формы классификатора дефекта и спреда до q05 вклеиваются
             # в профиль этой трубы (lab13-19)
             p_def = models["clf"].predict_proba(X)[:, 1]
@@ -59,6 +63,8 @@ def run() -> pd.DataFrame:
                               gap_w=b.get("gap_w", 0.0))
             if name == "ens_blend+stats":
                 pred = blend_stats(pred, aligned_stats_score(grp))
+            elif name == "aligned_stats_cal":
+                pred = stats_at_level(pred, aligned_stats_score(grp))
         elif name == "aligned_stats":
             pred = aligned_stats_score(grp)
         else:

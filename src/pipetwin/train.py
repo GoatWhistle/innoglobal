@@ -316,6 +316,16 @@ def aligned_stats_score(ds: pd.DataFrame) -> np.ndarray:
     return zscore(s) * float(np.std(base)) + float(np.mean(base))
 
 
+def stats_at_level(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
+    """Форма aligned_stats в уровне и разбросе ансамбля (aligned_stats_cal).
+
+    r² тот же, что у aligned_stats (Пирсон инвариантен к аффинному), а MAE как у ансамбля:
+    снаряд 2023 года показывает глубже, и уровень прошлого пропуска для мм не годится
+    (валидация с измеренным сдвигом: MAE 0.375 -> 0.240 мм, experiments/lab23).
+    """
+    return zscore(stats) * float(np.std(ens)) + float(np.mean(ens))
+
+
 def blend_stats(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
     """Равный бленд формы ансамбля и aligned_stats в уровне ансамбля."""
     b = zscore(ens) + zscore(stats)
@@ -376,6 +386,8 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
                 gap=val_preds["ensemble"] - q05_va, gap_w=cfg.get("gap_w", 0.0))
         if case == "case1":
             val_preds["aligned_stats"] = aligned_stats_score(va)
+            val_preds["aligned_stats_cal"] = stats_at_level(val_preds["ens_blend"],
+                                                            val_preds["aligned_stats"])
             val_preds["ens_blend+stats"] = blend_stats(val_preds["ens_blend"],
                                                        val_preds["aligned_stats"])
         for base_name in ("catboost", "ensemble", "ens_blend"):
