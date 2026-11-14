@@ -8,7 +8,7 @@ comment on table core.segment is 'Сетка 10-метровых сегмент�
 comment on table core.ili_run is 'Пропуски ВТД: число дефектов, модальная стенка, пригодность для обучения';
 comment on table core.ili_feature is 'Особенности и дефекты ВТД после очистки, со всеми полями отчёта';
 comment on table core.ili_reference_point is 'Опорные точки ВТД (задвижки, тройники, вантузы, знаки) с положением на участке; по ним привязываются врезки';
-comment on table core.ut_measurement is 'Замеры УЗТ; все 67 толще номинала, поэтому is_plausible = false';
+comment on table core.ut_measurement is 'Замеры УЗТ; все 67 толще номинала на ~7 мм (сдвиг нуля прибора): is_plausible = false, после вычета ut_offset_mm is_plausible_corr = true';
 comment on table core.corrosion_coupon is 'Образцы-свидетели и химия воды на узлах контроля коррозии, с привязкой к трубам паспорта';
 comment on table core.regime_daily is 'Технологический режим: одна строка на сутки × участок, сбои расчёта обнулены';
 

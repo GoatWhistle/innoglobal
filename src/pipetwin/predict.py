@@ -5,7 +5,8 @@ import pandas as pd
 
 from . import config as C
 from . import curve
-from .train import blend_prob, calibrate_mm, predict_bag
+from .train import (aligned_stats_score, blend_prob, blend_stats, calibrate_mm, predict_bag,
+                    stats_at_level)
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
 # на всех 3 сидах по r² и sm5):
@@ -19,8 +20,21 @@ from .train import blend_prob, calibrate_mm, predict_bag
 # 10 м). После выравнивания пропусков в координаты профиля (align.py, режим profile) оно размывает
 # форму: на валидации ens_blend 0.501 без сглаживания против 0.287 со сглаживанием. Без
 # выравнивания (PIPETWIN_ALIGN=off/line) сглаживание по-прежнему полезно.
+#
+# Кейс 1 по умолчанию — aligned_stats_cal: форма aligned_stats (устойчивые статистики выровненного
+# прошлого пропуска, train.aligned_stats_score) в уровне и разбросе ens_blend. Выбор по трём
+# валидациям (experiments/lab23_case1_candidates.py, notes/case1_stats_rationale.md, раздел 8):
+#                       от соседа (55)   сдвиг измерен (55)   сама 22871 2018->2022 (525)
+#   ens_blend               0.693             0.599                 0.011
+#   ens_blend+stats         0.546             0.690                 0.060
+#   aligned_stats_cal       0.273             0.701                 0.215
+# Режим «от соседа» даёт сдвигу 1250011604 ошибку 6-11 м, которой в прогнозе 22871 нет (сдвиг измерен
+# на обоих концах); в двух других aligned_stats_cal лучший по r², MAE, RMSE, Спирмену и топ-10%.
+# PIPETWIN_CASE1=aligned_stats_cal | aligned_stats | ens_blend+stats | ens_blend
+import os as _os
 from . import align as _align
-PREDICTOR = {"case1": ("ens_blend", None if _align.MODE == "profile" else 5),
+_CASE1 = _os.environ.get("PIPETWIN_CASE1", "aligned_stats_cal")
+PREDICTOR = {"case1": (_CASE1, None if _align.MODE == "profile" else 5),
              "case2": ("ensemble", None)}
 
 
@@ -42,7 +56,7 @@ def run() -> pd.DataFrame:
         # бэг, усреднённый по сидам/сетке (train.BAG_SEEDS / PARAM_GRID)
         agg = b.get("member_agg", "mean")
         preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale, agg=agg)
-        if name == "ens_blend":
+        if name in ("ens_blend", "ens_blend+stats", "aligned_stats_cal"):
             # формы классификатора дефекта и спреда до q05 вклеиваются
             # в профиль этой трубы (lab13-19)
             p_def = models["clf"].predict_proba(X)[:, 1]
@@ -56,6 +70,12 @@ def run() -> pd.DataFrame:
                               gap_w=b.get("gap_w", 0.0))
             if b.get("calib") == "prev":
                 pred = calibrate_mm(pred, preds["ensemble"], grp["prev_min"].values)
+            if name == "ens_blend+stats":
+                pred = blend_stats(pred, aligned_stats_score(grp))
+            elif name == "aligned_stats_cal":
+                pred = stats_at_level(pred, aligned_stats_score(grp))
+        elif name == "aligned_stats":
+            pred = aligned_stats_score(grp)
         else:
             pred = preds[name]
         if smooth:
@@ -80,18 +100,15 @@ def run() -> pd.DataFrame:
     # уровень прогноза выше номинала трубы (экстраполяция на более тонкую
     # трубу), опускаем весь профиль так, чтобы p99 лёг на номинал — иначе
     # клиппинг срезал бы профиль в константу и обнулил корреляцию.
-    # Только кейс 2: у кейса 1 труба та же 8 мм, что в обучении, а p99 профиля
-    # выше номинала дают бездефектные сегменты (z бленда 5-6) — до lab42 это
-    # правило сдвигало весь профиль 1250022871 вниз на 1.04 мм (среднее 5.94 -> 4.90
-    # при прошлом пропуске 6.29: ~1 мм/год против ~0.25 на валидации 2022->2023).
+    # Только кейс 2 (уровень экстраполирован на более тонкую трубу). Кейс 1 — клиппинг без сдвига
+    # (lab33): z-бленды кейса 1 могут вынести ~1% чистых сегментов за номинал, и сдвиг p99 опустил
+    # бы весь профиль (у ens_blend+stats на 22871 — на 0.49 мм), хотя уровень ансамбля на валидации
+    # несмещён (+0.02..0.03 мм). У дефолта aligned_stats_cal p99 ниже номинала — сдвига и так нет.
     parts = []
-    for pipe_id, grp in pred_ds.groupby("id"):
+    for pid, grp in pred_ds.groupby("id"):
         grp = grp.copy()
-        if case_of_id[int(pipe_id)] != "case2":
-            parts.append(grp)
-            continue
-        shift = max(0.0, float(np.quantile(grp["thickness_pred"], 0.99))
-                    - float(grp["wt_nom"].iloc[0]))
+        shift = 0.0 if case_of_id[int(pid)] == "case1" else max(
+            0.0, float(np.quantile(grp["thickness_pred"], 0.99)) - float(grp["wt_nom"].iloc[0]))
         for col in ("thickness_pred", "p05", "p10", "p90", "p95"):
             grp[col] = grp[col] - shift
         parts.append(grp)

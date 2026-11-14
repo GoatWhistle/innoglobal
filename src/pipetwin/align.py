@@ -5,8 +5,9 @@
 плавно меняется вдоль трассы от −5 до +2 м. При сегменте 10 м это ломает признаки «прошлого
 пропуска»: состояние стенки берётся не с того сегмента.
 
-Сдвиг оценивается взаимной корреляцией профилей глубины дефектов в окнах вдоль трубы и
-аппроксимируется линией (дистанция прошлого пропуска -> дистанция целевого). Если целевого
+Сдвиг оценивается в окнах вдоль трубы сопоставлением отдельных дефектов двух пропусков
+(дистанция ±0.15 м, угол ±12°, PIPETWIN_SHIFT=match; при неудаче — взаимной корреляцией
+профилей глубины, PIPETWIN_SHIFT=corr — как было) и аппроксимируется линией (дистанция прошлого пропуска -> дистанция целевого). Если целевого
 пропуска нет (прогноз кейса 1), сдвиг интерполируется по координате нитки (Distance_raw) из
 оценок соседних труб той же нитки на ту же пару пропусков.
 
@@ -29,6 +30,13 @@ ORACLE = os.environ.get("PIPETWIN_ALIGN_ORACLE") == "1"  # только эксп
 MAX_SHIFT = 40      # м, поиск сдвига
 MIN_CORR = 0.3      # окно с более слабой корреляцией не используется
 LOCAL = 6           # м, отклонение сдвига окна от общего сдвига трубы
+# Метод оценки сдвига: match — по совпавшим дефектам, corr — корреляция профилей глубины.
+# Кейс 1 (валидация 2022 -> 2023 и прогноз 22871) — match: точнее на метры (1250009490: +1.8 м
+# против −1 м у corr), от этого зависит сдвиг начала 22871 в прогнозе. Остальные пары — corr, как
+# было: с match прогноз кейса 2 меняется почти целиком (corr 0.24 со сданным) при той же строгой
+# валидации (0.016 у обоих), то есть без доказанного выигрыша.
+SHIFT_METHOD = os.environ.get("PIPETWIN_SHIFT", "corr")
+CASE1_SHIFT_METHOD = os.environ.get("PIPETWIN_SHIFT_CASE1", "match")
 _cache: dict = {}
 
 
@@ -51,15 +59,81 @@ def _best_shift(a: np.ndarray, b: np.ndarray, lo: int = -MAX_SHIFT, hi: int = MA
     return best
 
 
-def window_shifts(vtd: pd.DataFrame, pipe_id: int, run_a, run_b) -> list[tuple[float, float]]:
+MATCH_DX, MATCH_DA = 0.15, 12.0   # м и градусы: допуск «тот же дефект» в двух пропусках
+MATCH_STEP = 0.05                  # м, шаг поиска сдвига в окне
+MATCH_MIN, MATCH_PEAK = 8, 2.0     # мин. число совпадений и во сколько раз пик выше медианы сетки
+MATCH_WIN = 60.0                   # м, окно: локализует скачки одометра (1250011604: +7.5 -> +12.7 м около 340 м)
+
+
+def _xa(d: pd.DataFrame) -> np.ndarray:
+    d = d.dropna(subset=["Distance", "Angle"]).sort_values("Distance")
+    return d[["Distance", "Angle"]].to_numpy(dtype=float)
+
+
+def _n_matched(A: np.ndarray, B: np.ndarray, k: float) -> int:
+    """Сколько дефектов A имеют пару в B на дистанции x_A + k (±MATCH_DX) и угле ±MATCH_DA."""
+    if len(A) == 0 or len(B) == 0:
+        return 0
+    xb, ab = B[:, 0], B[:, 1]
+    lo = np.searchsorted(xb, A[:, 0] + k - MATCH_DX)
+    hi = np.searchsorted(xb, A[:, 0] + k + MATCH_DX)
+    hit = np.zeros(len(A), dtype=bool)
+    for j in range(int((hi - lo).max(initial=0))):
+        idx = lo + j
+        da = np.abs((ab[np.minimum(idx, len(xb) - 1)] - A[:, 1] + 180) % 360 - 180)
+        hit |= (idx < hi) & (da < MATCH_DA)
+    return int(hit.sum())
+
+
+def _match_shift(A: np.ndarray, B: np.ndarray, lo: float, hi: float, step: float = MATCH_STEP,
+                 peak: float = MATCH_PEAK):
+    """Сдвиг A -> B с максимумом совпавших дефектов; None, если пик не выделяется из шума."""
+    grid = np.arange(lo, hi + step / 2, step)
+    sc = np.array([_n_matched(A, B, float(k)) for k in grid])
+    i = int(sc.argmax())
+    if sc[i] < MATCH_MIN or sc[i] < peak * max(float(np.median(sc)), 1.0):
+        return None
+    return float(grid[i])
+
+
+def window_shifts_match(vtd: pd.DataFrame, pipe_id: int, run_a, run_b) -> list[tuple[float, float]]:
+    """Сдвиг по сопоставлению отдельных дефектов (дистанция + угол), точность ~0.05 м.
+
+    Корреляция профилей глубины с шагом 1 м на короткой трубе ошибается на метры: на 1250009490
+    для 2022 -> 2023 она даёт −1 м, а совпавшие дефекты (213 из 343) — +1.8 м. Пустой список —
+    мало дефектов с углом или пик не выделяется; тогда window_shifts откатывается на корреляцию.
+    """
+    sub = vtd[vtd["id"] == pipe_id]
+    A, B = _xa(sub[sub["run_date"] == run_a]), _xa(sub[sub["run_date"] == run_b])
+    if len(A) < MATCH_MIN or len(B) < MATCH_MIN:
+        return []
+    # общий якорь: на всей трубе пик размазан плавным дрейфом (2018 -> 2022 на 1250022871 от −7 до
+    # +4 м), поэтому без проверки пика; строгая проверка — в окнах ±LOCAL вокруг якоря
+    k0 = _match_shift(A, B, -MAX_SHIFT, MAX_SHIFT, step=0.1, peak=0.0)
+    if k0 is None:
+        return []
+    length = float(max(A[-1, 0], B[-1, 0]))
+    win = min(MATCH_WIN, length + 1)
+    pts = []
+    for w0 in np.arange(0, max(length - win / 2, 0) + 1, win / 2):
+        m = (A[:, 0] >= w0) & (A[:, 0] < w0 + win)
+        k = _match_shift(A[m], B, k0 - LOCAL, k0 + LOCAL)
+        if k is not None:
+            pts.append((float(w0 + win / 2), round(k, 2)))
+    return pts or [(length / 2, round(k0, 2))]
+
+
+def window_shifts(vtd: pd.DataFrame, pipe_id: int, run_a, run_b,
+                  method: str | None = None) -> list[tuple[float, float]]:
     """Точки (дистанция центра окна в координатах пропуска A, сдвиг A -> B)."""
-    key = ("w", pipe_id, run_a, run_b)
+    method = method or SHIFT_METHOD
+    key = ("w", pipe_id, run_a, run_b, method)
     if key in _cache:
         return _cache[key]
     sub = vtd[vtd["id"] == pipe_id]
     a, b = sub[sub["run_date"] == run_a], sub[sub["run_date"] == run_b]
-    pts = []
-    if len(a) and len(b):
+    pts = window_shifts_match(vtd, pipe_id, run_a, run_b) if method == "match" else []
+    if not pts and len(a) and len(b):
         length = int(max(a["Distance"].max(), b["Distance"].max())) + MAX_SHIFT + 1
         pa, pb = _profile(a, length), _profile(b, length)
         # общий сдвиг по всей трубе — якорь; в окнах ищем только рядом с ним (±LOCAL м),
@@ -92,6 +166,20 @@ def _fit(x: np.ndarray, y: np.ndarray):
     return lambda d: k * np.asarray(d, dtype=float) + b
 
 
+def _interp(x: np.ndarray, y: np.ndarray):
+    """Кусочно-линейный сдвиг по окнам (метод match): сохраняет скачки одометра, которые прямая
+    размазывает; за крайними окнами — постоянное значение."""
+    if len(x) == 0:
+        return lambda d: np.zeros_like(np.asarray(d, dtype=float))
+    o = np.argsort(x)
+    x, y = np.asarray(x, dtype=float)[o], np.asarray(y, dtype=float)[o]
+    return lambda d: np.interp(np.asarray(d, dtype=float), x, y)
+
+
+def _shift_fn(x, y, method):
+    return _interp(x, y) if (method or SHIFT_METHOD) == "match" else _fit(x, y)
+
+
 def raw_offsets() -> pd.Series:
     """Начало трубы в координате нитки: Distance_raw − Distance (одно на трубу)."""
     if "raw" not in _cache:
@@ -101,12 +189,12 @@ def raw_offsets() -> pd.Series:
     return _cache["raw"]
 
 
-def own_shift(vtd, pipe_id, run_a, run_b):
-    pts = window_shifts(vtd, pipe_id, run_a, run_b)
-    return _fit(np.array([p[0] for p in pts]), np.array([p[1] for p in pts]))
+def own_shift(vtd, pipe_id, run_a, run_b, method=None):
+    pts = window_shifts(vtd, pipe_id, run_a, run_b, method)
+    return _shift_fn(np.array([p[0] for p in pts]), np.array([p[1] for p in pts]), method)
 
 
-def line_shift(vtd, passport, pipe_id, run_a, run_b):
+def line_shift(vtd, passport, pipe_id, run_a, run_b, method=None):
     """Сдвиг для трубы по соседям той же нитки (координата Distance_raw)."""
     pas = passport.set_index("id")
     off = raw_offsets()
@@ -115,10 +203,10 @@ def line_shift(vtd, passport, pipe_id, run_a, run_b):
     for nb in same:
         if nb not in off.index:
             continue
-        for x, s in window_shifts(vtd, nb, run_a, run_b):
+        for x, s in window_shifts(vtd, nb, run_a, run_b, method):
             xs.append(x + off[nb])
             ys.append(s)
-    f = _fit(np.array(xs), np.array(ys))
+    f = _shift_fn(np.array(xs), np.array(ys), method)
     o = off.get(pipe_id, 0.0)
     return lambda d: f(np.asarray(d, dtype=float) + o)
 
@@ -149,7 +237,7 @@ def has_heights() -> set:
     return _cache["h"]
 
 
-def to_profile(vtd, passport, pipe_id, run, exclude=None):
+def to_profile(vtd, passport, pipe_id, run, exclude=None, method=None):
     """Функция: дистанция пропуска run -> координата профиля трассы.
 
     Пропуск с высотами уже в координатах профиля. Иначе сдвиг до более позднего пропуска той же
@@ -171,12 +259,12 @@ def to_profile(vtd, passport, pipe_id, run, exclude=None):
     for nxt in chain[1:]:
         if (pipe_id, cur) in hs:
             break
-        steps.append(own_shift(vtd, pipe_id, cur, nxt))
+        steps.append(own_shift(vtd, pipe_id, cur, nxt, method))
         cur = nxt
     if (pipe_id, cur) not in hs:
         if not ref:
             return zero
-        steps.append(line_shift(vtd, passport, pipe_id, cur, ref[-1]))
+        steps.append(line_shift(vtd, passport, pipe_id, cur, ref[-1], method))
     if not steps:
         return zero
 
