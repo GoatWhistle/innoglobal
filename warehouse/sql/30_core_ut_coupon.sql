@@ -14,11 +14,22 @@ with u as (
            core.num(u.residual_wall_thickness)          as thickness_mm
     from raw.uzt_south u
 )
-select u.*, p.wt_nom_mm,
-       u.thickness_mm / p.wt_nom_mm as thickness_to_nominal,
+, j as (select u.*, p.wt_nom_mm from u left join core.pipe p using (pipe_id))
+-- Систематический сдвиг прибора: все замеры толще номинала, но не в одно и то же число раз
+-- (1.6-2.7), а на одну и ту же величину: средний замер минус номинал 7.18 / 7.01 / 5.15 мм
+-- на трёх трубах. Аддитивная ошибка (не выставлен ноль / задержка датчика). Оценка сдвига —
+-- медиана по трубам; на 1250022871 остаток после вычета (6.15 мм) сходится с ВТД того же
+-- сегмента (6.23 в 2018, 6.48 в 2022), на 1250011604 (8.0 мм) — с чистым сегментом ВТД 2023.
+, off as (select median(d) as ut_offset_mm
+          from (select pipe_id, avg(thickness_mm) - any_value(wt_nom_mm) as d from j group by 1))
+select j.*,
+       j.thickness_mm / j.wt_nom_mm as thickness_to_nominal,
        -- остаточная стенка не может быть толще номинала больше плюсового допуска проката (~15%)
-       u.thickness_mm <= p.wt_nom_mm * 1.15 as is_plausible
-from u left join core.pipe p using (pipe_id)
+       j.thickness_mm <= j.wt_nom_mm * 1.15 as is_plausible,
+       off.ut_offset_mm,
+       j.thickness_mm - off.ut_offset_mm as thickness_corr_mm,
+       j.thickness_mm - off.ut_offset_mm <= j.wt_nom_mm * 1.15 as is_plausible_corr
+from j cross join off
 order by pipe_id, measured_at, control_point_id, angle_deg;
 
 

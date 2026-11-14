@@ -1,4 +1,6 @@
 """Этап 2: признаки сегментов — геометрия трассы, режим, прошлое ВТД, гравиметрия."""
+import os
+
 import numpy as np
 import pandas as pd
 
@@ -106,8 +108,14 @@ def regime_features(regime: pd.DataFrame, pipe_id: int,
 
 # --------------------------------------------------------------------- УЗТ
 def load_uzt() -> pd.DataFrame:
-    """Только правдоподобные замеры УЗТ (толщина ≤ номинал·1.15). В текущих данных
-    все 67 замеров толще номинала в 1.6-2.7 раза, поэтому таблица пуста."""
+    """Только правдоподобные замеры УЗТ (толщина ≤ номинал·1.15). Сырые 67 замеров толще
+    номинала на постоянные ~7 мм (сдвиг нуля прибора, core.ut_measurement.ut_offset_mm);
+    PIPETWIN_UZT=corr (по умолчанию) берёт толщину за вычетом сдвига, raw — сырую (таблица
+    пуста). Кейс 2: r² 0.181 -> 0.193, строгая проверка 0.010 -> 0.016."""
+    if os.environ.get("PIPETWIN_UZT", "corr") == "corr":
+        return W.query("""
+            select pipe_id as id, dist_m as dist, measured_at as date, thickness_corr_mm as thick
+            from core.ut_measurement where is_plausible_corr""")
     return W.query("""
         select pipe_id as id, dist_m as dist, measured_at as date, thickness_mm as thick
         from core.ut_measurement where is_plausible""")
@@ -196,6 +204,9 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
         df["prev_ndef_norm"] = 0.0
         df["prev_maxdepth"] = 0.0
         df["prev_loss_rate"] = 0.0
+        df["prev_q10"] = wt_nom
+        df["prev_q10_nb3"] = wt_nom
+        df["prev_lnn_nb3"] = 0.0
         df["has_prev"] = 0
         return df
 
@@ -221,6 +232,14 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
     df["prev_maxdepth"] = df["segment_id"].map(depth).fillna(0.0)
     age = max(start_age_years, 1e-6)
     df["prev_loss_rate"] = (wt_nom - df["prev_min"]).clip(lower=0) / age  # мм/год
+    # устойчивые статистики сегмента для предиктора aligned_stats (train.aligned_stats_score):
+    # по дефектам корреляция 2022 <-> 2023 всего 0.34 (шум снаряда, регрессия к среднему),
+    # поэтому 10-й процентиль остатка и соседи надёжнее голого минимума
+    q10 = sub.dropna(subset=["Residual Wall Thickness"]).groupby("segment_id")[
+        "Residual Wall Thickness"].quantile(0.1)
+    df["prev_q10"] = df["segment_id"].map(q10).fillna(df["prev_min"])
+    df["prev_q10_nb3"] = df["prev_q10"].rolling(3, center=True, min_periods=1).mean()
+    df["prev_lnn_nb3"] = np.log1p(df["prev_ndef"]).rolling(3, center=True, min_periods=1).mean()
     df["has_prev"] = 1
     return df
 
@@ -239,8 +258,10 @@ CHEM_FEATS = ["grav_cl", "grav_mineralization"]
 REGIME_SHARE_FEATS = ["rg_share_laminar", "rg_share_trans", "rg_share_turb"]
 CLIMB_FEATS = ["climb_len", "climb_rise", "climb_pos", "rise_500m"]
 TP_FEATS = ["t_at", "p_at"]
+# только для предиктора aligned_stats, в бустинги не идут (их состав не меняется)
+STAT_FEATS = ["prev_q10", "prev_q10_nb3", "prev_lnn_nb3"]
 OPTIONAL_FEATS = (UZT_FEATS + PROF_FEATS + INTER_FEATS + ERA_FEATS + POCKET_FEATS
-                  + CHEM_FEATS + REGIME_SHARE_FEATS + CLIMB_FEATS + TP_FEATS)
+                  + CHEM_FEATS + REGIME_SHARE_FEATS + CLIMB_FEATS + TP_FEATS + STAT_FEATS)
 
 
 def case_features(ds: pd.DataFrame, case: str) -> list[str]:
@@ -270,9 +291,14 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
             # используется для оценки сдвига прошлого (как при настоящем прогнозе)
             ex = (pd.Timestamp(end) if align.is_case1_val(pipe_id, start, end) and not align.ORACLE
                   else None)
+            # кейс 1 (валидация 2022 -> 2023 и прогноз целевой трубы) — сдвиг по совпавшим дефектам
+            case1 = (align.is_case1_val(pipe_id, start, end)
+                     or (not with_target and pipe_id == C.CASE1_ID))
+            method = align.CASE1_SHIFT_METHOD if case1 else None
             if kind == "vtd2vtd":
                 vtd_start = align.shifted_vtd(vtd, pipe_id, start,
-                                              align.to_profile(vtd, passport, pipe_id, start, ex),
+                                              align.to_profile(vtd, passport, pipe_id, start, ex,
+                                                               method=method),
                                               int(nseg.loc[pipe_id]))
             if with_target:
                 vtd_end = align.shifted_vtd(vtd, pipe_id, end,

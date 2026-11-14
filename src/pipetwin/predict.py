@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from . import config as C
-from .train import blend_prob, predict_bag
+from .train import aligned_stats_score, blend_prob, blend_stats, predict_bag
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
 # на всех 3 сидах по r² и sm5):
@@ -18,8 +18,17 @@ from .train import blend_prob, predict_bag
 # 10 м). После выравнивания пропусков в координаты профиля (align.py, режим profile) оно размывает
 # форму: на валидации ens_blend 0.501 без сглаживания против 0.287 со сглаживанием. Без
 # выравнивания (PIPETWIN_ALIGN=off/line) сглаживание по-прежнему полезно.
+#
+# Кейс 1 по умолчанию — ens_blend+stats: равный бленд ens_blend и aligned_stats (устойчивые
+# статистики выровненного прошлого пропуска, train.aligned_stats_score). Валидация 2022 -> 2023,
+# 55 сегментов: при измеренном сдвиге (PIPETWIN_ALIGN_ORACLE=1 — так у 22871, сдвиг известен на обоих
+# концах трубы) 0.646 против 0.543 у ens_blend; при сдвиге только от соседа 0.456 против 0.500.
+# aligned_stats один даёт 0.676 / 0.339 — выше при точном сдвиге, но хрупок к ошибке сдвига.
+# PIPETWIN_CASE1=ens_blend | aligned_stats | ens_blend+stats
+import os as _os
 from . import align as _align
-PREDICTOR = {"case1": ("ens_blend", None if _align.MODE == "profile" else 5),
+_CASE1 = _os.environ.get("PIPETWIN_CASE1", "ens_blend+stats")
+PREDICTOR = {"case1": (_CASE1, None if _align.MODE == "profile" else 5),
              "case2": ("ensemble", None)}
 
 
@@ -40,7 +49,7 @@ def run() -> pd.DataFrame:
         scale = grp["wt_nom"].values if b.get("target") == "rel" else 1.0
         # бэг, усреднённый по сидам/сетке (train.BAG_SEEDS / PARAM_GRID)
         preds = predict_bag(models["bag"], X, grp["wt_nom"].values, scale)
-        if name == "ens_blend":
+        if name in ("ens_blend", "ens_blend+stats"):
             # формы классификатора дефекта и спреда до q05 вклеиваются
             # в профиль этой трубы (lab13-19)
             p_def = models["clf"].predict_proba(X)[:, 1]
@@ -48,6 +57,10 @@ def run() -> pd.DataFrame:
             pred = blend_prob(preds["ensemble"], p_def, b["blend_w"],
                               gap=preds["ensemble"] - q05,
                               gap_w=b.get("gap_w", 0.0))
+            if name == "ens_blend+stats":
+                pred = blend_stats(pred, aligned_stats_score(grp))
+        elif name == "aligned_stats":
+            pred = aligned_stats_score(grp)
         else:
             pred = preds[name]
         if smooth:
