@@ -13,6 +13,42 @@ YEAR = pd.Timedelta(days=365.25)
 
 
 # ---------------------------------------------------------------- геометрия
+def relief_features(z: np.ndarray) -> dict:
+    """Относительные признаки карманов/подъёмов профиля (experiments/lab39).
+
+    Источник формы рельефного приора кейса 2 (нефть товарная: коррозия только там,
+    где выпадает и стоит вода). Все признаки относительные — не выдают трубу по
+    абсолютной отметке/дистанции."""
+    z = pd.Series(z)
+    out = {}
+    for w in (5, 11, 31, 101):  # прогиб относительно скользящего среднего
+        out[f"sag_{w}"] = (z - z.rolling(w, center=True, min_periods=1).mean()).values
+    zs = z.rolling(3, center=True, min_periods=1).mean()
+    d1 = zs.diff().fillna(0.0)
+    out["curv"] = zs.diff().diff().shift(-1).fillna(0.0).values
+    left, right = zs - zs.shift(5), zs.shift(-5) - zs  # V-дно: спуск слева, подъём справа
+    out["vbottom"] = np.minimum(-left.fillna(0), right.fillna(0)).clip(lower=0).values
+    down = (d1 < 0).values
+    up = (d1.shift(-1).fillna(0) > 0).values
+    run_l, run_r = np.zeros(len(z)), np.zeros(len(z))
+    for i in range(1, len(z)):  # водосбор: длина спуска, стекающего в сегмент
+        run_l[i] = run_l[i - 1] + 1 if down[i] else 0
+    for i in range(len(z) - 2, -1, -1):
+        run_r[i] = run_r[i + 1] + 1 if up[i] else 0
+    out["catch_left"], out["catch_right"] = run_l, run_r
+    lm = np.where((zs == zs.rolling(11, center=True, min_periods=1).min()).values)[0]
+    pos = np.arange(len(z))
+    out["dist_to_min"] = (np.abs(pos[:, None] - lm[None, :]).min(axis=1)
+                          if len(lm) else np.full(len(z), 99.0))
+    for w in (10, 25, 100):
+        lmax = z.rolling(w, min_periods=1).max()
+        rmax = z[::-1].rolling(w, min_periods=1).max()[::-1]
+        out[f"pocket_{w}"] = (np.minimum(lmax, rmax) - z).clip(lower=0).values
+    out["z_norm"] = ((z - z.min()) / max(float(z.max() - z.min()), 1e-6)).values
+    out["z_rank"] = z.rank(pct=True).values
+    return out
+
+
 def geometry_features(altitudes: pd.DataFrame, nseg: pd.Series) -> pd.DataFrame:
     """Признаки профиля на центр каждого сегмента."""
     out = []
@@ -50,6 +86,8 @@ def geometry_features(altitudes: pd.DataFrame, nseg: pd.Series) -> pd.DataFrame:
         df["rise_500m"] = (zsm - zsm.shift(50)).clip(lower=0).fillna(0).values
         df["dist_m"] = centers
         df["dist_frac"] = centers / (n * C.SEG_LEN)
+        for k, v in relief_features(z).items():
+            df[k] = v
         out.append(df)
     return pd.concat(out, ignore_index=True)
 
@@ -110,9 +148,10 @@ def regime_features(regime: pd.DataFrame, pipe_id: int,
 def load_uzt() -> pd.DataFrame:
     """Только правдоподобные замеры УЗТ (толщина ≤ номинал·1.15). Сырые 67 замеров толще
     номинала на постоянные ~7 мм (сдвиг нуля прибора, core.ut_measurement.ut_offset_mm);
-    PIPETWIN_UZT=corr (по умолчанию) берёт толщину за вычетом сдвига, raw — сырую (таблица
-    пуста). Кейс 2: r² 0.181 -> 0.193, строгая проверка 0.010 -> 0.016."""
-    if os.environ.get("PIPETWIN_UZT", "corr") == "corr":
+    PIPETWIN_UZT=corr берёт толщину за вычетом сдвига, raw (по умолчанию) — сырую (таблица пуста).
+    Со старым кейсом 2 (LGBM с z) corr давал V1 0.181 -> 0.193, но с боевым ens_prior_cal (exp/case2)
+    corr вредит: V1 0.1946 -> 0.1785, V2 0.0480 -> 0.0474, V3 0.0094 = (lab65); профиль 9583 тот же."""
+    if os.environ.get("PIPETWIN_UZT", "raw") == "corr":
         return W.query("""
             select pipe_id as id, dist_m as dist, measured_at as date, thickness_corr_mm as thick
             from core.ut_measurement where is_plausible_corr""")
@@ -260,8 +299,15 @@ CLIMB_FEATS = ["climb_len", "climb_rise", "climb_pos", "rise_500m"]
 TP_FEATS = ["t_at", "p_at"]
 # только для предиктора aligned_stats, в бустинги не идут (их состав не меняется)
 STAT_FEATS = ["prev_q10", "prev_q10_nb3", "prev_lnn_nb3"]
+# только для рельефного приора кейса 2 (train.fit_relief_prior), не в бустингах
+RELIEF_FEATS = ["sag_5", "sag_11", "sag_31", "sag_101", "curv", "vbottom", "catch_left",
+                "catch_right", "dist_to_min", "pocket_10", "pocket_25", "pocket_100",
+                "z_norm", "z_rank"]
+PRIOR_FEATS = (["slope", "lowness_250m", "lowness_1km", "z_rel", "water_trap"]
+               + CLIMB_FEATS + RELIEF_FEATS + POCKET_FEATS)
 OPTIONAL_FEATS = (UZT_FEATS + PROF_FEATS + INTER_FEATS + ERA_FEATS + POCKET_FEATS
-                  + CHEM_FEATS + REGIME_SHARE_FEATS + CLIMB_FEATS + TP_FEATS + STAT_FEATS)
+                  + CHEM_FEATS + REGIME_SHARE_FEATS + CLIMB_FEATS + TP_FEATS + RELIEF_FEATS
+                  + STAT_FEATS)
 
 
 def case_features(ds: pd.DataFrame, case: str) -> list[str]:
@@ -271,7 +317,10 @@ def case_features(ds: pd.DataFrame, case: str) -> list[str]:
     Режимы/подъёмы — experiments/lab8; t_at/p_at — lab12 (p_at кейсу 2 вредит)."""
     base = [c for c in feature_columns(ds) if c not in OPTIONAL_FEATS]
     if case == "case2":
-        return base + UZT_FEATS + ERA_FEATS + CLIMB_FEATS + ["t_at"]
+        # абсолютная отметка z у кейса 2 — идентификатор трубы (lab36): 9583 различалась
+        # только ею (ступень 16%/84% = полка 3.740); без z V1 0.181 -> 0.190, строгая V2
+        # 0.010 -> 0.030. Форму 9583 даёт рельефный приор (lab39).
+        return [f for f in base if f != "z"] + UZT_FEATS + ERA_FEATS + CLIMB_FEATS + ["t_at"]
     return base + REGIME_SHARE_FEATS + TP_FEATS
 
 

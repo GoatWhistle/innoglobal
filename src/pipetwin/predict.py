@@ -4,7 +4,10 @@ import numpy as np
 import pandas as pd
 
 from . import config as C
-from .train import aligned_stats_score, blend_prob, blend_stats, predict_bag, stats_at_level
+from .prepare import load_passport
+from . import features as F
+from .train import (aligned_stats_score, analog_rates, blend_prob, blend_stats, calibrate_level,
+                    predict_bag, prior_blend, stats_at_level)
 
 # Предиктор по кейсу — итог серий 13-15 (критерий: прирост против референса
 # на всех 3 сидах по r² и sm5):
@@ -33,7 +36,12 @@ import os as _os
 from . import align as _align
 _CASE1 = _os.environ.get("PIPETWIN_CASE1", "aligned_stats_cal")
 PREDICTOR = {"case1": (_CASE1, None if _align.MODE == "profile" else 5),
-             "case2": ("ensemble", None)}
+             "case2": ("ens_prior_cal", None)}
+# case2 (lab36-39, exp/case2): LGBM-сетка без абсолютной отметки z + рельефный приор дефекта
+# (логрегрессия на рельефе, обучена на трубах ЦППН — режим 9583) блендом z(ens)+0.5·z(−P),
+# затем калибровка уровня/масштаба по аналогам направления (R3): среднее = номинал −
+# средняя скорость потери труб того же направления × возраст, p99 = номинал. Аффинно.
+# У 9583 бустинг без z даёт константу — форма целиком от приора, полки нет.
 
 
 def run() -> pd.DataFrame:
@@ -42,6 +50,7 @@ def run() -> pd.DataFrame:
 
     # каждой целевой трубе — модель своего кейса
     case_of_id = {C.CASE1_ID: "case1", C.CASE2_ID: "case2"}
+    dir_of = dict(load_passport()[["id", "direction"]].itertuples(index=False))
     parts = []
     for pipe_id, grp in pred_ds.groupby("id"):
         case = case_of_id[int(pipe_id)]
@@ -67,6 +76,12 @@ def run() -> pd.DataFrame:
                 pred = stats_at_level(pred, aligned_stats_score(grp))
         elif name == "aligned_stats":
             pred = aligned_stats_score(grp)
+        elif name == "ens_prior_cal":
+            p_def = models["relief_prior"].predict_proba(grp[F.PRIOR_FEATS].fillna(0.0))[:, 1]
+            shaped = prior_blend(preds["ensemble"], p_def, b["prior_w"])
+            rates = analog_rates(models["analog_rows"], dir_of[int(pipe_id)], dir_of)
+            pred = calibrate_level(shaped, float(grp["wt_nom"].iloc[0]),
+                                   float(grp["age_end"].iloc[0]), rates)
         else:
             pred = preds[name]
         if smooth:
@@ -74,7 +89,12 @@ def run() -> pd.DataFrame:
                     .rolling(smooth, center=True, min_periods=1).median().values)
         grp["thickness_pred"] = pred
         for tag in ("p05", "p10", "p90", "p95"):
-            grp[tag] = models[tag].predict(X) * scale
+            q = models[tag].predict(X) * scale
+            if name == "ens_prior_cal":
+                # конверт переносится за прогнозом с сырой шириной (калибровка
+                # сжимает разброс профиля, но не неопределённость сегмента)
+                q = pred + (q - preds["ensemble"])
+            grp[tag] = q
         parts.append(grp)
     pred_ds = pd.concat(parts, ignore_index=True)
 

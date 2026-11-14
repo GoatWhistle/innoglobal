@@ -102,22 +102,57 @@
       "case": "case2",
       "model": "lgbm",
       "n": 525,
-      "pearson_r2": 0.1934,
-      "mae": 0.932
+      "pearson_r2": 0.1902,
+      "mae": 0.854
     },
     {
       "case": "case2",
       "model": "ensemble",
       "n": 525,
-      "pearson_r2": 0.1934,
-      "mae": 0.932
+      "pearson_r2": 0.1902,
+      "mae": 0.854
     },
     {
       "case": "case2",
       "model": "ensemble_smooth5",
       "n": 525,
-      "pearson_r2": 0.169,
-      "mae": 0.938
+      "pearson_r2": 0.1625,
+      "mae": 0.863
+    },
+    {
+      "case": "case2",
+      "model": "ens_prior",
+      "n": 525,
+      "pearson_r2": 0.1946,
+      "mae": 0.856
+    },
+    {
+      "case": "case2",
+      "model": "ens_prior_cal",
+      "n": 525,
+      "pearson_r2": 0.1946,
+      "mae": 0.815
+    },
+    {
+      "case": "case2_strict",
+      "model": "ensemble",
+      "n": 525,
+      "pearson_r2": 0.0296,
+      "mae": 0.945
+    },
+    {
+      "case": "case2_strict",
+      "model": "ens_prior",
+      "n": 525,
+      "pearson_r2": 0.048,
+      "mae": 0.94
+    },
+    {
+      "case": "case2_strict",
+      "model": "ens_prior_cal",
+      "n": 525,
+      "pearson_r2": 0.048,
+      "mae": 0.866
     }
   ],
   "params": {
