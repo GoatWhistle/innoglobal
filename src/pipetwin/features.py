@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 
+from . import align
 from . import config as C
 from . import prepare
 from . import warehouse as W
@@ -262,7 +263,27 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
         age_start = (start - pas.loc[pipe_id, "date_in"]) / YEAR
 
         df = geom[geom["id"] == pipe_id].copy()
-        st = start_state_features(vtd, runs, nseg, passport, pipe_id, start, kind, age_start)
+        vtd_start = vtd
+        vtd_end = vtd
+        if align.MODE == "profile":
+            # всё в координатах профиля; у валидационной пары кейса 1 целевой пропуск не
+            # используется для оценки сдвига прошлого (как при настоящем прогнозе)
+            ex = (pd.Timestamp(end) if align.is_case1_val(pipe_id, start, end) and not align.ORACLE
+                  else None)
+            if kind == "vtd2vtd":
+                vtd_start = align.shifted_vtd(vtd, pipe_id, start,
+                                              align.to_profile(vtd, passport, pipe_id, start, ex),
+                                              int(nseg.loc[pipe_id]))
+            if with_target:
+                vtd_end = align.shifted_vtd(vtd, pipe_id, end,
+                                            align.to_profile(vtd, passport, pipe_id, end),
+                                            int(nseg.loc[pipe_id]))
+        elif kind == "vtd2vtd":
+            # дистанции прошлого пропуска -> координаты целевого (сбой одометра, align.py)
+            f = align.shift_for_pair(vtd, passport, pipe_id, start, end, has_target=with_target)
+            if f is not None:
+                vtd_start = align.shifted_vtd(vtd, pipe_id, start, f, int(nseg.loc[pipe_id]))
+        st = start_state_features(vtd_start, runs, nseg, passport, pipe_id, start, kind, age_start)
         df = df.merge(st, on=["id", "segment_id"])
 
         for k, v in regime_features(regime, pipe_id, start, end).items():
@@ -296,7 +317,7 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
 
         df["kind"], df["start"], df["end"] = kind, start, end
         if with_target:
-            tgt = prepare.segment_targets(vtd, runs, nseg, pipe_id, end)
+            tgt = prepare.segment_targets(vtd_end, runs, nseg, pipe_id, end)
             df = df.merge(tgt[["segment_id", "y", "had_defect"]], on="segment_id")
         frames.append(df)
     return pd.concat(frames, ignore_index=True)
@@ -313,7 +334,9 @@ def assign_split(ds: pd.DataFrame) -> pd.DataFrame:
     ds["split"] = "train"
     v1 = ((ds["kind"] == "vtd2vtd")
           & (ds["end"] == pd.Timestamp(C.VAL_CASE1_END))
-          & (ds["start"] == pd.Timestamp(C.CASE1_PREV_RUN)))
+          & (ds["start"] == pd.Timestamp(C.VAL_CASE1_START)))
+    if C.VAL_CASE1_IDS is not None:
+        v1 &= ds["id"].isin(C.VAL_CASE1_IDS)
     ds.loc[v1, "split"] = "val_case1"
     for pid, end in C.VAL_CASE2_PAIRS:
         v2 = ((ds["kind"] == "comm2vtd") & (ds["id"] == pid)
