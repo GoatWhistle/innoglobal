@@ -329,6 +329,24 @@ def stats_at_level(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
     return zscore(stats) * float(np.std(ens)) + float(np.mean(ens))
 
 
+def quant_score(ds: pd.DataFrame) -> np.ndarray:
+    """Квантильная формула из nedra (ветка case1-improve): (q02 + q10 + q10 по ±1 сегменту) / 3, мм.
+
+    Устойчивые квантили остатка прошлого выровненного пропуска вместо минимума: снаряд шумит,
+    минимум сегмента — крайняя статистика шумных замеров.
+    """
+    return ((ds["prev_q02"] + ds["prev_q10"] + ds["prev_q10_nb3"]) / 3).to_numpy(dtype=float)
+
+
+def case1_stat_predictors(ds: pd.DataFrame, ens_blend: np.ndarray) -> dict[str, np.ndarray]:
+    """Предикторы кейса 1 поверх выровненного прошлого пропуска (без обучения) и их бленды с ансамблем."""
+    st, qt = aligned_stats_score(ds), quant_score(ds)
+    return {"aligned_stats": st, "aligned_stats_cal": stats_at_level(ens_blend, st),
+            "ens_blend+stats": blend_stats(ens_blend, st),
+            "quant": qt, "quant_cal": stats_at_level(ens_blend, qt),
+            "ens_blend+quant": blend_stats(ens_blend, qt)}
+
+
 def blend_stats(ens: np.ndarray, stats: np.ndarray) -> np.ndarray:
     """Равный бленд формы ансамбля и aligned_stats в уровне ансамбля."""
     b = zscore(ens) + zscore(stats)
@@ -354,7 +372,9 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         feats = F.case_features(ds, case)
         subset = ds[ds["kind"].isin(cfg["train_kinds"])]
         honest = subset[subset["split"] == "train_honest"]
-        subset = subset[subset["split"] != "train_honest"]
+        # train_honest и val_case1_measured — копии уже имеющихся строк с иным выравниванием,
+        # в финальное обучение не идут (иначе пары валидации задублированы)
+        subset = subset[~subset["split"].isin(["train_honest", "val_case1_measured"])]
         tr = subset[subset["split"] == "train"]
         if case == "case1" and len(honest):
             # честная валидация: строки труб валидации, выровненные без пропуска 2023
@@ -391,33 +411,41 @@ def run(tune_trials: int = 0) -> pd.DataFrame:
         val_bag = [m for p in grid for m in fit_bag(
             X_tr, y_tr, tr["aft_lb"].values, tr["aft_ub"].values, p, cfg["aft"],
             families=cfg["families"])]
-        val_preds = predict_bag(val_bag, va[feats], va["wt_nom"].values, va_scale)
-        if cfg.get("blend_w"):
-            p_va = fit_clf(X_tr, tr["had_defect"]).predict_proba(va[feats])[:, 1]
-            q05_va = np.mean([m.predict(va[feats])
-                              for m in fit_q05_pair(X_tr, y_tr, cfg.get("params"))], axis=0)
-            val_preds["ens_blend"] = blend_prob(
-                val_preds["ensemble"], p_va, cfg["blend_w"],
-                gap=val_preds["ensemble"] - q05_va, gap_w=cfg.get("gap_w", 0.0))
+        clf_va = fit_clf(X_tr, tr["had_defect"]) if cfg.get("blend_w") else None
+        q05_models = fit_q05_pair(X_tr, y_tr, cfg.get("params")) if cfg.get("blend_w") else None
+
+        def val_predictions(v: pd.DataFrame) -> dict[str, np.ndarray]:
+            vp = predict_bag(val_bag, v[feats], v["wt_nom"].values,
+                             v["wt_nom"].values if rel else 1.0)
+            if clf_va is not None:
+                q05_v = np.mean([m.predict(v[feats]) for m in q05_models], axis=0)
+                vp["ens_blend"] = blend_prob(
+                    vp["ensemble"], clf_va.predict_proba(v[feats])[:, 1], cfg["blend_w"],
+                    gap=vp["ensemble"] - q05_v, gap_w=cfg.get("gap_w", 0.0))
+            if case == "case1":
+                vp.update(case1_stat_predictors(v, vp["ens_blend"]))
+            for base_name in ("catboost", "ensemble", "ens_blend"):
+                if base_name in vp:
+                    vp[f"{base_name}_smooth5"] = (
+                        pd.DataFrame({"id": v["id"].values, "p": vp[base_name]})
+                        .groupby("id")["p"]
+                        .transform(lambda s: s.rolling(5, center=True, min_periods=1).median())
+                        .values)
+            return vp
+
+        blocks = [(case, va)]
         if case == "case1":
-            val_preds["aligned_stats"] = aligned_stats_score(va)
-            val_preds["aligned_stats_cal"] = stats_at_level(val_preds["ens_blend"],
-                                                            val_preds["aligned_stats"])
-            val_preds["ens_blend+stats"] = blend_stats(val_preds["ens_blend"],
-                                                       val_preds["aligned_stats"])
-        for base_name in ("catboost", "ensemble", "ens_blend"):
-            if base_name not in val_preds:
-                continue
-            val_preds[f"{base_name}_smooth5"] = (
-                pd.DataFrame({"id": va["id"].values, "p": val_preds[base_name]})
-                .groupby("id")["p"]
-                .transform(lambda s: s.rolling(5, center=True, min_periods=1).median())
-                .values)
-        for name, p in val_preds.items():
-            report_rows.append(dict(
-                case=case, model=name, n=len(va),
-                pearson_r2=round(pearson_r2(y_va, p), 4),
-                mae=round(float(np.mean(np.abs(y_va - p))), 3)))
+            # тот же val со сдвигом, измеренным по самой паре (features.build_all, measured=True)
+            vm = ds[ds["split"] == "val_case1_measured"]
+            if len(vm):
+                blocks.append(("case1_measured", vm))
+        for label, v in blocks:
+            yv = v["y"].values
+            for name, p in val_predictions(v).items():
+                report_rows.append(dict(
+                    case=label, model=name, n=len(v),
+                    pearson_r2=round(pearson_r2(yv, p), 4),
+                    mae=round(float(np.mean(np.abs(yv - p))), 3)))
 
         # финальные модели кейса: дообучение на train + val этого кейса
         X_all = subset[feats]
