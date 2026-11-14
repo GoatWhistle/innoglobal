@@ -21,3 +21,6 @@
 package-lock.json -diff linguist-generated
 uv.lock -diff linguist-generated
 **/schema.gen.ts -diff linguist-generated
+*.duckdb binary
+*.joblib binary
+*.gz binary

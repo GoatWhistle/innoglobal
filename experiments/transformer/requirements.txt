@@ -1,0 +1,9 @@
+# ВНИМАНИЕ: uvx --with-requirements игнорирует index-строки ниже — передавай
+# --extra-index-url https://download.pytorch.org/whl/cpu в CLI uvx.
+# Пин +cpu гарантирует CPU-сборку: на PyPI такой версии нет, резолв с CUDA невозможен.
+--index-url https://download.pytorch.org/whl/cpu
+--extra-index-url https://pypi.org/simple
+torch==2.15.0+cpu
+pandas
+numpy
+scikit-learn

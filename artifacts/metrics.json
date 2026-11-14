@@ -1,0 +1,128 @@
+{
+  "report": [
+    {
+      "case": "case1",
+      "model": "b1_nominal_minus_rate",
+      "n": 55,
+      "pearson_r2": 0.0,
+      "mae": 1.319
+    },
+    {
+      "case": "case1",
+      "model": "b2_prev_smoothed",
+      "n": 55,
+      "pearson_r2": 0.014,
+      "mae": 0.476
+    },
+    {
+      "case": "case1",
+      "model": "catboost",
+      "n": 55,
+      "pearson_r2": 0.2317,
+      "mae": 0.341
+    },
+    {
+      "case": "case1",
+      "model": "lgbm",
+      "n": 55,
+      "pearson_r2": 0.2122,
+      "mae": 0.391
+    },
+    {
+      "case": "case1",
+      "model": "xgb",
+      "n": 55,
+      "pearson_r2": 0.0643,
+      "mae": 0.488
+    },
+    {
+      "case": "case1",
+      "model": "aft",
+      "n": 55,
+      "pearson_r2": 0.341,
+      "mae": 0.436
+    },
+    {
+      "case": "case1",
+      "model": "ensemble",
+      "n": 55,
+      "pearson_r2": 0.2881,
+      "mae": 0.342
+    },
+    {
+      "case": "case1",
+      "model": "ens_blend",
+      "n": 55,
+      "pearson_r2": 0.5011,
+      "mae": 0.292
+    },
+    {
+      "case": "case1",
+      "model": "catboost_smooth5",
+      "n": 55,
+      "pearson_r2": 0.2133,
+      "mae": 0.349
+    },
+    {
+      "case": "case1",
+      "model": "ensemble_smooth5",
+      "n": 55,
+      "pearson_r2": 0.2754,
+      "mae": 0.345
+    },
+    {
+      "case": "case1",
+      "model": "ens_blend_smooth5",
+      "n": 55,
+      "pearson_r2": 0.2873,
+      "mae": 0.332
+    },
+    {
+      "case": "case2",
+      "model": "b1_nominal_minus_rate",
+      "n": 525,
+      "pearson_r2": 0.0,
+      "mae": 1.028
+    },
+    {
+      "case": "case2",
+      "model": "b2_prev_smoothed",
+      "n": 525,
+      "pearson_r2": 0.0,
+      "mae": 1.18
+    },
+    {
+      "case": "case2",
+      "model": "lgbm",
+      "n": 525,
+      "pearson_r2": 0.1934,
+      "mae": 0.932
+    },
+    {
+      "case": "case2",
+      "model": "ensemble",
+      "n": 525,
+      "pearson_r2": 0.1934,
+      "mae": 0.932
+    },
+    {
+      "case": "case2",
+      "model": "ensemble_smooth5",
+      "n": 525,
+      "pearson_r2": 0.169,
+      "mae": 0.938
+    }
+  ],
+  "params": {
+    "case1": {
+      "catboost": {},
+      "lgbm": {},
+      "xgb": {}
+    },
+    "case2": {
+      "catboost": {},
+      "lgbm": {},
+      "xgb": {}
+    }
+  }
+}

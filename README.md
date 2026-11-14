@@ -241,3 +241,10 @@ cd frontend && npm ci --silent && npm run dev
   <br>
   <sub>Команда {{TEAM}}, {{HACKATHON}}, {{YEAR}}.</sub>
 </p>
+
+## Данные и прогноз деградации
+
+Ветка ML включена в репозиторий: исходные CSV в `data/`, база в
+`warehouse/pipetwin.duckdb`, готовый прогноз в `result.csv`, отчёт в `report.html`
+и графики в `charts.html`. Инструкции конвейера: [README-ML.md](README-ML.md).
+Дизайн-каталог пока использует синтетический пример; подключение данных к UI ещё не выполнено.

@@ -45,3 +45,4 @@ models/
 *.pt
 *.gguf
 var/
+catboost_info/
