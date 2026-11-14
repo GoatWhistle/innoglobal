@@ -11,71 +11,85 @@
       "case": "case1",
       "model": "b2_prev_smoothed",
       "n": 55,
-      "pearson_r2": 0.014,
-      "mae": 0.476
+      "pearson_r2": 0.0754,
+      "mae": 0.495
     },
     {
       "case": "case1",
       "model": "catboost",
       "n": 55,
-      "pearson_r2": 0.2317,
-      "mae": 0.341
+      "pearson_r2": 0.3273,
+      "mae": 0.325
     },
     {
       "case": "case1",
       "model": "lgbm",
       "n": 55,
-      "pearson_r2": 0.2122,
-      "mae": 0.391
+      "pearson_r2": 0.2748,
+      "mae": 0.394
     },
     {
       "case": "case1",
       "model": "xgb",
       "n": 55,
-      "pearson_r2": 0.0643,
-      "mae": 0.488
+      "pearson_r2": 0.0709,
+      "mae": 0.468
     },
     {
       "case": "case1",
       "model": "aft",
       "n": 55,
-      "pearson_r2": 0.341,
-      "mae": 0.436
+      "pearson_r2": 0.388,
+      "mae": 0.427
     },
     {
       "case": "case1",
       "model": "ensemble",
       "n": 55,
-      "pearson_r2": 0.2881,
-      "mae": 0.342
+      "pearson_r2": 0.3384,
+      "mae": 0.331
     },
     {
       "case": "case1",
       "model": "ens_blend",
       "n": 55,
-      "pearson_r2": 0.5011,
-      "mae": 0.292
+      "pearson_r2": 0.5365,
+      "mae": 0.283
+    },
+    {
+      "case": "case1",
+      "model": "aligned_stats",
+      "n": 55,
+      "pearson_r2": 0.3392,
+      "mae": 0.467
+    },
+    {
+      "case": "case1",
+      "model": "ens_blend+stats",
+      "n": 55,
+      "pearson_r2": 0.4976,
+      "mae": 0.297
     },
     {
       "case": "case1",
       "model": "catboost_smooth5",
       "n": 55,
-      "pearson_r2": 0.2133,
-      "mae": 0.349
+      "pearson_r2": 0.189,
+      "mae": 0.352
     },
     {
       "case": "case1",
       "model": "ensemble_smooth5",
       "n": 55,
-      "pearson_r2": 0.2754,
-      "mae": 0.345
+      "pearson_r2": 0.2511,
+      "mae": 0.351
     },
     {
       "case": "case1",
       "model": "ens_blend_smooth5",
       "n": 55,
-      "pearson_r2": 0.2873,
-      "mae": 0.332
+      "pearson_r2": 0.2708,
+      "mae": 0.336
     },
     {
       "case": "case2",
