@@ -21,6 +21,8 @@ export interface MapPaint {
   readonly labels: MapLabels
 }
 
+const END_LABEL_SPAN = 0.01
+
 const STYLES: readonly (readonly [string, number])[] = [
   ["--text-secondary", 1.5],
   ["--text-primary", 2.5],
@@ -69,6 +71,7 @@ function paintEnd(frame: Frame, point: Point, name: string | undefined, side: nu
   ctx.strokeStyle = token(frame, "--text-primary")
   ctx.stroke()
   const label = name ?? ""
+  if (!label) return { left: x - 6, right: x + 6, top: y - 6, bottom: y + 6 }
   const width = ctx.measureText(label).width
   ctx.textAlign = side < 0 ? "right" : "left"
   ctx.fillStyle = token(frame, "--text-primary")
@@ -83,7 +86,7 @@ function paintEnds(frame: Frame, paint: MapPaint): Rect[] {
   const first = line?.projected[0]
   const last = line?.projected.at(-1)
   if (!line || !first || !last) return []
-  const names = line.direction.split(" - ")
+  const names = frame.view.width < END_LABEL_SPAN ? line.direction.split(" - ") : []
   frame.ctx.font = font(frame, 12, 600)
   frame.ctx.textBaseline = "middle"
   const leftFirst = first[0] <= last[0]

@@ -58,6 +58,39 @@ def inside(coords: list) -> bool:
     return any(RUSSIA[0] <= wrap(x) <= RUSSIA[2] and RUSSIA[1] <= y <= RUSSIA[3] for x, y in coords)
 
 
+def contains(ring: list, x: float, y: float) -> bool:
+    inside_ring = False
+    j = len(ring) - 1
+    for i in range(len(ring)):
+        xi, yi = ring[i]
+        xj, yj = ring[j]
+        if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / (yj - yi) + xi:
+            inside_ring = not inside_ring
+        j = i
+    return inside_ring
+
+
+class Russia:
+    def __init__(self, rings: list) -> None:
+        self.rings = [(r, min(p[0] for p in r), max(p[0] for p in r), min(p[1] for p in r), max(p[1] for p in r)) for r in rings]
+
+    def has(self, x: float, y: float) -> bool:
+        x = wrap(x)
+        return any(a <= x <= b and c <= y <= d and contains(r, x, y) for r, a, b, c, d in self.rings)
+
+    def runs(self, coords: list) -> list:
+        result, current = [], []
+        for x, y in coords:
+            if self.has(x, y):
+                current.append([x, y])
+            elif current:
+                result.append(current)
+                current = []
+        if current:
+            result.append(current)
+        return [r for r in result if len(r) >= 2]
+
+
 def load(name: str) -> list:
     return json.loads((SOURCE / name).read_text(encoding="utf-8"))["features"]
 
@@ -68,15 +101,18 @@ def country() -> dict:
         p = f["properties"]
         if p.get("adm0_a3") != "RUS":
             continue
-        rings = [r for r in (line(ring, 0.07, 2) for ring in lines_of(f["geometry"])) if len(r) >= 4]
+        rings = [r for r in (line(ring, 0.03, 2) for ring in lines_of(f["geometry"])) if len(r) >= 4]
         regions.append({"n": p.get("name_ru") or p.get("name"), "c": [round(wrap(p["longitude"]), 2), round(p["latitude"], 2)], "p": rings})
+    russia = Russia([ring for region in regions for ring in region["p"]])
     rivers = []
     for f in load("ne_10m_rivers_lake_centerlines.geojson"):
         if (f["properties"].get("scalerank") or 99) > 7:
             continue
         for part in lines_of(f["geometry"]):
-            if inside(part):
-                pts = line(part, 0.03, 2)
+            if not inside(part):
+                continue
+            for run in russia.runs(part):
+                pts = line(run, 0.02, 2)
                 if len(pts) >= 2:
                     rivers.append(pts)
     lakes = []
@@ -84,8 +120,10 @@ def country() -> dict:
         if (f["properties"].get("scalerank") or 99) > 5:
             continue
         for ring in lines_of(f["geometry"]):
-            if inside(ring):
-                pts = line(ring, 0.05, 2)
+            cx = sum(c[0] for c in ring) / len(ring)
+            cy = sum(c[1] for c in ring) / len(ring)
+            if inside(ring) and russia.has(cx, cy):
+                pts = line(ring, 0.03, 2)
                 if len(pts) >= 4:
                     lakes.append(pts)
     cities = []
