@@ -101,4 +101,6 @@ Branch feat/redesign-oil, HEAD dbb9a47; uncommitted. Evidence work/audits/main-3
 Latest state supersedes branch/metric notes above: frontend saved as 4035b31; dev base 8bb2210.
 Merge uses verified original common tree f3d7a42 despite rewritten history. ML files preserved from dev;
 API predictors now dens_quant_cal / ens_prior_cal. Frontend verify 375 and backend 128 tests pass.
-Next working branch: feat/frontend-refinement. Details and initial failed check: work/dev-integration.md.
+Merge 3c1d9f5 published to origin/dev; original branch 4035b31 also pushed. Compose rebuilt,
+ready=true at localhost:18080; browser cut-selection scenario passes against new API.
+Working branch for next changes: feat/frontend-refinement from dev. See work/dev-integration.md.

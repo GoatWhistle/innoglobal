@@ -33,6 +33,7 @@ for (const theme of ["light", "dark"]) {
 
 test("existing cut controls, baseline and unroll picking share the selected segment", async ({
   page,
+  request,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" })
   await page.goto("/?pipe=1250022871&segment=130")
@@ -45,7 +46,14 @@ test("existing cut controls, baseline and unroll picking share the selected segm
   await page.getByRole("button", { name: pipeCopy.restoration.go, exact: true }).click()
   await expect(page).toHaveURL(/segment=271/)
   await expect(scene).toHaveAttribute("data-mode", "section")
-  await expect(page.getByTestId("forecast-value")).toContainText("5,16")
+  const response = await request.get("/api/v1/pipes/1250022871/segments/271")
+  expect(response.ok()).toBeTruthy()
+  const detail = await response.json()
+  const expected = new Intl.NumberFormat("ru-RU", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(detail.segment.forecast_mm)
+  await expect(page.getByTestId("forecast-value")).toContainText(expected)
   await page.getByRole("button", { name: new RegExp(`^${copy.baseline}`) }).click()
   await page.getByRole("option", { name: /2018/ }).click()
   await expect(page.getByTestId("segment-facts")).toContainText("2018")
