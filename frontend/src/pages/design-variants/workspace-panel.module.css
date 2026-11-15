@@ -88,6 +88,14 @@
   padding-inline: var(--space-12);
 }
 
+.queueTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
 .queue {
   composes: plainList from "../../shared/styles/compose.module.css";
   display: grid;

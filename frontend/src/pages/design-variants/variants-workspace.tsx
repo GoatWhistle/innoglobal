@@ -93,7 +93,7 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
     <div className={styles.page}>
       {state.invalid ? <Banner tone="warning" title={t("variants:invalid")} /> : null}
       <PageBar
-        label={t("common:nav.label")}
+        label={t("common:nav.breadcrumbs")}
         crumbs={[{ label: t("variants:workspace.fleet"), to: "/" }]}
         title={pipe.passport.direction}
         meta={t("variants:workspace.pipeLine", {

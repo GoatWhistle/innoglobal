@@ -28,14 +28,20 @@ export function MaterialPipe({
   phase.current = onPhase
   const [failed, setFailed] = useState(false)
   useEffect(() => {
-    if (!host.current) return
+    const element = host.current
+    if (!element) return
     try {
-      const scene = createPipe(host.current, pipe.passport.direction, (value) =>
-        phase.current(value),
-      )
+      const scene = createPipe(element, pipe.passport.direction, (value) => phase.current(value))
       engine.current = scene
       scene.corrosionMap(profile.rows, pipe.passport.length_m)
+      const canvas = element.querySelector("canvas")
+      const lost = () => {
+        element.dataset.renderer = "fallback"
+        setFailed(true)
+      }
+      canvas?.addEventListener("webglcontextlost", lost)
       return () => {
+        canvas?.removeEventListener("webglcontextlost", lost)
         scene.dispose()
         engine.current = null
       }

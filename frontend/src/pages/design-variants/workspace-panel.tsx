@@ -3,7 +3,7 @@ import { useState } from "react"
 import type { PipeSummary, Profile, SegmentRow } from "@/entities/pipe"
 import { useThickness } from "@/entities/pipe"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { Button, Card, ScrollArea, Segmented } from "@/shared/ui"
+import { Button, ButtonAnchor, Card, ScrollArea, Segmented } from "@/shared/ui"
 import { SegmentPicker } from "./segment-picker"
 import styles from "./workspace-panel.module.css"
 
@@ -111,15 +111,24 @@ export function WorkspacePanel(props: WorkspacePanelProps) {
         />
         {tab === "queue" ? (
           <>
-            <Segmented
-              label={t("variants:order")}
-              value={order}
-              onChange={setOrder}
-              options={[
-                { value: "rank", label: t("variants:byPriority") },
-                { value: "distance", label: t("variants:byDistance") },
-              ]}
-            />
+            <div className={styles.queueTools}>
+              <Segmented
+                label={t("variants:order")}
+                value={order}
+                onChange={setOrder}
+                options={[
+                  { value: "rank", label: t("variants:byPriority") },
+                  { value: "distance", label: t("variants:byDistance") },
+                ]}
+              />
+              <ButtonAnchor
+                variant="quiet"
+                icon="download"
+                href={`/api/v1/pipes/${pipe.pipe_id}/priorities.csv`}
+              >
+                {t("variants:exportPriorities")}
+              </ButtonAnchor>
+            </div>
             <ScrollArea className={styles.queueScroll}>
               <ul className={styles.queue}>
                 {queue.map((item) => (

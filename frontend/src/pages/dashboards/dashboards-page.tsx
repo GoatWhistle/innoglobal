@@ -71,7 +71,7 @@ function Editor({ pipe, profile }: { readonly pipe: PipeSummary; readonly profil
   return (
     <div className={styles.page}>
       <PageBar
-        label={t("common:nav.label")}
+        label={t("common:nav.breadcrumbs")}
         crumbs={[
           { label: t("variants:workspace.fleet"), to: "/" },
           { label: pipe.passport.direction, to: `/?${editor.back}` },

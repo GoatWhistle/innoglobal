@@ -1,5 +1,5 @@
-import AxeBuilder from "@axe-core/playwright"
 import { expect, type Page, test } from "@playwright/test"
+import { auditViolations } from "./axe-audit"
 
 const ROUTES = ["/", "/data", "/model", "/missing-page"]
 const THEMES = ["light", "dark"] as const
@@ -19,13 +19,7 @@ async function audit(page: Page, route: string): Promise<void> {
   await page.goto(route)
   await expect(page.locator("#main h1")).toBeVisible()
   await settle(page)
-  const result = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze()
-  const violations = result.violations.map((violation) => ({
-    id: violation.id,
-    impact: violation.impact,
-    targets: violation.nodes.slice(0, 3).map((node) => node.target.join(" ")),
-  }))
-  expect(violations, route).toEqual([])
+  expect(await auditViolations(page, WCAG_TAGS), route).toEqual([])
 }
 
 for (const theme of THEMES) {
