@@ -46,9 +46,13 @@ export function MaterialPipe({
   }, [pipe, profile])
   useEffect(() => {
     const row = profile.rows.find((r) => r.segment_id === selected)
-    if (inspecting && row)
-      engine.current?.inspect((row.start_m + row.end_m) / 2 / pipe.passport.length_m)
-    else engine.current?.reset()
+    const fraction = row ? (row.start_m + row.end_m) / 2 / pipe.passport.length_m : null
+    if (inspecting && fraction !== null) {
+      engine.current?.inspect(fraction)
+      return
+    }
+    engine.current?.reset()
+    engine.current?.mark(fraction)
   }, [selected, inspecting, profile, pipe.passport.length_m])
   const controls = (
     <div className={styles.controls} data-inline={Boolean(controlsHost)}>

@@ -1,10 +1,14 @@
 import { useEffect, useRef } from "react"
 import type { Profile } from "@/entities/pipe"
 import { useThickness } from "@/entities/pipe"
-import { useTranslation } from "@/shared/i18n"
+import { useFormatters, useTranslation } from "@/shared/i18n"
 import { useTheme } from "@/shared/theme"
 import { Card } from "@/shared/ui"
 import styles from "./unroll-grid.module.css"
+
+const GUTTER = 64
+const ROW = 24
+const STEPS = [0, 1, 2, 3, 4, 5, 6, 7] as const
 export function UnrollGrid({
   profile,
   selected,
@@ -16,6 +20,7 @@ export function UnrollGrid({
 }) {
   const { t } = useTranslation(),
     thickness = useThickness(),
+    format = useFormatters(),
     { theme } = useTheme()
   const canvas = useRef<HTMLCanvasElement>(null)
   const columns = useRef(50)
@@ -31,7 +36,8 @@ export function UnrollGrid({
     const draw = () => {
       const width = element.clientWidth
       columns.current = width < 480 ? 20 : 50
-      const height = Math.ceil(profile.rows.length / columns.current) * 24
+      const rows = Math.ceil(profile.rows.length / columns.current)
+      const height = rows * ROW
       const ratio = window.devicePixelRatio
       element.width = width * ratio
       element.height = height * ratio
@@ -40,7 +46,19 @@ export function UnrollGrid({
       if (!ctx) return
       ctx.scale(ratio, ratio)
       const tokens = getComputedStyle(element),
-        cell = width / columns.current
+        cell = (width - GUTTER) / columns.current
+      ctx.fillStyle = tokens.getPropertyValue("--text-muted")
+      ctx.font = `11px ${tokens.getPropertyValue("--font-sans")}`
+      ctx.textBaseline = "middle"
+      for (let line = 0; line < rows; line++) {
+        const first = profile.rows[line * columns.current]
+        if (first)
+          ctx.fillText(
+            t("pipe:unit.m", { value: format.number(first.start_m, 0) }),
+            0,
+            line * ROW + ROW / 2,
+          )
+      }
       profile.rows.forEach((item, index) => {
         const level = Math.max(
           0,
@@ -53,8 +71,8 @@ export function UnrollGrid({
             ),
           ),
         )
-        const x = (index % columns.current) * cell,
-          y = Math.floor(index / columns.current) * 24
+        const x = GUTTER + (index % columns.current) * cell,
+          y = Math.floor(index / columns.current) * ROW
         ctx.fillStyle = tokens.getPropertyValue(`--wall-${level}`)
         ctx.fillRect(x + 2, y + 2, cell - 4, 20)
         if (item.segment_id === selected) {
@@ -68,7 +86,7 @@ export function UnrollGrid({
     observer.observe(element)
     draw()
     return () => observer.disconnect()
-  }, [profile, selected, min, theme])
+  }, [profile, selected, min, theme, t, format])
   return (
     <section className={styles.surface}>
       <header>
@@ -77,6 +95,15 @@ export function UnrollGrid({
         </Card>
         <span>{t("variants:workspace.cell")}</span>
       </header>
+      <div className={styles.legend} aria-hidden="true">
+        <span>{t("pipe:restoration.nearNominal")}</span>
+        <span className={styles.scale}>
+          {STEPS.map((step) => (
+            <span key={step} data-step={step} />
+          ))}
+        </span>
+        <span>{t("pipe:restoration.thinner")}</span>
+      </div>
       <canvas
         ref={canvas}
         className={styles.grid}
@@ -91,8 +118,10 @@ export function UnrollGrid({
         onPointerDown={(event) => {
           const box = event.currentTarget.getBoundingClientRect()
           const index =
-            Math.floor((event.clientY - box.top) / 24) * columns.current +
-            Math.floor((event.clientX - box.left) / (box.width / columns.current))
+            Math.floor((event.clientY - box.top) / ROW) * columns.current +
+            Math.floor(
+              (event.clientX - box.left - GUTTER) / ((box.width - GUTTER) / columns.current),
+            )
           const item = profile.rows[index]
           if (item) onSelect(item.segment_id)
         }}

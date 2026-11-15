@@ -132,6 +132,11 @@ export function createPipe(host, name, onPhase = () => {}, options = {}) {
       clearInspection()
       group.rotation.set(0, 0, 0)
     },
+    mark(fraction) {
+      if (state.inspection || !marker) return
+      marker.visible = fraction !== null
+      if (fraction !== null) marker.position.x = -4.4 + Math.max(0, Math.min(1, fraction)) * 8.8
+    },
     renderer,
     scene,
     camera,

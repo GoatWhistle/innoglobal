@@ -47,7 +47,6 @@
   "queuePosition": "{{current}} / {{count}}",
   "outsideQueue": "Вне очереди",
   "startQueue": "Начать осмотр",
-  "export": "Скачать result.csv",
   "names": {
     "inspection": "Осмотр участков"
   },
@@ -103,17 +102,12 @@
   "queueTitle": "Очередь проверки ({{count}})",
   "workspace": {
     "fleet": "Трубопроводы",
-    "charts": "Графики",
     "edit": "Номер участка",
-    "enter": "Enter / перейти",
-    "escape": "Esc / отменить",
     "invalid": "Введите целый номер от 0 до {{max}}",
     "minimum": "Мин. стенка",
     "inspect": "Осмотреть участок",
     "return": "Вернуться к трубе",
     "illustration": "Визуализация дефекта. Утечка не подтверждена.",
-    "flow": "Поток через дефект",
-    "metrics": "Метрики",
     "moveChat": "Переместить чат",
     "resizeChat": "Ширина чата",
     "reset": "Исходный масштаб",
@@ -123,7 +117,6 @@
     "surface": "Толщина стенки",
     "cell": "1 ячейка / 10 м",
     "map": "Карта трубопроводов",
-    "hideMetrics": "Скрыть метрики",
     "minimizeChat": "Свернуть чат",
     "mapView": "Карта",
     "pipeLine": "Труба {{id}}, {{length}} км",
@@ -144,7 +137,12 @@
     "mapField": "Месторождение",
     "mapSelected": "Выбранная труба",
     "mapCredit": "Данные карты: © участники OpenStreetMap, ODbL; Natural Earth",
-    "nominal": "По паспорту"
+    "nominal": "По паспорту",
+    "pickHint": "Номер от 0 до {{max}}, Enter чтобы перейти",
+    "pickPrompt": "Выберите участок: введите номер, нажмите на трубу или выберите строку из очереди проверки.",
+    "askAssistant": "Спросить помощника",
+    "csv": "Скачать CSV",
+    "allQueue": "Вся очередь ({{count}})"
   },
   "dash": {
     "title": "Дашборды",

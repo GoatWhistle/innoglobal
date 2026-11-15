@@ -4,7 +4,8 @@ import { fileURLToPath, pathToFileURL } from "node:url"
 import { readTokenSources, TOKEN_FILES, type TokenSource } from "./tokenSources.ts"
 
 export const FONT_PACKAGES = [
-  ["@fontsource-variable/onest", "index.css"],
+  ["@fontsource-variable/manrope", "index.css"],
+  ["@fontsource/ibm-plex-mono", "400.css"],
   ["@fontsource-variable/raleway", "wght-italic.css"],
 ] as const
 

@@ -15,6 +15,45 @@
   color: var(--text-secondary);
   font-size: var(--font-size-label);
 }
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  margin-block-end: var(--space-16);
+}
+.scale {
+  display: flex;
+  gap: var(--space-2);
+}
+.scale span {
+  inline-size: var(--space-20);
+  block-size: var(--space-12);
+  border-radius: var(--radius-sm);
+}
+.scale [data-step="0"] {
+  background-color: var(--wall-0);
+}
+.scale [data-step="1"] {
+  background-color: var(--wall-1);
+}
+.scale [data-step="2"] {
+  background-color: var(--wall-2);
+}
+.scale [data-step="3"] {
+  background-color: var(--wall-3);
+}
+.scale [data-step="4"] {
+  background-color: var(--wall-4);
+}
+.scale [data-step="5"] {
+  background-color: var(--wall-5);
+}
+.scale [data-step="6"] {
+  background-color: var(--wall-6);
+}
+.scale [data-step="7"] {
+  background-color: var(--wall-7);
+}
 .grid {
   display: block;
   width: 100%;

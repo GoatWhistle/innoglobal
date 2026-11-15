@@ -47,17 +47,9 @@
   gap: var(--space-24);
   min-inline-size: 0;
 }
-.pipeName {
-  composes: truncate from "../../shared/ui/layout/text-role/text-role.module.css";
-  font-size: var(--font-size-body-sm);
-  font-weight: var(--weight-medium);
-}
 @media (width < 48rem) {
   .identity {
     flex: 1;
     gap: var(--space-12);
-  }
-  .pipeName {
-    min-inline-size: 0;
   }
 }

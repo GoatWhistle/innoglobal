@@ -47,7 +47,6 @@
   "queuePosition": "{{current}} / {{count}}",
   "outsideQueue": "Outside queue",
   "startQueue": "Start inspection",
-  "export": "Download result.csv",
   "names": {
     "inspection": "Area inspection"
   },
@@ -101,17 +100,12 @@
   "queueTitle": "Inspection queue ({{count}})",
   "workspace": {
     "fleet": "Pipelines",
-    "charts": "Charts",
     "edit": "Segment number",
-    "enter": "Enter: go",
-    "escape": "Esc: cancel",
     "invalid": "Enter a whole number from 0 to {{max}}",
     "minimum": "Min. wall",
     "inspect": "Inspect segment",
     "return": "Return to pipe",
     "illustration": "Defect illustration. No confirmed leak.",
-    "flow": "Flow through defect",
-    "metrics": "Metrics",
     "moveChat": "Move chat",
     "resizeChat": "Chat width",
     "reset": "Default zoom",
@@ -121,7 +115,6 @@
     "surface": "Wall thickness",
     "cell": "1 cell / 10 m",
     "map": "Pipeline map",
-    "hideMetrics": "Hide metrics",
     "minimizeChat": "Minimize chat",
     "mapView": "Map",
     "pipeLine": "Pipe {{id}}, {{length}} km",
@@ -142,7 +135,12 @@
     "mapField": "Field",
     "mapSelected": "Selected pipeline",
     "mapCredit": "Map data: © OpenStreetMap contributors, ODbL; Natural Earth",
-    "nominal": "Nominal wall"
+    "nominal": "Nominal wall",
+    "pickHint": "Number from 0 to {{max}}, press Enter to go",
+    "pickPrompt": "Pick a segment: type its number, click the pipe or choose a row from the inspection queue.",
+    "askAssistant": "Ask the assistant",
+    "csv": "Download CSV",
+    "allQueue": "Whole queue ({{count}})"
   },
   "dash": {
     "title": "Dashboards",

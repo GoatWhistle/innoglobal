@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react"
-import { useNavigate, useSearchParams } from "react-router"
-import type { AssistantAction, AssistantMessage } from "@/entities/assistant"
+import { useState } from "react"
+import { useSearchParams } from "react-router"
 import { type PipeList, type PipeSummary, type Profile, useWorkspaceState } from "@/entities/pipe"
-import { AssistantDock } from "@/features/engineering-assistant"
 import {
   PriorityQueue,
   SegmentFacts,
@@ -11,13 +9,18 @@ import {
   type WorkspaceProps,
 } from "@/features/engineering-variants"
 import { MaterialPipe } from "@/features/material-pipe"
-import { PipeScene } from "@/features/pipe-scene"
-import { useTranslation } from "@/shared/i18n"
-import { Banner, Button, Disclosure, Drawer, Icon, Segmented } from "@/shared/ui"
-import { SegmentEditor } from "./segment-editor"
-import { applyAssistantAction } from "./workspace-actions"
-import { WorkspaceHeader } from "./workspace-header"
-import { WorkspaceMetrics } from "./workspace-metrics"
+import { useFormatters, useTranslation } from "@/shared/i18n"
+import {
+  Banner,
+  ButtonAnchor,
+  ButtonLink,
+  Disclosure,
+  Drawer,
+  PageHeader,
+  ScrollArea,
+  Segmented,
+} from "@/shared/ui"
+import { WorkspacePanel } from "./workspace-panel"
 import styles from "./workspace-shell.module.css"
 
 export interface VariantsWorkspaceProps {
@@ -25,38 +28,27 @@ export interface VariantsWorkspaceProps {
   readonly pipes: PipeList
   readonly profile: Profile
 }
+
+type View = "route" | "unroll"
+
 export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
-  const navigate = useNavigate()
   const { t } = useTranslation()
+  const format = useFormatters()
   const [params, setParams] = useSearchParams()
   const state = useWorkspaceState(profile.rows, 0)
   const selected = params.has("segment") && !state.invalid ? state.segment : null
   const row = profile.rows.find((r) => r.segment_id === state.segment) ?? profile.rows[0]
-  const mode = params.get("view") === "unroll" ? "unroll" : "route"
-  const [editing, setEditing] = useState(false),
-    [inspecting, setInspecting] = useState(selected !== null)
-  const [chat, setChat] = useState(false)
-  const [side, setSide] = useState<"left" | "right">("right")
-  const [metrics, setMetrics] = useState(true),
-    [queue, setQueue] = useState(false),
-    [charts, setCharts] = useState(false)
+  const mode: View = params.get("view") === "unroll" ? "unroll" : "route"
+  const [inspecting, setInspecting] = useState(false)
+  const [queue, setQueue] = useState(false)
   const [order, setOrder] = useState<"rank" | "distance">("rank")
   const [date, setDate] = useState(pipe.last_observed_run ?? undefined)
-  const [source, setSource] = useState(false)
-  const [controlsHost, setControlsHost] = useState<HTMLDivElement | null>(null)
-  useEffect(() => {
-    if (!charts) return
-    const next = new URLSearchParams(params)
-    if (date) next.set("baseline", date)
-    navigate(`/dashboards?${next}`)
-  }, [charts, date, navigate, params])
   if (!row) return null
   const select = (id: number) => {
     state.select(id)
-    setInspecting(mode === "route")
-    setMetrics(true)
+    setInspecting(false)
   }
-  const setMode = (view: "route" | "unroll") => {
+  const setMode = (view: View) => {
     setParams(
       (p) => {
         const next = new URLSearchParams(p)
@@ -80,37 +72,24 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
     baselineDate: date,
     onComparisonDate: setDate,
   }
-  const act = (action: AssistantAction, message: AssistantMessage) =>
-    applyAssistantAction(action, message, {
-      profile,
-      pipe,
-      select,
-      setQueue,
-      setChat,
-      setDate,
-      setCharts,
-      setSource,
-      zoom: state.zoom,
-      setMode,
-    })
+  const context = new URLSearchParams({ pipe: String(pipe.pipe_id) })
+  if (selected !== null) context.set("segment", String(selected))
   return (
     <div className={styles.page}>
       {state.invalid ? <Banner tone="warning" title={t("variants:invalid")} /> : null}
-      <h1 className="visually-hidden">{pipe.passport.direction}</h1>
-      <div className={styles.workspace} data-editing={editing} data-side={side}>
-        {!chat && selected !== null && metrics ? (
-          <WorkspaceMetrics
-            pipe={pipe}
-            row={row}
-            inspecting={inspecting}
-            onInspect={() => setInspecting((v) => !v)}
-            onSelect={select}
-            onCharts={() => navigate(`/dashboards?${params}`)}
-            onHide={() => setMetrics(false)}
-          />
-        ) : null}
-        <main className={styles.stage}>
-          <nav className={styles.toolbar}>
+      <PageHeader
+        eyebrow={
+          <ButtonLink className={styles.back} variant="quiet" icon="arrow-left" to="/">
+            {t("variants:workspace.fleet")}
+          </ButtonLink>
+        }
+        title={pipe.passport.direction}
+        description={t("variants:workspace.pipeLine", {
+          id: pipe.pipe_id,
+          length: format.number(pipe.passport.length_m / 1000, 1),
+        })}
+        actions={
+          <div className={styles.headActions}>
             <Segmented
               label={t("pipe:scene.label")}
               value={mode}
@@ -120,87 +99,48 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
                 { value: "unroll", label: t("pipe:scene.unroll") },
               ]}
             />
-            <SegmentEditor
-              key={selected}
-              selected={selected}
-              max={pipe.segments - 1}
-              onSelect={select}
-              onActive={setEditing}
-            />
-            <div ref={setControlsHost} className={styles.sceneActions} />
-            <WorkspaceHeader
-              pipe={pipe}
-              queue={queue}
-              onQueue={() => {
-                setQueue(!queue)
-                setChat(false)
-              }}
-            />
-            {!metrics ? (
-              <Button variant="quiet" onClick={() => setMetrics(true)}>
-                {t("variants:workspace.metrics")}
-              </Button>
-            ) : null}
-          </nav>
-          <div className={styles.visual}>
-            {mode === "route" ? (
-              <MaterialPipe
-                pipe={pipe}
-                profile={profile}
-                selected={selected}
-                inspecting={inspecting}
-                controlsHost={controlsHost}
-                onPhase={() => undefined}
-              />
-            ) : (
-              <>
-                <div className={styles.unroll}>
-                  <PipeScene
-                    pipe={pipe}
-                    profile={profile}
-                    selected={row.segment_id}
-                    mode="unroll"
-                    instant
-                    onSelect={(id) => select(id)}
-                    fallback={workspace.section}
-                    readout={false}
-                    controls={false}
-                  />
-                </div>
-                <UnrollGrid profile={profile} selected={selected} onSelect={select} />
-              </>
-            )}
+            <ButtonLink variant="secondary" icon="message-circle" to={`/assistant?${context}`}>
+              {t("variants:workspace.askAssistant")}
+            </ButtonLink>
+            <ButtonLink variant="secondary" icon="chart" to={`/dashboards?${context}`}>
+              {t("assistant:dashboards")}
+            </ButtonLink>
+            <ButtonAnchor variant="secondary" href="/api/v1/exports/result.csv" icon="download">
+              {t("variants:workspace.csv")}
+            </ButtonAnchor>
           </div>
-        </main>
-        <AssistantDock
+        }
+      />
+      <div className={styles.workspace}>
+        <WorkspacePanel
           pipe={pipe}
           profile={profile}
           row={row}
-          hidden={!chat}
-          side={side}
-          onSide={setSide}
-          onClose={() => {
-            setChat(false)
+          selected={selected}
+          inspecting={inspecting}
+          onSelect={select}
+          onInspect={() => {
+            if (mode !== "route") setMode("route")
+            setInspecting((value) => !value)
           }}
-          onMinimize={() => {
-            setChat(false)
-          }}
-          onAction={act}
+          onQueue={() => setQueue(true)}
         />
+        <main className={styles.stage}>
+          {mode === "route" ? (
+            <MaterialPipe
+              pipe={pipe}
+              profile={profile}
+              selected={selected}
+              inspecting={inspecting}
+              onPhase={() => undefined}
+            />
+          ) : (
+            <ScrollArea className={styles.unroll}>
+              <UnrollGrid profile={profile} selected={selected} onSelect={select} />
+            </ScrollArea>
+          )}
+        </main>
       </div>
-      {!chat ? (
-        <Button
-          className={styles.chatLauncher}
-          aria-label={t("assistant:title")}
-          onClick={() => {
-            setChat(true)
-            setQueue(false)
-          }}
-        >
-          <Icon name="message-circle" size="control" />
-        </Button>
-      ) : null}
-
       <Disclosure title={t("variants:segmentEvidence")}>
         <SegmentFacts {...workspace} detailsOnly />
       </Disclosure>
@@ -222,9 +162,6 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
             setQueue(false)
           }}
         />
-      </Drawer>
-      <Drawer open={source} onClose={() => setSource(false)} title={t("variants:sources")}>
-        <SegmentFacts {...workspace} detailsOnly />
       </Drawer>
     </div>
   )

@@ -5,6 +5,7 @@ export interface MaterialEngine {
   corrosionMap(rows: readonly SegmentRow[], length: number): void
   cancelInspection(): void
   reset(): void
+  mark(fraction: number | null): void
   zoom(factor: number): void
   fit(): void
   nudge(): void
