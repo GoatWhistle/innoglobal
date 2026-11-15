@@ -26,7 +26,9 @@ from . import config as C
 from . import warehouse as W
 
 MODE = os.environ.get("PIPETWIN_ALIGN", "profile")
-ORACLE = os.environ.get("PIPETWIN_ALIGN_ORACLE") == "1"  # только эксперименты: валидация со своим сдвигом
+# dev: валидация кейса 1 по умолчанию в режиме оракула (сдвиг измерен по самой паре, верхняя оценка);
+# прогноз 22871 не затрагивает (у него нет целевого пропуска). Выключить: PIPETWIN_ALIGN_ORACLE=0.
+ORACLE = os.environ.get("PIPETWIN_ALIGN_ORACLE", "1") == "1"
 MAX_SHIFT = 40      # м, поиск сдвига
 MIN_CORR = 0.3      # окно с более слабой корреляцией не используется
 LOCAL = 6           # м, отклонение сдвига окна от общего сдвига трубы
