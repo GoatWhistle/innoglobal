@@ -1,12 +1,21 @@
 import { useState } from "react"
 import { useSearchParams } from "react-router"
-import { createDashboard } from "@/entities/dashboard"
 import { type PipeSummary, type Profile, usePipes, useProfile } from "@/entities/pipe"
-import { useDocumentTitle, useFormatters, useTranslation } from "@/shared/i18n"
-import { Banner, Button, ButtonLink, QueryView, Select, Skeleton, TextField } from "@/shared/ui"
+import { useDocumentTitle, useTranslation } from "@/shared/i18n"
+import {
+  Banner,
+  Button,
+  ButtonLink,
+  EmptyState,
+  PageHeader,
+  QueryView,
+  Skeleton,
+  TextField,
+} from "@/shared/ui"
 import { DashboardCanvas } from "./dashboard-canvas"
 import { DashboardLibrary } from "./dashboard-library"
 import { DashboardPanel } from "./dashboard-panel"
+import { DashboardContext, DashboardToolbar } from "./dashboard-toolbar"
 import styles from "./dashboards-page.module.css"
 import { useDashboardEditor } from "./use-dashboard-editor"
 export function DashboardsPage() {
@@ -44,8 +53,7 @@ function Loader({ pipe }: { readonly pipe: PipeSummary }) {
   )
 }
 function Editor({ pipe, profile }: { readonly pipe: PipeSummary; readonly profile: Profile }) {
-  const { t } = useTranslation(),
-    format = useFormatters()
+  const { t } = useTranslation()
   const editor = useDashboardEditor(pipe, profile)
   const { board, boards, store, workspace } = editor
   const [editing, setEditing] = useState(false),
@@ -54,44 +62,20 @@ function Editor({ pipe, profile }: { readonly pipe: PipeSummary; readonly profil
   if (!workspace) return null
   return (
     <div className={styles.page}>
-      <header className={styles.heading}>
-        <ButtonLink variant="quiet" icon="arrow-left" to={`/?${editor.back}`}>
-          {t("variants:workspace.return")}
-        </ButtonLink>
-        <h1>{t("variants:dash.title")}</h1>
-        <span>{pipe.passport.direction}</span>
-      </header>
-      <div className={styles.toolbar}>
-        <Select
-          label={t("variants:dash.title")}
-          value={board.id}
-          onChange={(id) => {
-            const next = boards.find((b) => b.id === id)
-            if (next) editor.switchBoard(next)
-          }}
-          options={(boards.length ? boards : [board]).map((b) => ({ value: b.id, label: b.title }))}
-        />
-        <Button
-          variant="secondary"
-          onClick={() => {
-            editor.save(createDashboard(pipe.pipe_id, t("variants:dash.new")))
-            setEditing(true)
-          }}
-        >
-          {t("variants:dash.new")}
-        </Button>
-        <Button onClick={() => setLibrary(!library)} aria-expanded={library}>
-          {t("variants:dash.add")}
-        </Button>
-        <Button variant="quiet" onClick={() => setEditing(!editing)}>
-          {t(editing ? "variants:dash.done" : "variants:dash.edit")}
-        </Button>
-        <Button variant="quiet" disabled={!store.canUndo} onClick={store.undo}>
-          {t("variants:dash.undo")}
-        </Button>
-      </div>
+      <ButtonLink variant="quiet" icon="arrow-left" to={`/?${editor.back}`}>
+        {t("variants:workspace.return")}
+      </ButtonLink>
+      <PageHeader title={t("variants:dash.title")} description={pipe.passport.direction} />
+      <DashboardToolbar
+        editor={editor}
+        pipeId={pipe.pipe_id}
+        editing={editing}
+        library={library}
+        onEditing={setEditing}
+        onLibrary={setLibrary}
+      />
       {editing ? (
-        <div className={styles.toolbar}>
+        <div className={styles.rename}>
           <TextField
             label={t("variants:dash.name")}
             value={board.title}
@@ -99,6 +83,7 @@ function Editor({ pipe, profile }: { readonly pipe: PipeSummary; readonly profil
           />
           <Button
             variant="quiet"
+            icon="trash"
             onClick={() => {
               if (confirm !== board.id) {
                 setConfirm(board.id)
@@ -114,40 +99,12 @@ function Editor({ pipe, profile }: { readonly pipe: PipeSummary; readonly profil
           </Button>
         </div>
       ) : null}
-      <div className={styles.context}>
-        <Select
-          label={t("variants:baseline")}
-          value={editor.date}
-          onChange={editor.setDate}
-          options={[
-            { value: "nominal", label: t("variants:nominalBase") },
-            ...profile.run_dates.map((d) => ({ value: d, label: format.date(d) })),
-          ]}
-        />
-        <span>{format.date(pipe.target_date)}</span>
-        <span>
-          {t("pipe:unit.range", {
-            from: format.integer(editor.context.from),
-            to: format.integer(editor.context.to),
-          })}
-        </span>
-        <span>{t("variants:dash.selection", { id: workspace.row.segment_id })}</span>
-        <Button variant="quiet" onClick={editor.focus}>
-          {t("variants:dash.focus")}
-        </Button>
-        <Button variant="quiet" onClick={editor.state.reset}>
-          {t("variants:dash.all")}
-        </Button>
-      </div>
-      {store.error ? (
-        <Banner tone="warning" title={t("variants:dash.error")}>
-          <Button onClick={store.blocked ? store.reset : store.retry}>
-            {t(store.blocked ? "variants:dash.reset" : "variants:dash.retry")}
-          </Button>
-        </Banner>
-      ) : (
-        <p className={styles.status}>{t("variants:dash.saved")}</p>
-      )}
+      <DashboardContext
+        editor={editor}
+        pipe={pipe}
+        profile={profile}
+        segment={workspace.row.segment_id}
+      />
       <div className={styles.workspace} data-panel={library || undefined}>
         <div className={styles.canvas}>
           {board.items.length ? (
@@ -159,9 +116,16 @@ function Editor({ pipe, profile }: { readonly pipe: PipeSummary; readonly profil
               onChange={editor.save}
             />
           ) : (
-            <Button variant="secondary" onClick={() => setLibrary(true)}>
-              {t("variants:dash.empty")}
-            </Button>
+            <EmptyState
+              icon="chart"
+              title={t("variants:dash.empty")}
+              description={t("variants:dash.emptyHint")}
+              action={
+                <Button icon="plus" onClick={() => setLibrary(true)}>
+                  {t("variants:dash.add")}
+                </Button>
+              }
+            />
           )}
         </div>
         <DashboardPanel open={library} onClose={() => setLibrary(false)}>

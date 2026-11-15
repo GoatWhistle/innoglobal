@@ -191,6 +191,11 @@
     "priorityScale": "Thickness scale: 0 to {{value}}. Queue follows the selected range.",
     "placed": "Placed on a dashboard",
     "librarySaved": "In library",
+    "board": "Dashboard",
+    "target": "Forecast date",
+    "range": "Range",
+    "segment": "Selected segment",
+    "emptyHint": "Open the library and pick a block: wall thickness, change from baseline or inspection queue.",
     "saveLibrary": "Save to library"
   }
 }
