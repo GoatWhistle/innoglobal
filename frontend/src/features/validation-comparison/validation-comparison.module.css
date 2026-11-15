@@ -1,37 +1,39 @@
 .comparison {
-  margin-block-start: var(--space-32);
-  padding-block-start: var(--space-24);
-  border-block-start: var(--hairline) solid var(--border-subtle);
+  grid-template-rows: auto 1fr;
+  min-inline-size: 0;
 }
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-24);
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-12);
+  min-inline-size: 0;
 }
 
 .summary {
   display: grid;
-  align-content: start;
-  gap: var(--space-16);
+  gap: var(--space-12);
   min-inline-size: 0;
-}
-
-.reading {
-  composes: note from "../../shared/ui/layout/text-role/text-role.module.css";
 }
 
 .switch {
   justify-self: start;
 }
 
+.stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .view {
+  display: grid;
+  align-items: center;
   min-inline-size: 0;
 }
 
-@media (min-width: 64rem) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: var(--space-32);
-  }
+.table {
+  max-block-size: 28rem;
+}
+
+.reading {
+  composes: note from "../../shared/ui/layout/text-role/text-role.module.css";
 }

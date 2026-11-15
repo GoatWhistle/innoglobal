@@ -1,17 +1,16 @@
 import { CASE_TITLE } from "@/entities/pipe"
-import { featureKey, type ModelValidation, modelKey } from "@/entities/reference"
+import { type ModelValidation, modelKey } from "@/entities/reference"
 import { ValidationComparison } from "@/features/validation-comparison"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { BarList, Card, Stat, StatGrid } from "@/shared/ui"
+import { Card, Stat, StatGrid } from "@/shared/ui"
+import { ModelImportance } from "./model-importance"
 import styles from "./model-page.module.css"
-import { ModelRanking } from "./model-ranking"
+import { ModelRanking, VISIBLE_LIMIT } from "./model-ranking"
 
 export interface CaseValidationProps {
   readonly model: ModelValidation
   readonly caseId: string
 }
-
-const IMPORTANCE_LIMIT = 10
 
 export function CaseValidation({ model, caseId }: CaseValidationProps) {
   const { t } = useTranslation()
@@ -23,10 +22,6 @@ export function CaseValidation({ model, caseId }: CaseValidationProps) {
   const comparison = model.comparisons.find((item) => item.case_id === caseId)
   const pair = model.pairs.find((item) => item.case_id === caseId)
   const selected = metrics.find((item) => item.is_selected)
-  const importance = model.importance
-    .filter((item) => item.case_id === caseId)
-    .slice(0, IMPORTANCE_LIMIT)
-  const top = Math.max(...importance.map((item) => item.share), 1e-9)
   const name = (id: string) => {
     const key = modelKey(id)
     return key === null ? <code>{id}</code> : t(key)
@@ -37,10 +32,11 @@ export function CaseValidation({ model, caseId }: CaseValidationProps) {
       id={caseId}
       appearance="ruled"
       className={styles.case}
-      actions={t("model:case.pipe", {
-        pipe: target.pipe_id,
-        date: format.date(target.target_date),
-      })}
+      actions={
+        <span className={styles.caseMeta}>
+          {t("model:case.pipe", { pipe: target.pipe_id, date: format.date(target.target_date) })}
+        </span>
+      }
       title={t(CASE_TITLE[target.mode])}
       description={
         pair === undefined
@@ -58,12 +54,8 @@ export function CaseValidation({ model, caseId }: CaseValidationProps) {
       }
     >
       {selected === undefined ? null : (
-        <StatGrid look="ruled">
-          <Stat
-            className={styles.selectedModel}
-            label={t("model:selected")}
-            value={name(selected.model)}
-          />
+        <StatGrid look="ruled" className={styles.figures}>
+          <Stat label={t("model:selected")} value={name(selected.model)} />
           <Stat
             label={t("model:r2")}
             value={format.number(selected.pearson_r2, 3)}
@@ -73,6 +65,7 @@ export function CaseValidation({ model, caseId }: CaseValidationProps) {
             label={t("model:mae")}
             value={format.number(selected.mae_mm, 3)}
             unit={t("pipe:unit.mmShort")}
+            hint={t("model:maeHint")}
           />
           <Stat
             label={t("model:segments")}
@@ -81,39 +74,21 @@ export function CaseValidation({ model, caseId }: CaseValidationProps) {
           />
         </StatGrid>
       )}
-      <div className={styles.columns}>
+      <div className={styles.row}>
         <Card
-          appearance="plain"
-          className={styles.block}
+          className={styles.panel}
           title={t("model:metricsTitle")}
-          description={t("model:metricsNote", { total: metrics.length })}
+          description={
+            metrics.length > VISIBLE_LIMIT
+              ? t("model:metricsNote", { total: metrics.length, shown: VISIBLE_LIMIT })
+              : t("model:metricsAll", { total: metrics.length })
+          }
         >
           <ModelRanking metrics={metrics} name={name} />
         </Card>
-        <Card
-          appearance="plain"
-          className={styles.block}
-          title={t("model:importanceTitle")}
-          description={t("model:importanceNote", { total: importance.length })}
-        >
-          <BarList
-            label={t("model:importanceTitle")}
-            items={importance.map((item) => {
-              const key = featureKey(item.feature)
-              return {
-                id: item.feature,
-                label: key === null ? <code>{item.feature}</code> : t(key),
-                share: item.share / top,
-                value: format.percent(item.share, 1),
-              }
-            })}
-          />
-          <p className={styles.note}>
-            {t(caseId === "case1" ? "model:importanceCatboost" : "model:importanceLgbm")}
-          </p>
-        </Card>
+        <ModelImportance model={model} caseId={caseId} />
+        {comparison === undefined ? null : <ValidationComparison comparison={comparison} />}
       </div>
-      {comparison === undefined ? null : <ValidationComparison comparison={comparison} />}
     </Card>
   )
 }
