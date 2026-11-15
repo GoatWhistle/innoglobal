@@ -1,27 +1,60 @@
 .page {
   display: grid;
-  gap: var(--space-section);
+  gap: var(--space-24);
   min-inline-size: 0;
 }
 
-.grid {
+.stack {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-24);
+  gap: var(--space-32);
+  min-inline-size: 0;
 }
 
-.columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-24);
-  margin-block-start: var(--space-24);
+.verdict {
+  margin: 0;
+  padding: var(--space-12) var(--space-16);
+  border: var(--hairline) solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background-color: var(--surface-raised);
+  font-size: var(--font-size-body);
+  font-variant-numeric: var(--font-numeric);
 }
 
-.block {
+.case {
+  gap: var(--space-24);
+  padding-block-end: 0;
+  scroll-margin-block-start: var(--space-24);
+}
+
+.caseMeta {
+  color: var(--text-secondary);
+  font-variant-numeric: var(--font-numeric);
+}
+
+.figures {
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+}
+
+.row {
   display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr);
+  align-items: stretch;
+  gap: var(--space-16);
+}
+
+.panel {
+  grid-template-rows: auto 1fr;
+  align-content: stretch;
+  min-inline-size: 0;
+}
+
+.bars {
   align-content: start;
-  gap: var(--space-12);
-  min-inline-size: 0;
+  gap: var(--space-8);
+}
+
+.modelCell {
+  font-weight: var(--weight-regular);
 }
 
 .modelName {
@@ -34,38 +67,24 @@
   composes: note from "../../shared/ui/layout/text-role/text-role.module.css";
 }
 
-.prose {
-  max-inline-size: var(--prose-measure);
-  margin: 0;
+.notes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: stretch;
+  gap: var(--space-16);
+}
+
+.list {
+  composes: plainList from "../../shared/styles/compose.module.css";
+
+  display: grid;
+  align-content: start;
+  gap: var(--space-8);
 }
 
 .limits {
-  display: grid;
-  gap: var(--space-8);
-  max-inline-size: var(--prose-measure);
-  padding-inline-start: var(--space-16);
-  margin: 0;
-}
+  composes: list;
 
-@media (min-width: 64rem) {
-  .columns {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.case {
-  grid-column: 1 / -1;
-  scroll-margin-block-start: var(--space-24);
-}
-@media (min-width: 75rem) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 var(--space-32);
-  }
-}
-
-@media (width < 48rem) {
-  .selectedModel {
-    grid-column: 1 / -1;
-  }
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--space-24);
 }

@@ -7,6 +7,7 @@ import {
   EmptyState,
   NoValue,
   ScatterPlot,
+  ScrollArea,
   Segmented,
   Stat,
   StatGrid,
@@ -23,7 +24,6 @@ export function ValidationComparison({ comparison }: ValidationComparisonProps) 
   const format = useFormatters()
   return (
     <Card
-      appearance="plain"
       className={styles.comparison}
       title={t("model:comparison.title")}
       description={t("model:comparison.separate")}
@@ -37,7 +37,7 @@ export function ValidationComparison({ comparison }: ValidationComparisonProps) 
       ) : (
         <div className={styles.layout}>
           <div className={styles.summary}>
-            <StatGrid look="ruled">
+            <StatGrid look="ruled" className={styles.stats}>
               <Stat
                 label={t("model:comparison.samples")}
                 value={format.integer(comparison.points.length)}
@@ -60,7 +60,6 @@ export function ValidationComparison({ comparison }: ValidationComparisonProps) 
                 unit={t("pipe:unit.mmShort")}
               />
             </StatGrid>
-            <p className={styles.reading}>{t("model:comparison.reading")}</p>
             <div className={styles.switch}>
               <Segmented
                 label={t("model:comparison.view")}
@@ -86,28 +85,32 @@ export function ValidationComparison({ comparison }: ValidationComparisonProps) 
                 }))}
               />
             ) : (
-              <DataTable
-                label={t("model:comparison.table")}
-                head={
-                  <tr>
-                    <th scope="col">{t("model:comparison.pipe")}</th>
-                    <th scope="col">{t("model:comparison.segment")}</th>
-                    <th scope="col">{t("model:comparison.observed")}</th>
-                    <th scope="col">{t("model:comparison.forecast")}</th>
-                  </tr>
-                }
-              >
-                {comparison.points.map((point) => (
-                  <tr key={`${point.pipe_id}-${point.segment_id}`}>
-                    <th scope="row">{point.pipe_id}</th>
-                    <td>{point.segment_id}</td>
-                    <td>{format.number(point.observed_mm, 3)}</td>
-                    <td>{format.number(point.forecast_mm, 3)}</td>
-                  </tr>
-                ))}
-              </DataTable>
+              <ScrollArea className={styles.table}>
+                <DataTable
+                  density="compact"
+                  label={t("model:comparison.table")}
+                  head={
+                    <tr>
+                      <th scope="col">{t("model:comparison.pipe")}</th>
+                      <th scope="col">{t("model:comparison.segment")}</th>
+                      <th scope="col">{t("model:comparison.observed")}</th>
+                      <th scope="col">{t("model:comparison.forecast")}</th>
+                    </tr>
+                  }
+                >
+                  {comparison.points.map((point) => (
+                    <tr key={`${point.pipe_id}-${point.segment_id}`}>
+                      <th scope="row">{point.pipe_id}</th>
+                      <td>{point.segment_id}</td>
+                      <td>{format.number(point.observed_mm, 3)}</td>
+                      <td>{format.number(point.forecast_mm, 3)}</td>
+                    </tr>
+                  ))}
+                </DataTable>
+              </ScrollArea>
             )}
           </div>
+          <p className={styles.reading}>{t("model:comparison.reading")}</p>
         </div>
       )}
     </Card>

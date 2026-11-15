@@ -11,12 +11,11 @@
     "fromCommissioning": "Historical check: pipes {{pipes}}, from commissioning to {{end}}."
   },
   "selected": "Selected model",
-  "r2": "Squared Pearson correlation r²",
-  "r2Hint": "Not the coefficient of determination R²",
-  "mae": "Mean absolute error",
-  "maeMeta": "MAE {{value}} mm",
-  "segments": "Segments checked",
-  "segmentsHint": "Historical sections, not the hidden target inspection",
+  "r2": "Pearson r²",
+  "r2Hint": "Share of spread explained by a linear fit. Not R²",
+  "mae": "MAE",
+  "segments": "Segments, n",
+  "segmentsHint": "Historical 10 m sections, not the hidden inspection",
   "metricsTitle": "Ranking by r²",
   "importanceTitle": "Global feature importance",
   "importanceCatboost": "CatBoost importance normalised to sum to one. Not a local explanation of the ensemble forecast.",
@@ -25,7 +24,9 @@
   "badgeBaseline": "Baseline",
   "uncertainty": {
     "title": "Uncertainty",
-    "body": "Quantiles: {{quantiles}}. Separate quantile models; actual coverage is not calibrated. The interval does not guarantee thickness bounds."
+    "quantiles": "Quantiles {{quantiles}}, a separate model for each.",
+    "coverage": "Actual interval coverage is not calibrated.",
+    "bound": "The interval does not guarantee thickness bounds."
   },
   "limits": {
     "title": "Limits of use",
@@ -75,7 +76,7 @@
   },
   "comparison": {
     "title": "Historical forecast and observation",
-    "separate": "A separate saved run, not the selected model above. Metrics are recalculated from rounded saved pairs.",
+    "separate": "A separate saved run, not the selected model. Metrics are recalculated from rounded pairs.",
     "samples": "Verified pairs",
     "label": "Historical forecast versus observation, equal millimetre scales",
     "observed": "Observed, mm",
@@ -90,7 +91,16 @@
     "chart": "Chart",
     "tableTab": "Table"
   },
-  "metricsNote": "{{total}} models on the same historical segments. Top five, the selected model and baselines are shown.",
+  "metricsNote": "{{total}} models on the same segments. Top {{shown}}, the selected model and baselines.",
   "metricsRest": "Other models: {{total}}",
-  "importanceNote": "Top {{total}} features by importance share."
+  "importanceNote": "Top {{total}} features by importance share, each at least 1 %.",
+  "verdict": "Historical check of the selected models: {{cases}}.",
+  "verdictCase": "{{case}}, r² {{r2}} at MAE {{mae}} mm on {{n}} segments",
+  "maeHint": "Mean absolute error on the same segments",
+  "rank": {
+    "model": "Model",
+    "r2": "r²",
+    "mae": "MAE, mm"
+  },
+  "metricsAll": "{{total}} models on the same segments, all shown."
 }
