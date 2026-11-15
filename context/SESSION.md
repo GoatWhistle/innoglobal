@@ -105,12 +105,11 @@ work/frontend-prototype-import.md. API 8000, live UI 18089, Vite 5179.
 
 ## Defense deck (in progress)
 
-2026-11-15 user: «наша с тобой задача будет делать классную и хорошу презентацию»; structure of
-slides 1–10 plus final given in chat; «короче вся идея вокруг 3д труб»; «ключевая сущность это 3d
-модели ... все должно быть сверх пиздато». Team GoatWhistle. Branch feat/redesign-oil, uncommitted.
-Done: 11 slides in presentation/src/slides; product 3D engines bundled by `npm run pipe3d`
-(presentation/tools/pipe3d.mjs) into src/core/js/pipe3d.js; scene helper src/core/js/pipe-stage.js;
-3D on slides 1, 3, 4, 6, 7, 8, 11. Token export now ships Manrope and IBM Plex Mono
-(frontend/scripts/exportTokens.ts). docs/evidence.md metrics refreshed (case1 0.7475, case2 0.2003).
-Next: sourced numbers for slides 2–3 (research in scratchpad problem-facts.md), speech for 2–3,
-speech:sync, build:final, PDF; ask user: defense format, stand URL for QR, speaker names.
+2026-11-15 user: deck must be keynote-grade, «вся идея вокруг 3д труб», continuous 3D object between slides,
+team structure from chat (failures tour, cost, zoom to Russia, ILI/UT journey, odometer finding).
+13 slides in presentation/src/slides, speech synced 4:40/5:00, 0 errors. Core: pipe-actor.js (shared
+3D pipe with per-slide data-pipe poses and tours), pipe-journey.js (winding pipe, slides 5–7),
+pipe-parts.js, pipe-stage.js; product engine bundled by npm run pipe3d. Final QR: duppel.goatwhistle.ru,
+github.com/GoatWhistle/duppel. Branch feat/redesign-oil, uncommitted.
+Next: npm run final (PDF), live run-through on the projector, speaker names, check 11 914 and 92 % in
+the Minprirody report.
