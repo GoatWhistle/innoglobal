@@ -13,6 +13,7 @@ interface NavItem {
 
 const ITEMS: readonly NavItem[] = [
   { to: "/", label: "common:nav.pipes", end: true },
+  { to: "/assistant", label: "common:nav.assistant" },
   { to: "/dashboards", label: "assistant:dashboards" },
   { to: "/data", label: "common:nav.data" },
   { to: "/model", label: "common:nav.model" },

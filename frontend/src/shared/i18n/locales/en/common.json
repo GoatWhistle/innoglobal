@@ -49,6 +49,7 @@
     "label": "Main navigation",
     "pipes": "Pipelines",
     "data": "Data",
-    "model": "Model"
+    "model": "Model",
+    "assistant": "Assistant"
   }
 }

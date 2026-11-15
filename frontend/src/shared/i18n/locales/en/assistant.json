@@ -28,7 +28,9 @@
     "priority": "Explain priority",
     "compare": "Compare with latest inspection",
     "neighbors": "Compare with neighboring segments",
-    "available": "What data is available?"
+    "available": "What data is available?",
+    "thinnest": "Where is the wall thinnest along the pipe?",
+    "queue": "Which segments should be inspected first?"
   },
   "actions": {
     "select": "Go to segment {{segment}}",
@@ -56,5 +58,12 @@
   "hideScene": "Collapse scene",
   "showScene": "Show pipe",
   "welcome": "Explore the pipeline",
-  "welcomeDescription": "Ask about corrosion, compare segments or request a chart. The selected segment is already in context."
+  "welcomeDescription": "Ask about corrosion, compare segments or request a chart. The selected segment is already in context.",
+  "page": {
+    "newChat": "New conversation",
+    "followUps": "You can ask next",
+    "pipe": "Pipeline",
+    "description": "The assistant reads the wall thickness forecast, inspection runs and the inspection queue of the selected pipe. Every answer is grounded in server data.",
+    "pipeContext": "Whole pipe {{pipe}}, forecast for {{date}}"
+  }
 }

@@ -27,6 +27,10 @@ export const router = createBrowserRouter([
           "AssistantDashboardsPage",
         ),
       },
+      {
+        path: "assistant",
+        lazy: lazyPage(() => import("@/pages/assistant/assistant-page"), "AssistantPage"),
+      },
       { path: "design/variants/inspection", lazy: workspace },
       {
         path: "data",
