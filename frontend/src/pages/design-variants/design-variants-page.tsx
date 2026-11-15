@@ -49,7 +49,7 @@ export function DesignVariantsPage() {
   const [search] = useSearchParams()
   const pipes = usePipes()
   const requested = Number(search.get("pipe"))
-  useDocumentTitle(t("variants:names.inspection"))
+  useDocumentTitle(search.has("pipe") ? t("variants:names.inspection") : null)
   return (
     <QueryView query={pipes} label={t("variants:loading")} skeleton={<Skeleton shape="block" />}>
       {(data) => {

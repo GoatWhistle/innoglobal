@@ -32,5 +32,5 @@ export const REQUIRED_HEAD = [
   '<meta name="theme-color" content="%theme.dark%" media="(prefers-color-scheme: dark)" />',
   '<meta property="og:image" content="%meta.ogImage%" />',
   '<meta name="twitter:card" content="summary_large_image" />',
-  "<title>%meta.title%</title>",
+  "<title>%app.name%</title>",
 ] as const

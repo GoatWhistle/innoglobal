@@ -40,7 +40,7 @@ describe("LocaleProvider", () => {
     renderProbe()
     expect(screen.getByRole("button").textContent).toBe(ru.action.retry)
     expect(document.documentElement.lang).toBe("ru")
-    expect(document.title).toBe(`${ru.app.name} | ${ru.app.tagline}`)
+    expect(document.title).toBe(ru.app.name)
   })
 
   it("puts the page title into the tab title in the current language", async () => {

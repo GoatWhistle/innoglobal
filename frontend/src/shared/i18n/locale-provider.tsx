@@ -37,7 +37,7 @@ export function LocaleProvider({ children, instance = defaultInstance }: LocaleP
     document.documentElement.lang = locale
     if (instance.language !== locale) void instance.changeLanguage(locale)
     const t = instance.getFixedT(locale, NAMESPACES)
-    document.title = documentTitle(t("common:app.name"), t("common:app.tagline"), pageTitle)
+    document.title = documentTitle(t("common:app.name"), pageTitle)
   }, [instance, locale, pageTitle])
 
   const value = useMemo(() => ({ locale, setLocale, setPageTitle }), [locale, setLocale])

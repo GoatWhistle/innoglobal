@@ -8,7 +8,7 @@ const LOCALES = join(SOURCES, "shared/i18n/locales/en")
 const PLURAL_SUFFIX = /_(zero|one|two|few|many|other)$/
 const FULL_KEY = /["'`](\w+):([\w.]+)["'`]/g
 const KEY_PREFIX = /`(\w+):([\w.]*)\$\{/g
-const HTML_META_KEYS = new Set(["common:meta.description"])
+const HTML_META_KEYS = new Set(["common:meta.description", "common:app.tagline"])
 
 type Tree = { readonly [key: string]: unknown }
 
