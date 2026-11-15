@@ -22,14 +22,16 @@ Updated: 2026-11-15, MSK
 
 ## Current task
 
-2026-11-15 user: «короче продйись по всему ... там оч много ии слоп говна и многое не в дизайне нашем»;
-«делай так чтобы я видел результат»; «слей их в нашу ветку и короче работаем с этим».
-Branch feat/redesign-oil. Done and pushed: canvas growth fix, theme reveal, fleet card/pipe intro,
-text nav, list/map toggle, home tab "duppel", flange 404/crash pages, feat/frontend dashboards merged
-(/dashboards = custom editor, /dashboards/:id = assistant library). verify: 394 tests, 36 rules.
-Hot Vite http://localhost:5179 (API from Docker 18010); Compose frontend 18080 rebuilt after commits.
-Pitfall: Vite caches a truncated module if a file is rewritten in place; write via temp + rename.
-Next: continue UI pass over pipe workspace, dashboards, data and model pages.
+2026-11-15 user: desktop first, mobile later as a separate mobile-first pass; assistant must be a
+collapsible right column on the pipe page, not a page; agents allowed (about 10 min each).
+Branch feat/redesign-oil at f52163f, pushed. Done: offline OSM/Natural Earth map, pipe workspace
+(segment panel, full queue, docked assistant, unroll fill, graphite wall scale), dashboards, data and
+model pages via agents. Checks on merged tree: 36 rules, 400 tests, build.
+Hot Vite http://localhost:5179 (API Docker 18010); Compose frontend 18080 rebuilt.
+Pitfalls: worktree node_modules junctions must be deleted with PowerShell .Delete() before
+`git worktree remove`; Vite caches half-written files, restart on "does not provide an export".
+Another worker edits presentation/, data/processed, docs/evidence.md, frontend/scripts/exportTokens.ts
+in this tree; never stage those. Next: dashboards header too tall, marker callout, 3D polish.
 
 ## Historical limits
 
@@ -100,3 +102,15 @@ Current incomplete implementation and verification: work/pydantic-implementation
 
 Active servers, prototype import and QA: work/latest-frontend-dev.md,
 work/frontend-prototype-import.md. API 8000, live UI 18089, Vite 5179.
+
+## Defense deck (in progress)
+
+2026-11-15 user: «наша с тобой задача будет делать классную и хорошу презентацию»; structure of
+slides 1–10 plus final given in chat; «короче вся идея вокруг 3д труб»; «ключевая сущность это 3d
+модели ... все должно быть сверх пиздато». Team GoatWhistle. Branch feat/redesign-oil, uncommitted.
+Done: 11 slides in presentation/src/slides; product 3D engines bundled by `npm run pipe3d`
+(presentation/tools/pipe3d.mjs) into src/core/js/pipe3d.js; scene helper src/core/js/pipe-stage.js;
+3D on slides 1, 3, 4, 6, 7, 8, 11. Token export now ships Manrope and IBM Plex Mono
+(frontend/scripts/exportTokens.ts). docs/evidence.md metrics refreshed (case1 0.7475, case2 0.2003).
+Next: sourced numbers for slides 2–3 (research in scratchpad problem-facts.md), speech for 2–3,
+speech:sync, build:final, PDF; ask user: defense format, stand URL for QR, speaker names.
