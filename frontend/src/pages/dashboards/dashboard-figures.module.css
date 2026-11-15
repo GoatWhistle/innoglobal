@@ -1,0 +1,4 @@
+.figures {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-block-end: var(--space-24);
+}

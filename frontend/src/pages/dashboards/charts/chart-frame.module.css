@@ -1,0 +1,65 @@
+.frame {
+  display: grid;
+  grid-template-columns: var(--space-48) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  block-size: 100%;
+  min-block-size: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-label);
+  font-variant-numeric: tabular-nums;
+}
+.units {
+  display: flex;
+  justify-content: space-between;
+  grid-column: 1 / -1;
+  padding-block-end: var(--space-8);
+  font-size: var(--font-size-caption);
+}
+.yAxis {
+  position: relative;
+  grid-row: 2;
+  grid-column: 1;
+}
+.yAxis span {
+  position: absolute;
+  top: var(--at);
+  inset-inline-end: var(--space-8);
+  transform: translateY(-50%);
+}
+.plot {
+  position: relative;
+  grid-row: 2;
+  grid-column: 2;
+  min-block-size: 0;
+  border-inline-start: var(--hairline) solid var(--chart-axis);
+  border-block-end: var(--hairline) solid var(--chart-axis);
+  cursor: crosshair;
+}
+.plot:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+.svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  touch-action: none;
+}
+.grid {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.xAxis {
+  position: relative;
+  grid-row: 3;
+  grid-column: 2;
+  block-size: calc(var(--space-24) + var(--space-4));
+}
+.xAxis span {
+  position: absolute;
+  top: var(--space-8);
+  left: var(--at);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}

@@ -1,0 +1,75 @@
+.chart {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-block-size: 0;
+}
+.profileBody,
+.deltaBody {
+  position: relative;
+  flex: 1;
+  min-block-size: 22rem;
+}
+.deltaBody {
+  min-block-size: 17rem;
+}
+.band {
+  fill: var(--surface-range);
+  stroke: var(--border-control);
+  stroke-width: 0.5;
+}
+.forecast {
+  fill: none;
+  stroke: var(--chart-measured);
+  stroke-width: var(--chart-stroke-model);
+  stroke-linejoin: round;
+}
+.observed {
+  fill: var(--wall-rust);
+}
+.nominal,
+.cutoff,
+.reject,
+.zero,
+.hover,
+.selected {
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.nominal {
+  stroke: var(--text-muted);
+  stroke-dasharray: var(--chart-dash-model);
+}
+.cutoff {
+  stroke: var(--chart-warning);
+  stroke-dasharray: var(--chart-dash-model);
+}
+.reject {
+  stroke: var(--chart-danger);
+  stroke-width: var(--chart-stroke);
+}
+.zero {
+  stroke: var(--chart-axis);
+}
+.hover {
+  stroke: var(--chart-crosshair);
+}
+.selected {
+  stroke: var(--border-ink);
+  stroke-width: var(--chart-stroke);
+}
+.drag {
+  fill: var(--surface-range);
+  stroke: var(--border-ink);
+}
+.loss {
+  fill: var(--chart-model);
+}
+.gain {
+  fill: var(--chart-warning);
+}
+.note {
+  margin: var(--space-12) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-label);
+}
