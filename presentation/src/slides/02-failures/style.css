@@ -15,9 +15,9 @@
 }
 
 #failures .holo-dot {
-  fill: var(--deck-bg);
-  stroke: var(--deck-accent);
-  stroke-width: 2;
+  fill: var(--deck-accent);
+  stroke: color-mix(in oklab, var(--deck-accent) 30%, transparent);
+  stroke-width: 10;
   opacity: 0;
 }
 
@@ -32,6 +32,21 @@
   border-left: 2px solid var(--deck-fg);
   opacity: 0;
   translate: var(--hx, -999px) var(--hy, -999px);
+}
+
+#failures .holo i {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--deck-fg-3);
+}
+
+#failures .holo.is-hot i {
+  color: var(--brand-accent);
+}
+
+#failures .holo span {
+  max-width: 420px;
 }
 
 #failures .holo b {

@@ -6,74 +6,72 @@
   overflow: visible;
 }
 
-#architecture .arch-axis {
+#architecture .arch-link {
   fill: none;
   stroke: var(--ink-300);
-  stroke-width: 4;
+  stroke-width: 2.5;
   stroke-linecap: round;
 }
 
-#architecture .arch-disc {
-  fill: var(--deck-raised);
-}
-
-#architecture .arch-node {
-  fill: none;
-  stroke: var(--ink-300);
-  stroke-width: 3;
-  transition: stroke var(--dur-slow) var(--ease-out);
-}
-
-#architecture .arch-node.is-live {
+#architecture .arch-link.is-key {
   stroke: var(--brand-accent);
 }
 
 #architecture .arch-ball {
   fill: var(--brand-accent);
   opacity: 0;
-  transition: opacity var(--dur-base) var(--ease-out);
 }
 
-#architecture .arch-steps {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  pointer-events: none;
-}
-
-#architecture .arch-steps li {
+#architecture .arch-col-head {
   position: absolute;
   left: var(--x);
-  top: 484px;
-  width: 240px;
-  translate: -50% 0;
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  text-align: center;
-}
-
-#architecture .arch-steps .ico {
-  margin-bottom: 62px;
+  top: 262px;
+  margin: 0;
+  font-size: var(--fs-micro);
   color: var(--deck-fg-3);
-  transition: color var(--dur-slow) var(--ease-out);
 }
 
-#architecture .arch-steps li.is-live .ico {
-  color: var(--deck-fg);
+#architecture .arch-row {
+  position: absolute;
+  left: 560px;
+  top: var(--y);
+  margin: 0;
+  font-size: var(--fs-micro);
+  font-weight: var(--weight-strong);
+  color: var(--deck-fg-2);
 }
 
-#architecture .arch-steps b {
-  font-size: var(--fs-body);
+#architecture .arch-box {
+  position: absolute;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding: 14px 20px;
+  border: 1px solid var(--deck-line-strong);
+  border-radius: var(--radius-md);
+  background: var(--deck-raised);
+}
+
+#architecture .arch-box b {
+  font-size: var(--fs-caption);
   font-weight: var(--weight-strong);
   color: var(--deck-fg);
 }
 
-#architecture .arch-steps li > span:last-child {
+#architecture .arch-box > span {
   font-size: var(--fs-micro);
   line-height: var(--lh-snug);
   color: var(--deck-fg-2);
-  text-wrap: balance;
+}
+
+#architecture .arch-box.is-mix {
+  border-color: var(--ink-800);
+}
+
+#architecture .arch-box.is-key {
+  border-color: var(--brand-accent);
+}
+
+#architecture .arch-box.is-key b {
+  color: var(--brand-accent);
 }

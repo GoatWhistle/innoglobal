@@ -1,12 +1,21 @@
-<section class="slide" id="architecture" data-title="Архитектура решения">
-  <h2 class="title a">От шести таблиц <em>до экрана инженера</em></h2>
+<section class="slide" id="architecture" data-title="Архитектура моделей">
+  <h2 class="title a">Несколько моделей, <em>один прогноз</em></h2>
   <svg class="arch" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
-  <ol class="arch-steps">
-    <li style="--x:220px"><span class="ico is-lg" data-icon="file"></span><b>Данные</b><span>паспорт, профиль трассы, ВТД, УЗТ, техрежим, образцы</span></li>
-    <li style="--x:520px"><span class="ico is-lg" data-icon="database"></span><b>DuckDB</b><span><span class="num" data-num="dq_checks"></span> проверки, брак в карантин с причиной</span></li>
-    <li style="--x:820px"><span class="ico is-lg" data-icon="sliders"></span><b>Признаки</b><span>сегменты по <span class="num" data-num="segment_m"></span>, привязка по швам, прошлая ВТД, рельеф, режим</span></li>
-    <li style="--x:1120px"><span class="ico is-lg" data-icon="cpu"></span><b>Две модели</b><span>кейс 1: квантили прошлой ВТД, кейс 2: бустинг и приор рельефа</span></li>
-    <li style="--x:1420px"><span class="ico is-lg" data-icon="layers"></span><b>Прогноз</b><span>result.csv на <span class="num" data-num="forecasts_total"></span> сегментов, P10 и P90, очередь 10 %</span></li>
-    <li style="--x:1700px"><span class="ico is-lg" data-icon="monitor"></span><b>duppel</b><span>FastAPI, 3D-труба, дашборды, ассистент</span></li>
-  </ol>
+  <p class="arch-col-head" style="--x:120px;--d:0.2s">Признаки сегмента</p>
+  <p class="arch-col-head" style="--x:1080px;--d:0.9s">Сборка</p>
+  <p class="arch-col-head" style="--x:1520px;--d:1.2s">Выход</p>
+  <p class="arch-row" style="--y:262px;--d:0.5s">Кейс <span data-plain>1</span>: между ВТД</p>
+  <p class="arch-row" style="--y:622px;--d:0.7s">Кейс <span data-plain>2</span>: от ввода до ВТД</p>
+  <div class="arch-box" data-box="f1" data-xywh="120,300,320,130" style="--d:0.3s"><b>Прошлая ВТД</b><span>совмещена по швам: квантили толщины, число дефектов</span></div>
+  <div class="arch-box" data-box="f2" data-xywh="120,450,320,110" style="--d:0.38s"><b>Рельеф трассы</b><span>уклон, низинность, отметка</span></div>
+  <div class="arch-box" data-box="f3" data-xywh="120,580,320,110" style="--d:0.46s"><b>Режим перекачки</b><span>обводнённость, скорость, температура</span></div>
+  <div class="arch-box" data-box="f4" data-xywh="120,710,320,110" style="--d:0.54s"><b>Паспорт и возраст</b><span>толщина, годы, ингибитор</span></div>
+  <div class="arch-box" data-box="m1" data-xywh="560,300,420,120" style="--d:0.6s"><b>Ансамбль бустингов</b><span>CatBoost, LightGBM, XGBoost, AFT, по <span data-plain>5</span> сидов</span></div>
+  <div class="arch-box" data-box="m2" data-xywh="560,440,420,110" style="--d:0.7s"><b>Квантили прошлой ВТД</b><span>форма профиля вдоль трубы</span></div>
+  <div class="arch-box" data-box="m3" data-xywh="560,660,420,110" style="--d:0.8s"><b>LightGBM</b><span><span data-plain>6</span> наборов параметров, по <span data-plain>5</span> сидов</span></div>
+  <div class="arch-box" data-box="m4" data-xywh="560,790,420,110" style="--d:0.9s"><b>Приор рельефа</b><span>логистическая регрессия: где копится вода</span></div>
+  <div class="arch-box is-mix" data-box="c1" data-xywh="1080,345,340,160" style="--d:1s"><b>Уровень и форма</b><span>ансамбль задаёт уровень, прошлая ВТД задаёт форму</span></div>
+  <div class="arch-box is-mix" data-box="c2" data-xywh="1080,700,340,160" style="--d:1.1s"><b>Бленд и калибровка</b><span>бустинг плюс приор рельефа, уровень по трубам-аналогам</span></div>
+  <div class="arch-box" data-box="o1" data-xywh="1520,460,280,130" style="--d:1.3s"><b>Квантили P10 и P90</b><span>коридор для каждого сегмента</span></div>
+  <div class="arch-box is-key" data-box="o2" data-xywh="1520,620,280,130" style="--d:1.4s"><b>result.csv</b><span><span class="num" data-num="forecasts_total"></span> сегментов, очередь <span data-plain>10 %</span></span></div>
 </section>

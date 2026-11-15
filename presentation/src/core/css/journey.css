@@ -90,6 +90,33 @@
   color: var(--brand-accent);
 }
 
+.plaque-spec {
+  display: grid;
+  gap: 14px;
+  margin: 0 0 6px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--deck-line);
+}
+
+.plaque-spec div {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 16px;
+  align-items: baseline;
+}
+
+.plaque-spec dt {
+  font-size: var(--fs-micro);
+  color: var(--deck-fg-3);
+}
+
+.plaque-spec dd {
+  margin: 0;
+  font-size: var(--fs-caption);
+  line-height: var(--lh-snug);
+  color: var(--deck-fg);
+}
+
 .plaque hr {
   margin: 0;
   border: 0;
@@ -137,6 +164,3 @@
   --jr: 48%;
 }
 
-.stage > .deck-journey[data-slide="compare"] {
-  --jb: 50%;
-}

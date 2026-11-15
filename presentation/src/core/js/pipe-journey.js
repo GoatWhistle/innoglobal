@@ -1,10 +1,10 @@
 (() => {
-  const SLIDES = ["ili", "ut", "compare"]
+  const SLIDES = ["ili", "ut"]
   const R = 0.82
   const INNER = 0.74
   const SHOTS = {
-    ili: { side: 9.5, up: 2.8, lead: 1.2, ahead: 1.2, shift: 4.2, speed: 0.75, open: 1, ut: 0, at: 0.06 },
-    ut: { side: 9.5, up: 3.2, lead: 1.2, ahead: 1.6, shift: -4.2, speed: 0.75, open: 0, ut: 1, at: 0.12 },
+    ili: { side: 13, up: 4.2, lead: 1.2, ahead: 5.5, shift: 4.2, speed: 0.75, open: 1, ut: 0, at: 0.06 },
+    ut: { side: 12, up: 4.4, lead: 1.2, ahead: 5.5, shift: -4.2, speed: 0.75, open: 0, ut: 1, at: 0.12 },
     compare: { side: 15, up: 9, lead: 9, ahead: 6, shift: 0, speed: 0.6, open: 0, ut: 0, at: 0.18 },
   }
   const state = { live: null, locals: new Map(), slide: null, timer: 0 }

@@ -1,13 +1,17 @@
 #compare .plaque {
-  top: 660px;
+  top: 380px;
+  width: 640px;
+  gap: 26px;
 }
 
 #compare .plaque.is-ili {
-  left: 120px;
+  left: calc(960px - 640px - 60px);
 }
 
 #compare .plaque.is-ut {
-  right: 120px;
+  left: calc(960px + 60px);
+  padding-left: 60px;
+  border-left: 1px solid var(--deck-line);
 }
 
 #compare.is-current .plaque.is-ili {
@@ -16,22 +20,4 @@
 
 #compare.is-current .plaque.is-ut {
   view-transition-name: plaque-ut;
-}
-
-#compare .cmp-gap {
-  position: absolute;
-  left: 120px;
-  right: 120px;
-  bottom: 120px;
-  margin: 0;
-  font-size: var(--fs-lead);
-  line-height: var(--lh-snug);
-  text-align: center;
-  color: var(--deck-fg-2);
-  text-wrap: balance;
-}
-
-#compare .cmp-gap em {
-  font-style: normal;
-  color: var(--deck-fg);
 }

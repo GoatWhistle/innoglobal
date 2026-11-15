@@ -55,7 +55,7 @@
 }
 
 #research .odo-end.is-end {
-  left: 1220px;
+  left: 1290px;
 }
 
 #research .odo-lens {
@@ -221,6 +221,47 @@
 
 #research .odo-result b {
   font-size: var(--fs-lead);
+  font-weight: var(--weight-strong);
+  color: var(--brand-accent);
+}
+
+#research .odo-meter {
+  position: absolute;
+  left: 0;
+  top: 410px;
+  display: grid;
+  gap: 2px;
+  translate: var(--mx, 0px) 0;
+  font-size: var(--fs-micro);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--deck-fg-2);
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+  pointer-events: none;
+}
+
+#research .odo-meter.is-on {
+  opacity: 1;
+}
+
+#research .odo-meter p {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+}
+
+#research .odo-meter b {
+  width: 56px;
+  font-weight: var(--weight-regular);
+  color: var(--deck-fg-3);
+}
+
+#research .odo-meter span {
+  color: var(--deck-fg);
+}
+
+#research .odo-meter .is-gap span {
   font-weight: var(--weight-strong);
   color: var(--brand-accent);
 }

@@ -34,5 +34,5 @@
     bake(world.renderer.domElement, tune.fade)
   }
 
-  Object.assign((window.deckPrintScenes ??= {}), { ili: still, ut: still, compare: still })
+  Object.assign((window.deckPrintScenes ??= {}), { ili: still, ut: still })
 })()

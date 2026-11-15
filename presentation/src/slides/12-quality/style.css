@@ -152,7 +152,9 @@
 #quality .q-stats {
   display: flex;
   align-items: flex-end;
-  gap: 44px;
+  justify-content: center;
+  padding-left: 60px;
+  gap: 64px;
   margin: 28px 0 0;
 }
 

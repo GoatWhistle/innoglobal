@@ -69,6 +69,57 @@ const odoSpark = (el) => {
   deckKit.svg("path", { d: line(1), class: "spark-sm dr", pathLength: "1", style: "--d:2.1s;--t:0.6s" }, svg)
 }
 
+const odoPig = (el) => {
+  const a = deckActor.actor(el)
+  const meter = el.querySelector(".odo-meter")
+  if (!a || !meter) return
+  const pts = deckPipes.rows(el.querySelector("[data-curve]"))
+  const shift = (m) => {
+    if (m <= pts[0][0]) return pts[0][1]
+    for (let i = 1; i < pts.length; i++) {
+      if (m <= pts[i][0]) {
+        const [m0, s0] = pts[i - 1]
+        const [m1, s1] = pts[i]
+        return s0 + ((s1 - s0) * (m - m0)) / (m1 - m0)
+      }
+    }
+    return pts[pts.length - 1][1]
+  }
+  const { root } = diagParts.pig(a.THREE, a.extras)
+  root.scale.set(1.1, 0.85, 0.85)
+  const cells = [...meter.querySelectorAll("[data-m]")]
+  const fmt = (v, d) => deckKit.fmt(v, d)
+  const place = (u) => {
+    const x = -4.4 + 8.8 * u
+    root.position.x = x
+    const m = u * ODO_LEN
+    const s = shift(m)
+    cells[0].textContent = `${fmt(m, 0)} м`
+    cells[1].textContent = `${fmt(m + s, 0)} м`
+    cells[2].textContent = `${s >= 0 ? "+" : ""}${fmt(s, 1)} м`
+    const p = deckPipes.project(a.engine, a.group, new a.THREE.Vector3(x, 0, 0), a.host)
+    meter.style.setProperty("--mx", `${(p.x - 70).toFixed(1)}px`)
+  }
+  cancelAnimationFrame(el._pig)
+  meter.classList.remove("is-on")
+  if (deckKit.reduced) {
+    place(0.62)
+    meter.classList.add("is-on")
+    return
+  }
+  const t0 = performance.now()
+  const RUN = 7
+  const frame = (now) => {
+    el._pig = requestAnimationFrame(frame)
+    const t = (now - t0) / 1000 - 1.3
+    if (t < 0) return
+    meter.classList.add("is-on")
+    const loop = t % (RUN + 1.2)
+    place(Math.min(1, loop / RUN) * 0.96 + 0.02)
+  }
+  el._pig = requestAnimationFrame(frame)
+}
+
 deckScene("research", {
   init(el) {
     odoCurve(el)
@@ -80,6 +131,7 @@ deckScene("research", {
     }
   },
   enter(el) {
+    odoPig(el)
     const lenses = [...el.querySelectorAll(".odo-lens")]
     el._stop?.()
     if (deckKit.reduced) {
@@ -96,5 +148,6 @@ deckScene("research", {
   },
   leave(el) {
     el._stop?.()
+    cancelAnimationFrame(el._pig)
   },
 })

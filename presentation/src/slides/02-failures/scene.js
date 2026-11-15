@@ -7,8 +7,13 @@ const FAIL_X = 2.2
 const FAIL_POINTS = [
   [-1.6, 0.38, 0.6],
   [-0.2, 0.55, 0.45],
-  [FAIL_X, -0.45, 0.55],
+  [FAIL_X, -0.62, 0.12],
   [FAIL_X, -1.2, 0.01],
+]
+const FAIL_WINDOWS = [
+  [-1.6, 3.4, 8.2],
+  [-0.2, 8.9, 13.6],
+  [FAIL_X, 14.6, 19.2],
 ]
 const FAIL_OFFSETS = [
   [-120, -330],
@@ -491,9 +496,56 @@ const failTour = (el, keys) => {
 const failKeys = [
   [1.8, { cx: 1250, cy: 700, len: 2000, rx: 0.12, ry: -0.2 }, 1.7],
   [7.4, { cx: 1000, cy: 700, len: 2100, rx: 0.1, ry: 0.25 }, 1.7],
-  [13, { cx: 640, cy: 690, len: 1900, rx: 0.12, ry: 0.06 }, 1.9],
-  [19.6, { cx: 600, cy: 610, len: 1400, rx: 0.16, ry: 0.12 }, 2.2],
+  [13, { cx: 640, cy: 660, len: 2200, rx: -0.42, ry: 0.06, oil: 0 }, 1.9],
+  [19.6, { cx: 600, cy: 610, len: 1400, rx: 0.16, ry: 0.12, oil: 1 }, 2.2],
 ]
+
+const failFocus = (a, el) => {
+  const { THREE, extras } = a
+  const accent = deckPipes.color("--brand-accent")
+  const rings = FAIL_WINDOWS.map(([x]) => {
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.8, 0.018, 10, 128).rotateY(Math.PI / 2),
+      new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0, depthWrite: false }),
+    )
+    ring.position.x = x
+    ring.renderOrder = 8
+    extras.add(ring)
+    return ring
+  })
+  const pitMat = new THREE.MeshStandardMaterial({ color: deckPipes.color("--wall-rust"), roughness: 0.95, metalness: 0.05 })
+  const darkMat = new THREE.MeshStandardMaterial({ color: deckPipes.color("--crude-umber"), roughness: 1, metalness: 0 })
+  const random = deckKit.rng(77)
+  const pits = []
+  for (let i = 0; i < 46; i++) {
+    const ang = (random() - 0.5) * 1.1
+    const x = FAIL_X + (random() - 0.5) * 1.3
+    const r = 0.03 + random() * 0.06
+    const pit = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 10), random() < 0.6 ? pitMat : darkMat)
+    pit.position.set(x, -Math.cos(ang) * 0.632, Math.sin(ang) * 0.632)
+    pit.scale.set(1.4, 0.35, 1.4)
+    pit.lookAt(pit.position.clone().multiplyScalar(2).setX(x))
+    pit.scale.setScalar(0.001)
+    extras.add(pit)
+    pits.push({ pit, at: 14.4 + random() * 2.2 })
+  }
+  const start = performance.now()
+  cancelAnimationFrame(el._focus)
+  const tick = (now) => {
+    const t = deckKit.reduced ? 99 : (now - start) / 1000
+    FAIL_WINDOWS.forEach(([, from, to], i) => {
+      const k = Math.max(0, Math.min(1, (t - from) / 0.5, (to - t) / 0.5))
+      rings[i].material.opacity = k * (0.55 + 0.35 * Math.sin(t * 4))
+      rings[i].scale.setScalar(1 + 0.04 * Math.sin(t * 4))
+    })
+    for (const p of pits) {
+      const k = deckKit.ease.out(Math.max(0, Math.min(1, (t - p.at) / 0.6)))
+      p.pit.scale.set(1.4 * k + 0.001, 0.35 * k + 0.001, 1.4 * k + 0.001)
+    }
+    if (!deckKit.reduced) el._focus = requestAnimationFrame(tick)
+  }
+  tick(start)
+}
 
 deckScene("failures", {
   init() {
@@ -505,15 +557,17 @@ deckScene("failures", {
     const a = deckActor.actor(el)
     if (!a) return
     failMarks(a)
+    failFocus(a, el)
     el._blot = failGround(el)
     a.parts.uniforms.corrosion.value = 0
     a.parts.uniforms.rupture.value = 0
     failTour(el, failKeys)
-    failOpen(el, { corrosionAt: deckKit.reduced ? 0 : 15200, ruptureAt: deckKit.reduced ? 0 : 19200, corrosionDur: deckKit.reduced ? 1 : 3200, ruptureDur: deckKit.reduced ? 1 : 1400 })
+    failOpen(el, { corrosionAt: deckKit.reduced ? 0 : 14200, ruptureAt: deckKit.reduced ? 0 : 19800, corrosionDur: deckKit.reduced ? 1 : 2400, ruptureDur: deckKit.reduced ? 1 : 1400 })
     el._place?.()
     el._place = failPlace(el)
   },
   leave(el) {
+    cancelAnimationFrame(el._focus)
     el._place?.()
     el._place = null
     failSeal()

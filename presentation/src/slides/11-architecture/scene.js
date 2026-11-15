@@ -1,64 +1,93 @@
+const ARCH_LINKS = [
+  ["bus", "m1", 0.75],
+  ["bus", "m2", 0.8],
+  ["bus", "m3", 0.85],
+  ["bus", "m4", 0.9],
+  ["m1", "c1", 1.05],
+  ["m2", "c1", 1.1],
+  ["m3", "c2", 1.15],
+  ["m4", "c2", 1.2],
+  ["c1", "o1", 1.35],
+  ["c2", "o1", 1.4],
+  ["c1", "o2", 1.45, "is-key"],
+  ["c2", "o2", 1.5, "is-key"],
+]
+
+const ARCH_ROUTES = [
+  ["f1", "m1", "c1", "o2"],
+  ["f2", "m4", "c2", "o2"],
+]
+
 deckScene("architecture", {
   init(el) {
     const svg = el.querySelector(".arch")
-    const steps = [...el.querySelectorAll(".arch-steps li")]
-    const y = 512
-    const r = 62
-    const xs = steps.map((li) => Number.parseFloat(li.style.getPropertyValue("--x")))
-    xs.slice(0, -1).forEach((x, i) => {
-      deckKit.svg("path", { d: `M${x + r} ${y}H${xs[i + 1] - r}`, class: "arch-axis dr", pathLength: "1", style: `--d:${(0.55 + i * 0.28).toFixed(2)}s;--t:0.4s` }, svg)
+    const box = {}
+    for (const node of el.querySelectorAll("[data-box]")) {
+      const [x, y, w, h] = node.dataset.xywh.split(",").map(Number)
+      Object.assign(node.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` })
+      node.classList.add("a")
+      box[node.dataset.box] = { x, y, w, h, r: x + w, m: y + h / 2 }
+    }
+    for (const head of el.querySelectorAll(".arch-col-head, .arch-row")) head.classList.add("a")
+    const BUS = 500
+    box.bus = { r: BUS, m: 0 }
+    const curve = (x1, y1, x2, y2) => {
+      const mx = (x1 + x2) / 2
+      return `M${x1} ${y1}C${mx} ${y1},${mx} ${y2},${x2} ${y2}`
+    }
+    const feats = ["f1", "f2", "f3", "f4"].map((k) => box[k])
+    for (const [i, f] of feats.entries()) {
+      deckKit.svg("path", { d: `M${f.r} ${f.m}H${BUS}`, class: "arch-link dr", pathLength: "1", style: `--d:${(0.55 + i * 0.05).toFixed(2)}s;--t:0.3s` }, svg)
+    }
+    deckKit.svg("path", { d: `M${BUS} ${box.f1.m}V${box.m4.m}`, class: "arch-link dr", pathLength: "1", style: "--d:0.65s;--t:0.4s" }, svg)
+    const path = (from, to) => {
+      const a = box[from]
+      const b = box[to]
+      return from === "bus" ? `M${BUS} ${b.m}H${b.x}` : curve(a.r, a.m, b.x, b.m)
+    }
+    for (const [from, to, at, kind = ""] of ARCH_LINKS) {
+      deckKit.svg("path", { d: path(from, to), class: `arch-link dr ${kind}`, pathLength: "1", style: `--d:${at}s;--t:0.4s` }, svg)
+    }
+    const tail = (x1, y1, x2, y2) => {
+      const mx = (x1 + x2) / 2
+      return `C${mx} ${y1},${mx} ${y2},${x2} ${y2}`
+    }
+    el._routes = ARCH_ROUTES.map(([f, m, c, o]) => {
+      const d = [
+        `M${box[f].r} ${box[f].m}H${BUS}V${box[m].m}H${box[m].r}`,
+        tail(box[m].r, box[m].m, box[c].x, box[c].m),
+        `H${box[c].r}`,
+        tail(box[c].r, box[c].m, box[o].x, box[o].m),
+      ].join("")
+      return deckKit.svg("path", { d, fill: "none", stroke: "none" }, svg)
     })
-    const ball = deckKit.svg("circle", { cx: xs[0], cy: y, r: 10, class: "arch-ball" }, svg)
-    const nodes = steps.map((li, i) => {
-      const at = (0.2 + i * 0.28).toFixed(2)
-      deckKit.svg("circle", { cx: xs[i], cy: y, r, class: "arch-disc f", style: `--d:${at}s` }, svg)
-      const ring = deckKit.svg("circle", { cx: xs[i], cy: y, r, class: "arch-node dr", pathLength: "1", transform: `rotate(-90 ${xs[i]} ${y})`, style: `--d:${at}s;--t:0.7s` }, svg)
-      li.classList.add("a")
-      li.style.setProperty("--d", `${(Number(at) + 0.15).toFixed(2)}s`)
-      return { li, ring }
-    })
-    el._arch = { xs, r, ball, nodes }
+    el._ball = deckKit.svg("circle", { r: 9, class: "arch-ball" }, svg)
   },
   enter(el) {
-    const { xs, r, ball, nodes } = el._arch
     cancelAnimationFrame(el._raf)
-    for (const n of nodes) {
-      n.ring.classList.remove("is-live")
-      n.li.classList.remove("is-live")
-    }
+    const ball = el._ball
     ball.style.opacity = "0"
-    if (deckKit.reduced) {
-      for (const n of nodes) {
-        n.ring.classList.add("is-live")
-        n.li.classList.add("is-live")
-      }
-      return
-    }
-    const MOVE = 0.95
-    const HOLD = 0.55
-    const START = 2.3
-    const span = MOVE + HOLD
-    const total = (xs.length - 1) * span + 1.6
+    if (deckKit.reduced) return
+    const lens = el._routes.map((p) => p.getTotalLength())
+    const RUN = 3.2
+    const GAP = 0.6
     const t0 = performance.now()
     const frame = (now) => {
       el._raf = requestAnimationFrame(frame)
-      const t = (now - t0) / 1000 - START
+      const t = (now - t0) / 1000 - 2
       if (t < 0) return
-      const loop = t % total
-      const seg = Math.min(xs.length - 2, Math.floor(loop / span))
-      const local = loop - seg * span
-      const done = loop >= (xs.length - 1) * span
-      const k = done ? 1 : deckKit.ease.inOut(Math.min(1, local / MOVE))
-      const from = xs[seg] + r
-      const to = xs[seg + 1] - r
-      ball.setAttribute("cx", (from + (to - from) * k).toFixed(1))
-      ball.style.opacity = done || local > MOVE ? "0" : "1"
-      const reached = done ? xs.length - 1 : seg + (local > MOVE ? 1 : 0)
-      nodes.forEach((n, i) => {
-        const on = i <= reached
-        n.ring.classList.toggle("is-live", on)
-        n.li.classList.toggle("is-live", on)
-      })
+      const cycle = t % ((RUN + GAP) * lens.length)
+      const i = Math.floor(cycle / (RUN + GAP))
+      const local = cycle - i * (RUN + GAP)
+      if (local > RUN) {
+        ball.style.opacity = "0"
+        return
+      }
+      const k = deckKit.ease.inOut(local / RUN)
+      const pt = el._routes[i].getPointAtLength(k * lens[i])
+      ball.setAttribute("cx", pt.x.toFixed(1))
+      ball.setAttribute("cy", pt.y.toFixed(1))
+      ball.style.opacity = String(Math.min(1, local / 0.2, (RUN - local) / 0.2))
     }
     el._raf = requestAnimationFrame(frame)
   },
