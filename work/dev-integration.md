@@ -21,7 +21,7 @@
 - Первый backend-прогон: 127 passed / 1 failed из-за старого ожидаемого r².
   После согласования со свежими артефактами: 128 passed.
 
-Новая рабочая ветка: feat/frontend-refinement, от объединённого dev.
+Новая рабочая ветка: feat/frontend, от объединённого dev.
 
 Merge 3c1d9f5 опубликован в origin/dev; 4035b31 — в origin/feat/redesign-oil.
 Оба образа Compose пересобраны, стенд localhost:18080, ready=true.

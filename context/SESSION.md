@@ -103,4 +103,4 @@ Merge uses verified original common tree f3d7a42 despite rewritten history. ML f
 API predictors now dens_quant_cal / ens_prior_cal. Frontend verify 375 and backend 128 tests pass.
 Merge 3c1d9f5 published to origin/dev; original branch 4035b31 also pushed. Compose rebuilt,
 ready=true at localhost:18080; browser cut-selection scenario passes against new API.
-Working branch for next changes: feat/frontend-refinement from dev. See work/dev-integration.md.
+Working branch for next changes: feat/frontend from dev. See work/dev-integration.md.
