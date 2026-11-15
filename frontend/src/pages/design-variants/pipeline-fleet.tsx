@@ -29,14 +29,9 @@ export function PipelineFleet({ pipes }: { readonly pipes: PipeList }) {
       </header>
       {pipes.items.map((pipe) => (
         <article className={styles.row} key={pipe.pipe_id}>
-          <ButtonLink
-            className={styles.pipe}
-            variant="quiet"
-            to={`/?pipe=${pipe.pipe_id}`}
-            aria-label={`${t("variants:workspace.open")}: ${pipe.passport.direction}`}
-          >
+          <ButtonLink className={styles.pipe} variant="quiet" to={`/?pipe=${pipe.pipe_id}`}>
             <PipePreview name={pipe.passport.direction} />
-            <span className={styles.name}>{pipe.passport.direction}</span>
+            <span className="visually-hidden">{pipe.passport.direction}</span>
           </ButtonLink>
           <aside className={styles.details}>
             <Card appearance="plain" title={pipe.passport.direction}>

@@ -27,9 +27,6 @@
   padding: 0;
   background: transparent;
 }
-.name {
-  display: none;
-}
 .details h2 {
   font-size: var(--font-size-subheading);
 }
