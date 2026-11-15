@@ -1,0 +1,47 @@
+.panel {
+  composes: statePanel from "../../../styles/compose.module.css";
+  align-items: start;
+  gap: var(--space-12);
+  padding: var(--space-32);
+  text-align: start;
+}
+
+.icon {
+  color: var(--text-muted);
+}
+
+.panel[data-tone="danger"] .icon {
+  color: var(--text-danger);
+}
+
+.panel[data-tone="warning"] .icon {
+  color: var(--text-warning);
+}
+
+.title {
+  composes: subheadingText from "../../../styles/compose.module.css";
+  margin-block-start: var(--space-8);
+  font-weight: var(--weight-regular);
+}
+
+.text {
+  composes: secondaryText from "../../../styles/compose.module.css";
+  max-inline-size: var(--prose-measure);
+  margin-block-end: var(--space-8);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  composes: mutedCaption from "../../layout/text-role/text-role.module.css";
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-16);
+  font-variant-numeric: var(--font-numeric);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12) var(--space-16);
+}

@@ -1,0 +1,44 @@
+.field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
+  min-inline-size: 0;
+  max-inline-size: var(--field-max-width);
+}
+
+.top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-label);
+  line-height: var(--line-height-label);
+}
+
+.aside {
+  composes: mutedCaption from "../../layout/text-role/text-role.module.css";
+  font-variant-numeric: var(--font-numeric);
+}
+
+.message {
+  composes: mutedCaption from "../../layout/text-role/text-role.module.css";
+  display: flex;
+  align-items: start;
+  gap: var(--space-8);
+}
+
+.field[data-state="error"] .message {
+  color: var(--text-danger);
+}
+
+.field[data-state="warning"] .message {
+  color: var(--text-warning);
+}
+
+.field[data-state="disabled"] .label {
+  color: var(--text-disabled);
+}

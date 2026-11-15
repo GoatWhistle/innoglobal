@@ -1,0 +1,99 @@
+.readout {
+  position: absolute;
+  inset: var(--space-16) var(--space-16) auto auto;
+  inline-size: var(--readout-width);
+  padding: var(--space-16);
+  color: var(--text-primary);
+  background: var(--matte-fill);
+  border: var(--hairline) solid var(--border-subtle);
+  box-shadow: var(--shadow-float);
+  backdrop-filter: blur(var(--matte-blur));
+  pointer-events: none;
+}
+.label {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-8);
+  font-size: var(--font-size-caption);
+  font-variant-numeric: var(--font-numeric);
+}
+.figure {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+  margin-block: var(--space-8);
+}
+.number {
+  composes: readoutNumber from "../../shared/styles/compose.module.css";
+  letter-spacing: var(--tracking-readout);
+  font-variant-numeric: var(--font-numeric);
+}
+.figure span,
+.caption,
+.facts {
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+.facts {
+  display: grid;
+  gap: var(--space-8);
+  margin-block-start: var(--space-12);
+  border-block-start: var(--hairline) solid var(--border-subtle);
+  padding-block-start: var(--space-12);
+}
+.facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+.facts dd {
+  margin: 0;
+  color: var(--text-primary);
+}
+.priority {
+  color: var(--text-warning);
+  font-size: var(--font-size-caption);
+}
+.readout[data-mode="section"] {
+  inset: auto var(--space-24) var(--space-24) auto;
+  inline-size: min(26rem, 40%);
+  padding: var(--space-24);
+}
+.readout[data-mode="section"] strong {
+  font-size: var(--font-size-scene);
+}
+.readout[data-mode="unroll"] {
+  inline-size: auto;
+}
+.readout[data-mode="unroll"] .facts,
+.readout[data-mode="unroll"] .caption,
+.readout[data-mode="unroll"] .priority {
+  display: none;
+}
+.readout[data-mode="unroll"] strong {
+  font-size: var(--font-size-readout-sm);
+}
+@media (max-width: 48rem) {
+  .readout,
+  .readout[data-mode="section"],
+  .readout[data-mode="unroll"] {
+    inset: var(--space-8) var(--space-8) auto auto;
+    inline-size: auto;
+    padding: var(--space-8) var(--space-12);
+  }
+  .readout strong,
+  .readout[data-mode="section"] strong {
+    font-size: var(--font-size-readout-sm);
+  }
+  .facts,
+  .caption,
+  .priority {
+    display: none;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .readout {
+    background: var(--surface-float);
+    backdrop-filter: none;
+  }
+}

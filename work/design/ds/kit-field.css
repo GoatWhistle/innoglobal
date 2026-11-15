@@ -1,0 +1,220 @@
+.field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
+  min-inline-size: 0;
+  max-inline-size: var(--field-max-width);
+}
+
+.field-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.field-label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-label);
+  line-height: var(--line-height-label);
+}
+
+.field-optional,
+.field-count {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  font-variant-numeric: var(--font-numeric);
+}
+
+.field-message {
+  display: flex;
+  align-items: start;
+  gap: var(--space-8);
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.field-message .icon {
+  margin-block-start: 0;
+}
+
+.field[data-state="error"] .field-message,
+.field[data-state="error"] .field-count {
+  color: var(--text-danger);
+}
+
+.field[data-state="warning"] .field-message {
+  color: var(--text-warning);
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-block-size: var(--control-height);
+  padding-inline: var(--space-12);
+  border: var(--hairline) solid var(--border-control);
+  border-radius: var(--radius-control);
+  background: var(--surface-sunken);
+  color: var(--text-muted);
+  cursor: text;
+  transition: var(--transition-control);
+}
+
+.input input,
+.input textarea {
+  flex: 1 1 0;
+  inline-size: 0;
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--font-size-body-sm);
+  font-variant-numeric: var(--font-numeric);
+  text-overflow: ellipsis;
+}
+
+.input input::placeholder,
+.input textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+.input:focus-within,
+.input.is-focus {
+  border-color: var(--border-ink);
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.field[data-state="error"] .input {
+  border-color: var(--status-danger);
+}
+
+.field[data-state="error"] .input:focus-within,
+.field[data-state="error"] .input.is-focus {
+  box-shadow: inset 0 0 0 var(--hairline) var(--status-danger);
+}
+
+.field[data-state="warning"] .input {
+  border-color: var(--status-warning);
+}
+
+.field[data-state="disabled"] .input {
+  border-color: var(--border-subtle);
+  background: var(--action-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.field[data-state="disabled"] input,
+.field[data-state="disabled"] .field-label {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.field[data-state="readonly"] .input {
+  border-style: dashed;
+  border-color: var(--border-strong);
+  cursor: default;
+}
+
+.input-unit {
+  flex: none;
+  color: var(--text-muted);
+  font-size: var(--font-size-body-sm);
+}
+
+.input .icon-button {
+  margin-inline-end: calc(var(--space-8) * -1);
+}
+
+.input-number {
+  padding-inline: 0;
+}
+
+.input-number input {
+  text-align: end;
+}
+
+.input-number .input-unit {
+  padding-inline-end: var(--space-12);
+}
+
+.step {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: var(--control-height);
+  align-self: stretch;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-control-press);
+}
+
+.step:first-child {
+  border-inline-end: var(--hairline) solid var(--border-subtle);
+}
+
+.step:last-child {
+  border-inline-start: var(--hairline) solid var(--border-subtle);
+}
+
+.step:active:not(:disabled) .icon {
+  scale: var(--press-scale);
+}
+
+.step:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.input-area {
+  align-items: start;
+  padding-block: var(--space-12);
+}
+
+.input-area textarea {
+  min-block-size: 96px;
+  resize: vertical;
+  line-height: var(--line-height-body-sm);
+}
+
+.input-search[data-empty] .close-button {
+  display: none;
+}
+
+.input-search:not([data-empty]) .kbd {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .input:hover:not(:focus-within),
+  .input.is-hover {
+    border-color: var(--border-control-hover);
+  }
+
+  .field[data-state="error"] .input:hover:not(:focus-within) {
+    border-color: var(--status-danger);
+  }
+
+  .field[data-state="disabled"] .input:hover {
+    border-color: var(--border-subtle);
+  }
+
+  .field[data-state="readonly"] .input:hover {
+    border-color: var(--border-strong);
+  }
+
+  .step:hover:not(:disabled) {
+    background: var(--action-ghost-hover);
+  }
+}

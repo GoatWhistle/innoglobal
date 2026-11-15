@@ -1,0 +1,43 @@
+.scroll {
+  min-inline-size: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-body-sm);
+  font-variant-numeric: var(--font-numeric);
+  line-height: var(--line-height-body-sm);
+}
+
+.table th,
+.table td {
+  padding: var(--cell-padding);
+  border-block-end: var(--hairline) solid var(--border-subtle);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.table thead th {
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.table td[data-numeric],
+.table th[data-numeric] {
+  text-align: end;
+  white-space: nowrap;
+}
+
+.table tbody tr[aria-selected="true"] {
+  background-color: var(--surface-selected);
+}
+
+.compact th,
+.compact td {
+  padding: var(--cell-padding-compact);
+}

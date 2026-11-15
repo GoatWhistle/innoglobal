@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Страница не найдена</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="kit-base.css">
+<link rel="stylesheet" href="kit-button.css">
+<link rel="stylesheet" href="kit-tabs.css">
+<link rel="stylesheet" href="kit-layer.css">
+<link rel="stylesheet" href="kit-404.css">
+<script type="module" src="kit-404.js"></script>
+</head>
+<body>
+<div class="nf">
+  <header class="nf-bar">
+    <a class="nf-mark brand" href="kit.html" aria-label="duppel"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg></a>
+    <div class="segmented segmented-icons" role="radiogroup" aria-label="Тема" data-segmented data-theme-switch>
+      <button type="button" role="radio" aria-checked="true" data-value="dark" aria-label="Тёмная тема" data-tip="Тёмная тема"><svg class="icon" aria-hidden="true"><use href="icons.svg#moon"/></svg></button>
+      <button type="button" role="radio" aria-checked="false" data-value="light" aria-label="Светлая тема" data-tip="Светлая тема"><svg class="icon" aria-hidden="true"><use href="icons.svg#sun"/></svg></button>
+    </div>
+  </header>
+  <main class="nf-main">
+    <p class="nf-number" aria-hidden="true">
+      <svg class="nf-axis" preserveAspectRatio="none"><line x1="0" y1="0" x2="100%" y2="0"/></svg>
+      <span>4</span><span class="nf-zero"><svg class="nf-flange" viewBox="-50 -50 100 100" aria-hidden="true"><circle class="ring" r="45"/><circle class="fine axis-fine" r="31"/><circle class="fine" r="21"/><path class="fine axis-fine" d="M0 -60V60M-60 0H60"/><circle class="hole" cx="28.64" cy="11.86" r="3.25"/><circle class="hole" cx="11.86" cy="28.64" r="3.25"/><circle class="hole" cx="-11.86" cy="28.64" r="3.25"/><circle class="hole" cx="-28.64" cy="11.86" r="3.25"/><circle class="hole" cx="-28.64" cy="-11.86" r="3.25"/><circle class="hole" cx="-11.86" cy="-28.64" r="3.25"/><circle class="hole" cx="11.86" cy="-28.64" r="3.25"/><circle class="hole" cx="28.64" cy="-11.86" r="3.25"/><path class="leader" d="M14.06 -31.24L29.86 -64H64"/></svg><span class="nf-callout">Заглушка, Ду 404</span></span><span>4</span>
+    </p>
+    <div class="nf-copy">
+      <p class="nf-eyebrow">Ошибка 404</p>
+      <h1 class="nf-title">Дальше трубы нет</h1>
+      <p class="nf-text">Адреса <span class="nf-path" data-path>/uchastki/km-48</span> в схеме нет. Ссылка могла устареть, или участок убрали из модели. Остальные участки, журнал и тревоги работают.</p>
+      <div class="kit-demo">
+        <a class="button button-primary" href="kit.html"><svg class="icon" aria-hidden="true"><use href="icons.svg#arrow-left"/></svg><span>Вернуться к схеме</span></a>
+        <a class="button button-secondary" href="kit.html#table"><svg class="icon" aria-hidden="true"><use href="icons.svg#journal"/></svg><span>Открыть журнал</span></a>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

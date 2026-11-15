@@ -1,0 +1,119 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load local bake definitions
+#1 reading docker-compose.yml 1.25kB / 1.25kB done
+#1 reading docker-bake.hcl 549B / 549B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 398B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/nginx:1.27-alpine
+#3 DONE 0.1s
+
+#4 [internal] load metadata for docker.io/library/node:22-alpine
+#4 DONE 1.3s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 126B done
+#5 DONE 0.0s
+
+#6 [build 1/6] FROM docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a
+#6 resolve docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a 0.0s done
+#6 DONE 0.0s
+
+#7 [stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+#7 resolve docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10 0.0s done
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 234.05kB 0.0s done
+#8 DONE 0.0s
+
+#9 [build 2/6] WORKDIR /app
+#9 CACHED
+
+#10 [build 3/6] COPY package.json package-lock.json ./
+#10 CACHED
+
+#11 [build 4/6] RUN npm ci --no-audit --no-fund
+#11 CACHED
+
+#12 [build 5/6] COPY . .
+#12 DONE 0.1s
+
+#13 [build 6/6] RUN npm run build
+#13 0.191 
+#13 0.191 > app-frontend@0.1.0 build
+#13 0.191 > tsc --noEmit && vite build
+#13 0.191 
+#13 3.895 vite v8.3.4 building client environment for production...
+#13 3.901 transforming...
+#13 4.068 
+#13 4.068 A PostCSS plugin did not pass the `from` option to `postcss.parse`. This may cause imported assets to be incorrectly transformed. If you've recently added a PostCSS plugin that raised this warning, please contact the package author to fix the issue.
+#13 4.157 ✓ 362 modules transformed.
+#13 4.201 rendering chunks...
+#13 4.247 computing gzip size...
+#13 4.253 dist/index.html                                                3.48 kB │ gzip:   1.08 kB
+#13 4.253 dist/assets/onest-cyrillic-ext-wght-normal-DOFToQv1.woff2     10.54 kB
+#13 4.253 dist/assets/raleway-vietnamese-wght-italic-DYF7k-fG.woff2     11.76 kB
+#13 4.253 dist/assets/onest-vietnamese-wght-normal-BBxOatbv.woff2       12.40 kB
+#13 4.253 dist/assets/onest-cyrillic-wght-normal-DayYxulF.woff2         15.86 kB
+#13 4.253 dist/assets/onest-symbols-wght-normal-DxQzqQfC.woff2          18.16 kB
+#13 4.253 dist/assets/onest-math-wght-normal-Bl4ZGkZl.woff2             25.48 kB
+#13 4.253 dist/assets/raleway-cyrillic-wght-italic-DWTmaMJk.woff2       26.05 kB
+#13 4.253 dist/assets/onest-latin-ext-wght-normal-QAhDxQuo.woff2        28.45 kB
+#13 4.253 dist/assets/raleway-cyrillic-ext-wght-italic-Hi97ePR8.woff2   30.48 kB
+#13 4.253 dist/assets/raleway-latin-ext-wght-italic-MbfTa5YI.woff2      33.47 kB
+#13 4.253 dist/assets/onest-latin-wght-normal-Dun_Rd-l.woff2            33.76 kB
+#13 4.253 dist/assets/raleway-latin-wght-italic-RigrtYt2.woff2          50.24 kB
+#13 4.253 dist/assets/data-quality-page-Cl4DonhA.css                     0.29 kB │ gzip:   0.19 kB
+#13 4.253 dist/assets/segment-strip-CnvNP4jd.css                         2.55 kB │ gzip:   0.85 kB
+#13 4.253 dist/assets/priorities-page-D38E2jHO.css                       2.71 kB │ gzip:   0.90 kB
+#13 4.253 dist/assets/model-page-q-5bOAtx.css                            3.04 kB │ gzip:   0.98 kB
+#13 4.253 dist/assets/overview-page-Cx09V4VW.css                         3.83 kB │ gzip:   1.21 kB
+#13 4.253 dist/assets/pipe-page-CxMJJlww.css                            15.34 kB │ gzip:   3.44 kB
+#13 4.253 dist/assets/ui-n9x1NosB.css                                   28.15 kB │ gzip:   5.73 kB
+#13 4.253 dist/assets/index-BPY-GZ7A.css                                31.42 kB │ gzip:   7.74 kB
+#13 4.253 dist/assets/case-copy-DYgJhUW3.js                              0.33 kB │ gzip:   0.13 kB
+#13 4.253 dist/assets/not-found-page-CGaQdVLD.js                         0.33 kB │ gzip:   0.22 kB
+#13 4.253 dist/assets/pipe-switch-BiJTwvpo.js                            0.45 kB │ gzip:   0.31 kB
+#13 4.253 dist/assets/pipe-redirect-page-U09DVlng.js                     0.67 kB │ gzip:   0.42 kB
+#13 4.253 dist/assets/feature-copy-DotiWKCL.js                           0.83 kB │ gzip:   0.28 kB
+#13 4.253 dist/assets/data-quality-page-Bu5-4QT4.js                      2.12 kB │ gzip:   0.81 kB
+#13 4.253 dist/assets/segment-strip-B2UzUF3G.js                          2.95 kB │ gzip:   1.44 kB
+#13 4.253 dist/assets/reference-C_Trlk3u.js                              4.52 kB │ gzip:   1.21 kB
+#13 4.253 dist/assets/priorities-page-Ctb65vz6.js                        5.20 kB │ gzip:   2.01 kB
+#13 4.253 dist/assets/model-page-bIdT6yPL.js                             6.15 kB │ gzip:   2.08 kB
+#13 4.253 dist/assets/overview-page-D0p2Wfus.js                          7.29 kB │ gzip:   2.97 kB
+#13 4.253 dist/assets/useQuery-Ceh9b_IW.js                               8.19 kB │ gzip:   3.03 kB
+#13 4.253 dist/assets/index-C4YoWccC.js                                215.26 kB │ gzip:  68.09 kB
+#13 4.253 dist/assets/ui-iSxXfXjB.js                                   270.37 kB │ gzip:  87.16 kB
+#13 4.253 dist/assets/pipe-page-BALMtvfi.js                            593.88 kB │ gzip: 153.87 kB
+#13 4.253 
+#13 4.253 [plugin builtin:vite-reporter] 
+#13 4.253 (!) Some chunks are larger than 500 kB after minification. Consider:
+#13 4.253 - Using dynamic import() to code-split the application
+#13 4.253 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+#13 4.253 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#13 4.255 ✓ built in 359ms
+#13 DONE 4.3s
+
+#14 [stage-1 2/3] COPY nginx.conf /etc/nginx/templates/default.conf.template
+#14 CACHED
+
+#15 [stage-1 3/3] COPY --from=build /app/dist /usr/share/nginx/html
+#15 DONE 0.0s
+
+#16 exporting to image
+#16 exporting layers 0.1s done
+#16 exporting manifest sha256:8001ee57d0aa67cfbea6e7c5ebda0752846f0145bb195f8864caad760c552087 done
+#16 exporting config sha256:75689729bee560621de6f8b020c15582c62317ce2cc011923f19f6da46cdb857 done
+#16 exporting attestation manifest sha256:35d6bb027e6b6d3ac93cb943852fe427c4261a7854b4f6cd28a9bd18f6d77bfc done
+#16 exporting manifest list sha256:fb761607e94e19ff0b881658fdb2c13019922f1cc8cbc8551b22d2e30e583c92 done
+#16 naming to docker.io/library/app-frontend:latest done
+#16 unpacking to docker.io/library/app-frontend:latest 0.0s done
+#16 DONE 0.1s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/gy5vp24rnayjiizwefqmvbr6l

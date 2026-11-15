@@ -1,0 +1,47 @@
+name: ${COMPOSE_PROJECT_NAME:-app}
+
+services:
+  backend:
+    image: ${COMPOSE_PROJECT_NAME:-app}-backend:${TAG:-latest}
+    pull_policy: never
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATA_ROOT: /data
+    volumes:
+      - ./warehouse:/data/warehouse:ro
+      - ./data/processed:/data/data/processed:ro
+      - ./artifacts:/data/artifacts:ro
+      - ./result.csv:/data/result.csv:ro
+      - ./chart_data.json:/data/chart_data.json:ro
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8000}:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/ready', timeout=2)"
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  frontend:
+    depends_on:
+      backend:
+        condition: service_healthy
+    image: ${COMPOSE_PROJECT_NAME:-app}-frontend:${TAG:-latest}
+    pull_policy: never
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-8080}:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped

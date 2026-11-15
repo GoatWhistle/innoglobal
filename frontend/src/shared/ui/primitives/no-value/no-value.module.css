@@ -1,0 +1,10 @@
+.none {
+  color: var(--text-muted);
+  font-variant-numeric: var(--font-numeric);
+}
+
+.none[data-reason] {
+  cursor: help;
+  text-decoration: underline dotted var(--border-strong);
+  text-underline-offset: var(--space-4);
+}

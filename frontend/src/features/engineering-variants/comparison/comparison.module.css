@@ -1,0 +1,23 @@
+.panel {
+  display: grid;
+  gap: var(--space-16);
+  min-inline-size: 0;
+}
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-16);
+  align-items: end;
+}
+.comparison {
+  display: grid;
+  gap: var(--space-24);
+  padding-block: var(--space-16);
+  border-block: var(--hairline) solid var(--border-control);
+}
+.comparison p,
+.note {
+  font-size: var(--font-size-caption);
+  color: var(--text-secondary);
+}

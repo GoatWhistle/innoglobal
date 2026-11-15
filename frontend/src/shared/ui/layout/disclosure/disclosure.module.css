@@ -1,0 +1,21 @@
+.disclosure {
+  border-block-start: var(--hairline) solid var(--border-subtle);
+  padding-block: var(--space-8);
+}
+.body {
+  display: grid;
+  gap: var(--space-16);
+  padding-block: var(--space-12);
+}
+.body[hidden] {
+  display: none;
+}
+.body[data-state="open"] {
+  animation: var(--motion-fade-in);
+}
+.body[data-state="closed"] {
+  animation: var(--motion-fade-out);
+}
+.body[data-instant="true"] {
+  animation: none;
+}

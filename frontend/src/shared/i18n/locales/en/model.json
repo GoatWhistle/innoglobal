@@ -1,0 +1,92 @@
+{
+  "title": "Title",
+  "pageTitle": "Page title",
+  "description": "Description",
+  "loading": "Loading",
+  "case": {
+    "pipe": "Pipe: {{pipe}}, {{date}}"
+  },
+  "pair": {
+    "between": "Between: {{pipes}}, {{start}}, {{end}}",
+    "fromCommissioning": "From commissioning: {{pipes}}, {{end}}"
+  },
+  "selected": "Selected",
+  "r2": "R2",
+  "r2Hint": "R2 hint",
+  "mae": "Mae",
+  "maeMeta": "Mae meta: {{value}}",
+  "segments": "Segments",
+  "segmentsHint": "Segments hint",
+  "metricsTitle": "Metrics title",
+  "importanceTitle": "Importance title",
+  "importanceCatboost": "Importance catboost",
+  "importanceLgbm": "Importance lgbm",
+  "badgeSelected": "Badge selected",
+  "badgeBaseline": "Badge baseline",
+  "uncertainty": {
+    "title": "Title",
+    "body": "Body: {{quantiles}}"
+  },
+  "limits": {
+    "title": "Title",
+    "level": "Level",
+    "pearson": "Pearson",
+    "quantiles": "Quantiles",
+    "neighbours": "Neighbours",
+    "regime": "Regime"
+  },
+  "name": {
+    "b1_nominal_minus_rate": "B1 nominal minus rate",
+    "b2_prev_smoothed": "B2 prev smoothed",
+    "catboost": "CatBoost",
+    "lgbm": "LightGBM",
+    "xgb": "XGBoost",
+    "aft": "AFT",
+    "ensemble": "Ensemble",
+    "ens_blend": "Ens blend",
+    "catboost_smooth5": "Catboost smooth5",
+    "ensemble_smooth5": "Ensemble smooth5",
+    "ens_blend_smooth5": "Ens blend smooth5"
+  },
+  "feature": {
+    "dist_m": "Dist m",
+    "dist_frac": "Dist frac",
+    "z": "Z",
+    "z_rel": "Z rel",
+    "slope": "Slope",
+    "lowness_250m": "Lowness 250m",
+    "lowness_1km": "Lowness 1km",
+    "rise_500m": "Rise 500m",
+    "climb_pos": "Climb pos",
+    "climb_rise": "Climb rise",
+    "climb_len": "Climb len",
+    "p_at": "P at",
+    "t_at": "T at",
+    "prev_min": "Prev min",
+    "prev_min_sm5": "Prev min sm5",
+    "prev_min_sm21": "Prev min sm21",
+    "prev_ndef": "Prev ndef",
+    "rg_v_mean": "Rg v mean",
+    "rg_share_slow": "Rg share slow",
+    "rg_watercut_mean": "Rg watercut mean",
+    "uzt_dist": "Uzt dist",
+    "uzt_min_250": "Uzt min 250"
+  },
+  "comparison": {
+    "title": "Historical forecast and observation",
+    "separate": "A separate saved run, not the selected model above. Metrics are recalculated from rounded saved pairs.",
+    "samples": "Verified pairs",
+    "label": "Historical forecast versus observation, equal millimetre scales",
+    "observed": "Observed, mm",
+    "forecast": "Forecast, mm",
+    "reading": "Dashed line: exact agreement. Below it forecasts underestimate thickness; above it they overestimate.",
+    "table": "Historical pair values",
+    "pipe": "Pipe",
+    "segment": "Segment",
+    "unavailable": "Pairs do not match the split",
+    "mismatch": "The archived series contains {{count}} pairs. Observations differ from the current historical split, so the chart is omitted.",
+    "view": "Historical pair view",
+    "chart": "Chart",
+    "tableTab": "Table"
+  }
+}

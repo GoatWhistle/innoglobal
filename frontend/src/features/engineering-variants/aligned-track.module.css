@@ -1,0 +1,96 @@
+.track {
+  min-inline-size: 0;
+}
+.header,
+.axis {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-12);
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+.header {
+  margin-block-end: var(--space-8);
+}
+.header strong {
+  color: var(--text-primary);
+  font-weight: var(--weight-medium);
+}
+.plot {
+  position: relative;
+  margin-inline-start: var(--space-32);
+  min-block-size: var(--target-min);
+}
+.canvas {
+  composes: instrumentSurface from "../../shared/styles/compose.module.css";
+  block-size: var(--chart-height-sm);
+  overflow: hidden;
+}
+.track[data-track="priority"] .canvas {
+  block-size: var(--target-min);
+}
+.track[data-compact] .canvas {
+  block-size: var(--space-96);
+}
+.track[data-track="elevation"] .canvas {
+  block-size: var(--space-64);
+}
+.grid {
+  composes: instrumentLine from "../../shared/styles/compose.module.css";
+}
+.grid.grid {
+  stroke: var(--chart-grid);
+}
+.zero {
+  composes: instrumentLine from "../../shared/styles/compose.module.css";
+}
+.zero.zero {
+  stroke: var(--text-muted);
+}
+.selected {
+  composes: instrumentCursor from "../../shared/styles/compose.module.css";
+}
+.hover {
+  composes: instrumentHover from "../../shared/styles/compose.module.css";
+}
+.selection {
+  fill: var(--surface-range);
+  stroke: var(--border-ink);
+}
+.axis {
+  margin-block-start: var(--space-4);
+  font-variant-numeric: tabular-nums;
+}
+.missing {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-sm);
+  pointer-events: none;
+}
+
+.ticks {
+  position: absolute;
+  inset-inline-start: calc(-1 * var(--space-32));
+  inset-block: 0;
+  inline-size: calc(var(--space-24) + var(--space-4));
+  pointer-events: none;
+  color: var(--text-secondary);
+  font-size: var(--font-size-micro);
+  font-variant-numeric: tabular-nums;
+}
+.ticks span {
+  top: var(--tick-position);
+  position: absolute;
+  inset-inline-end: var(--space-4);
+  transform: translateY(-50%);
+}
+.header {
+  flex-wrap: wrap;
+}
+.reading {
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}

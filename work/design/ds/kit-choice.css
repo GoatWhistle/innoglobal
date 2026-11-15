@@ -1,0 +1,211 @@
+.check,
+.radio,
+.toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: start;
+  gap: var(--space-12);
+  min-block-size: var(--target-min);
+  padding-block: var(--space-12);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+  cursor: pointer;
+}
+
+.check input,
+.radio input,
+.toggle input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.choice-text {
+  display: grid;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+.choice-text small {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.check-box,
+.radio-dot {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: var(--indicator-size);
+  block-size: var(--indicator-size);
+  border: var(--border-width-control) solid var(--border-control);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    scale var(--dur-press) var(--ease-out);
+}
+
+.check-box {
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}
+
+.check-box svg {
+  grid-area: 1 / 1;
+  inline-size: var(--icon-sm);
+  block-size: var(--icon-sm);
+  fill: none;
+  stroke: var(--action-primary-text);
+  stroke-width: 2.5;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+.check-box .tick {
+  stroke-dasharray: 21;
+  stroke-dashoffset: 21;
+  transition: stroke-dashoffset var(--dur-base) var(--ease-out);
+}
+
+.check-box .dash {
+  stroke-dasharray: 13;
+  stroke-dashoffset: 13;
+  transition: stroke-dashoffset var(--dur-fast) var(--ease-out);
+}
+
+.check input:checked + .check-box,
+.check input:indeterminate + .check-box,
+.radio input:checked + .radio-dot {
+  border-color: var(--action-primary);
+}
+
+.check input:checked + .check-box,
+.check input:indeterminate + .check-box {
+  background: var(--action-primary);
+}
+
+.check input:checked:not(:indeterminate) + .check-box .tick,
+.check input:indeterminate + .check-box .dash {
+  stroke-dashoffset: 0;
+}
+
+.radio-dot {
+  border-radius: var(--radius-round);
+}
+
+.radio-dot::after {
+  content: "";
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: var(--radius-round);
+  background: var(--action-primary);
+  opacity: 0;
+  scale: 0.4;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out);
+}
+
+.radio input:checked + .radio-dot::after {
+  opacity: 1;
+  scale: 1;
+}
+
+.radio-group {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.radio-group legend {
+  margin-block-end: var(--space-4);
+  padding: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-label);
+}
+
+.check:active .check-box,
+.radio:active .radio-dot,
+.check-box.is-active,
+.radio-dot.is-active {
+  scale: 0.9;
+}
+
+.check input:focus-visible + .check-box,
+.radio input:focus-visible + .radio-dot,
+.toggle input:focus-visible + .toggle-track,
+.is-focus > .check-box,
+.is-focus > .radio-dot,
+.is-focus > .toggle-track {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.check[data-invalid] .check-box {
+  border-color: var(--status-danger);
+}
+
+.check:has(input:disabled),
+.radio:has(input:disabled),
+.toggle:has(input:disabled) {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.check:has(input:disabled) small,
+.radio:has(input:disabled) small,
+.toggle:has(input:disabled) small {
+  color: var(--text-disabled);
+}
+
+.check input:disabled + .check-box,
+.radio input:disabled + .radio-dot,
+.toggle input:disabled + .toggle-track {
+  border-color: var(--border-strong);
+  background: var(--action-disabled);
+}
+
+.check input:disabled:checked + .check-box,
+.check input:disabled:indeterminate + .check-box,
+.toggle input:disabled:checked + .toggle-track {
+  border-color: var(--text-disabled);
+  background: var(--text-disabled);
+}
+
+.radio input:disabled + .radio-dot::after {
+  background: var(--text-disabled);
+}
+
+.toggle input:disabled + .toggle-track .toggle-thumb {
+  background: var(--text-disabled);
+}
+
+.toggle input:disabled:checked + .toggle-track .toggle-thumb {
+  background: var(--surface-base);
+}
+
+.check input:disabled + .check-box svg {
+  stroke: var(--surface-base);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .check:hover input:not(:disabled, :checked, :indeterminate) + .check-box,
+  .radio:hover input:not(:disabled, :checked) + .radio-dot,
+  .toggle:hover input:not(:disabled, :checked) + .toggle-track,
+  .is-hover > .check-box,
+  .is-hover > .radio-dot,
+  .is-hover > .toggle-track {
+    border-color: var(--border-ink);
+  }
+
+  .check:hover input:not(:disabled):is(:checked, :indeterminate) + .check-box,
+  .toggle:hover input:not(:disabled):checked + .toggle-track {
+    border-color: var(--action-primary-hover);
+    background: var(--action-primary-hover);
+  }
+}

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Знак | duppel</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="ds.css">
+<link rel="stylesheet" href="doc.css">
+<link rel="stylesheet" href="doc-shell.css">
+<link rel="stylesheet" href="doc-spec.css">
+<link rel="stylesheet" href="doc-motion.css">
+<link rel="stylesheet" href="doc-brand.css">
+<link rel="stylesheet" href="doc-brand-motion.css">
+<link rel="stylesheet" href="doc-brand-parts.css">
+<link rel="stylesheet" href="doc-narrow.css">
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="top" data-top></header>
+<div class="shell">
+<nav class="toc" aria-label="Разделы" data-toc></nav>
+<main class="doc" id="main">
+<h1 class="visually-hidden">Знак duppel</h1>
+<section class="chapter chapter-first" id="idea">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Знак «то же самое»</h2>
+    <p class="chapter-lead">Два штриха кавычки 〃 значат «то же самое», двойной штрих ″ значит секунды. Второй штрих опустился на 7 модулей из 27: модель и показания разошлись, это утечка, и duppel находит её примерно за 2″.</p>
+  </header>
+  <div class="bd-hero">
+    <figure class="bd-hero-word"><svg class="brand-lockup" role="img" aria-label="duppel"><use href="brand.svg#lockup" width="100%" height="100%"/></svg><figcaption>Логотип: слово и знак верхним индексом</figcaption></figure>
+    <figure class="bd-hero-mark"><svg class="brand-symbol" role="img" aria-label="Знак duppel"><use href="brand.svg#symbol" width="100%" height="100%"/></svg><figcaption>Знак отдельно</figcaption></figure>
+  </div>
+  <ul class="facts">
+    <li>Название всегда строчными: <b>duppel</b>. В тексте набирается шрифтом текста, в логотипе только кривыми из <code>docs/brand/</code>.</li>
+    <li>Слово набрано Schibsted Grotesk 800 и переведено в кривые. Интерфейс остаётся на Onest, шрифт логотипа в интерфейсе не используется.</li>
+  </ul>
+</section>
+
+<section class="chapter" id="build">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Построение</h2>
+    <p class="chapter-lead">Модуль равен единице координат знака. Штрих высотой 27 модулей, голова шириной 11, шаг между штрихами 14, сдвиг второго штриха 7.</p>
+  </header>
+  <div class="bd-build">
+    <figure class="spec bd-figure">
+      <svg class="bd-grid" viewBox="0 0 52 46" role="img" aria-label="Знак на модульной сетке">
+        <defs><pattern id="bd-module" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M1 0V1H0" fill="none"/></pattern></defs>
+        <rect class="bd-grid-fill" x="4" y="2" width="44" height="42" fill="url(#bd-module)"/>
+        <path class="bd-guide" d="M4 6H48M4 13H48M4 33H48M4 40H48"/>
+        <path class="mark-base" d="M12.5 6H23.5Q20.6 21 16.4 33H12.8Q12 20 12.5 6Z"/>
+        <path class="mark-accent" d="M26.5 13H37.5Q34.6 28 30.4 40H26.8Q26 27 26.5 13Z"/>
+        <path class="bd-dim" d="M8.5 6V33M7.7 6H9.3M7.7 33H9.3M41.5 6V13M40.7 6H42.3M40.7 13H42.3M45 13V40M44.2 13H45.8M44.2 40H45.8M12.5 3.5H23.5M12.5 2.7V4.3M23.5 2.7V4.3M12.5 43H26.5M12.5 42.2V43.8M26.5 42.2V43.8"/>
+        <text class="bd-num" x="7.6" y="20" text-anchor="end">27</text>
+        <text class="bd-num bd-num-accent" x="40.6" y="10.2" text-anchor="end">7</text>
+        <text class="bd-num" x="46" y="27">27</text>
+        <text class="bd-num" x="18" y="2.4" text-anchor="middle">11</text>
+        <text class="bd-num" x="19.5" y="45.6" text-anchor="middle">14</text>
+      </svg>
+      <figcaption class="spec-cap">Сетка 1 модуль. Обе линии сверху и снизу показывают, на сколько разошлись штрихи.</figcaption>
+    </figure>
+    <figure class="spec bd-figure">
+      <svg class="bd-sup" viewBox="-12 -118 482 160" role="img" aria-label="Положение знака относительно слова">
+        <path class="bd-guide" d="M-10 0H436M-10 -70.31H436M356 -25.31H436"/>
+        <use href="brand.svg#lockup" x="-2" y="-95.7" width="409.5" height="120.2"/>
+        <path class="bd-dim" d="M424 -70.31V-25.31M420 -70.31H428M420 -25.31H428M348.15 -100V-84M362.21 -100V-84M348.15 -92H362.21"/>
+        <text class="bd-label" x="-10" y="-76">высота прописной</text>
+        <text class="bd-label" x="-10" y="16">базовая линия</text>
+        <text class="bd-label bd-label-accent" x="432" y="-44">0,64</text>
+        <text class="bd-label bd-label-accent" x="355" y="-104" text-anchor="middle">0,2</text>
+      </svg>
+      <figcaption class="spec-cap">Знак стоит верхним индексом: верх по высоте прописной, высота 0,64 прописной, отступ от слова 0,2 прописной.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="chapter" id="space">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Поле и размеры</h2>
+    <p class="chapter-lead">Вокруг логотипа свободное поле в высоту знака. Вокруг знака отдельно поле в 7 модулей, то есть в величину сдвига.</p>
+  </header>
+  <figure class="spec bd-figure">
+    <svg class="bd-field" viewBox="-72 -140 540 220" role="img" aria-label="Свободное поле вокруг логотипа">
+      <rect class="bd-field-zone" x="-45" y="-118" width="497" height="182"/>
+      <rect class="bd-field-core" x="0" y="-73" width="407" height="92"/>
+      <use href="brand.svg#lockup" x="-2" y="-95.7" width="409.5" height="120.2"/>
+      <path class="bd-dim" d="M-45 -126H0M-45 -130V-122M0 -130V-122M-53 -118V-73M-57 -118H-49M-57 -73H-49"/>
+      <text class="bd-label" x="-22" y="-130" text-anchor="middle">x</text>
+    </svg>
+    <figcaption class="spec-cap">x равен высоте знака в логотипе. Внутри поля нет текста, линий и краёв панели.</figcaption>
+  </figure>
+  <div class="bd-sizes">
+    <figure><div class="bd-size-cell"><svg class="brand-symbol" style="--brand-size:16px" aria-hidden="true"><use href="brand.svg#symbol" width="100%" height="100%"/></svg><svg class="brand-symbol" style="--brand-size:24px" aria-hidden="true"><use href="brand.svg#symbol" width="100%" height="100%"/></svg><svg class="brand-symbol" style="--brand-size:32px" aria-hidden="true"><use href="brand.svg#symbol" width="100%" height="100%"/></svg></div><figcaption><b>Знак от 16&nbsp;px</b>Favicon, вкладка, иконка в узкой шапке</figcaption></figure>
+    <figure><div class="bd-size-cell"><svg class="brand-lockup" style="--brand-size:22px" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg><svg class="brand-lockup" style="--brand-size:28px" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg></div><figcaption><b>Шапка 22–28&nbsp;px</b>Высота логотипа в приложении и документации. Меньше 20&nbsp;px только знак</figcaption></figure>
+    <figure><div class="bd-size-cell"><svg class="brand-lockup" style="--brand-size:64px" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg></div><figcaption><b>Слайд от 96&nbsp;px</b>Обложка презентации. На остальных слайдах знак 24&nbsp;px в углу</figcaption></figure>
+  </div>
+</section>
+
+<section class="chapter" id="color">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Цвет</h2>
+    <p class="chapter-lead">Слово и первый штрих цветом текста. Второй штрих цветом акцента: оксблад на светлом, янтарь на тёмном. Других сочетаний нет.</p>
+  </header>
+  <div class="bd-themes">
+    <figure class="bd-theme bd-theme-light"><img src="/docs/brand/wordmark-light.svg" alt="duppel на светлом фоне"><figcaption><span class="bd-chip" style="--chip:var(--ink-950)"></span>Чернила <code>#0f0e0d</code><span class="bd-chip" style="--chip:var(--leak-700)"></span>Оксблад <code>#a3271e</code></figcaption></figure>
+    <figure class="bd-theme bd-theme-dark"><img src="/docs/brand/wordmark-dark.svg" alt="duppel на тёмном фоне"><figcaption><span class="bd-chip" style="--chip:var(--ink-25)"></span>Бумага <code>#f7f6f4</code><span class="bd-chip" style="--chip:var(--crude-amber)"></span>Янтарь <code>#ffac2e</code></figcaption></figure>
+  </div>
+  <h3 class="sub">Одним цветом и вывороткой</h3>
+  <div class="bd-monos">
+    <figure class="bd-mono bd-mono-ink"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg><figcaption>Один цвет: печать, гравировка, факс</figcaption></figure>
+    <figure class="bd-mono bd-mono-paper"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg><figcaption>Выворотка: тёмный фон без акцента</figcaption></figure>
+    <figure class="bd-mono bd-mono-accent"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg><figcaption>На оксбладе: оба штриха цветом бумаги</figcaption></figure>
+  </div>
+</section>
+
+<section class="chapter" id="misuse">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Так нельзя</h2>
+    <p class="chapter-lead">Логотип берётся только из файлов. Всё, что ниже, ломает идею: двойник совпал, хотя должен был разойтись, или слово перестало быть нашим.</p>
+  </header>
+  <div class="bd-misuse">
+    <figure class="bd-bad"><div class="bd-bad-cell"><svg class="bd-stretch" viewBox="-2 -95.7 409.5 120.2" preserveAspectRatio="none" aria-hidden="true"><use href="brand.svg#lockup" x="-2" y="-95.7" width="409.5" height="120.2"/></svg></div><figcaption>Не растягивать и не сжимать</figcaption></figure>
+    <figure class="bd-bad"><div class="bd-bad-cell"><svg class="brand-symbol bd-big" viewBox="1.75 0 46 46" aria-hidden="true"><path class="bd-wrong" d="M12.5 6H23.5Q20.6 21 16.4 33H12.8Q12 20 12.5 6Z"/><path class="mark-accent" d="M26.5 13H37.5Q34.6 28 30.4 40H26.8Q26 27 26.5 13Z"/></svg></div><figcaption>Не перекрашивать первый штрих</figcaption></figure>
+    <figure class="bd-bad"><div class="bd-bad-cell"><svg class="brand-symbol bd-big" viewBox="1.75 0 46 46" aria-hidden="true"><path class="mark-base" d="M12.5 6H23.5Q20.6 21 16.4 33H12.8Q12 20 12.5 6Z"/><path class="mark-accent" d="M26.5 6H37.5Q34.6 21 30.4 33H26.8Q26 20 26.5 6Z"/></svg></div><figcaption>Не выравнивать штрихи в статичном логотипе</figcaption></figure>
+    <figure class="bd-bad"><div class="bd-bad-cell"><span class="bd-fake bd-fake-ui">duppel<svg aria-hidden="true"><use href="brand.svg#symbol" width="100%" height="100%"/></svg></span></div><figcaption>Не набирать слово шрифтом интерфейса</figcaption></figure>
+    <figure class="bd-bad"><div class="bd-bad-cell"><span class="bd-fake bd-fake-title">Duppel<svg aria-hidden="true"><use href="brand.svg#symbol" width="100%" height="100%"/></svg></span></div><figcaption>Не писать с прописной, даже в начале предложения</figcaption></figure>
+  </div>
+</section>
+
+<section class="chapter" id="motion">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Движение знака</h2>
+    <p class="chapter-lead">Знак показывает состояние двойника. Штрихи вместе: модель совпадает с показаниями. Второй штрих уходит вниз: найдено расхождение.</p>
+  </header>
+  <div class="bd-motion">
+    <div class="spec bd-stage" data-ditto-stage>
+      <svg class="ditto" viewBox="1.75 0 46 46" data-ditto="reveal" role="img" aria-label="Знак в состоянии «Появление»"><path class="mark-base" d="M12.5 6H23.5Q20.6 21 16.4 33H12.8Q12 20 12.5 6Z"/><path class="mark-accent" d="M26.5 13H37.5Q34.6 28 30.4 40H26.8Q26 27 26.5 13Z"/></svg>
+      <p class="bd-stage-state" data-ditto-caption role="status">Появление</p>
+    </div>
+    <div class="bd-controls">
+      <div class="bd-states" role="radiogroup" aria-label="Состояние знака">
+        <button class="doc-button" type="button" role="radio" aria-checked="true" data-ditto-pick="reveal">Появление</button>
+        <button class="doc-button" type="button" role="radio" aria-checked="false" data-ditto-pick="calm">Норма</button>
+        <button class="doc-button" type="button" role="radio" aria-checked="false" data-ditto-pick="alarm">Тревога</button>
+        <button class="doc-button" type="button" role="radio" aria-checked="false" data-ditto-pick="busy">Расчёт</button>
+      </div>
+      <div class="bd-states">
+        <button class="doc-button" type="button" data-ditto-replay><svg class="icon" aria-hidden="true"><use href="icons.svg#play"/></svg>Повторить</button>
+        <button class="doc-button" type="button" aria-pressed="false" data-ditto-reduce>Как при «уменьшить движение»</button>
+      </div>
+      <dl class="bd-timeline">
+        <div><dt>Появление</dt><dd>Первый штрих проявляется за 800&nbsp;мс, второй появляется рядом с ним и съезжает на место за 1250&nbsp;мс, кривая <code>--ease-viscous</code>. Запуск приложения.</dd></div>
+        <div><dt>Норма</dt><dd>Штрихи на одной линии, второй цветом текста. Двойник совпадает с показаниями.</dd></div>
+        <div><dt>Тревога</dt><dd>Второй штрих опускается на 7 модулей за 1250&nbsp;мс и окрашивается акцентом. Один раз, без мигания.</dd></div>
+        <div><dt>Расчёт</dt><dd>Второй штрих медленно ходит между линиями, пока модель ищет место утечки.</dd></div>
+        <div><dt>Без движения</dt><dd>Статичный знак со сдвигом и акцентом, как в логотипе. Состояние передаёт текст рядом.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="seconds">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Секунды ″</h2>
+    <p class="chapter-lead">Двойной штрих ″ означает секунды. В главной цифре времени обнаружения единицу рисует сам знак: число и есть обещание продукта.</p>
+  </header>
+  <div class="bd-seconds">
+    <figure class="spec bd-readout-card"><p class="bd-readout">2,1<svg class="bd-sec" viewBox="1.75 0 46 46" role="img" aria-label="секунды"><path class="mark-base" d="M12.5 6H23.5Q20.6 21 16.4 33H12.8Q12 20 12.5 6Z"/><path class="mark-accent" d="M26.5 13H37.5Q34.6 28 30.4 40H26.8Q26 27 26.5 13Z"/></svg></p><figcaption class="spec-cap">Утечка найдена через 2,1 секунды после начала</figcaption></figure>
+    <ul class="facts bd-rules">
+      <li><b>Можно.</b> Главная цифра времени обнаружения на экране утечки, обложка и слайд с результатом, README. В обычном тексте символ U+2033 без пробела: 2,1″.</li>
+      <li><b>Нельзя.</b> Таблицы, журнал, оси графиков, поля ввода и подписи датчиков. Там единица «с»: 2,1&nbsp;с.</li>
+      <li><b>Нельзя.</b> Ставить ″ после чисел, которые не время, и заменять им логотип.</li>
+      <li>Знак-единица стоит верхним индексом на высоте цифр, высота 0,64 высоты цифры, отступ 0,2.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter" id="icons">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Иконки и favicon</h2>
+    <p class="chapter-lead">Файлы ниже лежат в <code>frontend/public/</code> и собираются из знака командой <code>npm run brand:assets</code>. Руками их не правят.</p>
+  </header>
+  <div class="bd-icons">
+    <figure><div class="bd-icon-cell"><img src="/frontend/public/icons/icon-512.png" width="128" height="128" alt="Иконка приложения 512 px"></div><figcaption><b>icon-512.png</b>Иконка приложения</figcaption></figure>
+    <figure><div class="bd-icon-cell"><img class="bd-maskable" src="/frontend/public/icons/icon-maskable-512.png" width="128" height="128" alt="Маскируемая иконка в круглой маске"></div><figcaption><b>icon-maskable-512.png</b>В круглой маске Android</figcaption></figure>
+    <figure><div class="bd-icon-cell"><img class="bd-apple" src="/frontend/public/apple-touch-icon.png" width="90" height="90" alt="Иконка для iOS"></div><figcaption><b>apple-touch-icon.png</b>180&nbsp;px, iOS скругляет сам</figcaption></figure>
+    <figure><div class="bd-icon-cell bd-tabs"><span class="bd-tab bd-tab-light"><svg class="brand-symbol" style="--brand-size:16px" aria-hidden="true"><use href="brand.svg#symbol" width="100%" height="100%"/></svg>Участок | duppel</span><span class="bd-tab bd-tab-dark"><svg class="brand-symbol" style="--brand-size:16px" aria-hidden="true"><use href="brand.svg#symbol" width="100%" height="100%"/></svg>Участок | duppel</span></div><figcaption><b>favicon.svg</b>16&nbsp;px. В файле два набора цветов, браузер берёт их по теме системы</figcaption></figure>
+  </div>
+</section>
+</main>
+</div>
+<script type="module" src="doc-shell.js"></script>
+<script type="module" src="page.js"></script>
+<script type="module" src="doc-brand.js"></script>
+</body>
+</html>

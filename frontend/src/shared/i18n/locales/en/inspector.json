@@ -1,0 +1,10 @@
+{
+  "title": "Title: {{segment}}",
+  "outside": "Outside",
+  "rank": "Rank: {{rank}}, {{count}}",
+  "interval": "P10 / P90",
+  "intervalHint": "Interval hint",
+  "nominal": "Nominal",
+  "previous": "Previous",
+  "next": "Next"
+}

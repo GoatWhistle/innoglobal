@@ -1,0 +1,7 @@
+
+> app-frontend@0.1.0 typecheck
+> tsc --noEmit
+
+e2e/combined-inspection.spec.ts(19,28): error TS2339: Property 'scan' does not exist on type '{ product: string; pipe: string; segment: string; target: string; loading: string; empty: string; emptyBody: string; invalid: string; invalidPipe: string; forecast: string; missing: string; lastVtd: string; ... 55 more ...; localScope: string; }'.
+e2e/combined-inspection.spec.ts(37,54): error TS2339: Property 'scan' does not exist on type '{ product: string; pipe: string; segment: string; target: string; loading: string; empty: string; emptyBody: string; invalid: string; invalidPipe: string; forecast: string; missing: string; lastVtd: string; ... 55 more ...; localScope: string; }'.
+e2e/combined-inspection.spec.ts(68,54): error TS2339: Property 'scan' does not exist on type '{ product: string; pipe: string; segment: string; target: string; loading: string; empty: string; emptyBody: string; invalid: string; invalidPipe: string; forecast: string; missing: string; lastVtd: string; ... 55 more ...; localScope: string; }'.

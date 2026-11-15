@@ -1,0 +1,52 @@
+.list {
+  composes: plainList from "../../../styles/compose.module.css";
+
+  display: grid;
+  gap: var(--space-12);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--space-4) var(--space-12);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+}
+
+.label {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.value {
+  font-variant-numeric: var(--font-numeric);
+  font-weight: var(--weight-medium);
+}
+
+.track {
+  grid-column: 1 / -1;
+  display: block;
+  block-size: var(--space-4);
+  border-radius: var(--radius-pill);
+  background-color: var(--surface-sunken);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  block-size: 100%;
+  background-color: var(--chart-model);
+  transform: scaleX(var(--share));
+  transform-origin: left center;
+}
+
+.emphasis .fill {
+  background-color: var(--chart-measured);
+}
+
+.meta {
+  grid-column: 1 / -1;
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}

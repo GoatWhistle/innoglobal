@@ -1,0 +1,51 @@
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-8) var(--space-12);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.check {
+  visibility: hidden;
+}
+
+.option[aria-selected="true"] .check {
+  visibility: visible;
+}
+
+.label {
+  composes: truncate from "../../layout/text-role/text-role.module.css";
+  flex: 1 1 auto;
+}
+
+.option[aria-selected="true"] {
+  background-color: var(--surface-selected);
+}
+
+.option[aria-selected="true"] .label {
+  font-weight: var(--weight-medium);
+}
+
+.meta {
+  composes: mutedCaption from "../../layout/text-role/text-role.module.css";
+  flex: none;
+  margin-inline-start: auto;
+  font-variant-numeric: var(--font-numeric);
+}
+
+.option[data-active] {
+  background-color: var(--action-ghost-press);
+}
+
+.option[aria-disabled="true"] {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.option[aria-disabled="true"] .meta {
+  color: var(--text-disabled);
+}

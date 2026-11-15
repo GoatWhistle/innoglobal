@@ -1,0 +1,42 @@
+:root,
+:root[data-theme="light"] {
+  --wall-steel: #9fa4a8;
+  --wall-rust: #a4532c;
+  --wall-amber: #d9870f;
+  --wall-scale: linear-gradient(90deg, var(--wall-steel), var(--wall-rust), var(--wall-amber));
+  --matte-fill: color-mix(in oklab, var(--ink-0) 78%, transparent);
+  --matte-edge: color-mix(in oklab, var(--ink-0) 90%, transparent);
+  --matte-blur: 14px;
+  --key-face: var(--ink-0);
+  --key-edge: var(--ink-300);
+  --key-face-on: var(--ink-950);
+  --key-text-on: var(--ink-0);
+  --metal-light: var(--ink-0);
+  --metal-mid: var(--ink-100);
+  --metal-dark: var(--ink-300);
+  --cut-oil: transparent;
+  --sheet-frame-gap: 4px;
+  --tag-leader: 28px;
+  --pipe-scene: clamp(320px, 56vh, 600px);
+  --pipe-scene-mobile: 340px;
+  --readout-width: 18rem;
+  --dur-unroll: 1250ms;
+  --dur-cut: 1000ms;
+  --dur-key: 80ms;
+}
+
+:root[data-theme="dark"] {
+  --wall-steel: #6c7277;
+  --wall-rust: #94472a;
+  --wall-amber: #ffac2e;
+  --matte-fill: color-mix(in oklab, var(--ink-900) 64%, transparent);
+  --matte-edge: color-mix(in oklab, var(--ink-0) 16%, transparent);
+  --key-face: var(--ink-825);
+  --key-edge: var(--ink-1000);
+  --key-face-on: var(--ink-25);
+  --key-text-on: var(--ink-1000);
+  --metal-light: #c9ccce;
+  --metal-mid: #7c8185;
+  --metal-dark: #2e3133;
+  --cut-oil: var(--crude-pitch);
+}

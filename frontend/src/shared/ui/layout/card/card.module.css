@@ -1,0 +1,67 @@
+.card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-16);
+  min-inline-size: 0;
+  padding: var(--space-card);
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface-raised);
+}
+
+.entering {
+  animation: var(--motion-rise-in);
+  animation-delay: calc(var(--i) * var(--stagger));
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--space-element);
+}
+
+.heading {
+  display: grid;
+  flex: 1 1 var(--term-min);
+  gap: var(--space-4);
+  min-inline-size: 0;
+}
+
+.eyebrow {
+  composes: mutedCaption from "../text-role/text-role.module.css";
+  font-variant-numeric: var(--font-numeric);
+}
+
+.title {
+  composes: subheadingText from "../../../styles/compose.module.css";
+  font-weight: var(--weight-regular);
+}
+
+.description {
+  composes: secondaryText from "../../../styles/compose.module.css";
+  max-inline-size: var(--prose-measure);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.sheet {
+  border-radius: var(--radius-none);
+  border-color: var(--drawing-frame);
+  outline: var(--hairline) solid var(--border-subtle);
+  outline-offset: calc(var(--space-4) * -1);
+  box-shadow: var(--shadow-sheet);
+}
+
+.plain {
+  padding: 0;
+  border-width: 0;
+  border-radius: var(--radius-none);
+  background-color: transparent;
+}

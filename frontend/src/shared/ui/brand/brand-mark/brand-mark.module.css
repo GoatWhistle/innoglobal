@@ -1,0 +1,57 @@
+.mark {
+  display: block;
+  flex: none;
+  inline-size: auto;
+  block-size: var(--brand-size-md);
+  overflow: visible;
+}
+
+.sm {
+  block-size: var(--brand-size-sm);
+}
+
+.lg {
+  block-size: var(--brand-size-lg);
+}
+
+.word,
+.base {
+  fill: var(--brand-ink);
+}
+
+.accent {
+  fill: var(--brand-ink);
+  transform: translateY(calc(var(--shift-brand-align) * -1));
+  transition: var(--transition-brand-rise);
+}
+
+.identity .accent,
+.alarm .accent {
+  fill: var(--brand-accent);
+  transform: translateY(0);
+}
+
+.alarm .accent {
+  transition: var(--transition-brand-drop);
+}
+
+.busy .accent {
+  animation: var(--motion-brand-busy);
+}
+
+.reveal .base {
+  animation: var(--motion-brand-base-in);
+}
+
+.reveal .enter {
+  animation: var(--motion-brand-accent-in);
+}
+
+.reveal .drop {
+  animation: var(--motion-brand-drop-in);
+}
+
+.reveal.calm .drop,
+.reveal.busy .drop {
+  animation: none;
+}

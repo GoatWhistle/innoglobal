@@ -1,0 +1,13 @@
+strip keyboard, coordinate input and validation passed
+mouse chain route (click selected 630) -> unroll -> click spot -> section 636 passed; sheet aligned with profile
+unroll transition frames: 10, median 133.3 ms, p95 316.6 ms (headless SwiftShader, not a hardware GPU measurement)
+keyboard chain via camera keys and 1/2/3 passed, selection kept across scales
+theme keeps selection; case 2 partial segment and priority list passed
+real WebGL context loss switches to 2D scheme
+reduced motion: unroll is flat immediately
+forced 2D: three scales render as SVG, sheet click cuts the pipe
+absent renderer module falls back to 2D after timeout
+loading, empty, error recover; missing hides observed legend
+screenshot pipe-kit-page-375-dark.png skipped: page.screenshot: Protocol error (Page.captureScreenshot): Unable to capture screenshot
+matrix 24 views (375/768/1440, both themes): no overflow, no axe violations
+no page errors

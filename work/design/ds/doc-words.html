@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Клавиши и слова | duppel</title>
+<script>try { document.documentElement.dataset.theme = localStorage.getItem("ds-theme") === "light" ? "light" : "dark" } catch {}</script>
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="brand.css">
+<link rel="stylesheet" href="ds.css">
+<link rel="stylesheet" href="doc.css">
+<link rel="stylesheet" href="doc-shell.css">
+<link rel="stylesheet" href="doc-spec.css">
+<link rel="stylesheet" href="doc-table.css">
+<link rel="stylesheet" href="kit-button.css">
+<link rel="stylesheet" href="doc-narrow.css">
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="top" data-top></header>
+<div class="shell">
+<nav class="toc" aria-label="Разделы" data-toc></nav>
+<main class="doc" id="main">
+<h1 class="visually-hidden">Клавиши и слова</h1>
+<section class="chapter chapter-first" id="keys">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Навигация и клавиши</h2>
+    <p class="chapter-lead">Одна карта клавиш на весь продукт. Клавиши по физическому положению, работают в русской раскладке.</p>
+  </header>
+  <div class="scroll" tabindex="0" role="region" aria-label="Карта клавиш">
+    <table class="copy">
+      <thead><tr><th scope="col">Клавиша</th><th scope="col">Действие</th><th scope="col">Где</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><kbd class="kbd">Пробел</kbd></th><td>Открыть сегмент под курсором или в выбранной точке</td><td>Сцена</td></tr>
+        <tr><th scope="row"><kbd class="kbd">Esc</kbd></th><td>Закрыть верхний слой. Если слоёв нет: снять выбор сегмента</td><td>Везде</td></tr>
+        <tr><th scope="row"><kbd class="kbd">P</kbd></th><td>Пауза и продолжение</td><td>Сцена, графики</td></tr>
+        <tr><th scope="row"><kbd class="kbd">A</kbd></th><td>Принять сегмент в план</td><td>Везде, пока выбран сегмент из списка</td></tr>
+        <tr><th scope="row"><kbd class="kbd">/</kbd></th><td>Поиск по сегментам и журналу</td><td>Везде</td></tr>
+        <tr><th scope="row"><kbd class="kbd">G</kbd> <kbd class="kbd">S</kbd>, <kbd class="kbd">G</kbd> <kbd class="kbd">J</kbd>, <kbd class="kbd">G</kbd> <kbd class="kbd">P</kbd></th><td>Перейти: сцена, журнал, параметры</td><td>Везде</td></tr>
+        <tr><th scope="row"><kbd class="kbd">[</kbd> <kbd class="kbd">]</kbd></th><td>Такт назад и вперёд</td><td>Повтор, графики</td></tr>
+        <tr><th scope="row"><kbd class="kbd">?</kbd></th><td>Показать карту клавиш</td><td>Везде</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="facts">
+    <li><b>Клавиши не срабатывают</b> в полях ввода, кроме <kbd class="kbd">Esc</kbd>. У каждой клавиши есть кнопка с подсказкой, где клавиша написана.</li>
+    <li><b>Порядок фокуса</b> по чтению: ссылка «К содержанию», шапка, баннер списка, сцена, панель. Баннер списка получает фокус только по <kbd class="kbd">A</kbd> или Tab, не перехватывает его сам.</li>
+    <li><b>Смена экрана</b> через View Transitions, фокус переходит на заголовок нового экрана, заголовок вкладки меняется.</li>
+  </ul>
+</section>
+
+<section class="chapter" id="glossary">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Словарь</h2>
+    <p class="chapter-lead">Одно понятие, одно слово. В интерфейсе, журнале и на защите одинаково.</p>
+  </header>
+  <div class="scroll" tabindex="0" role="region" aria-label="Словарь терминов">
+    <table class="copy">
+      <thead><tr><th scope="col">Пишем</th><th scope="col">Значит</th><th scope="col">Не пишем</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Участок</th><td>Труба от входа до выхода, 12&nbsp;км</td><td class="no">Сегмент, линия, пайп</td></tr>
+        <tr><th scope="row">Сегмент, 630</th><td>Отрезок трубы 10 м</td><td class="no">Сенсор, точка, ДД3</td></tr>
+        <tr><th scope="row">Замер</th><td>Толщина по ВТД</td><td class="no">Факт, реальное, actual</td></tr>
+        <tr><th scope="row">Прогноз на T</th><td>Толщина на дату T</td><td class="no">Ожидаемая, предсказанная, симуляция</td></tr>
+        <tr><th scope="row">Расхождение</th><td>Замер минус прогноз, в мм</td><td class="no">Ошибка, дельта, аномалия</td></tr>
+        <tr><th scope="row">Расхождение</th><td>Расхождение в тексте для человека</td><td class="no">Отклонение от нормы</td></tr>
+        <tr><th scope="row">Порог, выдержка</th><td>Граница расхождения и время за ней</td><td class="no">Чувствительность, таймаут</td></tr>
+        <tr><th scope="row">Внимание</th><td>Ниже среднего по трубе, ещё не в списке</td><td class="no">Утонение выше среднего</td></tr>
+        <tr><th scope="row">Приоритет</th><td>Подтверждённое событие</td><td class="no">Авария, инцидент, протечка</td></tr>
+        <tr><th scope="row">Прогноз на дату T</th><td>Минимальная толщина на выбранную дату</td><td class="no">Предсказано, спрогнозили</td></tr>
+        <tr><th scope="row">Внутритрубная диагностика</th><td>Обследование трубы</td><td class="no">Сканирование, прогон</td></tr>
+        <tr><th scope="row">Принять</th><td>Инженер включил сегмент в план</td><td class="no">Квитировать, подтвердить, ОК</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="facts">
+    <li><b>Сегмент в списке:</b> что и где, потом число и дата. «Сегмент 630, 6&nbsp;300&nbsp;м: прогноз 4,86&nbsp;мм на дату T.»</li>
+    <li><b>Ошибка:</b> что случилось, что уцелело, что нажать. «Локальный расчёт остановился 14&nbsp;с. Показания на 14:02:11 сохранены. Повторить.»</li>
+    <li><b>Внимание</b> без драмы: «Сегмент 631 тоньше среднего на 0,63&nbsp;мм.»</li>
+  </ul>
+</section>
+
+<section class="chapter" id="copy">
+  <header class="chapter-head">
+    <h2 class="chapter-title">Текст</h2>
+    <p class="chapter-lead">Интерфейс говорит как журнал инженера: факт, место, число.</p>
+  </header>
+  <div class="scroll" tabindex="0" role="region" aria-label="Правила текста">
+    <table class="copy">
+      <thead><tr><th scope="col">Что</th><th scope="col">Пишем</th><th scope="col">Не пишем</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Число и единица</th><td><span data-num="1245.8" data-digits="1"></span>&nbsp;м³/ч</td><td class="no">1245.8 m3/h</td></tr>
+        <tr><th scope="row">Диапазон</th><td>0,02–0,5&nbsp;мм</td><td class="no">0,02 - 0,5мм</td></tr>
+        <tr><th scope="row">Доля</th><td><span data-pct="0.18"></span></td><td class="no">18 процентов</td></tr>
+        <tr><th scope="row">Время и длительность</th><td>14:02:11, за 0,8&nbsp;с</td><td class="no">2:02 PM, 0.8 сек.</td></tr>
+        <tr><th scope="row">Несколько признаков</th><td>Сегмент 630, 6&nbsp;290–6&nbsp;300&nbsp;м</td><td class="no">сег. 630 · 6290м</td></tr>
+        <tr><th scope="row">Событие</th><td>Сегменты 629–639 в списке</td><td class="no">Внимание! Обнаружен потенциально опасный участок!</td></tr>
+        <tr><th scope="row">Ошибка</th><td>Модель не отвечает 14&nbsp;с. Прошлый прогноз сохранён. <b>Повторить</b></td><td class="no">Упс! Что-то пошло не так</td></tr>
+        <tr><th scope="row">Кнопка</th><td>Принять в план</td><td class="no">ОК, Да, Подтвердить</td></tr>
+        <tr><th scope="row">Регистр</th><td>Журнал событий</td><td class="no">Журнал Событий, ЖУРНАЛ</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="facts">
+    <li>Числа форматирует <code>Intl</code>: неразрывный пробел в разрядах и перед единицей, запятая в дробях.</li>
+    <li>Ошибка отвечает на три вопроса: что случилось, что уцелело, что нажать. Текст с сервера в интерфейс не попадает.</li>
+    <li>Без длинного тире, средней точки и вертикальной черты между словами. Короткое тире только в диапазоне чисел.</li>
+  </ul>
+</section>
+</main>
+</div>
+<script type="module" src="doc-shell.js"></script>
+<script type="module" src="page.js"></script>
+<script type="module" src="doc-spec.js"></script>
+<script type="module" src="doc.js"></script>
+</body>
+</html>

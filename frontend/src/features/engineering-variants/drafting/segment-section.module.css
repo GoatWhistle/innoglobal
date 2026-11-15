@@ -1,0 +1,82 @@
+.figure {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-8);
+}
+.drawing {
+  inline-size: min(100%, var(--panel-min));
+  block-size: auto;
+}
+.wall {
+  fill: var(--wall-steel);
+  stroke: var(--border-ink);
+  stroke-width: var(--hairline);
+}
+.bore {
+  fill: var(--scene-crude);
+}
+.interval {
+  fill: none;
+  stroke: var(--surface-range);
+}
+.nominal {
+  fill: none;
+  stroke: var(--scene-crude-text);
+  stroke-width: var(--chart-stroke);
+  stroke-dasharray: 6 4;
+}
+.low {
+  composes: instrumentBound from "../../../shared/styles/compose.module.css";
+  stroke-dasharray: 2 3;
+}
+.high {
+  composes: instrumentBound from "../../../shared/styles/compose.module.css";
+}
+.dimension {
+  composes: instrumentLine from "../../../shared/styles/compose.module.css";
+}
+.value {
+  fill: var(--text-primary);
+  font-size: var(--font-size-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+.caption {
+  fill: var(--scene-crude-text);
+  font-size: var(--font-size-caption);
+}
+.note {
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+  text-align: center;
+}
+.keys {
+  display: grid;
+  gap: var(--space-8);
+  inline-size: 100%;
+  font-size: var(--font-size-caption);
+}
+.keys > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+.keys dt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+.keys dd {
+  font-variant-numeric: tabular-nums;
+}
+.nominalKey {
+  inline-size: var(--space-20);
+  border-block-start: var(--hairline) dashed var(--border-ink);
+}
+.lowKey {
+  inline-size: var(--space-20);
+  border-block-start: var(--hairline) dotted var(--wall-amber);
+}
+.highKey {
+  inline-size: var(--space-20);
+  border-block-start: var(--hairline) solid var(--wall-amber);
+}

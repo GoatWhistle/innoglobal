@@ -1,0 +1,9 @@
+.close {
+  color: var(--text-muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .close:hover:not(:disabled) {
+    color: var(--text-primary);
+  }
+}

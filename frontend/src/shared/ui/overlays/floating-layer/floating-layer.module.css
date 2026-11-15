@@ -1,0 +1,38 @@
+.layer {
+  --layer-from: calc(var(--shift-anchor) * -1);
+  --layer-hidden: 0;
+
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: var(--layer-popover);
+  opacity: calc(1 - var(--layer-hidden));
+  scale: calc(1 - var(--layer-hidden) * (1 - var(--enter-scale)));
+  translate: 0 calc(var(--layer-from) * var(--layer-hidden));
+  transform-origin: var(--layer-origin, top left);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out),
+    translate var(--dur-fast) var(--ease-out);
+}
+
+.layer[data-side="top"] {
+  --layer-from: var(--shift-anchor);
+}
+
+.layer[data-state="closed"] {
+  --layer-hidden: 1;
+
+  transition-duration: var(--dur-fast-exit);
+  pointer-events: none;
+}
+
+.layer[data-instant] {
+  transition: none;
+}
+
+@starting-style {
+  .layer[data-state="open"] {
+    --layer-hidden: 1;
+  }
+}

@@ -1,0 +1,31 @@
+.float {
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background-color: var(--surface-float);
+  box-shadow: var(--shadow-float);
+}
+
+.slidingIndicator {
+  position: absolute;
+  inset-inline: 0;
+  clip-path: inset(0 100% 0 0);
+  pointer-events: none;
+}
+
+.control {
+  composes: pressable from "../../../styles/compose.module.css";
+  border-radius: var(--radius-control);
+  font-size: var(--font-size-body-sm);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.recessed {
+  border-radius: var(--radius-sm);
+  background-color: var(--surface-sunken);
+}
+
+.frame {
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}

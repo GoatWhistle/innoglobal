@@ -1,0 +1,113 @@
+:root {
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-96: 96px;
+  --space-152: 152px;
+
+  --space-page: var(--space-24);
+  --space-page-wide: var(--space-32);
+  --space-section: var(--space-32);
+  --space-card: var(--space-20);
+  --space-element: var(--space-12);
+  --space-control-inline: var(--space-16);
+  --space-control-block: var(--space-12);
+
+  --hairline: 1px;
+  --target-min: 44px;
+  --control-height: 44px;
+  --control-height-compact: 36px;
+  --icon-sm: 16px;
+  --icon-control: 18px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --icon-xl: 48px;
+  --brand-size-sm: 24px;
+  --brand-size-md: 32px;
+  --brand-size-lg: 64px;
+  --icon-stroke: 1.5;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --scrollbar-size: 9px;
+  --scrollbar-gutter: 3px;
+  --header-height: 64px;
+  --state-min-height: 160px;
+  --panel-min: 320px;
+  --term-min: 160px;
+  --prose-measure: 70ch;
+  --field-max-width: 480px;
+  --border-width-control: 1px;
+  --indicator-size: 20px;
+  --switch-width: 40px;
+  --switch-height: 24px;
+  --thumb-size: 20px;
+  --option-height: 40px;
+  --popover-min-width: 220px;
+  --popover-max-block: 320px;
+  --tooltip-max-width: 260px;
+  --toast-width: 400px;
+  --dialog-width: 480px;
+  --drawer-width: 440px;
+  --fade-edge: 24px;
+  --track-size: 2px;
+
+  --header-height-compact: 48px;
+  --nav-width: 240px;
+  --panel-width: 384px;
+  --panel-width-wide: 440px;
+  --panel-max: 480px;
+  --sheet-peek: 136px;
+  --columns-sm: 4;
+  --columns-md: 8;
+  --columns-lg: 12;
+  --grid-gap: var(--space-24);
+
+  --row-height: 48px;
+  --row-height-compact: 36px;
+  --cell-padding: var(--space-12);
+  --cell-padding-compact: var(--space-8);
+
+  --chart-stroke: 2px;
+  --chart-stroke-model: 1.5px;
+  --chart-dash-model: 6 4;
+  --chart-marker: 8px;
+  --chart-hit: 24px;
+  --chart-height: 240px;
+  --chart-height-sm: 160px;
+  --sparkline-width: 96px;
+  --sparkline-height: 24px;
+
+  --ink-weight-contour: 2px;
+  --ink-weight-line: 1px;
+  --ink-weight-fine: 0.75px;
+  --hatch-angle: 45deg;
+  --hatch-spacing: 6px;
+  --hatch-width: 1px;
+  --centerline-dash: 28 6 3 6;
+  --dimension-tick: 8px;
+  --leader-shelf: 24px;
+  --mark-corner: 8px;
+  --paper-cell: 8px;
+  --paper-cell-major: 40px;
+  --scanner-panel: 320px;
+  --scanner-panel-min: 280px;
+  --scanner-scene-min: 200px;
+  --scanner-scene-max: 360px;
+  --scanner-scene-mobile: 260px;
+  --scanner-section-height: 140px;
+  --scanner-list-height: 300px;
+}
+
+:root {
+  --pipe-scene: clamp(320px, 56vh, 600px);
+  --pipe-scene-mobile: 340px;
+  --readout-width: 18rem;
+}

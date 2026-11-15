@@ -1,0 +1,7 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  max-inline-size: 100%;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}

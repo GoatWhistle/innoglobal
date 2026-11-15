@@ -1,0 +1,24 @@
+.ruler {
+  min-inline-size: 0;
+}
+.labels {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+.canvas {
+  margin-inline-start: var(--space-32);
+  composes: instrumentSurface from "../../../shared/styles/compose.module.css";
+  block-size: var(--target-min);
+}
+.window {
+  composes: instrumentLine from "../../../shared/styles/compose.module.css";
+}
+.marker {
+  composes: instrumentCursor from "../../../shared/styles/compose.module.css";
+}
+
+.canvas.canvas {
+  inline-size: calc(100% - var(--space-32));
+}

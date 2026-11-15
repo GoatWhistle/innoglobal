@@ -1,0 +1,92 @@
+.segmented {
+  position: relative;
+  display: inline-grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  padding: var(--space-4);
+  border: var(--hairline) solid var(--border-control);
+  background-color: var(--surface-sunken);
+  border-radius: var(--radius-control);
+}
+
+.option {
+  composes: control from "../../primitives/surface/surface.module.css";
+  position: relative;
+  z-index: var(--layer-raised);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  min-block-size: var(--control-height-compact);
+  padding-inline: var(--space-16);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.segmented .option {
+  transition: var(--transition-choice);
+}
+
+.iconOnly {
+  inline-size: var(--target-min);
+  padding-inline: 0;
+}
+
+.option::before {
+  content: "";
+  position: absolute;
+  inset-block: calc((var(--control-height-compact) - var(--target-min)) / 2);
+  inset-inline: 0;
+}
+
+.option[data-checked="true"] {
+  background-color: var(--action-primary);
+  color: var(--action-primary-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .option[data-checked="false"]:hover {
+    color: var(--text-primary);
+  }
+}
+
+.segmented .option:active {
+  transition: var(--transition-choice-press);
+  scale: var(--press-scale);
+}
+
+.option:has(:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.input {
+  composes: choiceInput from "../choice/choice.module.css";
+  appearance: none;
+}
+
+.camera {
+  gap: var(--space-4);
+  border-radius: var(--radius-none);
+  padding-block-end: var(--space-8);
+}
+.camera .option {
+  min-block-size: var(--target-min);
+  border: var(--hairline) solid var(--border-subtle);
+  box-shadow: var(--shadow-camera);
+  background: var(--surface-raised);
+}
+.camera .option[data-checked="true"] {
+  background: var(--action-primary);
+  box-shadow: var(--shadow-camera-on);
+  transform: translateY(var(--space-2));
+}
+@media (max-width: 48rem) {
+  .camera {
+    inline-size: 100%;
+  }
+  .camera .option {
+    padding-inline: var(--space-8);
+    font-size: var(--font-size-caption);
+  }
+}

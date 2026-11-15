@@ -1,0 +1,217 @@
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --surface-base: var(--ink-25);
+  --surface-raised: var(--ink-0);
+  --surface-raised-hover: var(--ink-25);
+  --surface-sunken: var(--ink-50);
+  --surface-selected: var(--ink-0);
+  --surface-float: var(--ink-0);
+  --surface-inverse: var(--ink-950);
+  --surface-skeleton: var(--ink-100);
+  --surface-scrim: color-mix(in oklab, var(--ink-950) 28%, transparent);
+
+  --text-primary: var(--ink-950);
+  --text-secondary: var(--ink-600);
+  --text-muted: var(--ink-550);
+  --text-disabled: var(--ink-300);
+  --text-on-inverse: var(--ink-0);
+  --text-accent: var(--ink-950);
+  --text-danger: var(--leak-700);
+  --text-warning: var(--amber-700);
+  --text-success: var(--ink-950);
+  --action-primary-text: var(--ink-0);
+
+  --action-primary: var(--ink-950);
+  --action-primary-hover: var(--ink-800);
+  --action-primary-press: var(--ink-700);
+  --action-ghost-hover: color-mix(in oklab, var(--ink-1000) 4%, transparent);
+  --action-ghost-press: color-mix(in oklab, var(--ink-1000) 8%, transparent);
+  --action-disabled: var(--ink-100);
+  --action-danger: var(--leak-700);
+  --action-danger-text: var(--ink-0);
+  --action-danger-hover: color-mix(in oklab, var(--leak-700) 86%, var(--ink-1000));
+  --action-danger-press: color-mix(in oklab, var(--leak-700) 74%, var(--ink-1000));
+
+  --border-subtle: var(--ink-200);
+  --border-strong: var(--ink-300);
+  --border-control: var(--ink-400);
+  --border-control-hover: var(--ink-600);
+  --border-ink: var(--ink-950);
+
+  --status-danger: var(--leak-700);
+  --status-success: var(--ink-950);
+  --status-warning: var(--amber-500);
+  --status-neutral: var(--ink-500);
+  --signal-danger-surface: color-mix(in oklab, var(--leak-700) 7%, var(--ink-0));
+  --signal-warning-surface: color-mix(in oklab, var(--amber-300) 20%, var(--ink-0));
+
+  --scene-void: var(--ink-25);
+  --scene-crude: var(--crude-pitch);
+  --scene-crude-text: var(--ink-0);
+  --scene-sheen-cool: var(--crude-olive);
+  --scene-sheen-warm: var(--crude-amber);
+  --scene-sheen-deep: var(--crude-umber);
+  --scene-leak: var(--crude-oxblood);
+  --scene-steel: var(--ink-400);
+
+  --brand-ink: var(--ink-950);
+  --brand-accent: var(--leak-700);
+
+  --focus-ring: var(--ink-950);
+  --shadow-near: color-mix(in oklab, var(--ink-1000) 6%, transparent);
+  --shadow-color: color-mix(in oklab, var(--ink-1000) 10%, transparent);
+  --scrollbar-thumb: color-mix(in oklab, var(--ink-1000) 20%, transparent);
+  --scrollbar-thumb-hover: color-mix(in oklab, var(--ink-1000) 44%, transparent);
+  --scrollbar-thumb-active: color-mix(in oklab, var(--ink-1000) 64%, transparent);
+  --surface-range: color-mix(in oklab, var(--ink-1000) 6%, transparent);
+  --text-highlight: var(--ink-1000);
+
+  --drawing-frame: var(--ink-950);
+  --drawing-contour: var(--ink-950);
+  --drawing-line: var(--ink-600);
+  --drawing-fine: color-mix(in oklab, var(--ink-1000) 30%, transparent);
+  --hatch-neutral: color-mix(in oklab, var(--ink-1000) 24%, transparent);
+  --hatch-warning: var(--amber-500);
+  --hatch-danger: var(--leak-700);
+  --fill-warning: color-mix(in oklab, var(--amber-300) 10%, transparent);
+  --fill-danger: color-mix(in oklab, var(--leak-700) 5%, transparent);
+  --paper-grid: color-mix(in oklab, var(--ink-1000) 3.5%, transparent);
+  --paper-grid-major: color-mix(in oklab, var(--ink-1000) 6.5%, transparent);
+  --selection-mark: var(--ink-950);
+  --trace: var(--ink-950);
+  --sheen: transparent;
+
+  --chart-measured: var(--ink-950);
+  --chart-model: var(--ink-500);
+  --chart-grid: color-mix(in oklab, var(--ink-1000) 8%, transparent);
+  --chart-axis: color-mix(in oklab, var(--ink-1000) 34%, transparent);
+  --chart-band: color-mix(in oklab, var(--ink-1000) 4%, transparent);
+  --chart-crosshair: color-mix(in oklab, var(--ink-1000) 45%, transparent);
+  --chart-warning: var(--amber-500);
+  --chart-danger: var(--leak-700);
+  --wall-steel: var(--steel-300);
+  --wall-rust: var(--rust-500);
+  --wall-amber: var(--wall-amber-500);
+  --wall-0: color-mix(in oklab, var(--wall-rust) 0%, var(--wall-steel));
+  --wall-1: color-mix(in oklab, var(--wall-rust) 29%, var(--wall-steel));
+  --wall-2: color-mix(in oklab, var(--wall-rust) 57%, var(--wall-steel));
+  --wall-3: color-mix(in oklab, var(--wall-rust) 86%, var(--wall-steel));
+  --wall-4: color-mix(in oklab, var(--wall-amber) 14%, var(--wall-rust));
+  --wall-5: color-mix(in oklab, var(--wall-amber) 43%, var(--wall-rust));
+  --wall-6: color-mix(in oklab, var(--wall-amber) 71%, var(--wall-rust));
+  --wall-7: color-mix(in oklab, var(--wall-amber) 100%, var(--wall-rust));
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface-base: var(--ink-950);
+  --surface-raised: var(--ink-850);
+  --surface-raised-hover: var(--ink-825);
+  --surface-sunken: var(--ink-925);
+  --surface-selected: var(--ink-775);
+  --surface-float: var(--ink-800);
+  --surface-inverse: var(--ink-25);
+  --surface-skeleton: var(--ink-775);
+  --surface-scrim: color-mix(in oklab, var(--ink-1000) 72%, transparent);
+
+  --text-primary: var(--ink-25);
+  --text-secondary: var(--ink-300);
+  --text-muted: var(--ink-350);
+  --text-disabled: var(--ink-600);
+  --text-on-inverse: var(--ink-950);
+  --text-accent: var(--ink-25);
+  --text-danger: var(--leak-300);
+  --text-warning: var(--amber-300);
+  --text-success: var(--ink-25);
+  --action-primary-text: var(--ink-1000);
+
+  --action-primary: var(--ink-25);
+  --action-primary-hover: var(--ink-100);
+  --action-primary-press: var(--ink-200);
+  --action-ghost-hover: color-mix(in oklab, var(--ink-0) 7%, transparent);
+  --action-ghost-press: color-mix(in oklab, var(--ink-0) 12%, transparent);
+  --action-disabled: var(--ink-825);
+  --action-danger: var(--leak-700);
+  --action-danger-text: var(--ink-0);
+  --action-danger-hover: color-mix(in oklab, var(--leak-700) 90%, var(--ink-0));
+  --action-danger-press: color-mix(in oklab, var(--leak-700) 80%, var(--ink-0));
+
+  --border-subtle: var(--ink-775);
+  --border-strong: var(--ink-650);
+  --border-control: var(--ink-400);
+  --border-control-hover: var(--ink-300);
+  --border-ink: var(--ink-25);
+
+  --status-danger: var(--leak-300);
+  --status-success: var(--ink-25);
+  --status-warning: var(--amber-300);
+  --status-neutral: var(--ink-400);
+  --signal-danger-surface: color-mix(in oklab, var(--leak-300) 15%, var(--ink-950));
+  --signal-warning-surface: color-mix(in oklab, var(--amber-300) 12%, var(--ink-950));
+
+  --scene-void: var(--ink-950);
+  --scene-crude: var(--crude-pitch);
+  --scene-crude-text: var(--ink-0);
+  --scene-sheen-cool: var(--crude-olive);
+  --scene-sheen-warm: var(--crude-amber);
+  --scene-sheen-deep: var(--crude-umber);
+  --scene-leak: var(--crude-oxblood);
+  --scene-steel: var(--ink-500);
+
+  --brand-ink: var(--ink-25);
+  --brand-accent: var(--amber-400);
+
+  --focus-ring: var(--ink-25);
+  --shadow-near: color-mix(in oklab, var(--ink-1000) 60%, transparent);
+  --shadow-color: color-mix(in oklab, var(--ink-1000) 72%, transparent);
+  --scrollbar-thumb: color-mix(in oklab, var(--ink-0) 22%, transparent);
+  --scrollbar-thumb-hover: color-mix(in oklab, var(--ink-0) 44%, transparent);
+  --scrollbar-thumb-active: color-mix(in oklab, var(--ink-0) 64%, transparent);
+  --surface-range: color-mix(in oklab, var(--ink-0) 9%, transparent);
+  --text-highlight: var(--ink-0);
+
+  --drawing-frame: color-mix(in oklab, var(--ink-0) 14%, transparent);
+  --drawing-contour: var(--ink-200);
+  --drawing-line: var(--ink-500);
+  --drawing-fine: color-mix(in oklab, var(--ink-0) 16%, transparent);
+  --hatch-neutral: color-mix(in oklab, var(--ink-0) 12%, transparent);
+  --hatch-warning: transparent;
+  --hatch-danger: transparent;
+  --fill-warning: color-mix(in oklab, var(--amber-300) 14%, transparent);
+  --fill-danger: color-mix(in oklab, var(--leak-300) 18%, transparent);
+  --paper-grid: transparent;
+  --paper-grid-major: transparent;
+  --selection-mark: transparent;
+  --trace: transparent;
+  --sheen: color-mix(in oklab, var(--ink-0) 9%, transparent);
+
+  --chart-measured: var(--ink-25);
+  --chart-model: var(--ink-400);
+  --chart-grid: color-mix(in oklab, var(--ink-0) 9%, transparent);
+  --chart-axis: color-mix(in oklab, var(--ink-0) 30%, transparent);
+  --chart-band: color-mix(in oklab, var(--ink-0) 6%, transparent);
+  --chart-crosshair: color-mix(in oklab, var(--ink-0) 45%, transparent);
+  --chart-warning: var(--amber-300);
+  --chart-danger: var(--leak-300);
+  --wall-steel: var(--steel-500);
+  --wall-rust: var(--rust-600);
+  --wall-amber: var(--amber-400);
+  --wall-0: color-mix(in oklab, var(--wall-rust) 0%, var(--wall-steel));
+  --wall-1: color-mix(in oklab, var(--wall-rust) 29%, var(--wall-steel));
+  --wall-2: color-mix(in oklab, var(--wall-rust) 57%, var(--wall-steel));
+  --wall-3: color-mix(in oklab, var(--wall-rust) 86%, var(--wall-steel));
+  --wall-4: color-mix(in oklab, var(--wall-amber) 14%, var(--wall-rust));
+  --wall-5: color-mix(in oklab, var(--wall-amber) 43%, var(--wall-rust));
+  --wall-6: color-mix(in oklab, var(--wall-amber) 71%, var(--wall-rust));
+  --wall-7: color-mix(in oklab, var(--wall-amber) 100%, var(--wall-rust));
+}
+
+:root[data-theme="light"] {
+  --matte-fill: color-mix(in oklab, var(--surface-float) 90%, transparent);
+}
+:root[data-theme="dark"] {
+  --matte-fill: color-mix(in oklab, var(--surface-float) 82%, transparent);
+}

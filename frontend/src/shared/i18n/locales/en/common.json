@@ -1,0 +1,51 @@
+{
+  "app": {
+    "name": "duppel",
+    "tagline": "Digital twin of a pipeline"
+  },
+  "meta": {
+    "description": "Minimum residual pipeline wall thickness forecasts for 10 m segments and inspection priorities."
+  },
+  "shell": {
+    "skip": "Skip to content"
+  },
+  "action": {
+    "retry": "Try again",
+    "home": "Go to the start page",
+    "close": "Close"
+  },
+  "state": {
+    "loading": "Loading",
+    "stale": "Refresh failed. Showing the previous snapshot."
+  },
+  "value": {
+    "none": "not set",
+    "noneLabel": "No value"
+  },
+  "theme": {
+    "legend": "Theme",
+    "light": "Light theme",
+    "dark": "Dark theme"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The address may contain a typo, or the page has moved."
+  },
+  "field": {
+    "optional": "optional",
+    "increase": "Increase",
+    "decrease": "Decrease",
+    "valueWithUnit": "{{value}} {{unit}}"
+  },
+  "toast": {
+    "region": "Notifications",
+    "dismiss": "Dismiss notification"
+  },
+  "nav": {
+    "home": "duppel home",
+    "label": "Main navigation",
+    "pipes": "Pipe",
+    "data": "Data",
+    "model": "Model"
+  }
+}

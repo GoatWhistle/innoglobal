@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Детали трубы | duppel</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script>try { document.documentElement.dataset.theme = localStorage.getItem('ds-theme') === 'light' ? 'light' : 'dark' } catch {}</script>
+<link rel="stylesheet" href="/frontend/node_modules/@fontsource-variable/onest/index.css">
+<link rel="stylesheet" href="/frontend/src/shared/styles/global.css">
+<link rel="stylesheet" href="kit-base.css"><link rel="stylesheet" href="kit-button.css">
+<link rel="stylesheet" href="wall/tokens.css"><link rel="stylesheet" href="wall/components.css"><link rel="stylesheet" href="wall/drawing.css"><link rel="stylesheet" href="wall/layout.css"><link rel="stylesheet" href="wall/kit.css"><link rel="stylesheet" href="site-nav.css">
+<script type="module" src="site-nav.js"></script>
+<script type="module" src="wall/kit.js"></script>
+<link rel="stylesheet" href="brand.css">
+</head>
+<body class="pipe-page">
+<a class="skip-link" href="#main">К содержимому</a>
+<header class="pipe-header">
+<a class="pipe-brand brand" href="index.html" aria-label="duppel, дизайн-система"><svg class="brand-lockup" aria-hidden="true"><use href="brand.svg#lockup" width="100%" height="100%"/></svg></a>
+<nav class="pipe-navigation site-nav" aria-label="Дизайн-система" data-site-nav></nav>
+<button class="button button-quiet" data-theme-toggle aria-label="Включить светлую тему"></button>
+</header>
+<main id="main" class="pk">
+<nav class="pk-toc" aria-label="Разделы"><a href="#idea">Идея</a><a href="#scales">Три масштаба</a><a href="#mix">Смешивание</a><a href="#motion">Движение</a><a href="#marking">Маркировка</a><a href="#tag">Бирка</a><a href="#scale">Шкала стенки</a><a href="#strip">Полоса сегментов</a><a href="#dimension">Размерная линия</a><a href="#key">Клавиша камеры</a><a href="#matte">Матовая панель</a><a href="#stamp">Штамп листа</a><a href="#truth">Что остаётся правдой</a></nav>
+<div class="pk-body">
+<header class="pk-intro" id="idea">
+<p class="marking pk-kicker"><span>Стиль от трубы</span><span>Основы</span></p>
+<h1>Труба не иллюстрирует интерфейс, а&nbsp;сама становится им</h1>
+<p>Навигация, компоненты и движение вырастают из трубы. Экраны показывают одну и ту же трубу с трёх расстояний. Масштаб меняется движением камеры, страница при этом не перезагружается.</p>
+<a class="button button-primary" href="screen-pipe.html"><svg class="icon" aria-hidden="true"><use href="icons.svg#pipe"/></svg>Открыть трубу</a>
+</header>
+
+<section class="pk-section" id="scales" aria-labelledby="scales-title">
+<h2 id="scales-title">Три масштаба</h2>
+<div class="pk-scales">
+<article><p class="pk-index">1</p><h3>Трасса</h3><p class="pk-question">Где на трубе тонкие места?</p><p>Вся труба на одном экране, пикеты и полоса сегментов. Тонкие места видны прямо на металле.</p><dl><div><dt>Ведущий источник</dt><dd>Сцена</dd></div><div><dt>Панели</dt><dd>Матовое стекло</dd></div></dl><a href="screen-pipe.html?state=route">Открыть</a></article>
+<article><p class="pk-index">2</p><h3>Развёртка</h3><p class="pk-question">Какой формы и размера каждое утонение?</p><p>Стенка раскрывается в плоский лист с картой толщины, как в отчёте ВТД. Профиль стоит на той же оси расстояния.</p><dl><div><dt>Ведущий источник</dt><dd>Чертёж поверх металла</dd></div><div><dt>Оси</dt><dd>Километры и часы</dd></div></dl><a href="screen-pipe.html?state=unroll">Открыть</a></article>
+<article><p class="pk-index">3</p><h3>Сечение</h3><p class="pk-question">Насколько тонко именно здесь?</p><p>Труба разрезана в выбранном сегменте. Кольцо стенки с размерами и одна крупная цифра.</p><dl><div><dt>Ведущий источник</dt><dd>Чертёж и редакция</dd></div><div><dt>Темы</dt><dd>Лист чертежа или срез металла</dd></div></dl><a href="screen-pipe.html?state=section">Открыть</a></article>
+</div>
+</section>
+
+<section class="pk-section" id="mix" aria-labelledby="mix-title">
+<h2 id="mix-title">Правило смешивания</h2>
+<p class="pk-lead">У каждого масштаба один ведущий источник, остальные молчат. Четыре пробных стиля разобраны на детали, и каждая деталь работает на трубу только в одном месте.</p>
+<div class="pk-table-wrap" tabindex="0" role="region" aria-label="Таблица источников, прокручивается"><table class="pk-table">
+<thead><tr><th scope="col">Источник</th><th scope="col">Берём</th><th scope="col">Где работает</th><th scope="col">Не берём</th></tr></thead>
+<tbody>
+<tr><th scope="row">Основа</th><td>Графит и бумага, Onest, волосяные линии, два темпа</td><td>Везде, это каркас</td><td>—</td></tr>
+<tr><th scope="row">Сцена трубы</th><td>Сталь, чёрная нефть, студийный свет</td><td>Металл, шкала стенки</td><td>—</td></tr>
+<tr><th scope="row">Чертёж</th><td>Размерные линии, штриховка, штамп, метки обреза</td><td>Сечение, светлая тема</td><td>Миллиметровку на весь фон</td></tr>
+<tr><th scope="row">Жидкое стекло</th><td>Матовую панель с бликом по кромке</td><td>Только панели над 3D</td><td>Цветные пятна, свечение, преломление</td></tr>
+<tr><th scope="row">Прибор</th><td>Клавишу с ходом, полосу делений</td><td>Масштабы, полоса сегментов</td><td>Точечный шрифт, светодиоды, винты</td></tr>
+<tr><th scope="row">Редакция</th><td>Одну огромную цифру</td><td>Главное показание сечения</td><td>Гигантские заголовки в рабочих экранах</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="pk-section" id="motion" aria-labelledby="motion-title">
+<h2 id="motion-title">Движение: два темпа</h2>
+<div class="pk-tempo">
+<div><p class="pk-figure">800–1&nbsp;250 <span>мс</span></p><h3>Сцена вязкая</h3><p>Развёртка 1&nbsp;250&nbsp;мс, разрез 1&nbsp;000&nbsp;мс, переход между сегментами в сечении 800&nbsp;мс. Плавный вход и выход, как течёт нефть.</p></div>
+<div><p class="pk-figure">80–320 <span>мс</span></p><h3>Интерфейс быстрый</h3><p>Ход клавиши 80&nbsp;мс, бегунок полосы и панели до 320&nbsp;мс. Выбранный сегмент не теряется при смене масштаба.</p></div>
+<div><p class="pk-figure">0 <span>мс</span></p><h3>Сниженное движение</h3><p>При <code>prefers-reduced-motion</code> камера переходит мгновенно, развёртка сразу показывается плоской.</p></div>
+</div>
+</section>
+
+<section class="pk-section" id="marking" aria-labelledby="marking-title">
+<h2 id="marking-title">Маркировка</h2>
+<p class="pk-lead">Строка маркировки, как краска на трубе, вместо заголовка объекта и хлебных крошек. Прописные Onest с широкой разрядкой и табличными цифрами. Разрез трафарета через буквы убран: он читался как дефект шрифта, а трафаретного шрифта с кириллицей нет. Маркировка допустима только в заголовке объекта и бирках.</p>
+<div class="pk-specimens" data-markings></div>
+</section>
+
+<section class="pk-section" id="tag" aria-labelledby="tag-title">
+<h2 id="tag-title">Бирка</h2>
+<p class="pk-lead">Подпись на хомуте. Привязана к точке трубы и едет вместе с камерой. Заменяет подсказку и выноску. Бирка не ловит указатель и не перекрывает матовую панель.</p>
+<div class="pk-specimens pk-tags">
+<figure><div class="pk-stage"><span class="tag tag-picket" style="transform:translate(130px,92px)"><span class="marking">ПК 60+00</span></span></div><figcaption>Пикет</figcaption></figure>
+<figure><div class="pk-stage"><span class="tag tag-selected" data-side="right" style="transform:translate(90px,96px)"><span class="tag-clamp"></span><span class="tag-text">630 · 4,86 мм</span></span></div><figcaption>Выбранный сегмент, текст справа</figcaption></figure>
+<figure><div class="pk-stage"><span class="tag tag-selected" data-side="left" style="transform:translate(220px,96px)"><span class="tag-clamp"></span><span class="tag-text">4,86 мм · 7:00</span></span></div><figcaption>У правого края текст уходит влево</figcaption></figure>
+</div>
+</section>
+
+<section class="pk-section" id="scale" aria-labelledby="scale-title">
+<h2 id="scale-title">Шкала стенки</h2>
+<p class="pk-lead">От стали через ржавчину к янтарю. Одна шкала на 3D, развёртку, полосу и сечение. Шкала относительная: 0 — номинал, 1 — самый тонкий сегмент выбранной трубы. Порога у нас нет, поэтому цвет не означает аварию.</p>
+<div class="pk-scale-grid">
+<div class="wall-scale pk-scale-full"><span class="wall-scale-bar" aria-hidden="true"></span><span class="wall-scale-ends"><span>Ближе к номиналу</span><span>Тоньше</span></span><p class="wall-scale-note">Относительно самого тонкого сегмента трубы</p></div>
+<ul class="pk-swatches"><li><span style="background:var(--wall-steel)"></span><code>--wall-steel</code>Сталь, 0</li><li><span style="background:var(--wall-rust)"></span><code>--wall-rust</code>Ржавчина, 0,5</li><li><span style="background:var(--wall-amber)"></span><code>--wall-amber</code>Янтарь, 1</li></ul>
+<div class="wall-scale pk-scale-empty"><span class="wall-scale-bar" aria-hidden="true"></span><span class="wall-scale-ends"><span>Нет прогноза</span><span></span></span><p class="wall-scale-note">Штриховка вместо цвета, когда толщины нет</p></div>
+</div>
+</section>
+
+<section class="pk-section" id="strip" aria-labelledby="strip-title">
+<h2 id="strip-title">Полоса сегментов</h2>
+<p class="pk-lead">Все деления трубы: 1&nbsp;200 у трубы 1 и 838 у трубы 2. Высота и цвет деления показывают относительное утонение. Полоса работает как прокрутка вдоль трубы: перетаскивание, стрелки на сегмент, Page Up и Page Down на десять, Home и End.</p>
+<div class="pk-strips">
+<figure><div class="strip" data-kit-strip="1" role="slider" tabindex="0" aria-label="Полоса сегментов, труба 1"></div><figcaption>Труба 1, 12 км. Попробуйте клавиатурой</figcaption></figure>
+<figure><div class="strip" data-kit-strip="1p" role="slider" tabindex="0" aria-label="Полоса сегментов с отмеченным списком проверки"></div><figcaption>Включён список проверки: метки под делениями</figcaption></figure>
+<figure><div class="strip" data-kit-strip="2" role="slider" tabindex="0" aria-label="Полоса сегментов, труба 2"></div><figcaption>Труба 2, 8,375 км, последний сегмент 5 м</figcaption></figure>
+</div>
+</section>
+
+<section class="pk-section" id="dimension" aria-labelledby="dimension-title">
+<h2 id="dimension-title">Размерная линия</h2>
+<p class="pk-lead">Стрелки, выносные линии, число над линией. Заменяет подпись значения на чертеже. Малый размер выносится полкой.</p>
+<div class="pk-specimens" data-dimensions></div>
+</section>
+
+<section class="pk-section" id="key" aria-labelledby="key-title">
+<h2 id="key-title">Клавиша камеры</h2>
+<p class="pk-lead">Кнопка с ходом вниз выбирает масштаб: трасса, развёртка, сечение. Группа ведёт себя как радиокнопки; стрелки переключают, цифры 1–3 работают на всём экране.</p>
+<div class="pk-keys">
+<figure><button class="cam-key" aria-pressed="false" tabindex="-1"><span class="cam-key-index">1</span><span>Трасса</span></button><figcaption>Покой: клавиша поднята</figcaption></figure>
+<figure><button class="cam-key" aria-checked="true" role="radio" tabindex="-1"><span class="cam-key-index">2</span><span>Развёртка</span></button><figcaption>Выбрана: утоплена, инверсия</figcaption></figure>
+<figure><button class="cam-key is-active" tabindex="-1"><span class="cam-key-index">3</span><span>Сечение</span></button><figcaption>Нажатие: полный ход</figcaption></figure>
+<figure><button class="cam-key is-focus" tabindex="-1"><span class="cam-key-index">1</span><span>Трасса</span></button><figcaption>Фокус с клавиатуры</figcaption></figure>
+<figure><button class="cam-key" disabled tabindex="-1"><span class="cam-key-index">3</span><span>Сечение</span></button><figcaption>Недоступна: нет данных</figcaption></figure>
+</div>
+</section>
+
+<section class="pk-section" id="matte" aria-labelledby="matte-title">
+<h2 id="matte-title">Матовая панель</h2>
+<p class="pk-lead">Панель, лежащая поверх 3D-сцены: размытие фона и тонкий блик по кромке. В других местах используется обычная поверхность. Если размытие недоступно или включено снижение прозрачности, панель становится непрозрачной.</p>
+<div class="pk-matte-stage" data-matte-stage>
+<div class="matte pk-matte"><p class="readout-label"><span>Сегмент 630</span><span>6 300–6 310 м</span></p><p class="readout-figure"><span class="readout-number">4,86</span><span class="readout-unit">мм</span></p><p class="readout-caption">Матовая панель над сценой</p></div>
+<div class="pk-matte pk-matte-solid"><p class="readout-label"><span>Сегмент 630</span><span>6 300–6 310 м</span></p><p class="readout-figure"><span class="readout-number">4,86</span><span class="readout-unit">мм</span></p><p class="readout-caption">Запасной вариант без размытия</p></div>
+</div>
+</section>
+
+<section class="pk-section" id="stamp" aria-labelledby="stamp-title">
+<h2 id="stamp-title">Штамп листа и сечение</h2>
+<p class="pk-lead">Штамп собирает трубу, сегмент, дату прогноза, масштаб и источник данных и заменяет подвал экрана. В светлой теме сечение выглядит как лист чертежа со штриховкой, в тёмной как срез металла.</p>
+<div class="pk-sheets" data-sheets></div>
+</section>
+
+<section class="pk-section" id="truth" aria-labelledby="truth-title">
+<h2 id="truth-title">Что остаётся правдой</h2>
+<ul class="pk-truth">
+<li>Данные синтетические, пока нет набора организаторов. Это написано на экране.</li>
+<li>Распределение по окружности задано правилом примера, это не замер ВТД.</li>
+<li>Без WebGL развёртка и сечение рисуются в SVG, выбор работает так же.</li>
+<li>Обе темы, только русский язык, ширина 375–1920 px.</li>
+</ul>
+</section>
+</div>
+</main>
+</body></html>

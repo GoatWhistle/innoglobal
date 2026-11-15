@@ -1,0 +1,246 @@
+@font-face {
+  font-family: "Schibsted Grotesk Logo";
+  src: url("/docs/brand/src/SchibstedGrotesk-800.ttf") format("truetype");
+  font-weight: 800;
+  font-display: swap;
+}
+
+.mark-base {
+  fill: currentColor;
+}
+
+.mark-accent {
+  fill: var(--mark-accent);
+}
+
+.bd-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  border: var(--hairline) solid var(--border-subtle);
+  background: var(--surface-raised);
+}
+
+.bd-hero figure {
+  display: grid;
+  place-items: center;
+  gap: var(--space-24);
+  margin: 0;
+  padding: var(--space-64) var(--space-32) var(--space-24);
+}
+
+.bd-hero figure + figure {
+  border-inline-start: var(--hairline) solid var(--border-subtle);
+}
+
+.bd-hero figcaption,
+.bd-sizes figcaption,
+.bd-monos figcaption,
+.bd-bad figcaption,
+.bd-icons figcaption {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.bd-hero-word .brand-lockup {
+  --brand-size: clamp(72px, 9vw, 140px);
+}
+
+.bd-hero-mark .brand-symbol {
+  --brand-size: clamp(96px, 10vw, 160px);
+}
+
+.bd-build {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--space-24);
+}
+
+.bd-figure {
+  display: grid;
+  align-content: space-between;
+  margin: 0;
+}
+
+.bd-figure svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  color: var(--text-primary);
+}
+
+.bd-grid pattern path {
+  stroke: var(--border-subtle);
+  stroke-width: 0.06;
+}
+
+.bd-guide {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-dasharray: 0.6 0.6;
+  stroke-width: 0.08;
+}
+
+.bd-sup .bd-guide,
+.bd-field .bd-guide {
+  stroke-dasharray: 4 4;
+  stroke-width: 1;
+}
+
+.bd-dim {
+  fill: none;
+  stroke: var(--text-secondary);
+  stroke-width: 0.12;
+}
+
+.bd-sup .bd-dim,
+.bd-field .bd-dim {
+  stroke-width: 1.4;
+}
+
+.bd-num {
+  fill: var(--text-secondary);
+  font-size: 1.6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bd-label {
+  fill: var(--text-secondary);
+  font-size: 12px;
+}
+
+.bd-num-accent,
+.bd-label-accent {
+  fill: var(--mark-accent);
+  font-weight: var(--weight-medium);
+}
+
+.bd-field-zone {
+  fill: var(--surface-sunken);
+  stroke: var(--border-strong);
+  stroke-dasharray: 4 4;
+  stroke-width: 1;
+}
+
+.bd-field-core {
+  fill: var(--surface-raised);
+  stroke: var(--border-subtle);
+}
+
+.bd-sizes,
+.bd-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--space-24);
+  margin-block-start: var(--space-24);
+}
+
+.bd-sizes figure,
+.bd-icons figure {
+  display: grid;
+  gap: var(--space-12);
+  margin: 0;
+}
+
+.bd-sizes b,
+.bd-icons b {
+  display: block;
+  color: var(--text-primary);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--weight-medium);
+}
+
+.bd-size-cell,
+.bd-icon-cell,
+.bd-bad-cell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-24);
+  min-block-size: 168px;
+  padding: var(--space-24);
+  border: var(--hairline) solid var(--border-subtle);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+}
+
+.bd-themes,
+.bd-monos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-24);
+}
+
+.bd-theme,
+.bd-mono {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-24);
+  margin: 0;
+  padding: var(--space-48) var(--space-24) var(--space-20);
+  border: var(--hairline) solid var(--border-subtle);
+}
+
+.bd-theme img {
+  block-size: 72px;
+  inline-size: auto;
+}
+
+.bd-theme figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--font-size-caption);
+}
+
+.bd-theme code {
+  color: inherit;
+  margin-inline-end: var(--space-12);
+  font-variant-numeric: tabular-nums;
+}
+
+.bd-theme-light,
+.bd-mono-ink {
+  background: var(--ink-25);
+  color: var(--ink-600);
+}
+
+.bd-theme-dark,
+.bd-mono-paper {
+  background: var(--ink-950);
+  color: var(--ink-300);
+}
+
+.bd-chip {
+  inline-size: 12px;
+  block-size: 12px;
+  border-radius: var(--radius-round);
+  outline: var(--hairline) solid color-mix(in oklab, currentColor 40%, transparent);
+  background: var(--chip);
+}
+
+.bd-mono .brand-lockup {
+  --brand-size: 48px;
+  --mark-accent: currentColor;
+}
+
+.bd-mono-ink .brand-lockup {
+  color: var(--ink-950);
+}
+
+.bd-mono-paper .brand-lockup,
+.bd-mono-accent .brand-lockup {
+  color: var(--ink-25);
+}
+
+.bd-mono-accent {
+  background: var(--leak-700);
+  color: var(--ink-50);
+}
+
+.bd-mono-accent figcaption,
+.bd-mono-paper figcaption {
+  color: inherit;
+}

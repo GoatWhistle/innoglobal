@@ -1,0 +1,138 @@
+.bd-motion {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--space-32);
+}
+
+.bd-stage {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-24);
+  min-block-size: 360px;
+  color: var(--text-primary);
+}
+
+.ditto {
+  inline-size: 200px;
+  block-size: 200px;
+  overflow: visible;
+}
+
+.bd-stage-state {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-body-sm);
+}
+
+.bd-controls {
+  display: grid;
+  align-content: start;
+  gap: var(--space-16);
+}
+
+.bd-states {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.bd-states [aria-checked="true"],
+.bd-states [aria-pressed="true"] {
+  border-color: var(--action-primary);
+  background: var(--action-primary);
+  color: var(--action-primary-text);
+}
+
+.bd-timeline {
+  display: grid;
+  margin: var(--space-8) 0 0;
+  border-block-start: var(--hairline) solid var(--border-subtle);
+}
+
+.bd-timeline div {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: var(--space-16);
+  padding-block: var(--space-12);
+  border-block-end: var(--hairline) solid var(--border-subtle);
+}
+
+.bd-timeline dt {
+  color: var(--text-primary);
+  font-weight: var(--weight-medium);
+}
+
+.bd-timeline dd {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.ditto .mark-base,
+.ditto .mark-accent {
+  transform-box: view-box;
+}
+
+.ditto[data-ditto="reveal"] .mark-base {
+  animation: bd-base-in var(--dur-scene) var(--ease-viscous) both;
+}
+
+.ditto[data-ditto="reveal"] .mark-accent {
+  animation:
+    bd-fade var(--dur-scene) var(--ease-out) calc(var(--dur-scene) * 0.4) both,
+    bd-bob var(--dur-scene-long) var(--ease-viscous) var(--dur-scene) both;
+}
+
+.ditto[data-ditto="calm"] .mark-accent {
+  fill: currentColor;
+  transform: translateY(-7px);
+}
+
+.ditto[data-ditto="alarm"] .mark-accent {
+  animation: bd-drop var(--dur-scene-long) var(--ease-viscous) both;
+}
+
+.ditto[data-ditto="busy"] .mark-accent {
+  fill: currentColor;
+  animation: bd-bob var(--dur-scene) var(--ease-in-out) infinite alternate;
+}
+
+.ditto[data-reduced] .mark-base,
+.ditto[data-reduced] .mark-accent {
+  animation: none;
+  transform: none;
+}
+
+.ditto[data-reduced] .mark-accent {
+  fill: var(--mark-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ditto .mark-base,
+  .ditto .mark-accent {
+    animation: none;
+    transform: none;
+  }
+
+  .ditto .mark-accent {
+    fill: var(--mark-accent);
+  }
+}
+
+@keyframes bd-base-in {
+  from { opacity: 0; transform: translateY(-7px); }
+}
+
+@keyframes bd-fade {
+  from { opacity: 0; }
+}
+
+@keyframes bd-drop {
+  from { fill: currentColor; transform: translateY(-7px); }
+  to { fill: var(--mark-accent); transform: none; }
+}
+
+@keyframes bd-bob {
+  from { transform: translateY(-7px); }
+  to { transform: none; }
+}

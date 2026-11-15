@@ -1,0 +1,13 @@
+.loading {
+  min-block-size: var(--state-min-height);
+}
+
+.ready {
+  display: contents;
+}
+
+.stale {
+  display: block;
+  opacity: var(--opacity-stale);
+  transition: var(--transition-control);
+}

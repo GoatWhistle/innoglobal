@@ -1,0 +1,124 @@
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-linear: linear;
+  --ease-viscous: cubic-bezier(0.19, 1, 0.22, 1);
+
+  --dur-instant: 80ms;
+  --dur-press: 140ms;
+  --dur-fast: 160ms;
+  --dur-fast-exit: 110ms;
+  --dur-base: 200ms;
+  --dur-exit: 140ms;
+  --dur-panel: 260ms;
+  --dur-slow: 320ms;
+  --dur-draw: 900ms;
+  --dur-spin: 800ms;
+  --dur-breathe: 2400ms;
+  --dur-scene-cut: 1000ms;
+  --dur-scene: 800ms;
+  --dur-scene-long: 1250ms;
+  --dur-alarm: 1600ms;
+  --dur-indeterminate: 1400ms;
+  --delay-tooltip: 500ms;
+  --window-tooltip-skip: 400ms;
+  --timeout-toast: 5000ms;
+  --timeout-toast-error: 10000ms;
+
+  --stagger: 40ms;
+  --press-scale: 0.97;
+  --press-scale-surface: 0.99;
+  --enter-scale: 0.95;
+  --shift-rise: 6px;
+  --shift-anchor: 4px;
+  --blur-soft: 2px;
+  --shift-brand-align: 7px;
+
+  --delay-skeleton: 200ms;
+  --hold-skeleton: 300ms;
+  --delay-spinner: 400ms;
+  --reduced-fade: 160ms;
+  --reduced-fade-exit: 110ms;
+  --view-transition-limit: 900ms;
+  --delay-brand-accent: calc(var(--dur-scene) * 0.4);
+  --delay-brand-drop: var(--dur-scene);
+
+  --transition-control:
+    background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out), scale var(--dur-instant) var(--ease-out);
+  --transition-control-press:
+    background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out), scale var(--dur-press) var(--ease-out);
+  --transition-choice: scale var(--dur-instant) var(--ease-out);
+  --transition-choice-press: scale var(--dur-press) var(--ease-out);
+  --transition-fade: opacity var(--dur-base) var(--ease-out);
+  --transition-brand-drop: transform var(--dur-scene-long) var(--ease-viscous);
+  --transition-brand-rise: transform var(--dur-scene) var(--ease-viscous);
+
+  --motion-fade-in: kf-fade-in var(--dur-base) var(--ease-out) both;
+  --motion-fade-out: kf-fade-out var(--dur-exit) var(--ease-out) both;
+  --motion-scale-in: kf-scale-in var(--dur-base) var(--ease-out) both;
+  --motion-scale-out: kf-scale-out var(--dur-exit) var(--ease-out) both;
+  --motion-rise-in: kf-rise-in var(--dur-slow) var(--ease-out) both;
+  --motion-swap-in: kf-swap-in var(--dur-fast) var(--ease-out) both;
+  --motion-swap-out: kf-swap-out var(--dur-fast-exit) var(--ease-out) both;
+  --motion-spin: kf-spin var(--dur-spin) var(--ease-linear) infinite;
+  --motion-shimmer: kf-shimmer var(--dur-breathe) var(--ease-in-out) infinite;
+  --motion-alarm: none;
+  --motion-reveal: kf-reveal var(--dur-scene) var(--ease-viscous) both;
+  --motion-toast-in: kf-toast-in var(--dur-slow) var(--ease-out) both;
+  --motion-toast-out: kf-toast-out var(--dur-exit) var(--ease-out) both;
+  --motion-indeterminate: kf-indeterminate var(--dur-indeterminate) var(--ease-in-out) infinite;
+  --motion-countdown: kf-countdown var(--timeout-toast) var(--ease-linear) both;
+  --motion-brand-base-in: kf-brand-base-in var(--dur-scene) var(--ease-viscous) both;
+  --motion-brand-accent-in: kf-fade-in var(--dur-scene) var(--ease-out) var(--delay-brand-accent)
+    both;
+  --motion-brand-drop-in: kf-brand-drop-in var(--dur-scene-long) var(--ease-viscous)
+    var(--delay-brand-drop) both;
+  --motion-brand-busy: kf-brand-busy var(--dur-scene) var(--ease-in-out) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-instant: 1ms;
+    --dur-press: 1ms;
+    --dur-fast: 1ms;
+    --dur-fast-exit: 1ms;
+    --dur-base: 1ms;
+    --dur-exit: 1ms;
+    --dur-panel: 1ms;
+    --dur-slow: 1ms;
+    --dur-draw: 1ms;
+    --dur-spin: 1ms;
+    --dur-breathe: 1ms;
+    --dur-scene-cut: 1ms;
+    --dur-scene: 1ms;
+    --dur-scene-long: 1ms;
+    --dur-alarm: 1ms;
+    --dur-indeterminate: 1ms;
+    --stagger: 0ms;
+    --press-scale: 1;
+    --press-scale-surface: 1;
+    --enter-scale: 1;
+    --shift-rise: 0px;
+    --shift-anchor: 0px;
+    --blur-soft: 0px;
+    --shift-brand-align: 0px;
+    --motion-spin: none;
+    --motion-shimmer: none;
+    --motion-alarm: none;
+    --motion-indeterminate: none;
+    --motion-brand-busy: none;
+  }
+
+  [data-motion="fade"] {
+    --motion-fade-in: kf-fade-in var(--reduced-fade) var(--ease-out) both;
+    --motion-fade-out: kf-fade-out var(--reduced-fade-exit) var(--ease-out) both;
+    --motion-scale-in: kf-fade-in var(--reduced-fade) var(--ease-out) both;
+    --motion-scale-out: kf-fade-out var(--reduced-fade-exit) var(--ease-out) both;
+    --motion-rise-in: kf-fade-in var(--reduced-fade) var(--ease-out) both;
+    --motion-swap-in: kf-fade-in var(--reduced-fade) var(--ease-out) both;
+    --motion-swap-out: kf-fade-out var(--reduced-fade-exit) var(--ease-out) both;
+  }
+}
