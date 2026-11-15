@@ -20,7 +20,7 @@ export function ModelPage() {
               <CaseValidation key={item.case_id} model={data} caseId={item.case_id} />
             ))}
             <Card appearance="ruled" title={t("model:uncertainty.title")}>
-              <p className={styles.note}>
+              <p className={styles.prose}>
                 {t("model:uncertainty.body", { quantiles: data.quantiles.join(", ") })}
               </p>
             </Card>

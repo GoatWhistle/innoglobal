@@ -2,8 +2,9 @@ import { CASE_TITLE } from "@/entities/pipe"
 import { featureKey, type ModelValidation, modelKey } from "@/entities/reference"
 import { ValidationComparison } from "@/features/validation-comparison"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { BarList, Card, Stat, StatGrid, StatusBadge } from "@/shared/ui"
+import { BarList, Card, Stat, StatGrid } from "@/shared/ui"
 import styles from "./model-page.module.css"
+import { ModelRanking } from "./model-ranking"
 
 export interface CaseValidationProps {
   readonly model: ModelValidation
@@ -26,7 +27,6 @@ export function CaseValidation({ model, caseId }: CaseValidationProps) {
     .filter((item) => item.case_id === caseId)
     .slice(0, IMPORTANCE_LIMIT)
   const top = Math.max(...importance.map((item) => item.share), 1e-9)
-  const best = Math.max(...metrics.map((item) => item.pearson_r2), 1e-9)
   const name = (id: string) => {
     const key = modelKey(id)
     return key === null ? <code>{id}</code> : t(key)
@@ -82,35 +82,20 @@ export function CaseValidation({ model, caseId }: CaseValidationProps) {
         </StatGrid>
       )}
       <div className={styles.columns}>
-        <Card appearance="plain" className={styles.block} title={t("model:metricsTitle")}>
-          <BarList
-            label={t("model:metricsTitle")}
-            items={metrics.map((item) => ({
-              id: item.model,
-              label: (
-                <span className={styles.modelName}>
-                  {name(item.model)}
-                  {item.is_selected ? (
-                    <StatusBadge tone="normal" size="compact" label={t("model:badgeSelected")} />
-                  ) : null}
-                  {item.is_baseline ? (
-                    <StatusBadge
-                      tone="muted"
-                      icon="minus"
-                      size="compact"
-                      label={t("model:badgeBaseline")}
-                    />
-                  ) : null}
-                </span>
-              ),
-              share: item.pearson_r2 / best,
-              value: format.number(item.pearson_r2, 3),
-              meta: t("model:maeMeta", { value: format.number(item.mae_mm, 3) }),
-              emphasis: item.is_selected,
-            }))}
-          />
+        <Card
+          appearance="plain"
+          className={styles.block}
+          title={t("model:metricsTitle")}
+          description={t("model:metricsNote", { total: metrics.length })}
+        >
+          <ModelRanking metrics={metrics} name={name} />
         </Card>
-        <Card appearance="plain" className={styles.block} title={t("model:importanceTitle")}>
+        <Card
+          appearance="plain"
+          className={styles.block}
+          title={t("model:importanceTitle")}
+          description={t("model:importanceNote", { total: importance.length })}
+        >
           <BarList
             label={t("model:importanceTitle")}
             items={importance.map((item) => {
