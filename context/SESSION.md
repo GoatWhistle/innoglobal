@@ -109,15 +109,6 @@ User: «нужно чтобы тут труба при поворотах бол
 
 User: «она на статичном уровне, брат. нужно чтобы как волны болтались от движений)»
 
-## Current state
-
-Main repo /Users/kaifarikman/hackathons/innoglobal, feat/frontend,
-HEAD d364b6c684bcba489a41c5b8817cc70dbc858980. Do not push into dev.
-
-Current prototype, version and evidence: .superdesign/resume.json and work/design/pipe-workspace/light-theme.md. Full state archived in work/design/pipe-workspace/session-v54.md. Production unchanged.
-SESSION target exceeded to preserve protected user instructions verbatim.
-
-
 User: «тут сделать стрелочку обратно ко всем трубам, снизу короткую информацию. занимай меньше места».
 
 User: «здесь поле ввода участка. как только мы его вводим, начинается зум в разрез. плавный переход сначала к низу трубы, показываем коррозиб, потом туда перемещаемся, начинается разрыв, течет нефть».
@@ -187,7 +178,17 @@ User: «перенеси влево вниз где метрики брат».
 User: «спроектируй белую тему по всему тому, что мы сделали щас в макетах, просто цель сделать белую тему под решение щас».
 
 User: «нужно чтобы в развертке трубы было что-то такое , братишка. нам надо это показывать . то есть сверху развертка, снизу данные вот эти и как то замиксовать и сделать это ахуенно; как только курсор от поля увожу, нужно чтобы акцент убирался и все переставало зумиться, акцент с поля ввода должен уходить».
-Published v55: linked continuous surface above segment grid; pointer-leave collapses editor. Evidence and implementation: work/design/pipe-workspace/unroll-surface.md. Both themes,1440/375 and both pipes passed. No production changes.
 
 User: «так теперь все это дело запушь в ветку feat/frontend».
-Publication: staged prototype sources, build inputs, preview and design evidence; origin/feat/frontend matched HEAD d364b6c before commit. Restore build passed. Personal .codex/hooks.json remains local.
+
+User: «Да, переноси всё в приложение».
+
+User: «разверни теперь все наше решение на отдельном порту и все давай мы будем работать только с фронтом, не дизайн системами и тд и тп , ну понял да меня???».
+
+## Current state
+
+Main repo /Users/kaifarikman/hackathons/innoglobal, feat/frontend,
+Frontend implementation commit 06dc95c; backend commit 3ef7f7c. Do not push into dev.
+
+React port implemented: live map, material pipe, unroll grid, docked assistant backed by real catalog calculations. Evidence: work/audits/react-port/. Separate Compose project duppel-live, frontend 18081/backend 18012. Frontend verify 382 tests, backend 131 tests and 4 chat browser tests passed. LLM free-form analysis is not connected. Continue only in the application frontend, not design-system showcases.
+SESSION target exceeded to preserve protected user instructions verbatim.

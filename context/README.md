@@ -10,9 +10,9 @@ Event identity, deadline and criterion weights are not confirmed by the provided
 |---|---|---|---|
 | Organizer case | confirmed source | Two initial-data cases, withheld target VTD, squared Pearson correlation | brief/sources/pipeline-degradation.pdf, pp. 1–3; received 2026-11-14 |
 | Current scope | approved | Complete local product on real imported data, per work/full-product-plan.md | work/full-product-plan.md, 2026-11-14 |
-| Design | verified locally | Superlative/monopo adaptation; Onest, graphite/paper, physical 3D pipe, fast selection, shared ruled surfaces | frontend/DESIGN.md; work/audits/material-workspace/README.md, 2026-11-15 |
+| Design | verified locally | Live React port; Manrope/IBM Plex Mono, graphite/paper, material 3D pipe, map and docked chat | frontend/DESIGN.md; work/audits/material-workspace/README.md, 2026-11-15 |
 | Data | verified locally | ML source CSVs, DuckDB and 2000 forecasts connected to FastAPI and React | README-ML.md, result.csv; merge 251a5ab |
-| Current frontend | verified locally | /, /data, /model redesigned; priority groups, segment evidence, responsive drawer; 378 unit and 14 browser tests | work/audits/material-workspace/README.md, 2026-11-15 |
+| Current frontend | verified locally 2026-11-15 | Map and workspace consume API; 382 frontend tests, 131 backend tests, 4 chat browser tests; separate Compose on 18081 | work/audits/material-workspace/README.md, 2026-11-15 |
 | Earlier leak simulator | removed 2026-11-14 | Not part of the final design system; brief kept | brief/pipetwin-original.md; git history |
 
 ## Pointers

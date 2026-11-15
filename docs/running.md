@@ -71,3 +71,19 @@ E2E_BASE_URL=http://localhost:18080 npx playwright test e2e/product.spec.ts
 ---
 
 <sub>[Документация](README.md) · [README проекта](../README.md)</sub>
+
+## Отдельный стенд рабочего фронта
+
+```bash
+COMPOSE_PROJECT_NAME=duppel-live docker buildx bake
+COMPOSE_PROJECT_NAME=duppel-live BACKEND_PORT=18012 FRONTEND_PORT=18081 docker compose up -d --wait
+```
+
+Рабочее приложение: http://localhost:18081. Это React со своим API и реальными данными,
+не HTML-превью. После изменения фронта пересоберите образ и повторите `compose up`.
+Для разработки с горячим обновлением можно направить Vite на API этого стенда:
+
+```bash
+cd frontend
+API_URL=http://localhost:18012 npm run dev -- --port 5191 --strictPort
+```
