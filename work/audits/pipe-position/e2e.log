@@ -1,0 +1,18 @@
+
+> app-frontend@0.1.0 e2e
+> playwright test e2e/combined-inspection.spec.ts --workers=2
+
+
+Running 5 tests using 2 workers
+
+(node:99986) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:99987) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [chromium] › e2e/combined-inspection.spec.ts:7:5 › main 3d workspace light 375 (3.9s)
+  ✓  1 [chromium] › e2e/combined-inspection.spec.ts:7:5 › main 3d workspace light 1440 (4.0s)
+  ✓  3 [chromium] › e2e/combined-inspection.spec.ts:7:5 › main 3d workspace dark 375 (3.4s)
+  ✓  4 [chromium] › e2e/combined-inspection.spec.ts:7:5 › main 3d workspace dark 1440 (3.6s)
+  ✓  5 [chromium] › e2e/combined-inspection.spec.ts:34:1 › existing cut controls, baseline and unroll picking share the selected segment (2.3s)
+
+  5 passed (10.0s)

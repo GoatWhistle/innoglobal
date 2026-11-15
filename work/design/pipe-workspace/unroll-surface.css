@@ -1,0 +1,18 @@
+.shell .workspace.unroll-active .stage{display:block}
+.workspace.unroll-active .stage .segment-entry{margin-left:0;margin-right:0;margin-bottom:28px}
+.surface-section{margin:0 0 32px;padding:0 0 24px;border-bottom:1px solid var(--ws-line)}
+.surface-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:64px}
+.surface-heading>span{font-size:11px;color:var(--ws-muted)}
+#surface-map{height:230px;position:relative;cursor:crosshair;border:1px solid #566166;touch-action:pan-y}
+#surface-canvas{display:block;width:100%;height:100%}
+#surface-marker{position:absolute;top:0;bottom:0;width:1px;background:#fff;pointer-events:none}
+#surface-marker[hidden]{display:none}
+#surface-marker>i{position:absolute;left:-4px;top:-4px;width:9px;height:9px;border:1px solid #fff;border-radius:50%;background:#303b40}
+#surface-value{position:absolute;bottom:calc(100% + 12px);left:0;transform:translateX(-50%);display:grid;gap:3px;white-space:nowrap;background:var(--ws-text);color:var(--bg);padding:8px 12px;border-radius:4px;font-size:10px;line-height:1.4}
+#surface-value strong{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:400}#surface-value small{font:11px Manrope,sans-serif}
+#surface-marker.at-start #surface-value{transform:none}#surface-marker.at-end #surface-value{transform:translateX(-100%)}
+#surface-marker.preview{background:#e4c19c}#surface-marker.preview>i{border-color:#e4c19c}
+.surface-axis{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;font-size:11px;color:var(--ws-muted);font-variant-numeric:tabular-nums}
+.surface-axis>span:nth-child(2){font-size:10px}
+#unroll-view .surface-note{font-size:11px;line-height:1.5;margin:16px 0 0;color:var(--ws-muted)}
+@media(max-width:700px){.surface-heading{align-items:flex-start;flex-direction:column;gap:6px;margin-bottom:64px}#surface-map{height:180px}.surface-axis{font-size:10px}.surface-axis>span:nth-child(2){display:none}.surface-section{margin-bottom:24px}.workspace.unroll-active .stage .segment-entry{margin-bottom:24px}}

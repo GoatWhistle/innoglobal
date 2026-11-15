@@ -49,3 +49,5 @@ models/
 *.gguf
 var/
 catboost_info/
+
+.superdesign/tmp/

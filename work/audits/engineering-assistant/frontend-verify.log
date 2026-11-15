@@ -1,0 +1,133 @@
+
+> app-frontend@0.1.0 verify
+> npm run rules && npm run typecheck && npm run lint && npm run test && npm run build
+
+
+> app-frontend@0.1.0 rules
+> node scripts/checks/index.ts
+
+ok   file-length (0 in baseline)
+ok   no-comments (0 in baseline)
+ok   package-size (0 in baseline)
+ok   package-subject (0 in baseline)
+ok   import-cycles (0 in baseline)
+ok   layers (0 in baseline)
+ok   raw-requests (0 in baseline)
+ok   no-mocks (0 in baseline)
+ok   page-titles (0 in baseline)
+ok   motion-libraries (0 in baseline)
+ok   ui-kits (0 in baseline)
+ok   remote-assets (0 in baseline)
+ok   icon-alias (0 in baseline)
+ok   consistency (0 in baseline)
+ok   cyrillic (0 in baseline)
+ok   jsx-text (0 in baseline)
+ok   text-separators (0 in baseline)
+ok   symbol-glyphs (0 in baseline)
+ok   no-emoji (0 in baseline)
+ok   css-literals (0 in baseline)
+ok   css-token-refs (0 in baseline)
+ok   css-modules (0 in baseline)
+ok   global-styles (0 in baseline)
+ok   css-duplicates (0 in baseline)
+ok   css-transitions (0 in baseline)
+ok   scale-tokens (0 in baseline)
+ok   token-layers (0 in baseline)
+ok   theme-parity (0 in baseline)
+ok   contrast (0 in baseline)
+ok   no-side-stripe (0 in baseline)
+ok   no-gradients (0 in baseline)
+ok   page-width (0 in baseline)
+ok   touch-targets (0 in baseline)
+ok   hover-gate (0 in baseline)
+ok   motion-tokens (0 in baseline)
+ok   ts-timings (0 in baseline)
+rules: 36 checks passed
+
+> app-frontend@0.1.0 typecheck
+> tsc --noEmit
+
+
+> app-frontend@0.1.0 lint
+> biome check .
+
+src/shared/ui/data-display/data-table/data-table.module.css:40:1 lint/style/noDescendingSpecificity ━━━━━━━━━━
+
+  ! Descending specificity selector found. This selector specificity is (0, 1, 1)
+  
+    38 │ }
+    39 │ 
+  > 40 │ .compact th,
+       │ ^^^^^^^^^^^
+    41 │ .compact td {
+    42 │   padding: var(--cell-padding-compact);
+  
+  i This selector specificity is (0, 1, 2)
+  
+    21 │ }
+    22 │ 
+  > 23 │ .table thead th {
+       │ ^^^^^^^^^^^^^^^
+    24 │   color: var(--text-secondary);
+    25 │   font-size: var(--font-size-caption);
+  
+  i Descending specificity selector may not be applied. Consider rearranging the order of the selectors. See MDN web docs for more details.
+  
+
+Checked 410 files in 58ms. No fixes applied.
+Found 1 warning.
+
+> app-frontend@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.3 /Users/kaifarikman/hackathons/innoglobal-assistant/frontend
+
+
+ Test Files  44 passed (44)
+      Tests  382 passed (382)
+   Start at  13:51:23
+   Duration  2.02s (environment 39%, transform 31%, tests 13%, setup 10%, import 8%, worker 1%)
+
+
+> app-frontend@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.3.4 building client environment for production...
+transforming...
+
+A PostCSS plugin did not pass the `from` option to `postcss.parse`. This may cause imported assets to be incorrectly transformed. If you've recently added a PostCSS plugin that raised this warning, please contact the package author to fix the issue.
+✓ 365 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                3.26 kB │ gzip:   1.03 kB
+dist/assets/onest-cyrillic-ext-wght-normal-DOFToQv1.woff2     10.54 kB
+dist/assets/raleway-vietnamese-wght-italic-DYF7k-fG.woff2     11.76 kB
+dist/assets/onest-vietnamese-wght-normal-BBxOatbv.woff2       12.40 kB
+dist/assets/onest-cyrillic-wght-normal-DayYxulF.woff2         15.86 kB
+dist/assets/onest-symbols-wght-normal-DxQzqQfC.woff2          18.16 kB
+dist/assets/onest-math-wght-normal-Bl4ZGkZl.woff2             25.48 kB
+dist/assets/raleway-cyrillic-wght-italic-DWTmaMJk.woff2       26.05 kB
+dist/assets/onest-latin-ext-wght-normal-QAhDxQuo.woff2        28.45 kB
+dist/assets/raleway-cyrillic-ext-wght-italic-Hi97ePR8.woff2   30.48 kB
+dist/assets/raleway-latin-ext-wght-italic-MbfTa5YI.woff2      33.47 kB
+dist/assets/onest-latin-wght-normal-Dun_Rd-l.woff2            33.76 kB
+dist/assets/raleway-latin-wght-italic-RigrtYt2.woff2          50.24 kB
+dist/assets/data-quality-page-GVKzpsBP.css                     0.37 kB │ gzip:   0.24 kB
+dist/assets/model-page-D4cU_XJb.css                            3.51 kB │ gzip:   1.15 kB
+dist/assets/design-variants-page-b6BwpfYe.css                 23.12 kB │ gzip:   4.62 kB
+dist/assets/index-C8QJXrZa.css                                61.47 kB │ gzip:  13.08 kB
+dist/assets/not-found-page-7E_8PKw1.js                         0.34 kB │ gzip:   0.23 kB
+dist/assets/data-quality-page-DB3asLax.js                      2.19 kB │ gzip:   0.83 kB
+dist/assets/pipe-DlcHO-Y_.js                                   3.44 kB │ gzip:   1.38 kB
+dist/assets/model-page-Dvb_TJ5P.js                             6.22 kB │ gzip:   2.08 kB
+dist/assets/reference-DuG4zuw6.js                             12.03 kB │ gzip:   3.90 kB
+dist/assets/index-D68HcEzk.js                                491.89 kB │ gzip: 155.93 kB
+dist/assets/design-variants-page-CdDFxcZK.js                 616.50 kB │ gzip: 160.75 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 239ms

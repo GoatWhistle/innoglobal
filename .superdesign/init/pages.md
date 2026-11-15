@@ -1,0 +1,1122 @@
+# Page dependencies
+- frontend/src/pages/design-variants/design-variants-page.tsx
+  - frontend/src/entities/pipe/index.ts
+    - frontend/src/entities/pipe/case-copy.ts
+      - frontend/src/shared/i18n/index.ts
+        - frontend/src/shared/i18n/document-title.ts
+        - frontend/src/shared/i18n/error-key.ts
+          - frontend/src/shared/api/index.ts
+            - frontend/src/shared/api/client.ts
+            - frontend/src/shared/api/query-client.ts
+              - frontend/src/shared/api/client.ts (shared)
+        - frontend/src/shared/i18n/formatters.ts
+          - frontend/src/shared/i18n/locale.ts
+        - frontend/src/shared/i18n/instance.ts
+          - frontend/src/shared/i18n/locale.ts (shared)
+          - frontend/src/shared/i18n/resources.ts
+            - frontend/src/shared/i18n/locale.ts (shared)
+            - frontend/src/shared/i18n/locales/en/common.json
+            - frontend/src/shared/i18n/locales/en/errors.json
+            - frontend/src/shared/i18n/locales/en/health.json
+            - frontend/src/shared/i18n/locales/en/inspector.json
+            - frontend/src/shared/i18n/locales/en/model.json
+            - frontend/src/shared/i18n/locales/en/overview.json
+            - frontend/src/shared/i18n/locales/en/pipe.json
+            - frontend/src/shared/i18n/locales/en/priorities.json
+            - frontend/src/shared/i18n/locales/en/profile.json
+            - frontend/src/shared/i18n/locales/en/quality.json
+            - frontend/src/shared/i18n/locales/en/route.json
+            - frontend/src/shared/i18n/locales/en/section.json
+            - frontend/src/shared/i18n/locales/en/variants.json
+            - frontend/src/shared/i18n/locales/ru/common.json
+            - frontend/src/shared/i18n/locales/ru/errors.json
+            - frontend/src/shared/i18n/locales/ru/health.json
+            - frontend/src/shared/i18n/locales/ru/inspector.json
+            - frontend/src/shared/i18n/locales/ru/model.json
+            - frontend/src/shared/i18n/locales/ru/overview.json
+            - frontend/src/shared/i18n/locales/ru/pipe.json
+            - frontend/src/shared/i18n/locales/ru/priorities.json
+            - frontend/src/shared/i18n/locales/ru/profile.json
+            - frontend/src/shared/i18n/locales/ru/quality.json
+            - frontend/src/shared/i18n/locales/ru/route.json
+            - frontend/src/shared/i18n/locales/ru/section.json
+            - frontend/src/shared/i18n/locales/ru/variants.json
+        - frontend/src/shared/i18n/locale.ts (shared)
+        - frontend/src/shared/i18n/locale-provider.tsx
+          - frontend/src/shared/i18n/document-title.ts (shared)
+          - frontend/src/shared/i18n/instance.ts (shared)
+          - frontend/src/shared/i18n/locale.ts (shared)
+          - frontend/src/shared/i18n/resources.ts (shared)
+        - frontend/src/shared/i18n/resources.ts (shared)
+        - frontend/src/shared/i18n/use-document-title.ts
+          - frontend/src/shared/i18n/use-locale.ts
+            - frontend/src/shared/i18n/locale-provider.tsx (shared)
+            - frontend/src/shared/i18n/locale-provider.tsx (shared)
+        - frontend/src/shared/i18n/use-error-text.ts
+          - frontend/src/shared/i18n/error-key.ts (shared)
+          - frontend/src/shared/i18n/use-translation.ts
+            - frontend/src/shared/i18n/resources.ts (shared)
+        - frontend/src/shared/i18n/use-formatters.ts
+          - frontend/src/shared/i18n/formatters.ts (shared)
+          - frontend/src/shared/i18n/use-locale.ts (shared)
+        - frontend/src/shared/i18n/use-locale.ts (shared)
+        - frontend/src/shared/i18n/use-translation.ts (shared)
+    - frontend/src/entities/pipe/distance.ts
+    - frontend/src/entities/pipe/pipe-selection.ts
+    - frontend/src/entities/pipe/priority-groups.ts
+    - frontend/src/entities/pipe/use-thickness.ts
+      - frontend/src/shared/i18n/index.ts (shared)
+    - frontend/src/entities/pipe/use-workspace-state.ts
+      - frontend/src/entities/pipe/distance.ts (shared)
+    - frontend/src/entities/pipe/wall-illustration.ts
+    - frontend/src/entities/pipe/wall-scale.ts
+  - frontend/src/shared/i18n/index.ts (shared)
+  - frontend/src/shared/ui/index.ts
+    - frontend/src/shared/ui/brand/brand-mark/brand-mark.tsx
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/ui/brand/brand-mark/brand-mark.module.css
+    - frontend/src/shared/ui/data-display/bar-list/bar-list.tsx
+      - frontend/src/shared/ui/data-display/bar-list/bar-list.module.css
+        - frontend/src/shared/styles/compose.module.css
+    - frontend/src/shared/ui/data-display/data-table/data-table.tsx
+      - frontend/src/shared/ui/data-display/data-table/data-table.module.css
+    - frontend/src/shared/ui/data-display/scatter-plot/scatter-plot.tsx
+      - frontend/src/shared/hooks/index.ts
+        - frontend/src/shared/hooks/use-element-width.ts
+        - frontend/src/shared/hooks/use-media-query.ts
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/ui/data-display/scatter-plot/scatter-plot.module.css
+    - frontend/src/shared/ui/data-display/stat/stat.tsx
+      - frontend/src/shared/ui/data-display/stat/stat.module.css
+        - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/styles/compose.module.css (shared)
+    - frontend/src/shared/ui/data-display/stat-grid/stat-grid.tsx
+      - frontend/src/shared/ui/data-display/stat-grid/stat-grid.module.css
+    - frontend/src/shared/ui/data-display/status-badge/status-badge.tsx
+      - frontend/src/shared/ui/primitives/icon/icon.tsx
+        - frontend/src/shared/ui/primitives/icon/icon.module.css
+      - frontend/src/shared/ui/states/spinner/spinner.tsx
+        - frontend/src/shared/motion/index.ts
+          - frontend/src/shared/motion/css-tokens.ts
+          - frontend/src/shared/motion/stagger.ts
+          - frontend/src/shared/motion/swap/swap.tsx
+            - frontend/src/shared/motion/css-tokens.ts (shared)
+            - frontend/src/shared/motion/fallback-delay.ts
+              - frontend/src/shared/motion/css-tokens.ts (shared)
+              - frontend/src/shared/motion/use-reduced-motion.ts
+            - frontend/src/shared/motion/swap/swap.module.css
+          - frontend/src/shared/motion/use-input-modality.ts
+          - frontend/src/shared/motion/use-latched.ts
+          - frontend/src/shared/motion/use-loading-indicator.ts
+            - frontend/src/shared/motion/css-tokens.ts (shared)
+          - frontend/src/shared/motion/use-presence.ts
+            - frontend/src/shared/motion/css-tokens.ts (shared)
+            - frontend/src/shared/motion/fallback-delay.ts (shared)
+          - frontend/src/shared/motion/use-reduced-motion.ts (shared)
+          - frontend/src/shared/motion/use-sliding-indicator.ts
+            - frontend/src/shared/motion/css-tokens.ts (shared)
+            - frontend/src/shared/motion/use-reduced-motion.ts (shared)
+          - frontend/src/shared/motion/with-view-transition.ts
+            - frontend/src/shared/motion/css-tokens.ts (shared)
+            - frontend/src/shared/motion/use-reduced-motion.ts (shared)
+        - frontend/src/shared/ui/states/spinner/spinner.module.css
+      - frontend/src/shared/ui/data-display/status-badge/status-badge.module.css
+        - frontend/src/shared/ui/primitives/pill/pill.module.css
+    - frontend/src/shared/ui/forms/checkbox/checkbox.tsx
+      - frontend/src/shared/ui/forms/checkbox/checkbox.module.css
+        - frontend/src/shared/ui/forms/choice/choice.module.css
+          - frontend/src/shared/ui/layout/text-role/text-role.module.css
+            - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/primitives/surface/surface.module.css
+          - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/ui/primitives/icon/icon.module.css (shared)
+    - frontend/src/shared/ui/forms/number-field/number-field.tsx
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/forms/field/field.tsx
+        - frontend/src/shared/i18n/index.ts (shared)
+        - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+        - frontend/src/shared/ui/forms/field/field.module.css
+          - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+          - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+      - frontend/src/shared/ui/forms/field/input-box.ts
+        - frontend/src/shared/ui/forms/field/field.tsx (shared)
+        - frontend/src/shared/ui/forms/field/input-box.module.css
+          - frontend/src/shared/styles/compose.module.css (shared)
+      - frontend/src/shared/ui/forms/number-field/number-field.module.css
+        - frontend/src/shared/styles/compose.module.css (shared)
+      - frontend/src/shared/ui/forms/number-field/number-value.ts
+      - frontend/src/shared/ui/forms/number-field/use-number-draft.ts
+        - frontend/src/shared/i18n/index.ts (shared)
+        - frontend/src/shared/ui/forms/number-field/number-value.ts (shared)
+    - frontend/src/shared/ui/forms/range-field/range-field.tsx
+      - frontend/src/shared/ui/forms/range-field/range-field.module.css
+    - frontend/src/shared/ui/forms/segmented/segmented.tsx
+      - frontend/src/shared/motion/index.ts (shared)
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/forms/segmented/segmented.module.css
+        - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+    - frontend/src/shared/ui/forms/select/select.tsx
+      - frontend/src/shared/ui/overlays/floating-layer/floating-layer.tsx
+        - frontend/src/shared/motion/index.ts (shared)
+        - frontend/src/shared/ui/overlays/layer-host/layer-host.tsx
+        - frontend/src/shared/ui/overlays/layer-host/place.ts
+        - frontend/src/shared/ui/overlays/floating-layer/floating-layer.module.css
+        - frontend/src/shared/ui/overlays/floating-layer/use-placement.ts
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/overlays/layer-host/place.ts (shared)
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/forms/field/field.tsx (shared)
+      - frontend/src/shared/ui/forms/field/input-box.ts (shared)
+      - frontend/src/shared/ui/forms/select/select.module.css
+        - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+        - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+      - frontend/src/shared/ui/forms/select/select-options.tsx
+        - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+        - frontend/src/shared/ui/forms/select/select-options.module.css
+          - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+          - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+      - frontend/src/shared/ui/forms/select/use-listbox.ts
+        - frontend/src/shared/motion/index.ts (shared)
+        - frontend/src/shared/ui/forms/select/listbox-keys.ts
+      - frontend/src/shared/ui/forms/select/select-options.tsx (shared)
+    - frontend/src/shared/ui/forms/switch/switch.tsx
+      - frontend/src/shared/ui/forms/switch/switch.module.css
+        - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+    - frontend/src/shared/ui/forms/text-field/text-field.tsx
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/forms/field/field.tsx (shared)
+      - frontend/src/shared/ui/forms/field/input-box.ts (shared)
+    - frontend/src/shared/ui/layout/card/card.tsx
+      - frontend/src/shared/motion/index.ts (shared)
+      - frontend/src/shared/ui/layout/card/card.module.css
+        - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+        - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/styles/compose.module.css (shared)
+    - frontend/src/shared/ui/layout/disclosure/disclosure.tsx
+      - frontend/src/shared/motion/index.ts (shared)
+      - frontend/src/shared/ui/primitives/button/button.tsx
+        - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+        - frontend/src/shared/ui/primitives/button/button-content.tsx
+          - frontend/src/shared/ui/states/spinner/spinner.tsx (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/primitives/button/button.module.css
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/primitives/button/button-content.tsx (shared)
+      - frontend/src/shared/ui/layout/disclosure/disclosure.module.css
+    - frontend/src/shared/ui/layout/page-header/page-header.tsx
+      - frontend/src/shared/ui/layout/page-header/page-header.module.css
+        - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+    - frontend/src/shared/ui/layout/scroll-area/scroll-area.tsx
+      - frontend/src/shared/ui/layout/scroll-area/scroll-area.module.css
+    - frontend/src/shared/ui/layout/tabs/tabs.tsx
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/motion/index.ts (shared)
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/layout/tabs/tabs.module.css
+        - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/primitives/kbd/kbd.module.css
+          - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+    - frontend/src/shared/ui/overlays/drawer/drawer.tsx
+      - frontend/src/shared/motion/index.ts (shared)
+      - frontend/src/shared/ui/primitives/close-button/close-button.tsx
+        - frontend/src/shared/i18n/index.ts (shared)
+        - frontend/src/shared/ui/primitives/icon-button/icon-button.tsx
+          - frontend/src/shared/ui/overlays/tooltip/tooltip-layer.tsx
+            - frontend/src/shared/ui/primitives/kbd/kbd.tsx
+              - frontend/src/shared/ui/primitives/kbd/kbd.module.css (shared)
+            - frontend/src/shared/ui/overlays/floating-layer/floating-layer.tsx (shared)
+            - frontend/src/shared/ui/overlays/tooltip/tooltip-layer.module.css
+              - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/ui/overlays/tooltip/use-tooltip.ts
+            - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/states/spinner/spinner.tsx (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/primitives/icon-button/icon-button.module.css
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/primitives/close-button/close-button.module.css
+      - frontend/src/shared/ui/overlays/drawer/drawer.module.css
+    - frontend/src/shared/ui/overlays/floating-layer/floating-layer.tsx (shared)
+    - frontend/src/shared/ui/overlays/layer-host/layer-host.tsx (shared)
+    - frontend/src/shared/ui/overlays/toast/toast-provider.tsx
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/ui/overlays/toast/toast-card.tsx
+        - frontend/src/shared/i18n/index.ts (shared)
+        - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+        - frontend/src/shared/ui/primitives/close-button/close-button.tsx (shared)
+        - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+        - frontend/src/shared/ui/overlays/toast/toast-card.module.css
+          - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/overlays/toast/toast-store.ts
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/overlays/toast/toast-provider.module.css
+      - frontend/src/shared/ui/overlays/toast/toast-store.ts (shared)
+    - frontend/src/shared/ui/overlays/toast/toast-store.ts (shared)
+    - frontend/src/shared/ui/overlays/tooltip/tooltip.tsx
+      - frontend/src/shared/ui/overlays/tooltip/tooltip.module.css
+      - frontend/src/shared/ui/overlays/tooltip/tooltip-layer.tsx (shared)
+      - frontend/src/shared/ui/overlays/tooltip/use-tooltip.ts (shared)
+    - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+    - frontend/src/shared/ui/primitives/button/button-anchor.tsx
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/primitives/button/button-content.tsx (shared)
+    - frontend/src/shared/ui/primitives/button/button-link.tsx
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/primitives/button/button-content.tsx (shared)
+    - frontend/src/shared/ui/primitives/close-button/close-button.tsx (shared)
+    - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+    - frontend/src/shared/ui/primitives/icon-button/icon-button.tsx (shared)
+    - frontend/src/shared/ui/primitives/kbd/kbd.tsx (shared)
+    - frontend/src/shared/ui/primitives/no-value/no-value.tsx
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/ui/overlays/tooltip/tooltip.tsx (shared)
+      - frontend/src/shared/ui/primitives/no-value/no-value.module.css
+    - frontend/src/shared/ui/states/banner/banner.tsx
+      - frontend/src/shared/ui/primitives/close-button/close-button.tsx (shared)
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/states/banner/banner.module.css
+        - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+    - frontend/src/shared/ui/states/empty-state/empty-state.tsx
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/states/state-panel/state-panel.tsx
+        - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+        - frontend/src/shared/ui/states/state-panel/state-panel.module.css
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+    - frontend/src/shared/ui/states/error-state/error-state.tsx
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+      - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+      - frontend/src/shared/ui/states/state-panel/state-panel.tsx (shared)
+    - frontend/src/shared/ui/states/query-view/query-view.tsx
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/motion/index.ts (shared)
+      - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+      - frontend/src/shared/ui/states/banner/banner.tsx (shared)
+      - frontend/src/shared/ui/states/error-state/error-state.tsx (shared)
+      - frontend/src/shared/ui/states/query-view/query-view.module.css
+    - frontend/src/shared/ui/states/skeleton/skeleton.tsx
+      - frontend/src/shared/ui/states/skeleton/skeleton.module.css
+    - frontend/src/shared/ui/states/spinner/spinner.tsx (shared)
+    - frontend/src/shared/ui/states/state-panel/state-panel.tsx (shared)
+  - frontend/src/pages/design-variants/variants-workspace.tsx
+    - frontend/src/entities/pipe/index.ts (shared)
+    - frontend/src/features/engineering-variants/index.ts
+      - frontend/src/features/engineering-variants/drafting/segment-section.tsx
+        - frontend/src/entities/pipe/index.ts (shared)
+        - frontend/src/shared/i18n/index.ts (shared)
+        - frontend/src/features/engineering-variants/variant-types.ts
+          - frontend/src/entities/pipe/index.ts (shared)
+        - frontend/src/features/engineering-variants/drafting/segment-section.module.css
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/styles/compose.module.css (shared)
+      - frontend/src/features/engineering-variants/inspection/inspection.tsx
+        - frontend/src/shared/hooks/index.ts (shared)
+        - frontend/src/shared/i18n/index.ts (shared)
+        - frontend/src/shared/ui/index.ts (shared)
+        - frontend/src/features/engineering-variants/comparison/comparison-panel.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/index.ts (shared)
+          - frontend/src/features/engineering-variants/aligned-track.tsx
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/features/engineering-variants/aligned-track.module.css
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/features/engineering-variants/track-marks.tsx
+              - frontend/src/entities/pipe/index.ts (shared)
+              - frontend/src/features/engineering-variants/track-marks.module.css
+                - frontend/src/shared/styles/compose.module.css (shared)
+                - frontend/src/shared/styles/compose.module.css (shared)
+                - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/features/engineering-variants/track-model.ts
+                - frontend/src/entities/pipe/index.ts (shared)
+                - frontend/src/features/engineering-variants/variant-types.ts (shared)
+              - frontend/src/features/engineering-variants/variant-types.ts (shared)
+            - frontend/src/features/engineering-variants/track-model.ts (shared)
+            - frontend/src/features/engineering-variants/use-track-input.ts
+              - frontend/src/entities/pipe/index.ts (shared)
+            - frontend/src/features/engineering-variants/variant-types.ts (shared)
+          - frontend/src/features/engineering-variants/controls/evidence-legend.tsx
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/features/engineering-variants/controls/evidence-legend.module.css
+              - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/features/engineering-variants/variant-types.ts (shared)
+          - frontend/src/features/engineering-variants/comparison/comparison.module.css
+        - frontend/src/features/engineering-variants/segment-facts.tsx
+          - frontend/src/entities/pipe/index.ts (shared)
+          - frontend/src/shared/hooks/index.ts (shared)
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/index.ts (shared)
+          - frontend/src/features/engineering-variants/evidence/segment-evidence.tsx
+            - frontend/src/entities/pipe/index.ts (shared)
+            - frontend/src/entities/reference/index.ts
+              - frontend/src/entities/reference/feature-copy.ts
+                - frontend/src/shared/i18n/index.ts (shared)
+              - frontend/src/entities/reference/model-copy.ts
+                - frontend/src/shared/i18n/index.ts (shared)
+              - frontend/src/entities/reference/quality-tables/quality-tables.tsx
+                - frontend/src/shared/i18n/index.ts (shared)
+                - frontend/src/shared/ui/index.ts (shared)
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/index.ts (shared)
+            - frontend/src/features/engineering-variants/evidence/segment-evidence.module.css
+          - frontend/src/features/engineering-variants/segment-facts.module.css
+            - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/features/engineering-variants/track-model.ts (shared)
+          - frontend/src/features/engineering-variants/variant-types.ts (shared)
+        - frontend/src/features/engineering-variants/track-model.ts (shared)
+        - frontend/src/features/engineering-variants/variant-types.ts (shared)
+        - frontend/src/features/engineering-variants/workspace-frame.tsx
+          - frontend/src/shared/hooks/index.ts (shared)
+          - frontend/src/features/engineering-variants/summary/focus-summary.tsx
+            - frontend/src/entities/pipe/index.ts (shared)
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/index.ts (shared)
+            - frontend/src/features/engineering-variants/track-model.ts (shared)
+            - frontend/src/features/engineering-variants/variant-types.ts (shared)
+            - frontend/src/features/engineering-variants/summary/focus-summary.module.css
+          - frontend/src/features/engineering-variants/variant-types.ts (shared)
+          - frontend/src/features/engineering-variants/workspace-frame.module.css
+        - frontend/src/features/engineering-variants/inspection/inspection.module.css
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+        - frontend/src/features/engineering-variants/inspection/priority-queue.tsx
+          - frontend/src/entities/pipe/index.ts (shared)
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/index.ts (shared)
+          - frontend/src/features/engineering-variants/variant-types.ts (shared)
+          - frontend/src/features/engineering-variants/inspection/priority-queue.module.css
+      - frontend/src/features/engineering-variants/variant-types.ts (shared)
+    - frontend/src/features/pipe-scene/index.ts
+      - frontend/src/features/pipe-scene/pipe-scene.tsx
+        - frontend/src/entities/pipe/index.ts (shared)
+        - frontend/src/shared/i18n/index.ts (shared)
+        - frontend/src/shared/ui/index.ts (shared)
+        - frontend/src/features/pipe-scene/pipe-scene.module.css
+          - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/features/pipe-scene/scene-fallback.tsx
+          - frontend/src/entities/pipe/index.ts (shared)
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/theme/index.ts
+            - frontend/src/shared/theme/theme.ts
+            - frontend/src/shared/theme/theme-provider.tsx
+              - frontend/src/shared/theme/theme.ts (shared)
+            - frontend/src/shared/theme/use-theme.ts
+              - frontend/src/shared/theme/theme-provider.tsx (shared)
+          - frontend/src/features/pipe-scene/fallback-paint.ts
+            - frontend/src/entities/pipe/index.ts (shared)
+          - frontend/src/features/pipe-scene/pipe-scene.tsx (shared)
+          - frontend/src/features/pipe-scene/scene-fallback.module.css
+            - frontend/src/features/pipe-scene/pipe-scene.module.css (shared)
+        - frontend/src/features/pipe-scene/scene-readout.tsx
+          - frontend/src/entities/pipe/index.ts (shared)
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/features/pipe-scene/scene-readout.module.css
+            - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/features/pipe-scene/use-scene-engine.ts
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/theme/index.ts (shared)
+          - frontend/src/features/pipe-scene/engine/engine.js
+            - frontend/src/features/pipe-scene/engine/camera.js
+              - frontend/src/features/pipe-scene/engine/metrics.js
+            - frontend/src/features/pipe-scene/engine/cut.js
+              - frontend/src/features/pipe-scene/engine/field.js
+                - frontend/src/entities/pipe/index.ts (shared)
+              - frontend/src/features/pipe-scene/engine/geometry.js
+            - frontend/src/features/pipe-scene/engine/field.js (shared)
+            - frontend/src/features/pipe-scene/engine/geometry.js (shared)
+            - frontend/src/features/pipe-scene/engine/interaction.js
+            - frontend/src/features/pipe-scene/engine/picking.js
+              - frontend/src/features/pipe-scene/engine/geometry.js (shared)
+            - frontend/src/features/pipe-scene/engine/projection.js
+              - frontend/src/features/pipe-scene/engine/geometry.js (shared)
+            - frontend/src/features/pipe-scene/engine/scale.js
+            - frontend/src/features/pipe-scene/engine/scene.js
+              - frontend/src/features/pipe-scene/engine/geometry.js (shared)
+              - frontend/src/features/pipe-scene/engine/props.js
+                - frontend/src/features/pipe-scene/engine/shaders.js
+              - frontend/src/features/pipe-scene/engine/shaders.js (shared)
+              - frontend/src/features/pipe-scene/engine/shaders-cut.js
+                - frontend/src/features/pipe-scene/engine/shaders.js (shared)
+            - frontend/src/features/pipe-scene/engine/studio.js
+            - frontend/src/features/pipe-scene/engine/textures.js
+          - frontend/src/features/pipe-scene/pipe-scene.tsx (shared)
+    - frontend/src/features/segment-strip/index.ts
+      - frontend/src/features/segment-strip/segment-strip.tsx
+        - frontend/src/entities/pipe/index.ts (shared)
+        - frontend/src/shared/hooks/index.ts (shared)
+        - frontend/src/shared/i18n/index.ts (shared)
+        - frontend/src/features/segment-strip/segment-strip.module.css
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/styles/compose.module.css (shared)
+    - frontend/src/shared/i18n/index.ts (shared)
+    - frontend/src/shared/motion/index.ts (shared)
+    - frontend/src/shared/ui/index.ts (shared)
+    - frontend/src/pages/design-variants/pipe-controls.tsx
+      - frontend/src/entities/pipe/index.ts (shared)
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/ui/index.ts (shared)
+      - frontend/src/pages/design-variants/pipe-controls.module.css
+    - frontend/src/pages/design-variants/variants-workspace.module.css
+- frontend/src/pages/data-quality/data-quality-page.tsx
+  - frontend/src/entities/reference/index.ts
+    - frontend/src/entities/reference/feature-copy.ts
+      - frontend/src/shared/i18n/index.ts
+        - frontend/src/shared/i18n/document-title.ts
+        - frontend/src/shared/i18n/error-key.ts
+          - frontend/src/shared/api/index.ts
+            - frontend/src/shared/api/client.ts
+            - frontend/src/shared/api/query-client.ts
+              - frontend/src/shared/api/client.ts (shared)
+        - frontend/src/shared/i18n/formatters.ts
+          - frontend/src/shared/i18n/locale.ts
+        - frontend/src/shared/i18n/instance.ts
+          - frontend/src/shared/i18n/locale.ts (shared)
+          - frontend/src/shared/i18n/resources.ts
+            - frontend/src/shared/i18n/locale.ts (shared)
+            - frontend/src/shared/i18n/locales/en/common.json
+            - frontend/src/shared/i18n/locales/en/errors.json
+            - frontend/src/shared/i18n/locales/en/health.json
+            - frontend/src/shared/i18n/locales/en/inspector.json
+            - frontend/src/shared/i18n/locales/en/model.json
+            - frontend/src/shared/i18n/locales/en/overview.json
+            - frontend/src/shared/i18n/locales/en/pipe.json
+            - frontend/src/shared/i18n/locales/en/priorities.json
+            - frontend/src/shared/i18n/locales/en/profile.json
+            - frontend/src/shared/i18n/locales/en/quality.json
+            - frontend/src/shared/i18n/locales/en/route.json
+            - frontend/src/shared/i18n/locales/en/section.json
+            - frontend/src/shared/i18n/locales/en/variants.json
+            - frontend/src/shared/i18n/locales/ru/common.json
+            - frontend/src/shared/i18n/locales/ru/errors.json
+            - frontend/src/shared/i18n/locales/ru/health.json
+            - frontend/src/shared/i18n/locales/ru/inspector.json
+            - frontend/src/shared/i18n/locales/ru/model.json
+            - frontend/src/shared/i18n/locales/ru/overview.json
+            - frontend/src/shared/i18n/locales/ru/pipe.json
+            - frontend/src/shared/i18n/locales/ru/priorities.json
+            - frontend/src/shared/i18n/locales/ru/profile.json
+            - frontend/src/shared/i18n/locales/ru/quality.json
+            - frontend/src/shared/i18n/locales/ru/route.json
+            - frontend/src/shared/i18n/locales/ru/section.json
+            - frontend/src/shared/i18n/locales/ru/variants.json
+        - frontend/src/shared/i18n/locale.ts (shared)
+        - frontend/src/shared/i18n/locale-provider.tsx
+          - frontend/src/shared/i18n/document-title.ts (shared)
+          - frontend/src/shared/i18n/instance.ts (shared)
+          - frontend/src/shared/i18n/locale.ts (shared)
+          - frontend/src/shared/i18n/resources.ts (shared)
+        - frontend/src/shared/i18n/resources.ts (shared)
+        - frontend/src/shared/i18n/use-document-title.ts
+          - frontend/src/shared/i18n/use-locale.ts
+            - frontend/src/shared/i18n/locale-provider.tsx (shared)
+            - frontend/src/shared/i18n/locale-provider.tsx (shared)
+        - frontend/src/shared/i18n/use-error-text.ts
+          - frontend/src/shared/i18n/error-key.ts (shared)
+          - frontend/src/shared/i18n/use-translation.ts
+            - frontend/src/shared/i18n/resources.ts (shared)
+        - frontend/src/shared/i18n/use-formatters.ts
+          - frontend/src/shared/i18n/formatters.ts (shared)
+          - frontend/src/shared/i18n/use-locale.ts (shared)
+        - frontend/src/shared/i18n/use-locale.ts (shared)
+        - frontend/src/shared/i18n/use-translation.ts (shared)
+    - frontend/src/entities/reference/model-copy.ts
+      - frontend/src/shared/i18n/index.ts (shared)
+    - frontend/src/entities/reference/quality-tables/quality-tables.tsx
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/ui/index.ts
+        - frontend/src/shared/ui/brand/brand-mark/brand-mark.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/brand/brand-mark/brand-mark.module.css
+        - frontend/src/shared/ui/data-display/bar-list/bar-list.tsx
+          - frontend/src/shared/ui/data-display/bar-list/bar-list.module.css
+            - frontend/src/shared/styles/compose.module.css
+        - frontend/src/shared/ui/data-display/data-table/data-table.tsx
+          - frontend/src/shared/ui/data-display/data-table/data-table.module.css
+        - frontend/src/shared/ui/data-display/scatter-plot/scatter-plot.tsx
+          - frontend/src/shared/hooks/index.ts
+            - frontend/src/shared/hooks/use-element-width.ts
+            - frontend/src/shared/hooks/use-media-query.ts
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/data-display/scatter-plot/scatter-plot.module.css
+        - frontend/src/shared/ui/data-display/stat/stat.tsx
+          - frontend/src/shared/ui/data-display/stat/stat.module.css
+            - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/ui/data-display/stat-grid/stat-grid.tsx
+          - frontend/src/shared/ui/data-display/stat-grid/stat-grid.module.css
+        - frontend/src/shared/ui/data-display/status-badge/status-badge.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx
+            - frontend/src/shared/ui/primitives/icon/icon.module.css
+          - frontend/src/shared/ui/states/spinner/spinner.tsx
+            - frontend/src/shared/motion/index.ts
+              - frontend/src/shared/motion/css-tokens.ts
+              - frontend/src/shared/motion/stagger.ts
+              - frontend/src/shared/motion/swap/swap.tsx
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+                - frontend/src/shared/motion/fallback-delay.ts
+                  - frontend/src/shared/motion/css-tokens.ts (shared)
+                  - frontend/src/shared/motion/use-reduced-motion.ts
+                - frontend/src/shared/motion/swap/swap.module.css
+              - frontend/src/shared/motion/use-input-modality.ts
+              - frontend/src/shared/motion/use-latched.ts
+              - frontend/src/shared/motion/use-loading-indicator.ts
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+              - frontend/src/shared/motion/use-presence.ts
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+                - frontend/src/shared/motion/fallback-delay.ts (shared)
+              - frontend/src/shared/motion/use-reduced-motion.ts (shared)
+              - frontend/src/shared/motion/use-sliding-indicator.ts
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+                - frontend/src/shared/motion/use-reduced-motion.ts (shared)
+              - frontend/src/shared/motion/with-view-transition.ts
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+                - frontend/src/shared/motion/use-reduced-motion.ts (shared)
+            - frontend/src/shared/ui/states/spinner/spinner.module.css
+          - frontend/src/shared/ui/data-display/status-badge/status-badge.module.css
+            - frontend/src/shared/ui/primitives/pill/pill.module.css
+        - frontend/src/shared/ui/forms/checkbox/checkbox.tsx
+          - frontend/src/shared/ui/forms/checkbox/checkbox.module.css
+            - frontend/src/shared/ui/forms/choice/choice.module.css
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css
+                - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/primitives/surface/surface.module.css
+              - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/ui/primitives/icon/icon.module.css (shared)
+        - frontend/src/shared/ui/forms/number-field/number-field.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/forms/field/field.tsx
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/forms/field/field.module.css
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+          - frontend/src/shared/ui/forms/field/input-box.ts
+            - frontend/src/shared/ui/forms/field/field.tsx (shared)
+            - frontend/src/shared/ui/forms/field/input-box.module.css
+              - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/ui/forms/number-field/number-field.module.css
+            - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/ui/forms/number-field/number-value.ts
+          - frontend/src/shared/ui/forms/number-field/use-number-draft.ts
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/forms/number-field/number-value.ts (shared)
+        - frontend/src/shared/ui/forms/range-field/range-field.tsx
+          - frontend/src/shared/ui/forms/range-field/range-field.module.css
+        - frontend/src/shared/ui/forms/segmented/segmented.tsx
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/forms/segmented/segmented.module.css
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/forms/select/select.tsx
+          - frontend/src/shared/ui/overlays/floating-layer/floating-layer.tsx
+            - frontend/src/shared/motion/index.ts (shared)
+            - frontend/src/shared/ui/overlays/layer-host/layer-host.tsx
+            - frontend/src/shared/ui/overlays/layer-host/place.ts
+            - frontend/src/shared/ui/overlays/floating-layer/floating-layer.module.css
+            - frontend/src/shared/ui/overlays/floating-layer/use-placement.ts
+              - frontend/src/shared/motion/index.ts (shared)
+              - frontend/src/shared/ui/overlays/layer-host/place.ts (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/forms/field/field.tsx (shared)
+          - frontend/src/shared/ui/forms/field/input-box.ts (shared)
+          - frontend/src/shared/ui/forms/select/select.module.css
+            - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+          - frontend/src/shared/ui/forms/select/select-options.tsx
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/forms/select/select-options.module.css
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+          - frontend/src/shared/ui/forms/select/use-listbox.ts
+            - frontend/src/shared/motion/index.ts (shared)
+            - frontend/src/shared/ui/forms/select/listbox-keys.ts
+          - frontend/src/shared/ui/forms/select/select-options.tsx (shared)
+        - frontend/src/shared/ui/forms/switch/switch.tsx
+          - frontend/src/shared/ui/forms/switch/switch.module.css
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/forms/text-field/text-field.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/forms/field/field.tsx (shared)
+          - frontend/src/shared/ui/forms/field/input-box.ts (shared)
+        - frontend/src/shared/ui/layout/card/card.tsx
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/layout/card/card.module.css
+            - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+            - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/ui/layout/disclosure/disclosure.tsx
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/button/button.tsx
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/primitives/button/button-content.tsx
+              - frontend/src/shared/ui/states/spinner/spinner.tsx (shared)
+              - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+              - frontend/src/shared/ui/primitives/button/button.module.css
+                - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/primitives/button/button-content.tsx (shared)
+          - frontend/src/shared/ui/layout/disclosure/disclosure.module.css
+        - frontend/src/shared/ui/layout/page-header/page-header.tsx
+          - frontend/src/shared/ui/layout/page-header/page-header.module.css
+            - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+        - frontend/src/shared/ui/layout/scroll-area/scroll-area.tsx
+          - frontend/src/shared/ui/layout/scroll-area/scroll-area.module.css
+        - frontend/src/shared/ui/layout/tabs/tabs.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/layout/tabs/tabs.module.css
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/primitives/kbd/kbd.module.css
+              - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/overlays/drawer/drawer.tsx
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/close-button/close-button.tsx
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/primitives/icon-button/icon-button.tsx
+              - frontend/src/shared/ui/overlays/tooltip/tooltip-layer.tsx
+                - frontend/src/shared/ui/primitives/kbd/kbd.tsx
+                  - frontend/src/shared/ui/primitives/kbd/kbd.module.css (shared)
+                - frontend/src/shared/ui/overlays/floating-layer/floating-layer.tsx (shared)
+                - frontend/src/shared/ui/overlays/tooltip/tooltip-layer.module.css
+                  - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/ui/overlays/tooltip/use-tooltip.ts
+                - frontend/src/shared/motion/index.ts (shared)
+              - frontend/src/shared/ui/states/spinner/spinner.tsx (shared)
+              - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+              - frontend/src/shared/ui/primitives/icon-button/icon-button.module.css
+                - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/primitives/close-button/close-button.module.css
+          - frontend/src/shared/ui/overlays/drawer/drawer.module.css
+        - frontend/src/shared/ui/overlays/floating-layer/floating-layer.tsx (shared)
+        - frontend/src/shared/ui/overlays/layer-host/layer-host.tsx (shared)
+        - frontend/src/shared/ui/overlays/toast/toast-provider.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/overlays/toast/toast-card.tsx
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+            - frontend/src/shared/ui/primitives/close-button/close-button.tsx (shared)
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/overlays/toast/toast-card.module.css
+              - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/overlays/toast/toast-store.ts
+              - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/overlays/toast/toast-provider.module.css
+          - frontend/src/shared/ui/overlays/toast/toast-store.ts (shared)
+        - frontend/src/shared/ui/overlays/toast/toast-store.ts (shared)
+        - frontend/src/shared/ui/overlays/tooltip/tooltip.tsx
+          - frontend/src/shared/ui/overlays/tooltip/tooltip.module.css
+          - frontend/src/shared/ui/overlays/tooltip/tooltip-layer.tsx (shared)
+          - frontend/src/shared/ui/overlays/tooltip/use-tooltip.ts (shared)
+        - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+        - frontend/src/shared/ui/primitives/button/button-anchor.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/primitives/button/button-content.tsx (shared)
+        - frontend/src/shared/ui/primitives/button/button-link.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/primitives/button/button-content.tsx (shared)
+        - frontend/src/shared/ui/primitives/close-button/close-button.tsx (shared)
+        - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+        - frontend/src/shared/ui/primitives/icon-button/icon-button.tsx (shared)
+        - frontend/src/shared/ui/primitives/kbd/kbd.tsx (shared)
+        - frontend/src/shared/ui/primitives/no-value/no-value.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/overlays/tooltip/tooltip.tsx (shared)
+          - frontend/src/shared/ui/primitives/no-value/no-value.module.css
+        - frontend/src/shared/ui/states/banner/banner.tsx
+          - frontend/src/shared/ui/primitives/close-button/close-button.tsx (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/states/banner/banner.module.css
+            - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/states/empty-state/empty-state.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/states/state-panel/state-panel.tsx
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/states/state-panel/state-panel.module.css
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+        - frontend/src/shared/ui/states/error-state/error-state.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/states/state-panel/state-panel.tsx (shared)
+        - frontend/src/shared/ui/states/query-view/query-view.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+          - frontend/src/shared/ui/states/banner/banner.tsx (shared)
+          - frontend/src/shared/ui/states/error-state/error-state.tsx (shared)
+          - frontend/src/shared/ui/states/query-view/query-view.module.css
+        - frontend/src/shared/ui/states/skeleton/skeleton.tsx
+          - frontend/src/shared/ui/states/skeleton/skeleton.module.css
+        - frontend/src/shared/ui/states/spinner/spinner.tsx (shared)
+        - frontend/src/shared/ui/states/state-panel/state-panel.tsx (shared)
+  - frontend/src/shared/i18n/index.ts (shared)
+  - frontend/src/shared/ui/index.ts (shared)
+  - frontend/src/pages/data-quality/data-quality-page.module.css
+- frontend/src/pages/model/model-page.tsx
+  - frontend/src/entities/reference/index.ts
+    - frontend/src/entities/reference/feature-copy.ts
+      - frontend/src/shared/i18n/index.ts
+        - frontend/src/shared/i18n/document-title.ts
+        - frontend/src/shared/i18n/error-key.ts
+          - frontend/src/shared/api/index.ts
+            - frontend/src/shared/api/client.ts
+            - frontend/src/shared/api/query-client.ts
+              - frontend/src/shared/api/client.ts (shared)
+        - frontend/src/shared/i18n/formatters.ts
+          - frontend/src/shared/i18n/locale.ts
+        - frontend/src/shared/i18n/instance.ts
+          - frontend/src/shared/i18n/locale.ts (shared)
+          - frontend/src/shared/i18n/resources.ts
+            - frontend/src/shared/i18n/locale.ts (shared)
+            - frontend/src/shared/i18n/locales/en/common.json
+            - frontend/src/shared/i18n/locales/en/errors.json
+            - frontend/src/shared/i18n/locales/en/health.json
+            - frontend/src/shared/i18n/locales/en/inspector.json
+            - frontend/src/shared/i18n/locales/en/model.json
+            - frontend/src/shared/i18n/locales/en/overview.json
+            - frontend/src/shared/i18n/locales/en/pipe.json
+            - frontend/src/shared/i18n/locales/en/priorities.json
+            - frontend/src/shared/i18n/locales/en/profile.json
+            - frontend/src/shared/i18n/locales/en/quality.json
+            - frontend/src/shared/i18n/locales/en/route.json
+            - frontend/src/shared/i18n/locales/en/section.json
+            - frontend/src/shared/i18n/locales/en/variants.json
+            - frontend/src/shared/i18n/locales/ru/common.json
+            - frontend/src/shared/i18n/locales/ru/errors.json
+            - frontend/src/shared/i18n/locales/ru/health.json
+            - frontend/src/shared/i18n/locales/ru/inspector.json
+            - frontend/src/shared/i18n/locales/ru/model.json
+            - frontend/src/shared/i18n/locales/ru/overview.json
+            - frontend/src/shared/i18n/locales/ru/pipe.json
+            - frontend/src/shared/i18n/locales/ru/priorities.json
+            - frontend/src/shared/i18n/locales/ru/profile.json
+            - frontend/src/shared/i18n/locales/ru/quality.json
+            - frontend/src/shared/i18n/locales/ru/route.json
+            - frontend/src/shared/i18n/locales/ru/section.json
+            - frontend/src/shared/i18n/locales/ru/variants.json
+        - frontend/src/shared/i18n/locale.ts (shared)
+        - frontend/src/shared/i18n/locale-provider.tsx
+          - frontend/src/shared/i18n/document-title.ts (shared)
+          - frontend/src/shared/i18n/instance.ts (shared)
+          - frontend/src/shared/i18n/locale.ts (shared)
+          - frontend/src/shared/i18n/resources.ts (shared)
+        - frontend/src/shared/i18n/resources.ts (shared)
+        - frontend/src/shared/i18n/use-document-title.ts
+          - frontend/src/shared/i18n/use-locale.ts
+            - frontend/src/shared/i18n/locale-provider.tsx (shared)
+            - frontend/src/shared/i18n/locale-provider.tsx (shared)
+        - frontend/src/shared/i18n/use-error-text.ts
+          - frontend/src/shared/i18n/error-key.ts (shared)
+          - frontend/src/shared/i18n/use-translation.ts
+            - frontend/src/shared/i18n/resources.ts (shared)
+        - frontend/src/shared/i18n/use-formatters.ts
+          - frontend/src/shared/i18n/formatters.ts (shared)
+          - frontend/src/shared/i18n/use-locale.ts (shared)
+        - frontend/src/shared/i18n/use-locale.ts (shared)
+        - frontend/src/shared/i18n/use-translation.ts (shared)
+    - frontend/src/entities/reference/model-copy.ts
+      - frontend/src/shared/i18n/index.ts (shared)
+    - frontend/src/entities/reference/quality-tables/quality-tables.tsx
+      - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/shared/ui/index.ts
+        - frontend/src/shared/ui/brand/brand-mark/brand-mark.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/brand/brand-mark/brand-mark.module.css
+        - frontend/src/shared/ui/data-display/bar-list/bar-list.tsx
+          - frontend/src/shared/ui/data-display/bar-list/bar-list.module.css
+            - frontend/src/shared/styles/compose.module.css
+        - frontend/src/shared/ui/data-display/data-table/data-table.tsx
+          - frontend/src/shared/ui/data-display/data-table/data-table.module.css
+        - frontend/src/shared/ui/data-display/scatter-plot/scatter-plot.tsx
+          - frontend/src/shared/hooks/index.ts
+            - frontend/src/shared/hooks/use-element-width.ts
+            - frontend/src/shared/hooks/use-media-query.ts
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/data-display/scatter-plot/scatter-plot.module.css
+        - frontend/src/shared/ui/data-display/stat/stat.tsx
+          - frontend/src/shared/ui/data-display/stat/stat.module.css
+            - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/ui/data-display/stat-grid/stat-grid.tsx
+          - frontend/src/shared/ui/data-display/stat-grid/stat-grid.module.css
+        - frontend/src/shared/ui/data-display/status-badge/status-badge.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx
+            - frontend/src/shared/ui/primitives/icon/icon.module.css
+          - frontend/src/shared/ui/states/spinner/spinner.tsx
+            - frontend/src/shared/motion/index.ts
+              - frontend/src/shared/motion/css-tokens.ts
+              - frontend/src/shared/motion/stagger.ts
+              - frontend/src/shared/motion/swap/swap.tsx
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+                - frontend/src/shared/motion/fallback-delay.ts
+                  - frontend/src/shared/motion/css-tokens.ts (shared)
+                  - frontend/src/shared/motion/use-reduced-motion.ts
+                - frontend/src/shared/motion/swap/swap.module.css
+              - frontend/src/shared/motion/use-input-modality.ts
+              - frontend/src/shared/motion/use-latched.ts
+              - frontend/src/shared/motion/use-loading-indicator.ts
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+              - frontend/src/shared/motion/use-presence.ts
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+                - frontend/src/shared/motion/fallback-delay.ts (shared)
+              - frontend/src/shared/motion/use-reduced-motion.ts (shared)
+              - frontend/src/shared/motion/use-sliding-indicator.ts
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+                - frontend/src/shared/motion/use-reduced-motion.ts (shared)
+              - frontend/src/shared/motion/with-view-transition.ts
+                - frontend/src/shared/motion/css-tokens.ts (shared)
+                - frontend/src/shared/motion/use-reduced-motion.ts (shared)
+            - frontend/src/shared/ui/states/spinner/spinner.module.css
+          - frontend/src/shared/ui/data-display/status-badge/status-badge.module.css
+            - frontend/src/shared/ui/primitives/pill/pill.module.css
+        - frontend/src/shared/ui/forms/checkbox/checkbox.tsx
+          - frontend/src/shared/ui/forms/checkbox/checkbox.module.css
+            - frontend/src/shared/ui/forms/choice/choice.module.css
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css
+                - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/primitives/surface/surface.module.css
+              - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/ui/primitives/icon/icon.module.css (shared)
+        - frontend/src/shared/ui/forms/number-field/number-field.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/forms/field/field.tsx
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/forms/field/field.module.css
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+          - frontend/src/shared/ui/forms/field/input-box.ts
+            - frontend/src/shared/ui/forms/field/field.tsx (shared)
+            - frontend/src/shared/ui/forms/field/input-box.module.css
+              - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/ui/forms/number-field/number-field.module.css
+            - frontend/src/shared/styles/compose.module.css (shared)
+          - frontend/src/shared/ui/forms/number-field/number-value.ts
+          - frontend/src/shared/ui/forms/number-field/use-number-draft.ts
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/forms/number-field/number-value.ts (shared)
+        - frontend/src/shared/ui/forms/range-field/range-field.tsx
+          - frontend/src/shared/ui/forms/range-field/range-field.module.css
+        - frontend/src/shared/ui/forms/segmented/segmented.tsx
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/forms/segmented/segmented.module.css
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/forms/select/select.tsx
+          - frontend/src/shared/ui/overlays/floating-layer/floating-layer.tsx
+            - frontend/src/shared/motion/index.ts (shared)
+            - frontend/src/shared/ui/overlays/layer-host/layer-host.tsx
+            - frontend/src/shared/ui/overlays/layer-host/place.ts
+            - frontend/src/shared/ui/overlays/floating-layer/floating-layer.module.css
+            - frontend/src/shared/ui/overlays/floating-layer/use-placement.ts
+              - frontend/src/shared/motion/index.ts (shared)
+              - frontend/src/shared/ui/overlays/layer-host/place.ts (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/forms/field/field.tsx (shared)
+          - frontend/src/shared/ui/forms/field/input-box.ts (shared)
+          - frontend/src/shared/ui/forms/select/select.module.css
+            - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+          - frontend/src/shared/ui/forms/select/select-options.tsx
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/forms/select/select-options.module.css
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+          - frontend/src/shared/ui/forms/select/use-listbox.ts
+            - frontend/src/shared/motion/index.ts (shared)
+            - frontend/src/shared/ui/forms/select/listbox-keys.ts
+          - frontend/src/shared/ui/forms/select/select-options.tsx (shared)
+        - frontend/src/shared/ui/forms/switch/switch.tsx
+          - frontend/src/shared/ui/forms/switch/switch.module.css
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+            - frontend/src/shared/ui/forms/choice/choice.module.css (shared)
+        - frontend/src/shared/ui/forms/text-field/text-field.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/forms/field/field.tsx (shared)
+          - frontend/src/shared/ui/forms/field/input-box.ts (shared)
+        - frontend/src/shared/ui/layout/card/card.tsx
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/layout/card/card.module.css
+            - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+            - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/styles/compose.module.css (shared)
+        - frontend/src/shared/ui/layout/disclosure/disclosure.tsx
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/button/button.tsx
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/primitives/button/button-content.tsx
+              - frontend/src/shared/ui/states/spinner/spinner.tsx (shared)
+              - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+              - frontend/src/shared/ui/primitives/button/button.module.css
+                - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/primitives/button/button-content.tsx (shared)
+          - frontend/src/shared/ui/layout/disclosure/disclosure.module.css
+        - frontend/src/shared/ui/layout/page-header/page-header.tsx
+          - frontend/src/shared/ui/layout/page-header/page-header.module.css
+            - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+        - frontend/src/shared/ui/layout/scroll-area/scroll-area.tsx
+          - frontend/src/shared/ui/layout/scroll-area/scroll-area.module.css
+        - frontend/src/shared/ui/layout/tabs/tabs.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/layout/tabs/tabs.module.css
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/primitives/kbd/kbd.module.css
+              - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/overlays/drawer/drawer.tsx
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/close-button/close-button.tsx
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/primitives/icon-button/icon-button.tsx
+              - frontend/src/shared/ui/overlays/tooltip/tooltip-layer.tsx
+                - frontend/src/shared/ui/primitives/kbd/kbd.tsx
+                  - frontend/src/shared/ui/primitives/kbd/kbd.module.css (shared)
+                - frontend/src/shared/ui/overlays/floating-layer/floating-layer.tsx (shared)
+                - frontend/src/shared/ui/overlays/tooltip/tooltip-layer.module.css
+                  - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/ui/overlays/tooltip/use-tooltip.ts
+                - frontend/src/shared/motion/index.ts (shared)
+              - frontend/src/shared/ui/states/spinner/spinner.tsx (shared)
+              - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+              - frontend/src/shared/ui/primitives/icon-button/icon-button.module.css
+                - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/primitives/close-button/close-button.module.css
+          - frontend/src/shared/ui/overlays/drawer/drawer.module.css
+        - frontend/src/shared/ui/overlays/floating-layer/floating-layer.tsx (shared)
+        - frontend/src/shared/ui/overlays/layer-host/layer-host.tsx (shared)
+        - frontend/src/shared/ui/overlays/toast/toast-provider.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/overlays/toast/toast-card.tsx
+            - frontend/src/shared/i18n/index.ts (shared)
+            - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+            - frontend/src/shared/ui/primitives/close-button/close-button.tsx (shared)
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/overlays/toast/toast-card.module.css
+              - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+            - frontend/src/shared/ui/overlays/toast/toast-store.ts
+              - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/overlays/toast/toast-provider.module.css
+          - frontend/src/shared/ui/overlays/toast/toast-store.ts (shared)
+        - frontend/src/shared/ui/overlays/toast/toast-store.ts (shared)
+        - frontend/src/shared/ui/overlays/tooltip/tooltip.tsx
+          - frontend/src/shared/ui/overlays/tooltip/tooltip.module.css
+          - frontend/src/shared/ui/overlays/tooltip/tooltip-layer.tsx (shared)
+          - frontend/src/shared/ui/overlays/tooltip/use-tooltip.ts (shared)
+        - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+        - frontend/src/shared/ui/primitives/button/button-anchor.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/primitives/button/button-content.tsx (shared)
+        - frontend/src/shared/ui/primitives/button/button-link.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/primitives/button/button-content.tsx (shared)
+        - frontend/src/shared/ui/primitives/close-button/close-button.tsx (shared)
+        - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+        - frontend/src/shared/ui/primitives/icon-button/icon-button.tsx (shared)
+        - frontend/src/shared/ui/primitives/kbd/kbd.tsx (shared)
+        - frontend/src/shared/ui/primitives/no-value/no-value.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/overlays/tooltip/tooltip.tsx (shared)
+          - frontend/src/shared/ui/primitives/no-value/no-value.module.css
+        - frontend/src/shared/ui/states/banner/banner.tsx
+          - frontend/src/shared/ui/primitives/close-button/close-button.tsx (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/states/banner/banner.module.css
+            - frontend/src/shared/styles/compose.module.css (shared)
+            - frontend/src/shared/ui/primitives/surface/surface.module.css (shared)
+        - frontend/src/shared/ui/states/empty-state/empty-state.tsx
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/states/state-panel/state-panel.tsx
+            - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+            - frontend/src/shared/ui/states/state-panel/state-panel.module.css
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/styles/compose.module.css (shared)
+              - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+        - frontend/src/shared/ui/states/error-state/error-state.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+          - frontend/src/shared/ui/primitives/icon/icon.tsx (shared)
+          - frontend/src/shared/ui/states/state-panel/state-panel.tsx (shared)
+        - frontend/src/shared/ui/states/query-view/query-view.tsx
+          - frontend/src/shared/i18n/index.ts (shared)
+          - frontend/src/shared/motion/index.ts (shared)
+          - frontend/src/shared/ui/primitives/button/button.tsx (shared)
+          - frontend/src/shared/ui/states/banner/banner.tsx (shared)
+          - frontend/src/shared/ui/states/error-state/error-state.tsx (shared)
+          - frontend/src/shared/ui/states/query-view/query-view.module.css
+        - frontend/src/shared/ui/states/skeleton/skeleton.tsx
+          - frontend/src/shared/ui/states/skeleton/skeleton.module.css
+        - frontend/src/shared/ui/states/spinner/spinner.tsx (shared)
+        - frontend/src/shared/ui/states/state-panel/state-panel.tsx (shared)
+  - frontend/src/shared/i18n/index.ts (shared)
+  - frontend/src/shared/ui/index.ts (shared)
+  - frontend/src/pages/model/case-validation.tsx
+    - frontend/src/entities/pipe/index.ts
+      - frontend/src/entities/pipe/case-copy.ts
+        - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/entities/pipe/distance.ts
+      - frontend/src/entities/pipe/pipe-selection.ts
+      - frontend/src/entities/pipe/priority-groups.ts
+      - frontend/src/entities/pipe/use-thickness.ts
+        - frontend/src/shared/i18n/index.ts (shared)
+      - frontend/src/entities/pipe/use-workspace-state.ts
+        - frontend/src/entities/pipe/distance.ts (shared)
+      - frontend/src/entities/pipe/wall-illustration.ts
+      - frontend/src/entities/pipe/wall-scale.ts
+    - frontend/src/entities/reference/index.ts (shared)
+    - frontend/src/features/validation-comparison/index.ts
+      - frontend/src/features/validation-comparison/validation-comparison.tsx
+        - frontend/src/entities/reference/index.ts (shared)
+        - frontend/src/shared/i18n/index.ts (shared)
+        - frontend/src/shared/ui/index.ts (shared)
+    - frontend/src/shared/i18n/index.ts (shared)
+    - frontend/src/shared/ui/index.ts (shared)
+    - frontend/src/pages/model/model-page.module.css
+      - frontend/src/shared/styles/compose.module.css (shared)
+      - frontend/src/shared/ui/layout/text-role/text-role.module.css (shared)
+  - frontend/src/pages/model/model-page.module.css (shared)

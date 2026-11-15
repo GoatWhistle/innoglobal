@@ -1,0 +1,27 @@
+
+> app-frontend@0.1.0 e2e
+> playwright test --workers=2
+
+
+Running 14 tests using 2 workers
+
+(node:55533) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:55534) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › e2e/axe.spec.ts:33:5 › axe dark ru (8.8s)
+  ✓   2 [chromium] › e2e/axe.spec.ts:33:5 › axe light ru (8.8s)
+  ✓   3 [chromium] › e2e/combined-inspection.spec.ts:7:5 › main 3d workspace light 375 (5.9s)
+  ✓   4 [chromium] › e2e/combined-inspection.spec.ts:7:5 › main 3d workspace light 1440 (6.0s)
+  ✓   5 [chromium] › e2e/combined-inspection.spec.ts:7:5 › main 3d workspace dark 375 (6.0s)
+  ✓   6 [chromium] › e2e/combined-inspection.spec.ts:7:5 › main 3d workspace dark 1440 (6.0s)
+  ✓   7 [chromium] › e2e/combined-inspection.spec.ts:34:1 › existing cut controls, baseline and unroll picking share the selected segment (3.9s)
+  ✓   8 [chromium] › e2e/material-workspace.spec.ts:12:3 › workspace fits and keeps evidence visible in light (14.2s)
+  ✓   9 [chromium] › e2e/material-workspace.spec.ts:12:3 › workspace fits and keeps evidence visible in dark (13.4s)
+  ✓  10 [chromium] › e2e/material-workspace.spec.ts:38:1 › mobile queue traps focus, groups priorities and restores the trigger (3.1s)
+  ✓  11 [chromium] › e2e/material-workspace.spec.ts:55:1 › new segment details never display previous feature values (2.7s)
+  ✓  12 [chromium] › e2e/material-workspace.spec.ts:78:1 › priority export uses the selected pipe and nominal-only pipe keeps its evidence (4.7s)
+  ✓  13 [chromium] › e2e/material-workspace.spec.ts:95:1 › WebGL context loss preserves coordinate selection and profile (2.5s)
+  ✓  14 [chromium] › e2e/material-workspace.spec.ts:110:1 › detail failure is isolated and retry can recover to an empty evidence state (2.3s)
+
+  14 passed (45.5s)

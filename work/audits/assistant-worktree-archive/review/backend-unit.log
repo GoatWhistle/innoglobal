@@ -1,0 +1,26 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.0, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/kaifarikman/hackathons/innoglobal-assistant/backend
+configfile: pyproject.toml
+plugins: xdist-3.8.0, anyio-4.15.1
+collected 124 items
+
+tests/unit/adapter/decision/test_lexical.py .....                        [  4%]
+tests/unit/adapter/decision/test_system_one.py ..................        [ 18%]
+tests/unit/adapter/llm/test_claude_agent.py .....                        [ 22%]
+tests/unit/adapter/llm/test_codex_agent.py ........                      [ 29%]
+tests/unit/adapter/log/test_stdlib.py ....                               [ 32%]
+tests/unit/architecture/test_dependency_rule.py .................        [ 45%]
+tests/unit/composition/test_main.py .......                              [ 51%]
+tests/unit/composition/test_settings.py .......                          [ 57%]
+tests/unit/controller/test_assistant_http.py ...                         [ 59%]
+tests/unit/controller/test_errors.py ...........                         [ 68%]
+tests/unit/controller/test_health.py ..                                  [ 70%]
+tests/unit/controller/test_pipes_api.py .........                        [ 77%]
+tests/unit/domain/test_decision.py ....                                  [ 80%]
+tests/unit/domain/test_priority.py ........                              [ 87%]
+tests/unit/domain/test_snapshot.py ......                                [ 91%]
+tests/unit/usecase/test_assistant.py ....                                [ 95%]
+tests/unit/usecase/test_pipes.py ......                                  [100%]
+
+============================= 124 passed in 3.10s ==============================

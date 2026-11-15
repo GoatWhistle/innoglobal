@@ -1,0 +1,27 @@
+
+> app-frontend@0.1.0 e2e
+> playwright test e2e/engineering-assistant.spec.ts
+
+
+Running 6 tests using 6 workers
+
+(node:58596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58598) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58597) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58600) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58601) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:58599) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 [chromium] › e2e/engineering-assistant.spec.ts:90:3 › fits 1440 with accessible mobile dialogue (6.7s)
+  ✓  4 [chromium] › e2e/engineering-assistant.spec.ts:90:3 › fits 1024 with accessible mobile dialogue (6.7s)
+  ✓  3 [chromium] › e2e/engineering-assistant.spec.ts:90:3 › fits 375 with accessible mobile dialogue (6.9s)
+  ✓  1 [chromium] › e2e/engineering-assistant.spec.ts:60:1 › handles unavailable provider, retry and stop (7.0s)
+  ✓  2 [chromium] › e2e/engineering-assistant.spec.ts:106:1 › retries the selected older message with its original context (7.3s)
+  ✓  6 [chromium] › e2e/engineering-assistant.spec.ts:10:1 › keeps frozen context and validates actions after a late response (7.5s)
+
+  6 passed (8.0s)

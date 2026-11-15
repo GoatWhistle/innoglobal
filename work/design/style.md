@@ -1,5 +1,8 @@
 # Style: monopo saigon (Refero)
 
+New reference discussed 2026-11-15: [Superlative and engineering workspace](superlative/direction.md).
+The historical monopo extraction below remains intact; no new frontend styling has been applied.
+
 - Style page: https://styles.refero.design/style/3e52dd36-6ab1-48c6-bc40-47ef6d33abc2
 - Source site: https://monopo.vn/
 - Theme on Refero: light. Requested by the user on 2026-11-12: both light and dark themes, Russian
