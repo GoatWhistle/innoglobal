@@ -45,6 +45,10 @@ npm run dev -- --port 5179
 другой адрес задаётся `API_URL`. Backend принимает `DATA_ROOT`, по умолчанию корень репозитория.
 Данные не попадают во frontend bundle.
 
+Инженерный помощник по умолчанию выдаёт сводку без LLM. Для исследования через Codex SDK
+на `gpt-6.1-sol` задайте `LANGUAGE_MODEL=codex`; контейнеру нужна сборка `LLM=true`.
+Авторизация и ограничения: [помощник](assistant.md#как-включить-codex).
+
 ## Как проверить изменения?
 
 ```bash
@@ -71,3 +75,26 @@ E2E_BASE_URL=http://localhost:18080 npx playwright test e2e/product.spec.ts
 ---
 
 <sub>[Документация](README.md) · [README проекта](../README.md)</sub>
+
+## Локальный dev-стенд с исследовательским агентом
+
+Текущий собранный фронтенд доступен на http://localhost:18089, горячая версия — на
+http://localhost:5179. Они используют API на порту 8000, запущенный с `LANGUAGE_MODEL=codex`.
+Агент работает через PydanticAI; авторизация Codex остаётся на хосте.
+
+```bash
+cd backend
+LANGUAGE_MODEL=codex uv run uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000
+```
+
+В другом терминале, из корня проекта:
+
+```bash
+COMPOSE_PROJECT_NAME=innopa-dev docker buildx bake frontend
+COMPOSE_PROJECT_NAME=innopa-dev FRONTEND_PORT=18089 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --no-deps --wait frontend
+curl --fail http://localhost:18089/api/v1/ready
+```
+
+Dev-конфигурация рассчитана на Docker Desktop: Nginx обращается к API хоста через
+`host.docker.internal:8000`. Backend должен оставаться запущенным. Таблицы, графики и версии
+дашбордов обслуживаются этим API; данные не встраиваются во frontend bundle.

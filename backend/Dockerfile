@@ -33,6 +33,7 @@ RUN --mount=from=uv,source=/uv,target=/usr/local/bin/uv \
 FROM deps-${LLM}
 ENV PYTHONPATH=/srv/src
 COPY --chown=app:app src ./src
+RUN mkdir -p /state && chown app:app /state
 USER app
 EXPOSE 8000
 CMD ["uvicorn", "app.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]

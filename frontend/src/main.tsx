@@ -1,4 +1,5 @@
-import "@fontsource-variable/onest"
+import "@fontsource-variable/manrope"
+import "@fontsource/ibm-plex-mono/400.css"
 import "@fontsource-variable/raleway/wght-italic.css"
 import "./shared/styles/global.css"
 import { StrictMode } from "react"

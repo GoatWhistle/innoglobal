@@ -1,5 +1,5 @@
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import StrEnum
 from pathlib import Path
 
@@ -31,7 +31,9 @@ class Settings:
     decision_api_key: str | None = None
     decision_timeout_s: float = 10.0
     language_provider: LanguageProvider = LanguageProvider.NONE
+    codex_api_key: str | None = field(default=None, repr=False)
     data_root: Path = REPOSITORY_ROOT
+    state_root: Path | None = None
 
 
 def load_settings(env: Mapping[str, str]) -> Settings:
@@ -43,7 +45,9 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         decision_api_key=env.get("DECISION_MODEL_API_KEY") or None,
         decision_timeout_s=_positive(env, "DECISION_MODEL_TIMEOUT_S", 10.0),
         language_provider=_choice(env, "LANGUAGE_MODEL", LanguageProvider, LanguageProvider.NONE),
+        codex_api_key=env.get("CODEX_API_KEY") or None,
         data_root=Path(env.get("DATA_ROOT") or REPOSITORY_ROOT),
+        state_root=Path(env["STATE_ROOT"]) if env.get("STATE_ROOT") else None,
     )
 
 

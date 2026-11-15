@@ -53,8 +53,7 @@ export function useSceneEngine(props: PipeSceneProps) {
           const row =
             current.profile.rows.find((item) => meters >= item.start_m && meters < item.end_m) ??
             current.profile.rows.at(-1)
-          if (row)
-            current.onSelect(row.segment_id, current.mode === "unroll" ? "section" : undefined)
+          if (row) current.onSelect(row.segment_id)
         },
         onFrame: annotate,
         onFailure: () => {

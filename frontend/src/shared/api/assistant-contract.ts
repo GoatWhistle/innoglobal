@@ -23,7 +23,8 @@ export interface AssistantAction {
   readonly date?: string | null
 }
 export interface AssistantEvent {
-  readonly type: "status" | "delta" | "evidence" | "done" | "error"
+  readonly type: "status" | "delta" | "evidence" | "done" | "error" | "artifact"
+  readonly artifact_id?: string
   readonly text: string
   readonly code: string
   readonly actions: AssistantAction[]

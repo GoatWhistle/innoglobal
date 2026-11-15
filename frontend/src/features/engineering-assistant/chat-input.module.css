@@ -1,0 +1,17 @@
+.input {
+  inline-size: 100%;
+  resize: vertical;
+  max-block-size: 180px;
+  min-block-size: 96px;
+  padding: var(--space-12);
+  background: var(--surface-sunken);
+  color: var(--text-primary);
+  outline: var(--hairline) solid var(--border-control);
+  border: 0;
+  border-radius: var(--radius-none);
+  font: inherit;
+  font-size: var(--font-size-body);
+}
+.input::placeholder {
+  color: var(--text-secondary);
+}

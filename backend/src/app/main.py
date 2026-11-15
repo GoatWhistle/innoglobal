@@ -12,7 +12,12 @@ from app.adapter.log.stdlib import StdlibLogger
 from app.controller.errors import ErrorHandlers
 from app.controller.router import api_router_v1
 from app.repository.duckdb.source import DataPaths, DuckdbSnapshotSource
+from app.repository.explanations import FileExplanations
+from app.repository.research_data import ResearchDataSource
+from app.repository.research_store import ResearchStore
 from app.settings import ConfigError, DecisionProvider, LanguageProvider, Settings, load_settings
+from app.usecase.assistant import EngineeringAssistant
+from app.usecase.assistant_tools import AssistantTools
 from app.usecase.catalog import ForecastCatalog
 from app.usecase.interface import DecisionModel, LanguageModel, Logger, SnapshotSource
 
@@ -54,7 +59,7 @@ def build_language_model(settings: Settings) -> LanguageModel | None:
                 from app.adapter.llm.codex_agent import CodexAgentModel
             except ModuleNotFoundError as exc:
                 raise _missing_llm_group(settings, exc) from exc
-            return CodexAgentModel()
+            return CodexAgentModel(api_key=settings.codex_api_key)
 
 
 def _missing_llm_group(settings: Settings, exc: ModuleNotFoundError) -> ConfigError:
@@ -79,6 +84,24 @@ def create_app(settings: Settings | None = None, source: SnapshotSource | None =
         catalog = ForecastCatalog(snapshots, logger)
         await asyncio.to_thread(catalog.refresh)
         app.state.catalog = catalog
+        app.state.assistant = EngineeringAssistant(
+            AssistantTools(
+                catalog, FileExplanations(config.data_root / "artifacts/explain_cards.jsonl")
+            ),
+            language if config.language_provider is LanguageProvider.CODEX else None,
+            logger,
+        )
+        app.state.research_data = ResearchDataSource(
+            config.data_root,
+            ResearchStore((config.state_root or config.data_root / "var") / "assistant.sqlite3"),
+            AssistantTools(
+                catalog, FileExplanations(config.data_root / "artifacts/explain_cards.jsonl")
+            ),
+        )
+        if config.language_provider is LanguageProvider.CODEX:
+            app.state.research_runner = build_research_runner(app.state.research_data)
+        else:
+            app.state.research_runner = None
         try:
             yield
         finally:
@@ -88,3 +111,9 @@ def create_app(settings: Settings | None = None, source: SnapshotSource | None =
     ErrorHandlers(logger).register(app)
     app.include_router(api_router_v1)
     return app
+
+
+def build_research_runner(data: ResearchDataSource) -> object:
+    from app.adapter.llm.pydantic_research import PydanticResearch
+
+    return PydanticResearch(data)

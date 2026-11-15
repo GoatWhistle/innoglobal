@@ -28,7 +28,7 @@ export async function streamAssistant(
   const consume = (line: string) => {
     if (!line.trim()) return
     const event: AssistantEvent = JSON.parse(line)
-    if (!["delta", "status", "evidence", "done", "error"].includes(event.type))
+    if (!["delta", "status", "evidence", "done", "error", "artifact"].includes(event.type))
       throw new ApiError(502, "assistant_stream")
     if (
       typeof event.text !== "string" ||

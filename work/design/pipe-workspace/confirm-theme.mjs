@@ -1,0 +1,12 @@
+import {chromium} from '../../frontend/node_modules/playwright/index.mjs';
+const b=await chromium.launch();const p=await b.newPage({viewport:{width:1440,height:1000}});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+await p.goto('http://127.0.0.1:5188/.superdesign/tmp/fleet-workspace.html#pipe=1250009583');await p.locator('#distance-input').waitFor({state:'visible'});
+await p.locator('#distance-input').fill('235');await p.locator('#distance-input').press('Enter');await p.mouse.move(20,20);await p.evaluate(()=>resetScene());
+await p.locator('.data-disclosures summary').first().click();await p.locator('.data-disclosures summary').last().click();await p.screenshot({path:'work/design/pipe-workspace/light-data.png',fullPage:true});
+await p.locator('.theme-toggle').click();await p.screenshot({path:'work/design/pipe-workspace/dark-theme-preserved.png',fullPage:true});
+if(await p.locator('#segment-number').innerText()!=='235')throw Error('Theme lost selection');
+await p.locator('.theme-toggle').click();await p.setViewportSize({width:375,height:812});await p.evaluate(()=>toggleQueue(true));await p.screenshot({path:'work/design/pipe-workspace/light-queue-mobile.png',fullPage:true});
+if(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Mobile overflow');
+await p.evaluate(()=>toggleQueue(false));await p.locator('.segment-entry').hover();await p.locator('#distance-input').fill('');await p.locator('#distance-input').press('Enter');await p.screenshot({path:'work/design/pipe-workspace/light-error-mobile.png'});
+if(errors.length)throw Error(errors.join(';'));
+console.log('Second pipe, disclosures, theme preserves selection, mobile queue/error, no overflow or runtime errors: passed');await b.close();

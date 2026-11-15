@@ -19,12 +19,21 @@ ISOLATION_OVERRIDES = (
 
 
 class CodexAgentModel:
-    def __init__(self, models: Mapping[Tier, str] = DEFAULT_MODELS) -> None:
+    def __init__(
+        self, models: Mapping[Tier, str] = DEFAULT_MODELS, *, api_key: str | None = None
+    ) -> None:
         self._models = dict(models)
+        self._api_key = api_key
 
     async def _run(self, request: StructuredRequest, cwd: str) -> TurnResult:
-        config = CodexConfig(config_overrides=ISOLATION_OVERRIDES, cwd=cwd)
+        config = CodexConfig(
+            config_overrides=ISOLATION_OVERRIDES,
+            cwd=cwd,
+            env={"CODEX_HOME": cwd} if self._api_key else None,
+        )
         async with AsyncCodex(config) as codex:
+            if self._api_key:
+                await codex.login_api_key(self._api_key)
             thread = await codex.thread_start(
                 approval_mode=ApprovalMode.deny_all,
                 base_instructions=request.system,

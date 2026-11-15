@@ -1,0 +1,25 @@
+.surface {
+  padding: var(--space-24);
+}
+.surface header,
+.surface footer {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-16);
+  margin-block: var(--space-16);
+}
+.surface h2 {
+  font-size: var(--font-size-subheading);
+}
+.surface span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-label);
+}
+.grid {
+  display: block;
+  width: 100%;
+  cursor: crosshair;
+}
+.grid:focus-visible {
+  outline: var(--hairline) solid var(--focus-ring);
+}

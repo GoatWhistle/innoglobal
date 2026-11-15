@@ -2,7 +2,7 @@ from collections.abc import Sequence
 from typing import Protocol
 
 from app.domain.decision import Decision, DecisionRequest
-from app.domain.inference import Completion, StructuredRequest, Vector
+from app.domain.inference import Completion, JsonSchema, StructuredRequest, Vector
 from app.domain.snapshot import Snapshot
 
 type LogValue = str | int | float | bool | None
@@ -38,3 +38,7 @@ class DecisionModel(Protocol):
 
 class SnapshotSource(Protocol):
     def load(self) -> Snapshot: ...
+
+
+class ExplanationSource(Protocol):
+    def card(self, pipe_id: int, segment_id: int) -> JsonSchema: ...

@@ -77,7 +77,21 @@ def fake_codex(outcome: TurnResult | Exception, calls: dict[str, Any] | None = N
             seen["thread_start"] = options
             return FakeThread(outcome, seen)
 
+        async def login_api_key(self, api_key: str) -> None:
+            seen["api_key"] = api_key
+
     return FakeCodex
+
+
+@pytest.mark.anyio
+async def test_api_key_login_uses_temporary_codex_home(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: dict[str, Any] = {}
+    monkeypatch.setattr(codex_agent, "AsyncCodex", fake_codex(result(), calls))
+    await CodexAgentModel(api_key="test-key").complete(REQUEST)
+    assert calls["api_key"] == "test-key"
+    config = calls["config"]
+    assert config.env == {"CODEX_HOME": config.cwd}
+    assert calls["thread_start"]["model"] == "gpt-6.1-sol"
 
 
 @pytest.mark.anyio

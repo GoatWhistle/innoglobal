@@ -3,9 +3,11 @@ name = "app"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
+    "aiosqlite>=0.22.1",
     "duckdb>=2.0.0",
     "fastapi>=0.143.1",
     "httpx>=0.28.1",
+    "sqlglot>=30.31.0",
     "uvicorn>=0.54.0",
 ]
 
@@ -13,6 +15,7 @@ dependencies = [
 llm = [
     "claude-agent-sdk>=0.2.166",
     "openai-codex>=0.162.1",
+    "pydantic-ai-slim[openai]==2.68.0",
 ]
 dev = [
     "mypy>=1.18",

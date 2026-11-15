@@ -152,6 +152,7 @@ export function EngineeringAssistant(props: EngineeringAssistantProps) {
             {t("assistant:input")}
           </label>
           <textarea
+            className={styles.input}
             id="assistant-input"
             value={draft}
             maxLength={4000}

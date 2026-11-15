@@ -13,6 +13,7 @@ export interface AssistantMessage {
   readonly id: string
   readonly prompt: string
   readonly context: AssistantContext
+  readonly artifacts: string[]
   readonly text: string
   readonly actions: AssistantAction[]
   readonly values: NonNullable<AssistantEvent["values"]>
@@ -44,6 +45,7 @@ export function useAssistant(context: AssistantContext) {
       prompt: body.prompt,
       context: { ...body.context },
       text: "",
+      artifacts: [],
       actions: [],
       values: [],
       status: "connecting",
@@ -62,6 +64,7 @@ export function useAssistant(context: AssistantContext) {
           if (abort.signal.aborted) return
           update((row) => ({
             ...row,
+            artifacts: event.artifact_id ? [...row.artifacts, event.artifact_id] : row.artifacts,
             text: row.text + (event.text ?? ""),
             actions: [...row.actions, ...(event.actions ?? [])],
             values: [...row.values, ...(event.values ?? [])],

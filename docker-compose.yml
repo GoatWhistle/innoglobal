@@ -9,10 +9,13 @@ services:
         required: false
     environment:
       DATA_ROOT: /data
+      STATE_ROOT: /state
     volumes:
+      - assistant-state:/state
       - ./warehouse:/data/warehouse:ro
       - ./data/processed:/data/data/processed:ro
       - ./artifacts:/data/artifacts:ro
+      - ./docs/methodology:/data/docs/methodology:ro
       - ./result.csv:/data/result.csv:ro
       - ./chart_data.json:/data/chart_data.json:ro
     ports:
@@ -45,3 +48,6 @@ services:
       timeout: 3s
       retries: 5
     restart: unless-stopped
+
+volumes:
+  assistant-state:

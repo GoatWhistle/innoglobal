@@ -4,6 +4,14 @@ API только читает данные. Авторизация для лок
 Полные схемы ответов и параметров доступны в `/openapi.json` и интерактивном `/docs` backend.
 Типы frontend генерируются командой `cd frontend && npm run api:types`.
 
+`POST /api/v1/assistant` принимает `prompt`, `context` и необязательную `history`.
+Контекст содержит `pipe_id,segment_id,snapshot_id,target_date`, необязательные
+`comparison_date,scope,from_m,to_m`. Ответ — `application/x-ndjson`, одна запись на строку.
+Каждая запись содержит `type,text,code,actions,values`; типы событий:
+`status,evidence,delta,done,error`. После начала потока сбои передаются событием `error`
+без `done`; до его начала неверный контекст получает 422. Неизвестная труба или сегмент — 404,
+неготовый снимок — 503. Ответы не кэшируются. [Лимиты и подключение](assistant.md).
+
 ## Какие запросы доступны?
 
 Все пути ниже начинаются с `/api/v1`.

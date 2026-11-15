@@ -22,10 +22,27 @@ Updated: 2026-11-15, MSK
 
 ## Current task
 
-2026-11-14 user: «work/audits/full-product/progress-review.md добей цель до конца друг».
-Complete product scope supersedes the design-only phase. RU only, both themes, duppel, Onest.
-Branch feat/redesign-oil; product commit 98e7841 is published to origin/feat/redesign-oil.
+User: «запушь то что у нас есть всё прям».
+Full publication to origin/feat/redesign-oil; HEAD before publication 7e607a8.
+Includes research agent, latest frontend, local stand, docs and design artifacts.
+Frontend 382 tests/build verified; backend lint/types and 28 integration tests pass.
+Git hooks enabled; unit tests run at commit. No force push; remote branch is absent.
 
+
+2026-11-15 user: «exp/explain спуль сюда»; «и смержи его с https://github.com/GoatWhistle/innoglobal/commit/d364b6c684bcba489a41c5b8817cc70dbc858980».
+User: «путь давания сразу всех цифр в ллм - нет».
+User: «отлично.Используйем codex agents sdk, на sol 6/1».
+Branch feat/redesign-oil, HEAD 7e607a8. Merge completed; assistant implementation is uncommitted.
+Current research agent uses PydanticAI 2.68, OpenAICodexModel gpt-6.1-sol and nine tools.
+Full status: work/pydantic-implementation-status.md, docs/assistant.md.
+Latest user: «спуль фронт последний и раскатай на прод его и туда поставим уже агента».
+Clarification: «локально всмысле. На дев стенде локальном».
+Latest frontend 82dbab3 from origin/feat/frontend applied, research agent/artifacts retained.
+Active local stand http://localhost:18089, Docker innopa-dev frontend, proxies host API 8000.
+Hot Vite 5179 restarted (exec 34434). Verify: 382 tests/build and four deployed chat e2e pass.
+Chat simplified; pipe name in app header, floating chat icon, one scene toolbar.
+Dev stand updated; work/latest-frontend-dev.md.
+No live model generation checked. Previous UI migration: work/new-product-design.md.
 Previous user instructions retained:
 User: «давай тогда пробуй и начинай менять дизайн по трубе, брат. делай с помощью субагентов sol 6.1 high fast».
 User: «параоллельно работает если что агент который работает полностью с нефтью.»
@@ -33,15 +50,9 @@ User: «удаляем ровно все то, что не нужно по ди�
 User: «спулллься полностью , подтяни в мою ветку другую ветку (ml-pipetwin-merge-case-2) и как бы я хочу чтобы у меня появились данные».
 User: «так ну давай промт агенту чтобы построилась полностью наша система по реальным данным и был построен полностью сайт по нашему кейсу, не просто дизайн система а прям готовый фронтенд . сделай это в план и положи в md доку».
 
-## Limits and next
+## Historical limits
 
-Historical metrics are imported, not retrained. Target VTD is withheld. P10/P90 coverage is not
-calibrated. 1245/1475 case2 predictions equal 3.469 mm, not all predictions; ties use segment ID.
-The physical scene uses labelled illustrative angular thinning; values come from the real API.
-No physical touch-device or cross-browser certification. Product docs describe current behavior.
-Setup has activated repository hooks; use the configured human Git identity for commits.
-
-Previous completion evidence: work/audits/full-product/previous-completion.md.
+Pre-merge limitations: work/previous-dev-integration-session.md; re-check against current ML.
 
 ## Publication
 
@@ -95,13 +106,16 @@ camera bar, coordinate form, selection strip and URL modes restored. Engine dire
 Verify: 36 rules, types/lint, 375 tests/build pass. Compose: 5 browser tests pass. Review: ship; documentation complete. Next: user review.
 Branch feat/redesign-oil, HEAD dbb9a47; uncommitted. Evidence work/audits/main-3d/.
 
-## Dev integration
+## Previous integration
 
-2026-11-15 user requested fetch, merge current frontend into dev and branch for more frontend work.
-Latest state supersedes branch/metric notes above: frontend saved as 4035b31; dev base 8bb2210.
-Merge uses verified original common tree f3d7a42 despite rewritten history. ML files preserved from dev;
-API predictors now dens_quant_cal / ens_prior_cal. Frontend verify 375 and backend 128 tests pass.
-User correction: dev must contain none of our frontend commits. Local/remote dev restored to
-8bb2210 using an exact force-with-lease after checking no intervening commits. All frontend work
-remains on feat/frontend (based on 8bb2210); this is the active branch. Do not push work into dev.
-Compose remains at localhost:18080. Details: work/dev-integration.md.
+Historical branch integration and checks: work/previous-dev-integration-session.md.
+Do not push work into dev.
+
+## PydanticAI implementation in progress
+
+Current incomplete implementation and verification: work/pydantic-implementation-status.md.
+
+## Local servers and prototypes
+
+Active servers, prototype import and QA: work/latest-frontend-dev.md,
+work/frontend-prototype-import.md. API 8000, live UI 18089, Vite 5179.

@@ -1,6 +1,7 @@
 import type { AssistantAction, AssistantMessage } from "@/entities/assistant"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { Button } from "@/shared/ui"
+import { Button, ButtonLink } from "@/shared/ui"
+import { AssistantArtifact } from "./assistant-artifact"
 import styles from "./engineering-assistant.module.css"
 
 export interface AssistantAnswerProps {
@@ -24,6 +25,12 @@ export function AssistantAnswer({ message, onAction, onRetry }: AssistantAnswerP
       <p className={styles.question}>{message.prompt}</p>
       <FrozenContext message={message} />
       <p className={styles.response}>{message.text}</p>
+      {message.artifacts?.length ? (
+        <ButtonLink to="/dashboards">{t("assistant:dashboards")}</ButtonLink>
+      ) : null}
+      {message.artifacts?.map((id) => (
+        <AssistantArtifact key={id} id={id} />
+      ))}
       {values.length ? (
         <dl className={styles.evidence}>
           {values.map((value) => (

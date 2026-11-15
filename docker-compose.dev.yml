@@ -1,0 +1,4 @@
+services:
+  frontend:
+    environment:
+      API_UPSTREAM: http://host.docker.internal:8000

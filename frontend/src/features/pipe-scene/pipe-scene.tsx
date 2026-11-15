@@ -23,6 +23,7 @@ export interface PipeSceneProps {
   readonly mode: "route" | "unroll" | "section"
   readonly onSelect: (id: number, mode?: "section") => void
   readonly fallback: ReactNode
+  readonly controls?: boolean
   readonly readout?: boolean
 }
 
@@ -41,7 +42,7 @@ export function PipeScene(props: PipeSceneProps) {
       data-renderer={failed ? "fallback" : ready ? "webgl" : "loading"}
       aria-label={t("pipe:scene.label")}
     >
-      <div className={styles.controls}>
+      <div className={styles.controls} hidden={props.controls === false}>
         <Button
           variant="secondary"
           icon="expand"

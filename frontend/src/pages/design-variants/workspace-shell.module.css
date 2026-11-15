@@ -1,0 +1,140 @@
+.page {
+  padding-block: 0;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-inline-start: auto;
+}
+.workspace {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--border-subtle);
+  min-height: 40rem;
+}
+.workspace[data-side="left"] > aside:last-child {
+  order: -1;
+}
+.stage {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  align-items: center;
+  min-height: 5rem;
+  padding: var(--space-16) var(--space-24);
+}
+.visual {
+  height: calc(100% - 5rem);
+}
+.unroll {
+  padding-block-start: var(--space-96);
+}
+.metrics {
+  display: flex;
+  flex-direction: column;
+  width: 16rem;
+  flex: none;
+  padding: var(--space-16) var(--space-24) var(--space-24) 0;
+  border-right: 1px solid var(--border-subtle);
+}
+.metrics header {
+  display: flex;
+  align-items: center;
+}
+.metrics h2 {
+  font-size: var(--font-size-lead);
+  margin-inline-end: auto;
+}
+.metrics > p {
+  color: var(--text-secondary);
+  margin-block: var(--space-16) var(--space-32);
+}
+.metrics dl {
+  margin-block: var(--space-16) var(--space-32);
+}
+.metrics dl div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-12);
+  margin-block: var(--space-16);
+  font-size: var(--font-size-label);
+}
+.metrics dt {
+  color: var(--text-secondary);
+}
+.metrics dd {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.metrics .minimum {
+  font-size: var(--font-size-heading);
+}
+.metrics > section {
+  border-top: 1px solid var(--border-subtle);
+  padding-block: var(--space-24);
+}
+.metrics h3 {
+  font-size: var(--font-size-body);
+}
+.metrics > section p {
+  color: var(--text-secondary);
+  margin-block-start: var(--space-12);
+  font-size: var(--font-size-label);
+  line-height: 1.6;
+}
+.full {
+  width: 100%;
+}
+.bottom {
+  margin-block-start: auto;
+  padding-block-start: var(--space-32);
+}
+.workspace[data-editing="true"] .metrics,
+.workspace[data-editing="true"] .visual {
+  opacity: 0.25;
+}
+.chatLauncher {
+  position: fixed;
+  inset-block-end: var(--space-24);
+  inset-inline-end: var(--space-24);
+  z-index: var(--layer-raised);
+  inline-size: var(--space-48);
+  block-size: var(--space-48);
+  padding: 0;
+  border-radius: var(--radius-round);
+}
+@media (width < 75rem) {
+  .metrics {
+    width: 14rem;
+  }
+}
+@media (width < 48rem) {
+  .workspace {
+    flex-direction: column;
+  }
+  .stage {
+    order: -2;
+  }
+  .metrics {
+    width: 100%;
+    border: 0;
+    padding: var(--space-24);
+  }
+  .toolbar {
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    padding: var(--space-12);
+  }
+}
+
+.sceneActions {
+  display: flex;
+  align-items: center;
+}

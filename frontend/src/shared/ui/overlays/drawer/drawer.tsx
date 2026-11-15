@@ -38,6 +38,7 @@ export function Drawer({ open, onClose, title, children, size = "default" }: Dra
       onPointerDownCapture={modality.onPointerDown}
       onCancel={(event) => {
         event.preventDefault()
+        event.stopPropagation()
         onClose()
       }}
       onClick={(event) => {
