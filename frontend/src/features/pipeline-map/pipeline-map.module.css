@@ -13,7 +13,7 @@
 
 .stage {
   position: relative;
-  block-size: calc(100svh - var(--header-height) - 11rem);
+  block-size: calc(100svh - var(--header-height) - 7rem);
   min-block-size: 34rem;
   overflow: hidden;
   border: var(--hairline) solid var(--border-subtle);

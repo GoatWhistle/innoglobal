@@ -5,11 +5,10 @@ import { useDocumentTitle, useTranslation } from "@/shared/i18n"
 import {
   Banner,
   Button,
-  ButtonLink,
   EmptyState,
-  PageHeader,
+  LoadingScene,
+  PageBar,
   QueryView,
-  Skeleton,
   TextField,
 } from "@/shared/ui"
 import { DashboardCanvas } from "./dashboard-canvas"
@@ -25,7 +24,11 @@ export function DashboardsPage() {
     pipes = usePipes()
   useDocumentTitle(t("variants:dash.title"))
   return (
-    <QueryView query={pipes} label={t("variants:loading")} skeleton={<Skeleton shape="block" />}>
+    <QueryView
+      query={pipes}
+      label={t("variants:loading")}
+      skeleton={<LoadingScene label={t("variants:loading")} />}
+    >
       {(data) => {
         const pipe =
           data.items.find((p) => p.pipe_id === Number(params.get("pipe"))) ?? data.items[0]
@@ -42,7 +45,11 @@ function Loader({ pipe }: { readonly pipe: PipeSummary }) {
   const profile = useProfile(pipe.pipe_id),
     { t } = useTranslation()
   return (
-    <QueryView query={profile} label={t("variants:loading")} skeleton={<Skeleton shape="block" />}>
+    <QueryView
+      query={profile}
+      label={t("variants:loading")}
+      skeleton={<LoadingScene label={t("variants:loading")} />}
+    >
       {(data) =>
         data.rows.length ? (
           <Editor pipe={pipe} profile={data} />
@@ -63,10 +70,14 @@ function Editor({ pipe, profile }: { readonly pipe: PipeSummary; readonly profil
   if (!workspace) return null
   return (
     <div className={styles.page}>
-      <ButtonLink variant="quiet" icon="arrow-left" to={`/?${editor.back}`}>
-        {t("variants:workspace.return")}
-      </ButtonLink>
-      <PageHeader title={t("variants:dash.title")} description={pipe.passport.direction} />
+      <PageBar
+        label={t("common:nav.label")}
+        crumbs={[
+          { label: t("variants:workspace.fleet"), to: "/" },
+          { label: pipe.passport.direction, to: `/?${editor.back}` },
+        ]}
+        title={t("variants:dash.title")}
+      />
       <DashboardToolbar
         editor={editor}
         pipeId={pipe.pipe_id}

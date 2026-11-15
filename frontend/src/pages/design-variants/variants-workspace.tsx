@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router"
 import type { AssistantAction, AssistantMessage } from "@/entities/assistant"
 import { type PipeList, type PipeSummary, type Profile, useWorkspaceState } from "@/entities/pipe"
@@ -11,8 +11,17 @@ import {
 } from "@/features/engineering-variants"
 import { MaterialPipe } from "@/features/material-pipe"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { Banner, ButtonAnchor, ButtonLink, IconButton, PageHeader, Segmented } from "@/shared/ui"
-import { useChatOpen } from "./use-chat-open"
+import {
+  Banner,
+  BrandMark,
+  Button,
+  ButtonAnchor,
+  ButtonLink,
+  PageBar,
+  Segmented,
+} from "@/shared/ui"
+import { ChatResizer } from "./chat-resizer"
+import { useChatDock } from "./use-chat-dock"
 import { WorkspacePanel } from "./workspace-panel"
 import styles from "./workspace-shell.module.css"
 
@@ -33,7 +42,11 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
   const row = profile.rows.find((r) => r.segment_id === state.segment) ?? profile.rows[0]
   const mode: View = params.get("view") === "unroll" ? "unroll" : "route"
   const [inspecting, setInspecting] = useState(false)
-  const [chat, setChat] = useChatOpen()
+  const dock = useChatDock()
+  const frame = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    frame.current?.style.setProperty("--chat-width", `${dock.width}px`)
+  }, [dock.width])
   const navigate = useNavigate()
   const [date, setDate] = useState(pipe.last_observed_run ?? undefined)
   if (!row) return null
@@ -79,14 +92,11 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
   return (
     <div className={styles.page}>
       {state.invalid ? <Banner tone="warning" title={t("variants:invalid")} /> : null}
-      <PageHeader
-        eyebrow={
-          <ButtonLink className={styles.back} variant="quiet" icon="arrow-left" to="/">
-            {t("variants:workspace.fleet")}
-          </ButtonLink>
-        }
+      <PageBar
+        label={t("common:nav.label")}
+        crumbs={[{ label: t("variants:workspace.fleet"), to: "/" }]}
         title={pipe.passport.direction}
-        description={t("variants:workspace.pipeLine", {
+        meta={t("variants:workspace.pipeLine", {
           id: pipe.pipe_id,
           length: format.number(pipe.passport.length_m / 1000, 1),
         })}
@@ -110,7 +120,7 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
           </div>
         }
       />
-      <div className={styles.workspace} data-chat={chat}>
+      <div ref={frame} className={styles.workspace} data-chat={dock.open}>
         <WorkspacePanel
           pipe={pipe}
           profile={profile}
@@ -137,24 +147,27 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
             <UnrollGrid profile={profile} selected={selected} onSelect={select} />
           )}
         </main>
-        {chat ? (
-          <AssistantChat
-            pipe={pipe}
-            profile={profile}
-            row={row}
-            onHide={() => setChat(false)}
-            onAction={act}
-          />
-        ) : (
-          <aside className={styles.rail}>
-            <IconButton
-              icon="message-circle"
-              label={t("assistant:show")}
-              onClick={() => setChat(true)}
+        {dock.open ? (
+          <div className={styles.chatColumn}>
+            <ChatResizer width={dock.width} onResize={dock.setWidth} />
+            <AssistantChat
+              pipe={pipe}
+              profile={profile}
+              row={row}
+              onHide={() => dock.setOpen(false)}
+              onAction={act}
             />
-          </aside>
-        )}
+          </div>
+        ) : null}
       </div>
+      {dock.open ? null : (
+        <Button variant="secondary" className={styles.launcher} onClick={() => dock.setOpen(true)}>
+          <span className={styles.launcherBody}>
+            <BrandMark variant="symbol" size="sm" state="calm" />
+            {t("assistant:launcher")}
+          </span>
+        </Button>
+      )}
     </div>
   )
 }

@@ -75,19 +75,38 @@
   white-space: normal;
 }
 .answer {
-  padding-block: var(--space-16);
-  border-block-start: var(--hairline) solid var(--border-subtle);
+  display: grid;
+  gap: var(--space-12);
+  padding-block: var(--space-8);
 }
 .question {
-  font-weight: var(--weight-medium);
-  margin-block-end: var(--space-8);
+  justify-self: end;
+  margin-inline-start: var(--space-48);
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-lg);
+  background-color: var(--action-primary);
+  color: var(--action-primary-text);
+  overflow-wrap: anywhere;
+}
+.reply {
+  display: grid;
+  grid-template-columns: var(--space-24) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-12);
+}
+.avatar {
+  margin-block-start: var(--space-4);
+}
+.replyBody {
+  display: grid;
+  gap: var(--space-8);
+  min-inline-size: 0;
 }
 .response {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   font-size: var(--font-size-body);
   line-height: 1.6;
-  margin-block: var(--space-12);
 }
 .actions {
   display: flex;

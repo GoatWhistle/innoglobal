@@ -1,0 +1,14 @@
+.scene {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-16);
+  min-block-size: calc(100svh - var(--header-height) - var(--space-96));
+  animation: var(--motion-fade-in);
+  animation-delay: var(--delay-skeleton);
+}
+
+.label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-label);
+}

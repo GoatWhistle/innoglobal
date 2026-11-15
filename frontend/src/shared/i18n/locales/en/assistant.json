@@ -57,13 +57,14 @@
   "hideQueue": "Collapse queue",
   "hideScene": "Collapse scene",
   "showScene": "Show pipe",
-  "welcome": "Explore the pipeline",
-  "welcomeDescription": "Ask about corrosion, compare segments or request a chart. The selected segment is already in context.",
   "page": {
     "newChat": "New conversation",
     "followUps": "You can ask next",
     "pipeContext": "Whole pipe {{pipe}}, forecast for {{date}}"
   },
-  "hide": "Hide assistant",
-  "show": "Open assistant"
+  "close": "Close assistant",
+  "resize": "Assistant width",
+  "subtitle": "Answers from the forecast, inline inspections and the queue",
+  "launcher": "Assistant",
+  "greeting": "Hello. I read the wall forecast, inline inspection results and the inspection queue of this pipe. Ask about a segment or pick a question below."
 }

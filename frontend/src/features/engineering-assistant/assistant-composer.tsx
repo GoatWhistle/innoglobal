@@ -1,6 +1,6 @@
 import { useId, useState } from "react"
 import { useTranslation } from "@/shared/i18n"
-import { Button } from "@/shared/ui"
+import { Button, IconButton } from "@/shared/ui"
 import styles from "./assistant-chat.module.css"
 
 export interface AssistantComposerProps {
@@ -26,7 +26,7 @@ export function AssistantComposer({ busy, onSend, onStop }: AssistantComposerPro
         send()
       }}
     >
-      <div className={styles.composerInner}>
+      <div className={styles.composerBox}>
         <label className="visually-hidden" htmlFor={id}>
           {t("assistant:input")}
         </label>
@@ -46,20 +46,23 @@ export function AssistantComposer({ busy, onSend, onStop }: AssistantComposerPro
           }}
         />
         <div className={styles.send}>
-          <small role="status" className={styles.hint}>
-            {t(busy ? "assistant:reading" : "assistant:enter")}
-          </small>
           {busy ? (
-            <Button variant="secondary" onClick={onStop}>
+            <Button variant="secondary" size="compact" onClick={onStop}>
               {t("assistant:stop")}
             </Button>
           ) : (
-            <Button type="submit" icon="arrow-right" disabled={!draft.trim()}>
-              {t("assistant:send")}
-            </Button>
+            <IconButton
+              type="submit"
+              icon="arrow-right"
+              label={t("assistant:send")}
+              disabled={!draft.trim()}
+            />
           )}
         </div>
       </div>
+      <small role="status" className={styles.hint}>
+        {t(busy ? "assistant:reading" : "assistant:enter")}
+      </small>
     </form>
   )
 }

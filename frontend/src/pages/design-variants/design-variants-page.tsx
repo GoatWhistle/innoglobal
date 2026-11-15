@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router"
 import { type PipeList, type PipeSummary, usePipes, useProfile } from "@/entities/pipe"
 import { useDocumentTitle, useTranslation } from "@/shared/i18n"
-import { Banner, ButtonLink, EmptyState, QueryView, Skeleton } from "@/shared/ui"
+import { Banner, ButtonLink, EmptyState, LoadingScene, QueryView } from "@/shared/ui"
 import { PipelineFleet } from "./pipeline-fleet"
 import { VariantsWorkspace } from "./variants-workspace"
 
@@ -22,7 +22,7 @@ function ProfileLoader({
       <QueryView
         query={profile}
         label={t("variants:loading")}
-        skeleton={<Skeleton shape="block" />}
+        skeleton={<LoadingScene label={t("variants:loading")} />}
       >
         {(data) =>
           data.rows.length ? (
@@ -51,7 +51,11 @@ export function DesignVariantsPage() {
   const requested = Number(search.get("pipe"))
   useDocumentTitle(search.has("pipe") ? t("variants:names.inspection") : null)
   return (
-    <QueryView query={pipes} label={t("variants:loading")} skeleton={<Skeleton shape="block" />}>
+    <QueryView
+      query={pipes}
+      label={t("variants:loading")}
+      skeleton={<LoadingScene label={t("variants:loading")} />}
+    >
       {(data) => {
         if (!search.has("pipe")) return <PipelineFleet pipes={data} />
         const match = data.items.find((item) => item.pipe_id === requested)

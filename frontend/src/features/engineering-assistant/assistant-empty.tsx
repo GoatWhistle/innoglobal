@@ -1,5 +1,5 @@
 import { useTranslation } from "@/shared/i18n"
-import { Button } from "@/shared/ui"
+import { BrandMark, Button } from "@/shared/ui"
 import styles from "./assistant-chat.module.css"
 
 export interface AssistantEmptyProps {
@@ -14,13 +14,19 @@ export function AssistantEmpty({ context, disabled, onAsk }: AssistantEmptyProps
   const { t } = useTranslation()
   return (
     <div className={styles.empty}>
-      <h1 className={styles.intro}>{t("assistant:welcome")}</h1>
-      <p className={styles.context}>{context}</p>
+      <div className={styles.greeting}>
+        <BrandMark variant="symbol" size="sm" state="calm" />
+        <div className={styles.bubble}>
+          <p>{t("assistant:greeting")}</p>
+          <p className={styles.context}>{context}</p>
+        </div>
+      </div>
       <div className={styles.starters}>
         {STARTERS.map((key) => (
           <Button
             key={key}
             variant="secondary"
+            size="compact"
             disabled={disabled}
             className={styles.starter}
             onClick={() => onAsk(t(`assistant:prompts.${key}`))}

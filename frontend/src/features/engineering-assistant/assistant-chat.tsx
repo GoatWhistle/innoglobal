@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { type AssistantAction, type AssistantMessage, useAssistant } from "@/entities/assistant"
 import type { PipeSummary, Profile, SegmentRow } from "@/entities/pipe"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { Button, Card, IconButton, ScrollArea, Segmented } from "@/shared/ui"
+import { BrandMark, Button, Card, IconButton, ScrollArea } from "@/shared/ui"
 import { AssistantAnswer } from "./assistant-answer"
 import styles from "./assistant-chat.module.css"
 import { AssistantComposer } from "./assistant-composer"
@@ -35,7 +35,7 @@ function AssistantSession({
 }: AssistantChatProps & { readonly onReset: () => void }) {
   const { t } = useTranslation()
   const format = useFormatters()
-  const [scope, setScope] = useState<"segment" | "pipe">("segment")
+  const scope = "segment" as const
   const end = useRef<HTMLDivElement>(null)
   const chat = useAssistant({
     pipe_id: pipe.pipe_id,
@@ -61,27 +61,28 @@ function AssistantSession({
       <Card
         appearance="plain"
         className={styles.head}
-        title={t("assistant:title")}
+        title={
+          <span className={styles.title}>
+            <BrandMark variant="symbol" size="md" state={chat.busy ? "busy" : "calm"} />
+            {t("assistant:title")}
+          </span>
+        }
+        description={t("assistant:subtitle")}
         actions={
           <div className={styles.headActions}>
             {count ? (
-              <Button variant="quiet" icon="plus" disabled={chat.busy} onClick={onReset}>
-                {t("assistant:page.newChat")}
-              </Button>
+              <IconButton
+                icon="plus"
+                label={t("assistant:page.newChat")}
+                disabled={chat.busy}
+                onClick={onReset}
+              />
             ) : null}
-            <IconButton icon="chevron-right" label={t("assistant:hide")} onClick={onHide} />
+            <IconButton icon="x" label={t("assistant:close")} onClick={onHide} />
           </div>
         }
       >
-        <Segmented
-          label={t("assistant:scope")}
-          value={scope}
-          onChange={setScope}
-          options={[
-            { value: "segment", label: t("assistant:segmentScope") },
-            { value: "pipe", label: t("assistant:pipeScope") },
-          ]}
-        />
+        {null}
       </Card>
       <ScrollArea className={styles.log} role="log" aria-label={t("assistant:conversation")}>
         {count ? null : (
