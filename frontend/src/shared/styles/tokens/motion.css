@@ -50,8 +50,10 @@
   --transition-control-press:
     background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out), scale var(--dur-press) var(--ease-out);
-  --transition-choice: scale var(--dur-instant) var(--ease-out);
-  --transition-choice-press: scale var(--dur-press) var(--ease-out);
+  --transition-choice:
+    color var(--dur-base) var(--ease-out), scale var(--dur-instant) var(--ease-out);
+  --transition-choice-press:
+    color var(--dur-base) var(--ease-out), scale var(--dur-press) var(--ease-out);
   --transition-fade: opacity var(--dur-base) var(--ease-out);
   --transition-brand-drop: transform var(--dur-scene-long) var(--ease-viscous);
   --transition-brand-rise: transform var(--dur-scene) var(--ease-viscous);
@@ -67,6 +69,7 @@
   --motion-rise-in: kf-rise-in var(--dur-slow) var(--ease-out) both;
   --motion-swap-in: kf-swap-in var(--dur-fast) var(--ease-out) both;
   --motion-swap-out: kf-swap-out var(--dur-fast-exit) var(--ease-out) both;
+  --motion-theme-reveal: kf-theme-reveal var(--dur-scene) var(--ease-viscous) both;
   --motion-spin: kf-spin var(--dur-spin) var(--ease-linear) infinite;
   --motion-shimmer: kf-shimmer var(--dur-breathe) var(--ease-in-out) infinite;
   --motion-alarm: none;

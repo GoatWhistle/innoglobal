@@ -137,3 +137,14 @@
     transform: translateY(0);
   }
 }
+
+@keyframes kf-theme-reveal {
+  from {
+    clip-path: circle(0 at var(--theme-reveal-x, 100%) var(--theme-reveal-y, 0));
+  }
+  to {
+    clip-path: circle(
+      var(--theme-reveal-radius, 150vmax) at var(--theme-reveal-x, 100%) var(--theme-reveal-y, 0)
+    );
+  }
+}

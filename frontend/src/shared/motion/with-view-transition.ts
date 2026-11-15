@@ -2,7 +2,7 @@ import { flushSync } from "react-dom"
 import { motionMs } from "./css-tokens"
 import { prefersReducedMotion } from "./use-reduced-motion"
 
-export type ViewTransitionMode = "layout" | "focus" | "route"
+export type ViewTransitionMode = "layout" | "focus" | "route" | "theme"
 
 let latestTransition = 0
 

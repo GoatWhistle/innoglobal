@@ -27,6 +27,12 @@
   transition: var(--transition-choice);
 }
 
+.ink {
+  composes: slidingIndicator from "../../primitives/surface/surface.module.css";
+  inset-block: var(--space-4);
+  background-color: var(--action-primary);
+}
+
 .iconOnly {
   inline-size: var(--target-min);
   padding-inline: 0;
@@ -40,7 +46,6 @@
 }
 
 .option[data-checked="true"] {
-  background-color: var(--action-primary);
   color: var(--action-primary-text);
 }
 
@@ -70,6 +75,9 @@
   background: var(--surface-base);
   padding: 0;
   gap: var(--space-4);
+}
+.camera .ink {
+  display: none;
 }
 .camera .option {
   min-block-size: var(--target-min);

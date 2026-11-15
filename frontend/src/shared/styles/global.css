@@ -88,6 +88,19 @@ samp {
   animation-timing-function: var(--ease-out);
 }
 
+:root[data-view-transition="theme"]::view-transition-old(root),
+:root[data-view-transition="theme"]::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+:root[data-view-transition="theme"]::view-transition-old(root) {
+  animation: none;
+}
+
+:root[data-view-transition="theme"]::view-transition-new(root) {
+  animation: var(--motion-theme-reveal);
+}
+
 :root[data-view-transition="layout"]::view-transition-group(*) {
   animation-duration: var(--dur-panel);
   animation-timing-function: var(--ease-out);
