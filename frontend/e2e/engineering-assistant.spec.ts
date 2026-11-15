@@ -1,6 +1,5 @@
 import { expect, test } from "@playwright/test"
 import ru from "../src/shared/i18n/locales/ru/assistant.json" with { type: "json" }
-import inspector from "../src/shared/i18n/locales/ru/inspector.json" with { type: "json" }
 import variants from "../src/shared/i18n/locales/ru/variants.json" with { type: "json" }
 
 const endpoint = "**/api/v1/assistant"
@@ -23,22 +22,16 @@ test("retains the submitted context when the segment changes during a response",
     })
   })
   await page.goto("/?pipe=1250022871&segment=130")
-  await page.getByRole("button", { name: ru.title, exact: true }).click()
   await page.getByRole("textbox", { name: ru.input, exact: true }).fill(ru.prompts.priority)
   await page.getByRole("textbox", { name: ru.input, exact: true }).press("Enter")
-  await page
-    .getByRole("button", { name: inspector.title.replace("{{segment}}", "130"), exact: true })
-    .hover()
   await page.getByLabel(variants.workspace.edit, { exact: true }).fill("131")
   await page.getByLabel(variants.workspace.edit, { exact: true }).press("Enter")
-  await page.mouse.move(0, 0)
   finish?.()
   const answer = page.getByTestId("assistant-answer")
   await expect(answer).toContainText("Segment 130 evidence")
   await expect(page).toHaveURL(/segment=131/)
   await answer.getByRole("button", { name: ru.actions.source, exact: true }).click()
   await expect(page).toHaveURL(/segment=130/)
-  await expect(page.getByRole("dialog")).toBeVisible()
 })
 
 test("shows request errors and retries against the backend contract", async ({ page }) => {
@@ -54,7 +47,6 @@ test("shows request errors and retries against the backend contract", async ({ p
     })
   })
   await page.goto("/?pipe=1250022871&segment=20")
-  await page.getByRole("button", { name: ru.title, exact: true }).click()
   await page.getByRole("textbox", { name: ru.input, exact: true }).fill(ru.prompts.priority)
   await page.getByRole("textbox", { name: ru.input, exact: true }).press("Enter")
   await expect(page.getByRole("alert")).toContainText(ru.unavailable)
@@ -62,33 +54,13 @@ test("shows request errors and retries against the backend contract", async ({ p
   await expect(page.getByTestId("assistant-answer")).toContainText("Recovered response")
 })
 
-for (const width of [375, 1440]) {
-  test(`preserves draft and live conversation when docking at ${width}`, async ({ page }) => {
-    await page.route(endpoint, (route) =>
-      route.fulfill({
-        contentType: "application/x-ndjson",
-        body: `${event("delta", { text: "Segment range: 30–40 m" })}\n${event("done")}\n`,
-      }),
-    )
-    await page.setViewportSize({ width, height: 900 })
-    await page.goto("/?pipe=1250009583&segment=3")
-    await page.getByRole("button", { name: ru.title, exact: true }).click()
-    await page.getByRole("textbox", { name: ru.input, exact: true }).fill(ru.prompts.neighbors)
-    await page.getByRole("textbox", { name: ru.input, exact: true }).press("Enter")
-    await expect(page.getByTestId("assistant-answer")).toContainText(/30.*40/)
-    const input = page.getByRole("textbox", { name: ru.input })
-    await expect(
-      page.getByRole("complementary", { name: ru.title }).getByRole("combobox"),
-    ).toHaveCount(0)
-    await input.fill("Draft question")
-    await page.getByRole("button", { name: variants.workspace.moveChat }).click()
-    await expect(input).toHaveValue("Draft question")
-    await page.getByRole("button", { name: variants.workspace.minimizeChat }).click()
-    await page.getByRole("button", { name: ru.title, exact: true }).first().click()
-    await expect(input).toHaveValue("Draft question")
-    await expect(page.getByTestId("assistant-answer")).toContainText(/30.*40/)
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
-      width,
-    )
-  })
-}
+test("closes the assistant to a launcher and opens it again", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/?pipe=1250009583&segment=3")
+  await expect(page.getByRole("textbox", { name: ru.input, exact: true })).toBeVisible()
+  await page.getByRole("button", { name: ru.close, exact: true }).click()
+  await expect(page.getByRole("textbox", { name: ru.input, exact: true })).toHaveCount(0)
+  await page.getByRole("button", { name: ru.launcher }).click()
+  await expect(page.getByRole("textbox", { name: ru.input, exact: true })).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1440)
+})
