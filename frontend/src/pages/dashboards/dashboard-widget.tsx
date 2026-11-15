@@ -1,13 +1,10 @@
 import type { WidgetDefinition } from "@/entities/dashboard"
 import { useThickness } from "@/entities/pipe"
-import {
-  AlignedTrack,
-  EvidenceLegend,
-  UnrollGrid,
-  type WorkspaceProps,
-} from "@/features/engineering-variants"
-import { useFormatters, useTranslation } from "@/shared/i18n"
+import { AlignedTrack, UnrollGrid, type WorkspaceProps } from "@/features/engineering-variants"
+import { useTranslation } from "@/shared/i18n"
 import { Button, ScrollArea } from "@/shared/ui"
+import { DeltaChart } from "./charts/delta-chart"
+import { ProfileChart } from "./charts/profile-chart"
 import { DashboardPriority } from "./dashboard-priority"
 import styles from "./dashboard-widget.module.css"
 export function DashboardWidget({
@@ -17,7 +14,6 @@ export function DashboardWidget({
   readonly item: WidgetDefinition
   readonly workspace: WorkspaceProps
 }) {
-  const format = useFormatters()
   const thickness = useThickness(),
     { t } = useTranslation()
   if (item.kind === "metric")
@@ -75,25 +71,11 @@ export function DashboardWidget({
         </table>
       </ScrollArea>
     )
+  if (item.kind === "forecast") return <ProfileChart workspace={workspace} />
+  if (item.kind === "delta") return <DeltaChart workspace={workspace} />
   return (
     <div className={styles.chart}>
-      <AlignedTrack
-        {...workspace}
-        kind={item.kind}
-        date={workspace.baselineDate}
-        overlay={item.kind === "forecast"}
-      />
-      {item.kind === "forecast" ? <EvidenceLegend date={workspace.baselineDate} /> : null}
-      {item.kind === "delta" ? (
-        <p className={styles.note}>
-          {t("variants:deltaExplanation", {
-            date: workspace.baselineDate
-              ? format.date(workspace.baselineDate)
-              : t("variants:nominalBase"),
-            target: format.date(workspace.pipe.target_date),
-          })}
-        </p>
-      ) : null}
+      <AlignedTrack {...workspace} kind={item.kind} date={workspace.baselineDate} />
     </div>
   )
 }

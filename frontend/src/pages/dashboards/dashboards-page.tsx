@@ -13,6 +13,7 @@ import {
   TextField,
 } from "@/shared/ui"
 import { DashboardCanvas } from "./dashboard-canvas"
+import { DashboardFigures } from "./dashboard-figures"
 import { DashboardLibrary } from "./dashboard-library"
 import { DashboardPanel } from "./dashboard-panel"
 import { DashboardContext, DashboardToolbar } from "./dashboard-toolbar"
@@ -105,6 +106,7 @@ function Editor({ pipe, profile }: { readonly pipe: PipeSummary; readonly profil
         profile={profile}
         segment={workspace.row.segment_id}
       />
+      <DashboardFigures workspace={workspace} />
       <div className={styles.workspace} data-panel={library || undefined}>
         <div className={styles.canvas}>
           {board.items.length ? (

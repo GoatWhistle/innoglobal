@@ -1,0 +1,61 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-8) var(--space-24);
+  padding-block-end: var(--space-12);
+}
+.legend {
+  composes: plainList from "../../../shared/styles/compose.module.css";
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8) var(--space-20);
+  color: var(--text-secondary);
+  font-size: var(--font-size-label);
+}
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+.mark {
+  inline-size: var(--space-20);
+  border-block-start: var(--chart-stroke) solid var(--chart-measured);
+}
+.band {
+  block-size: var(--space-12);
+  border: var(--hairline) solid var(--border-control);
+  background: var(--surface-range);
+}
+.observed {
+  inline-size: var(--space-8);
+  block-size: var(--space-8);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--wall-rust);
+}
+.nominal {
+  border-block-start: var(--chart-stroke-model) dashed var(--text-muted);
+}
+.reject {
+  border-block-start-color: var(--chart-danger);
+}
+.cutoff {
+  border-block-start: var(--chart-stroke-model) dashed var(--chart-warning);
+}
+.loss,
+.gain {
+  block-size: var(--space-12);
+  border: 0;
+  background: var(--chart-model);
+}
+.gain {
+  background: var(--chart-warning);
+}
+.reading {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-body-sm);
+  font-variant-numeric: tabular-nums;
+}
