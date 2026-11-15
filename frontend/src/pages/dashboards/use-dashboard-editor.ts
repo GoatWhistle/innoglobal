@@ -138,3 +138,4 @@ export function useDashboardEditor(pipe: PipeSummary, profile: Profile) {
       ),
   }
 }
+export type DashboardEditor = ReturnType<typeof useDashboardEditor>
