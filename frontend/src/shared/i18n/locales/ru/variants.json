@@ -130,6 +130,11 @@
     "map": "Карта трубопроводов",
     "hideMetrics": "Скрыть метрики",
     "minimizeChat": "Свернуть чат",
-    "mapView": "Карта"
+    "mapView": "Карта",
+    "pipeLine": "Труба {{id}}, {{length}} км",
+    "minimumBy": "Минимальная стенка к {{date}}",
+    "ofNominal": "из {{value}} мм по паспорту",
+    "queueCount": "Участков в очереди",
+    "openPipe": "Открыть трубу"
   }
 }

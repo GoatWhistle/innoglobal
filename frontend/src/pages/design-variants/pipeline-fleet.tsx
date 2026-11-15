@@ -33,24 +33,31 @@ export function PipelineFleet({ pipes }: { readonly pipes: PipeList }) {
             <PipePreview name={pipe.passport.direction} />
             <span className="visually-hidden">{pipe.passport.direction}</span>
           </ButtonLink>
-          <aside className={styles.details}>
-            <Card appearance="plain" title={pipe.passport.direction}>
-              {null}
-            </Card>
-            <p>{pipe.pipe_id}</p>
+          <Card
+            as="aside"
+            appearance="plain"
+            className={styles.details}
+            title={pipe.passport.direction}
+            description={t("variants:workspace.pipeLine", {
+              id: pipe.pipe_id,
+              length: format.number(pipe.passport.length_m / 1000, 1),
+            })}
+          >
+            <div className={styles.lead}>
+              <p>{t("variants:workspace.minimumBy", { date: format.date(pipe.target_date) })}</p>
+              <p className={styles.minimum}>
+                {format.number(pipe.thinnest_mm, 2)}
+                <small>{t("pipe:unit.mmShort")}</small>
+              </p>
+              <p>
+                {t("variants:workspace.ofNominal", {
+                  value: format.number(pipe.passport.nominal_wall_mm, 2),
+                })}
+              </p>
+            </div>
             <dl>
               <div>
-                <dt>{t("variants:workspace.minimum")}</dt>
-                <dd className={styles.minimum}>
-                  {format.number(pipe.thinnest_mm, 2)} <small>{t("pipe:unit.mmShort")}</small>
-                </dd>
-              </div>
-              <div>
-                <dt>{t("variants:target")}</dt>
-                <dd>{format.date(pipe.target_date)}</dd>
-              </div>
-              <div>
-                <dt>{t("variants:queue")}</dt>
+                <dt>{t("variants:workspace.queueCount")}</dt>
                 <dd>{pipe.priority_count}</dd>
               </div>
               <div>
@@ -62,10 +69,15 @@ export function PipelineFleet({ pipes }: { readonly pipes: PipeList }) {
                 </dd>
               </div>
             </dl>
-            <ButtonLink variant="quiet" icon="arrow-right" to={`/?pipe=${pipe.pipe_id}`}>
-              {t("variants:workspace.open")}
+            <ButtonLink
+              className={styles.open}
+              variant="secondary"
+              icon="arrow-right"
+              to={`/?pipe=${pipe.pipe_id}`}
+            >
+              {t("variants:workspace.openPipe")}
             </ButtonLink>
-          </aside>
+          </Card>
         </article>
       ))}
     </section>
