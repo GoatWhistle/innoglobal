@@ -22,33 +22,14 @@ Updated: 2026-11-15, MSK
 
 ## Current task
 
-User: «запушь то что у нас есть всё прям».
-Product publication commit 301556f; target origin/feat/redesign-oil.
-Includes research agent, latest frontend, local stand, docs and design artifacts.
-Frontend 382 tests/build verified; backend lint/types and 28 integration tests pass.
-Git hooks enabled; 131 unit tests passed at commit. No force push.
-
-
-2026-11-15 user: «exp/explain спуль сюда»; «и смержи его с https://github.com/GoatWhistle/innoglobal/commit/d364b6c684bcba489a41c5b8817cc70dbc858980».
-User: «путь давания сразу всех цифр в ллм - нет».
-User: «отлично.Используйем codex agents sdk, на sol 6/1».
-Branch feat/redesign-oil, HEAD 7e607a8. Merge completed; assistant implementation is uncommitted.
-Current research agent uses PydanticAI 2.68, OpenAICodexModel gpt-6.1-sol and nine tools.
-Full status: work/pydantic-implementation-status.md, docs/assistant.md.
-Latest user: «спуль фронт последний и раскатай на прод его и туда поставим уже агента».
-Clarification: «локально всмысле. На дев стенде локальном».
-Latest frontend 82dbab3 from origin/feat/frontend applied, research agent/artifacts retained.
-Active local stand http://localhost:18089, Docker innopa-dev frontend, proxies host API 8000.
-Hot Vite 5179 restarted (exec 34434). Verify: 382 tests/build and four deployed chat e2e pass.
-Chat simplified; pipe name in app header, floating chat icon, one scene toolbar.
-Dev stand updated; work/latest-frontend-dev.md.
-No live model generation checked. Previous UI migration: work/new-product-design.md.
-Previous user instructions retained:
-User: «давай тогда пробуй и начинай менять дизайн по трубе, брат. делай с помощью субагентов sol 6.1 high fast».
-User: «параоллельно работает если что агент который работает полностью с нефтью.»
-User: «удаляем ровно все то, что не нужно по дизайну ... оставил ровно то, что я последнее тыкал»; «все связанное с dupple оставь , остальное убери».
-User: «спулллься полностью , подтяни в мою ветку другую ветку (ml-pipetwin-merge-case-2) и как бы я хочу чтобы у меня появились данные».
-User: «так ну давай промт агенту чтобы построилась полностью наша система по реальным данным и был построен полностью сайт по нашему кейсу, не просто дизайн система а прям готовый фронтенд . сделай это в план и положи в md доку».
+2026-11-15 user: «короче продйись по всему ... там оч много ии слоп говна и многое не в дизайне нашем»;
+«делай так чтобы я видел результат»; «слей их в нашу ветку и короче работаем с этим».
+Branch feat/redesign-oil. Done and pushed: canvas growth fix, theme reveal, fleet card/pipe intro,
+text nav, list/map toggle, home tab "duppel", flange 404/crash pages, feat/frontend dashboards merged
+(/dashboards = custom editor, /dashboards/:id = assistant library). verify: 394 tests, 36 rules.
+Hot Vite http://localhost:5179 (API from Docker 18010); Compose frontend 18080 rebuilt after commits.
+Pitfall: Vite caches a truncated module if a file is rewritten in place; write via temp + rename.
+Next: continue UI pass over pipe workspace, dashboards, data and model pages.
 
 ## Historical limits
 
