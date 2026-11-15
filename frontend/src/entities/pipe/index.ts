@@ -19,6 +19,7 @@ export type {
   SegmentDetail,
   SegmentRow,
 } from "./pipe.types"
+export { PipeCard, type PipeCardProps } from "./pipe-card"
 export { readSelectedPipe, rememberSelectedPipe } from "./pipe-selection"
 export { type PriorityGroup, priorityGroups } from "./priority-groups"
 export { THICKNESS_DIGITS, useThickness } from "./use-thickness"

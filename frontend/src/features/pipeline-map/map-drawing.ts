@@ -41,7 +41,7 @@ export function drawMap(
   }
   for (const line of lines) {
     ctx.strokeStyle = tokens.getPropertyValue(
-      line.pipe_id === selected ? "--brand-accent" : "--text-secondary",
+      line.pipe_id === selected ? "--text-primary" : "--text-muted",
     )
     ctx.lineWidth = line.pipe_id === selected ? 4 : 2
     ctx.beginPath()

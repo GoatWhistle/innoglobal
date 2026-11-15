@@ -1,16 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import type { PipeList } from "@/entities/pipe"
+import { PipeCard, type PipeList } from "@/entities/pipe"
 import { useNetwork } from "@/entities/reference"
-import { useFormatters, useTranslation } from "@/shared/i18n"
+import { useTranslation } from "@/shared/i18n"
 import { useTheme } from "@/shared/theme"
-import { Button, ButtonLink, Card, IconButton, QueryView, Skeleton } from "@/shared/ui"
+import { Button, IconButton, QueryView, Segmented, Skeleton } from "@/shared/ui"
 import { drawMap, nearestLine } from "./map-drawing"
 import { countryView, fitBounds, project, type View, zoom } from "./map-geometry"
 import styles from "./pipeline-map.module.css"
 
 export function PipelineMap({ pipes }: { readonly pipes: PipeList }) {
   const { t } = useTranslation()
-  const format = useFormatters()
   const network = useNetwork()
   const { theme } = useTheme()
   const canvas = useRef<HTMLCanvasElement>(null)
@@ -42,10 +41,6 @@ export function PipelineMap({ pipes }: { readonly pipes: PipeList }) {
   const pipe = pipes.items.find((p) => p.pipe_id === selected)
   return (
     <section className={styles.fleet}>
-      <header>
-        <h1>{t("variants:workspace.fleet")}</h1>
-        <p>{t("variants:workspace.mapHint")}</p>
-      </header>
       <QueryView
         query={network}
         label={t("variants:loading")}
@@ -85,7 +80,7 @@ export function PipelineMap({ pipes }: { readonly pipes: PipeList }) {
               }}
             />
             <div className={styles.controls}>
-              <Button variant="secondary" onClick={() => setView(localView)}>
+              <Button variant="secondary" icon="map-pin" onClick={() => setView(localView)}>
                 {t("variants:workspace.network")}
               </Button>
               <Button variant="quiet" onClick={() => setView(countryView)}>
@@ -102,51 +97,25 @@ export function PipelineMap({ pipes }: { readonly pipes: PipeList }) {
                 onClick={() => setView((v) => zoom(v, 1.6))}
               />
             </div>
-            {pipe ? (
-              <aside className={styles.readout}>
-                <Card appearance="plain" title={pipe.passport.direction}>
-                  {null}
-                </Card>
-                <p>{pipe.pipe_id}</p>
-                <dl>
-                  <div>
-                    <dt>{t("variants:workspace.minimum")}</dt>
-                    <dd>
-                      {format.number(pipe.thinnest_mm, 2)} {t("pipe:unit.mmShort")}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>{t("variants:target")}</dt>
-                    <dd>{format.date(pipe.target_date)}</dd>
-                  </div>
-                  <div>
-                    <dt>{t("variants:queue")}</dt>
-                    <dd>{pipe.priority_count}</dd>
-                  </div>
-                </dl>
-                <ButtonLink to={`/?pipe=${pipe.pipe_id}`}>
-                  {t("variants:workspace.open")}
-                </ButtonLink>
-              </aside>
-            ) : null}
+            {pipe ? <PipeCard pipe={pipe} appearance="panel" className={styles.readout} /> : null}
           </div>
         )}
       </QueryView>
-      <div className={styles.list}>
-        {pipes.items.map((pipe) => (
-          <Button
-            key={pipe.pipe_id}
-            variant="quiet"
-            aria-pressed={selected === pipe.pipe_id}
-            onClick={() => {
-              setSelected(pipe.pipe_id)
-              setView(localView)
-            }}
-          >
-            {pipe.passport.direction}
-          </Button>
-        ))}
-      </div>
+      {pipes.items.length > 1 && selected !== undefined ? (
+        <Segmented
+          className={styles.list}
+          label={t("variants:workspace.mapHint")}
+          value={String(selected)}
+          onChange={(value) => {
+            setSelected(Number(value))
+            setView(localView)
+          }}
+          options={pipes.items.map((item) => ({
+            value: String(item.pipe_id),
+            label: item.passport.direction,
+          }))}
+        />
+      ) : null}
     </section>
   )
 }

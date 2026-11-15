@@ -1,7 +1,6 @@
 {
   "product": "Main interface",
   "pipe": "Pipeline",
-  "target": "Forecast date",
   "loading": "Loading pipeline forecast",
   "empty": "No segments in this snapshot",
   "emptyBody": "Profile data is unavailable. Return to the main interface.",
@@ -103,7 +102,6 @@
   "workspace": {
     "fleet": "Pipelines",
     "mapHint": "Select a pipeline on the map or in the list",
-    "open": "Open pipeline",
     "country": "Russia",
     "network": "Find pipelines",
     "charts": "Charts",
@@ -133,6 +131,8 @@
     "minimumBy": "Thinnest wall by {{date}}",
     "ofNominal": "of {{value}} mm nominal",
     "queueCount": "Segments in queue",
-    "openPipe": "Open pipeline"
+    "openPipe": "Open pipeline",
+    "fleetView": "Pipeline view",
+    "listView": "List"
   }
 }

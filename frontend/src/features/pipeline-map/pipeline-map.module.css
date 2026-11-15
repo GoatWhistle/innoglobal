@@ -1,17 +1,6 @@
-.fleet {
-  padding-block: var(--space-32);
-}
-.fleet h1 {
-  font-size: var(--font-size-heading-lg);
-  font-weight: 500;
-}
-.fleet :where(header) p {
-  color: var(--text-secondary);
-  margin-block: var(--space-16) var(--space-32);
-}
 .map {
   position: relative;
-  border-block: 1px solid var(--border-subtle);
+  border-block: var(--hairline) solid var(--border-subtle);
   min-height: 38rem;
 }
 .map canvas {
@@ -35,38 +24,10 @@
   position: absolute;
   right: var(--space-16);
   bottom: var(--space-16);
-  background: var(--surface-base);
-  padding: var(--space-24);
   width: 20rem;
-  border: 1px solid var(--border-subtle);
-}
-.readout h2 {
-  font-size: var(--font-size-subheading);
-}
-.readout p {
-  color: var(--text-muted);
-  margin-block: var(--space-8) var(--space-24);
-}
-.readout dl {
-  margin-block-end: var(--space-24);
-}
-.readout dl div {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-16);
-  margin-block: var(--space-12);
-}
-.readout dt {
-  color: var(--text-secondary);
-}
-.readout dd {
-  font-variant-numeric: tabular-nums;
 }
 .list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-16);
-  padding-block: var(--space-16);
+  margin-block-start: var(--space-16);
 }
 @media (width < 48rem) {
   .map {
@@ -78,6 +39,5 @@
   .readout {
     position: static;
     width: auto;
-    border-inline: none;
   }
 }

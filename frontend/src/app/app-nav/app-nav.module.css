@@ -2,23 +2,37 @@
   min-inline-size: 0;
 }
 
+.track {
+  position: relative;
+}
+
 .list {
   composes: plainList from "../../shared/styles/compose.module.css";
-
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-8);
 }
 
 .link {
-  composes: controlFrame controlRow controlText from "../../shared/styles/compose.module.css";
+  composes: controlText from "../../shared/styles/compose.module.css";
+  display: inline-flex;
+  align-items: center;
   min-block-size: var(--target-min);
+  padding-inline: var(--space-8);
   color: var(--text-secondary);
   text-decoration: none;
+  transition: var(--transition-control);
 }
 
 .active {
-  background-color: var(--surface-selected);
   color: var(--text-primary);
+}
+
+.ink {
+  composes: ink from "../../shared/ui/layout/tabs/tabs.module.css";
+}
+
+.link:focus-visible {
+  outline-offset: calc(var(--focus-ring-width) * -1);
 }
 
 @media (hover: hover) and (pointer: fine) {
