@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import { useState } from "react"
 import type { PipeSummary, Profile, SegmentRow } from "@/entities/pipe"
 import { useThickness } from "@/entities/pipe"
@@ -14,6 +15,7 @@ export interface WorkspacePanelProps {
   readonly inspecting: boolean
   readonly onSelect: (id: number) => void
   readonly onInspect: () => void
+  readonly details: ReactNode
 }
 
 function SegmentFactsList({ pipe, row }: { readonly pipe: PipeSummary; readonly row: SegmentRow }) {
@@ -63,6 +65,7 @@ export function WorkspacePanel(props: WorkspacePanelProps) {
   const { t } = useTranslation()
   const thickness = useThickness()
   const [order, setOrder] = useState<"rank" | "distance">("rank")
+  const [tab, setTab] = useState<"queue" | "details">("queue")
   const queue = profile.rows
     .filter((item) => item.priority_rank !== null)
     .sort((a, b) =>
@@ -96,44 +99,54 @@ export function WorkspacePanel(props: WorkspacePanelProps) {
           </Button>
         </Card>
       )}
-      <Card
-        appearance="plain"
-        className={styles.queueBlock}
-        title={t("variants:queue")}
-        actions={<span className={styles.count}>{queue.length}</span>}
-      >
+      <section className={styles.queueBlock}>
         <Segmented
-          label={t("variants:order")}
-          value={order}
-          onChange={setOrder}
+          label={t("variants:workspace.lowerTabs")}
+          value={tab}
+          onChange={setTab}
           options={[
-            { value: "rank", label: t("variants:byPriority") },
-            { value: "distance", label: t("variants:byDistance") },
+            { value: "queue", label: t("variants:workspace.queueTab", { count: queue.length }) },
+            { value: "details", label: t("variants:segmentEvidence") },
           ]}
         />
-        <ScrollArea className={styles.queueScroll}>
-          <ul className={styles.queue}>
-            {queue.map((item) => (
-              <li key={item.segment_id}>
-                <Button
-                  variant="quiet"
-                  className={styles.queueItem}
-                  aria-pressed={item.segment_id === selected}
-                  onClick={() => onSelect(item.segment_id)}
-                >
-                  <span className={styles.queueRow}>
-                    <span className={styles.rank}>{item.priority_rank}</span>
-                    <span className={styles.where}>
-                      {thickness.range(item.start_m, item.end_m)}
-                    </span>
-                    <strong>{thickness.withUnit(item.forecast_mm)}</strong>
-                  </span>
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </ScrollArea>
-      </Card>
+        {tab === "queue" ? (
+          <>
+            <Segmented
+              label={t("variants:order")}
+              value={order}
+              onChange={setOrder}
+              options={[
+                { value: "rank", label: t("variants:byPriority") },
+                { value: "distance", label: t("variants:byDistance") },
+              ]}
+            />
+            <ScrollArea className={styles.queueScroll}>
+              <ul className={styles.queue}>
+                {queue.map((item) => (
+                  <li key={item.segment_id}>
+                    <Button
+                      variant="quiet"
+                      className={styles.queueItem}
+                      aria-pressed={item.segment_id === selected}
+                      onClick={() => onSelect(item.segment_id)}
+                    >
+                      <span className={styles.queueRow}>
+                        <span className={styles.rank}>{item.priority_rank}</span>
+                        <span className={styles.where}>
+                          {thickness.range(item.start_m, item.end_m)}
+                        </span>
+                        <strong>{thickness.withUnit(item.forecast_mm)}</strong>
+                      </span>
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </ScrollArea>
+          </>
+        ) : (
+          <ScrollArea className={styles.queueScroll}>{props.details}</ScrollArea>
+        )}
+      </section>
     </div>
   )
 }

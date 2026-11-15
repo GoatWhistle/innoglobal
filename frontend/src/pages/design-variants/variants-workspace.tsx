@@ -11,15 +11,7 @@ import {
 } from "@/features/engineering-variants"
 import { MaterialPipe } from "@/features/material-pipe"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import {
-  Banner,
-  ButtonAnchor,
-  ButtonLink,
-  Disclosure,
-  IconButton,
-  PageHeader,
-  Segmented,
-} from "@/shared/ui"
+import { Banner, ButtonAnchor, ButtonLink, IconButton, PageHeader, Segmented } from "@/shared/ui"
 import { useChatOpen } from "./use-chat-open"
 import { WorkspacePanel } from "./workspace-panel"
 import styles from "./workspace-shell.module.css"
@@ -126,6 +118,7 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
           selected={selected}
           inspecting={inspecting}
           onSelect={select}
+          details={<SegmentFacts {...workspace} detailsOnly />}
           onInspect={() => {
             if (mode !== "route") setMode("route")
             setInspecting((value) => !value)
@@ -162,9 +155,6 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
           </aside>
         )}
       </div>
-      <Disclosure title={t("variants:segmentEvidence")}>
-        <SegmentFacts {...workspace} detailsOnly />
-      </Disclosure>
     </div>
   )
 }

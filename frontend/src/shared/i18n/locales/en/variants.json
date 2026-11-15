@@ -138,7 +138,9 @@
     "nominal": "Nominal wall",
     "pickHint": "From 0 to {{max}}, Enter",
     "pickPrompt": "Pick a segment: type its number, click the pipe or choose a row from the inspection queue.",
-    "csv": "Download CSV"
+    "csv": "Download CSV",
+    "lowerTabs": "Queue or segment data",
+    "queueTab": "Queue ({{count}})"
   },
   "dash": {
     "title": "Dashboards",
