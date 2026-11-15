@@ -23,10 +23,10 @@ Updated: 2026-11-15, MSK
 ## Current task
 
 User: «запушь то что у нас есть всё прям».
-Full publication to origin/feat/redesign-oil; HEAD before publication 7e607a8.
+Product publication commit 301556f; target origin/feat/redesign-oil.
 Includes research agent, latest frontend, local stand, docs and design artifacts.
 Frontend 382 tests/build verified; backend lint/types and 28 integration tests pass.
-Git hooks enabled; unit tests run at commit. No force push; remote branch is absent.
+Git hooks enabled; 131 unit tests passed at commit. No force push.
 
 
 2026-11-15 user: «exp/explain спуль сюда»; «и смержи его с https://github.com/GoatWhistle/innoglobal/commit/d364b6c684bcba489a41c5b8817cc70dbc858980».

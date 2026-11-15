@@ -72,3 +72,5 @@ matched provider names in file paths and rejected runtime dependency mentions pe
 AGENTS.md. It now scans added text and permits bare Codex dependency names only in backend,
 docs and .env.example; attribution phrases, commit metadata and other paths remain checked.
 Backend 131 unit + 28 integration tests pass; frontend 382 tests/build pass.
+
+Product publication commit: 301556f7bdb66e861237bceb1a354f22f0af5b48; branch feat/redesign-oil.

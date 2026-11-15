@@ -33,4 +33,3 @@ Result, contribution and card artifacts have 2000 matching unique keys and forec
 Merge commit 7e607a8. Backend unit/integration: 128 passed; DuckDB subset: 11 passed.
 Initial test collection lacked optional SDKs; installing the llm group resolved it.
 Frontend build/browser checks not run; dependencies absent in this clone.
-
