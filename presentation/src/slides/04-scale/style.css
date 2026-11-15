@@ -1,0 +1,271 @@
+#scale .map {
+  position: absolute;
+  left: 60px;
+  top: 220px;
+  width: 1360px;
+  height: 700px;
+}
+
+#scale .map path {
+  vector-effect: non-scaling-stroke;
+}
+
+#scale .map .map-line {
+  vector-effect: none;
+}
+
+#scale .map-field .fw {
+  fill: color-mix(in oklab, var(--chart-model) 28%, var(--deck-bg));
+  stroke: none;
+}
+
+#scale .map-field .fr {
+  fill: none;
+  stroke: color-mix(in oklab, var(--chart-model) 55%, var(--deck-bg));
+  stroke-width: 2.5;
+}
+
+#scale .map-field .fm {
+  fill: none;
+  stroke: var(--ink-650);
+  stroke-width: 2.5;
+}
+
+#scale .map-field .fn {
+  fill: none;
+  stroke: var(--ink-400);
+  stroke-width: 1.2;
+}
+
+#scale .zoom-pin {
+  position: absolute;
+  left: 365px;
+  top: 595px;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border: 3px solid var(--brand-accent);
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+#scale .map-flow,
+#scale .map-note {
+  display: none;
+}
+
+#scale .map {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, var(--deck-fg) 7%, var(--deck-fg) 93%, transparent), linear-gradient(to bottom, transparent, var(--deck-fg) 9%, var(--deck-fg) 91%, transparent);
+  mask-composite: intersect;
+}
+
+#scale .map-region {
+  fill: color-mix(in oklab, var(--deck-fg) 4%, var(--deck-sunken));
+  stroke: var(--deck-bg);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+#scale .map-region.is-oil {
+  fill: color-mix(in oklab, var(--deck-fg) 16%, var(--deck-sunken));
+}
+
+#scale.play .map-region.is-oil {
+  animation: scale-tint 0.8s var(--ease-out) 0.3s both;
+}
+
+@keyframes scale-tint {
+  from {
+    fill-opacity: 0.3;
+  }
+}
+
+#scale .map-line {
+  fill: none;
+  stroke: var(--deck-fg);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#scale .burst-dot {
+  fill: var(--brand-accent);
+  stroke: var(--deck-bg);
+  stroke-width: 1.5;
+}
+
+#scale .burst-ring {
+  fill: none;
+  stroke: var(--brand-accent);
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#scale .burst {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#scale.play .burst {
+  animation: scale-burst 0.42s var(--ease-out) var(--d) both;
+}
+
+#scale.play .burst-ring {
+  animation: scale-ring var(--every) var(--ease-out) var(--loop) infinite;
+}
+
+@keyframes scale-burst {
+  from {
+    opacity: 0;
+    scale: 2.4;
+  }
+}
+
+@keyframes scale-ring {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 0;
+    transform: scale(4.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(4.2);
+  }
+}
+
+#scale .map-flow {
+  pointer-events: none;
+}
+
+#scale .map-flow i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: var(--radius-pill);
+  background: var(--deck-bg);
+  box-shadow: 0 0 0 2px var(--deck-fg);
+  offset-path: var(--path);
+  offset-rotate: 0deg;
+  opacity: 0;
+}
+
+#scale.play .map-flow i {
+  animation: scale-flow var(--dur) linear var(--delay) infinite;
+}
+
+@keyframes scale-flow {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+#scale .map-note {
+  position: absolute;
+  left: var(--gutter);
+  top: 930px;
+  margin: 0;
+  font-size: var(--fs-micro);
+  color: var(--deck-fg-3);
+}
+
+#scale .scale-kpis {
+  position: absolute;
+  right: var(--gutter);
+  top: 240px;
+  width: 400px;
+  display: grid;
+  gap: 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#scale .scale-kpis li {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--deck-line);
+}
+
+#scale .scale-kpis li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+#scale .fig {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 76px;
+  font-weight: var(--weight-regular);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--deck-fg);
+}
+
+#scale .fig-u {
+  font-size: var(--fs-body);
+  letter-spacing: 0;
+  color: var(--deck-fg-2);
+}
+
+#scale .is-hot .fig-v {
+  color: var(--brand-accent);
+}
+
+#scale .scale-kpis span:not([class]) {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-snug);
+  color: var(--deck-fg-2);
+}
+
+
+
+
+
+#scale .fig:not([data-roll]) .fig-v {
+  font-variant-numeric: proportional-nums;
+}
+
+#scale .map-canvas {
+  position: absolute;
+  left: 60px;
+  top: 220px;
+  width: 1360px;
+  height: 700px;
+  mask-image: linear-gradient(to right, transparent, var(--deck-fg) 7%, var(--deck-fg) 93%, transparent), linear-gradient(to bottom, transparent, var(--deck-fg) 9%, var(--deck-fg) 91%, transparent);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+#scale.is-canvas .map-regions,
+#scale.is-canvas .map-field {
+  display: none;
+}
+
+#scale.is-canvas .map {
+  mask-image: none;
+}

@@ -1,0 +1,62 @@
+#cost .cost-plaque {
+  position: absolute;
+  right: var(--gutter);
+  top: 250px;
+  width: 440px;
+  display: grid;
+  gap: 28px;
+}
+
+#cost .cost-eyebrow {
+  margin: 0;
+  font-size: var(--fs-caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--deck-fg-3);
+}
+
+#cost .cost-row {
+  display: grid;
+  gap: 6px;
+  padding-top: 24px;
+  border-top: 1px solid var(--deck-line);
+}
+
+#cost .cost-row.is-hot {
+  padding-top: 0;
+  border-top: 0;
+}
+
+#cost .fig {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 96px;
+  font-weight: var(--weight-regular);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--deck-fg);
+}
+
+#cost .fig-u {
+  font-size: var(--fs-body);
+  letter-spacing: 0;
+  color: var(--deck-fg-2);
+}
+
+#cost .is-hot .fig-v {
+  color: var(--brand-accent);
+}
+
+#cost .cost-word {
+  font-size: var(--fs-lead);
+  font-weight: var(--weight-regular);
+  color: var(--deck-fg);
+}
+
+#cost .cost-row span:not([class]) {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-snug);
+  color: var(--deck-fg-2);
+  text-wrap: balance;
+}

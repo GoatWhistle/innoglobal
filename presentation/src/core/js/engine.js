@@ -106,16 +106,25 @@
     const nextStep = Math.max(0, Math.min(s.steps, step))
     if (target !== state.index) {
       const prev = slides[state.index]
-      if (prev) {
-        call(prev, "leave")
-        prev.el.classList.remove("is-current", "play")
+      const swap = () => {
+        if (prev) {
+          call(prev, "leave")
+          prev.el.classList.remove("is-current", "play")
+        }
+        s.el.classList.add("is-current")
+        state.index = target
+        state.step = nextStep
+        applySteps(s, nextStep)
+        for (const layer of window.deckLayers ?? []) layer.stage?.(s.el, dir)
+        init(s)
+        play(s, nextStep, dir)
       }
-      s.el.classList.add("is-current")
-      state.index = target
-      state.step = nextStep
-      applySteps(s, nextStep)
-      init(s)
-      play(s, nextStep, dir)
+      if (prev && document.startViewTransition && !kit.reduced) {
+        root.dataset.dir = dir < 0 ? "back" : "forward"
+        root.classList.add("is-morphing")
+        const transition = document.startViewTransition(swap)
+        transition.finished.finally(() => root.classList.remove("is-morphing"))
+      } else swap()
     } else {
       state.step = nextStep
       applySteps(s, nextStep)
@@ -262,6 +271,7 @@
     for (const s of slides) {
       s.el.classList.add("is-current")
       applySteps(s, s.steps)
+      for (const layer of window.deckLayers ?? []) layer.printStage?.(s.el)
       init(s)
       play(s, s.steps, 1)
     }
@@ -298,6 +308,12 @@
     const target = readHash() ?? { index: 0, step: 0 }
     go(target.index, target.step, 1)
     expose()
+    const prewarm = (i) => {
+      if (i >= slides.length) return
+      init(slides[i])
+      setTimeout(() => prewarm(i + 1), 120)
+    }
+    setTimeout(() => prewarm(0), 1500)
     root.classList.add("is-ready")
   }
 

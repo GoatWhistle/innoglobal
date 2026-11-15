@@ -1,0 +1,27 @@
+<section class="slide" id="sensor" data-title="Виртуальный датчик" data-pipe="cx:760 cy:405 len:1250 rx:-0.9 ry:0 rz:0 cut:0 oil:1 damage:1 label:0">
+  <h2 class="title a">Толщина стенки <em>в каждом сегменте</em></h2>
+  <span hidden data-queue data-from="queue_22871"></span>
+  <span hidden data-profile data-from="profile_22871"></span>
+  <svg class="sensor-profile" aria-hidden="true"></svg>
+  <svg class="sensor-rug" aria-hidden="true"></svg>
+  <div class="sensor-axis f" style="--d:0.6s">
+    <span data-plain>0 км</span>
+    <span><span class="num" data-num="segments_22871"></span> сегментов по <span class="num" data-num="segment_m"></span></span>
+    <span data-plain>5,25 км</span>
+  </div>
+  <div class="sensor-legend f" style="--d:1.2s">
+    <span class="is-line">прогноз</span>
+    <span class="is-band" data-plain>коридор P10 и P90, покрытие не измерено</span>
+    <span class="is-queue">очередь проверки</span>
+  </div>
+  <aside class="sensor-card">
+    <p class="sensor-label a" style="--d:0.5s"><span>Минимальная стенка</span><span>к <span class="num" data-num="forecast_date_22871"></span></span></p>
+    <p class="sensor-value a" style="--d:1.35s"><span class="num" data-num="min_22871_value"></span><small>мм</small></p>
+    <p class="sensor-sub a" style="--d:1.45s">из <span class="num" data-num="nominal_22871"></span> по паспорту</p>
+    <div class="sensor-rank">
+      <p class="sensor-rank-head a" style="--d:1.6s"><span>Очередь проверки</span><span>топ-5 из <span class="num" data-num="queue_22871_n"></span></span></p>
+      <ol class="sensor-rank-list"></ol>
+      <span hidden data-rank data-from="ranked_22871"></span>
+    </div>
+  </aside>
+</section>

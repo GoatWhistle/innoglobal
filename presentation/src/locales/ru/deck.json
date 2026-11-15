@@ -15,5 +15,7 @@
   "keys.presenter": "ыЫ",
   "keys.fullscreen": "аА",
   "keys.replay": "кК",
-  "keys.blackout": "иИю"
+  "keys.blackout": "иИю",
+  "print.before": "до привязки",
+  "print.after": "после"
 }

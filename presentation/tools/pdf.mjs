@@ -14,6 +14,7 @@ page.on("console", (message) => {
 await page.goto(deckUrl("?print"))
 await waitReady(page)
 await page.evaluate(() => document.fonts.ready)
+await page.waitForFunction(() => !window.deckPrint || document.documentElement.classList.contains("is-print-ready"), null, { timeout: 30000 })
 await page.waitForTimeout(300)
 const pages = await page.evaluate(() => document.querySelectorAll(".slide").length)
 await page.pdf({ path: out, width: "1920px", height: "1080px", printBackground: true, preferCSSPageSize: true })

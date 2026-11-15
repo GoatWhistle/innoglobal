@@ -28,10 +28,15 @@
     "linkedin:init": "node tools/linkedin.mjs init",
     "linkedin": "node tools/linkedin.mjs render",
     "readme": "node tools/readme.mjs",
-    "readme:preview": "node tools/readme-preview.mjs"
+    "readme:preview": "node tools/readme-preview.mjs",
+    "pipe3d": "node tools/pipe3d.mjs"
   },
   "dependencies": {
     "playwright-core": "^1.63.0",
     "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.12",
+    "three": "^0.186.1"
   }
 }

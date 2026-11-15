@@ -1,0 +1,100 @@
+const ODO_X0 = 780 - (4.4 * 1100) / 11.8
+const ODO_W = (8.8 * 1100) / 11.8
+const ODO_LEN = 5250
+
+const odoCurve = (el) => {
+  const svg = el.querySelector(".odo-curve")
+  const pts = deckPipes.rows(el.querySelector("[data-curve]"))
+  const x = (m) => ODO_X0 + (m / ODO_LEN) * ODO_W
+  const y = (s) => 120 - s * 14
+  deckKit.svg("line", { x1: ODO_X0, x2: ODO_X0 + ODO_W, y1: y(0), y2: y(0), class: "odo-zero f", style: "--d:0.5s" }, svg)
+  const d = pts.map(([m, s], i) => `${i ? "L" : "M"}${x(m).toFixed(1)} ${y(s).toFixed(1)}`).join("")
+  deckKit.svg("path", { d, class: "odo-line dr", pathLength: "1", style: "--d:0.6s;--t:1.2s" }, svg)
+  const [first, last] = [pts[0], pts[pts.length - 1]]
+  for (const [m, s, at] of [[first[0], first[1], 0.7], [last[0], last[1], 1.7]]) {
+    deckKit.svg("circle", { cx: x(m), cy: y(s), r: 7, class: "odo-dot pop", style: `--d:${at}s` }, svg)
+  }
+  for (const [label, at] of [["0 км", ODO_X0], ["5,25 км", ODO_X0 + ODO_W]]) {
+    const t = deckKit.svg("text", { x: at, y: 240, "text-anchor": "middle", class: "odo-tick f", style: "--d:0.5s", "data-plain": "" }, svg)
+    t.textContent = label
+  }
+  const t = deckKit.svg("text", { x: ODO_X0 + ODO_W + 24, y: y(0) + 7, class: "odo-tick f", style: "--d:0.5s" }, svg)
+  t.textContent = "0 м"
+}
+
+const odoLens = (lens) => {
+  const svg = lens.querySelector("svg")
+  const pairs = deckPipes.rows(lens.querySelector("[data-win]"))
+  const lo = pairs[0][0] - 6
+  const px = 510 / 64
+  const x = (m) => 80 + (m - lo) * px
+  deckKit.svg("line", { x1: 72, x2: 600, y1: 38, y2: 38, class: "lens-row" }, svg)
+  deckKit.svg("line", { x1: 72, x2: 600, y1: 112, y2: 112, class: "lens-row" }, svg)
+  const label = (text, yy) => {
+    const t = deckKit.svg("text", { x: 0, y: yy + 7, "text-anchor": "start", class: "lens-label", "data-plain": "" }, svg)
+    t.textContent = text
+  }
+  label("2018", 38)
+  label("2022", 112)
+  const items = pairs.map(([a, s]) => {
+    const top = deckKit.svg("line", { x1: x(a), x2: x(a), y1: 22, y2: 54, class: "lens-weld" }, svg)
+    const link = deckKit.svg("line", { x1: x(a), x2: x(a + s), y1: 54, y2: 96, class: "lens-link" }, svg)
+    const bottom = deckKit.svg("line", { x1: x(a + s), x2: x(a + s), y1: 96, y2: 128, class: "lens-weld is-b" }, svg)
+    return { a, s, link, bottom }
+  })
+  lens._items = items
+  lens._x = x
+}
+
+const odoSnap = (lens, k) => {
+  const x = lens._x
+  for (const { a, s, link, bottom } of lens._items ?? []) {
+    const bx = x(a + s * (1 - k))
+    link.setAttribute("x2", bx.toFixed(1))
+    bottom.setAttribute("x1", bx.toFixed(1))
+    bottom.setAttribute("x2", bx.toFixed(1))
+  }
+}
+
+const odoSpark = (el) => {
+  const svg = el.querySelector(".odo-spark")
+  const rows = deckPipes.rows(el.querySelector("[data-spark]"))
+  const all = rows.flat()
+  const lo = Math.min(...all)
+  const hi = Math.max(...all)
+  const x = (i) => (i / (rows.length - 1)) * 340
+  const y = (v) => 6 + ((hi - v) / (hi - lo || 1)) * 68
+  const line = (k) => rows.map((r, i) => `${i ? "L" : "M"}${x(i).toFixed(1)} ${y(r[k]).toFixed(1)}`).join("")
+  deckKit.svg("path", { d: line(0), class: "spark-raw dr", pathLength: "1", style: "--d:1.8s;--t:0.6s" }, svg)
+  deckKit.svg("path", { d: line(1), class: "spark-sm dr", pathLength: "1", style: "--d:2.1s;--t:0.6s" }, svg)
+}
+
+deckScene("research", {
+  init(el) {
+    odoCurve(el)
+    el.querySelectorAll(".odo-lens").forEach(odoLens)
+    odoSpark(el)
+    for (const lens of el.querySelectorAll(".odo-lens svg")) {
+      lens.classList.add("f")
+      lens.style.setProperty("--d", "1.45s")
+    }
+  },
+  enter(el) {
+    const lenses = [...el.querySelectorAll(".odo-lens")]
+    el._stop?.()
+    if (deckKit.reduced) {
+      for (const lens of lenses) odoSnap(lens, 1)
+      return
+    }
+    for (const lens of lenses) odoSnap(lens, 0)
+    el._stop = deckKit.tween({
+      dur: 900,
+      delay: 2600,
+      curve: "inOut",
+      update: (k) => lenses.forEach((lens) => odoSnap(lens, k)),
+    })
+  },
+  leave(el) {
+    el._stop?.()
+  },
+})

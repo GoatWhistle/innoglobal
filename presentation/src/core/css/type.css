@@ -50,10 +50,15 @@
   top: var(--title-top);
   width: calc(var(--stage-w) - 2 * var(--gutter));
   font-size: var(--fs-title);
-  font-weight: var(--weight-strong);
+  font-weight: var(--weight-regular);
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-title);
   text-wrap: balance;
+}
+
+.title em {
+  font-style: normal;
+  font-weight: var(--weight-strong);
 }
 
 .lead {
@@ -80,7 +85,7 @@
 }
 
 .num {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }

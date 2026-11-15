@@ -1,0 +1,40 @@
+<section class="slide" id="research" data-title="Исследование данных" data-pipe="cx:780 cy:335 len:1100 label:1">
+  <h2 class="title a">Одометр копит ошибку, <em>швы её снимают</em></h2>
+  <svg class="odo-curve" viewBox="0 0 1920 240" aria-hidden="true"></svg>
+  <span hidden data-curve data-from="odo_curve"></span>
+  <div class="odo-ends">
+    <p class="odo-end is-start a" style="--d:1.2s"><span class="num" data-num="odo_shift_start"></span><span>сдвиг в начале</span></p>
+    <p class="odo-end is-end a" style="--d:1.35s"><span class="num" data-num="odo_shift_end"></span><span>сдвиг в конце</span></p>
+  </div>
+  <div class="odo-lens is-start">
+    <p class="odo-lens-head a" style="--d:1.4s">начало трубы, швы <b data-plain>2018</b> и <b data-plain>2022</b></p>
+    <svg viewBox="0 0 600 150" aria-hidden="true"></svg>
+    <span hidden data-win data-from="odo_win_start"></span>
+  </div>
+  <div class="odo-lens is-end">
+    <p class="odo-lens-head a" style="--d:1.5s">конец трубы</p>
+    <svg viewBox="0 0 600 150" aria-hidden="true"></svg>
+    <span hidden data-win data-from="odo_win_end"></span>
+  </div>
+  <aside class="odo-side">
+    <div class="odo-card a" style="--d:0.6s">
+      <p class="fig"><span class="num" data-num="odo_welds"></span></p>
+      <p class="odo-cap">сварных швов служат маяками</p>
+    </div>
+    <div class="odo-card a" style="--d:1.7s">
+      <p class="odo-name">Толщина на прошлой ВТД</p>
+      <svg class="odo-spark" viewBox="0 0 340 80" aria-hidden="true"></svg>
+      <span hidden data-spark data-from="prev_raw_sm"></span>
+      <p class="odo-cap">медиана по пяти сегментам вместо шумного минимума</p>
+    </div>
+    <div class="odo-card a" style="--d:1.9s">
+      <p class="odo-name">Дефекты на прошлой ВТД</p>
+      <div class="odo-bars">
+        <span style="--h:0.087"><b class="num" data-num="ili_defects_2018"></b></span>
+        <span style="--h:1"><b class="num" data-num="ili_defects_2022"></b></span>
+      </div>
+      <p class="odo-cap">два снаряда, поэтому делим на число дефектов пропуска</p>
+    </div>
+  </aside>
+  <p class="odo-result a" style="--d:2.4s">после привязки r² первого кейса <span class="num" data-num="align_r2_before"></span> <span class="ico is-sm" data-icon="arrow-right"></span> <b class="num" data-num="align_r2_after"></b></p>
+</section>

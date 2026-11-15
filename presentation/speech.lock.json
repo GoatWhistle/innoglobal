@@ -1,18 +1,19 @@
 {
-  "total": "5:40",
-  "regulation": "6:00",
+  "total": "4:40",
+  "regulation": "5:00",
   "slides": {
-    "cover": "c835c53d155e",
-    "problem": "32a9cd82c46f",
-    "solution": "cce4de173a5e",
-    "product": "93d47703cd52",
-    "mechanic": "492774494d80",
-    "funnel": "b61ae6bcb889",
-    "explain": "dc92f3fc5b2d",
-    "measured": "93ee4311b308",
-    "architecture": "b88fb49ee81a",
-    "impact": "8023c9be2c2d",
-    "status": "fa08b41fd09c",
-    "final": "a1eeb3825975"
+    "cover": "69cde5f6dddc",
+    "failures": "02d58bb85b76",
+    "cost": "146ef75846f1",
+    "scale": "4f05627b9b8f",
+    "ili": "6101b101e3e9",
+    "ut": "db56521d2d77",
+    "compare": "8c7fa3acb44c",
+    "sensor": "dbcd0ce857fe",
+    "research": "af47ad70aa64",
+    "features": "6e49c54f9df8",
+    "architecture": "9683a263f83c",
+    "quality": "a7b20a4933cc",
+    "final": "2a7f14d6570f"
   }
 }

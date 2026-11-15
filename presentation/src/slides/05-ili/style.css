@@ -1,0 +1,8 @@
+#ili .plaque {
+  left: 120px;
+  top: 400px;
+}
+
+#ili.is-current .plaque {
+  view-transition-name: plaque-ili;
+}

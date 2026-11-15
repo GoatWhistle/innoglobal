@@ -1,33 +1,65 @@
 @font-face {
-  font-family: 'Onest Variable';
+  font-family: 'Manrope Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url("fonts/onest-cyrillic-ext-wght-normal.woff2") format('woff2-variations');
+  font-weight: 200 800;
+  src: url("fonts/manrope-cyrillic-ext-wght-normal.woff2") format('woff2-variations');
   unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
 }
 @font-face {
-  font-family: 'Onest Variable';
+  font-family: 'Manrope Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url("fonts/onest-cyrillic-wght-normal.woff2") format('woff2-variations');
+  font-weight: 200 800;
+  src: url("fonts/manrope-cyrillic-wght-normal.woff2") format('woff2-variations');
   unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
 }
 @font-face {
-  font-family: 'Onest Variable';
+  font-family: 'Manrope Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url("fonts/onest-latin-ext-wght-normal.woff2") format('woff2-variations');
+  font-weight: 200 800;
+  src: url("fonts/manrope-latin-ext-wght-normal.woff2") format('woff2-variations');
   unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
 }
 @font-face {
-  font-family: 'Onest Variable';
+  font-family: 'Manrope Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url("fonts/onest-latin-wght-normal.woff2") format('woff2-variations');
+  font-weight: 200 800;
+  src: url("fonts/manrope-latin-wght-normal.woff2") format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("fonts/ibm-plex-mono-cyrillic-ext-400-normal.woff2") format('woff2'), url("fonts/ibm-plex-mono-cyrillic-ext-400-normal.woff") format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("fonts/ibm-plex-mono-cyrillic-400-normal.woff2") format('woff2'), url("fonts/ibm-plex-mono-cyrillic-400-normal.woff") format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("fonts/ibm-plex-mono-latin-ext-400-normal.woff2") format('woff2'), url("fonts/ibm-plex-mono-latin-ext-400-normal.woff") format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("fonts/ibm-plex-mono-latin-400-normal.woff2") format('woff2'), url("fonts/ibm-plex-mono-latin-400-normal.woff") format('woff');
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
@@ -68,6 +100,12 @@
   --amber-400: #ffac2e;
   --amber-500: #b06f00;
   --amber-700: #855200;
+
+  --steel-300: #9fa4a8;
+  --steel-500: #6c7277;
+  --rust-500: #a4532c;
+  --rust-600: #94472a;
+  --wall-amber-500: #d9870f;
 }
 
 :root,
@@ -121,6 +159,7 @@
 
   --scene-void: var(--ink-25);
   --scene-crude: var(--crude-pitch);
+  --scene-crude-text: var(--ink-0);
   --scene-sheen-cool: var(--crude-olive);
   --scene-sheen-warm: var(--crude-amber);
   --scene-sheen-deep: var(--crude-umber);
@@ -162,6 +201,17 @@
   --chart-crosshair: color-mix(in oklab, var(--ink-1000) 45%, transparent);
   --chart-warning: var(--amber-500);
   --chart-danger: var(--leak-700);
+  --wall-steel: var(--steel-300);
+  --wall-rust: var(--rust-500);
+  --wall-amber: var(--wall-amber-500);
+  --wall-0: color-mix(in oklab, var(--wall-rust) 0%, var(--wall-steel));
+  --wall-1: color-mix(in oklab, var(--wall-rust) 29%, var(--wall-steel));
+  --wall-2: color-mix(in oklab, var(--wall-rust) 57%, var(--wall-steel));
+  --wall-3: color-mix(in oklab, var(--wall-rust) 86%, var(--wall-steel));
+  --wall-4: color-mix(in oklab, var(--wall-amber) 14%, var(--wall-rust));
+  --wall-5: color-mix(in oklab, var(--wall-amber) 43%, var(--wall-rust));
+  --wall-6: color-mix(in oklab, var(--wall-amber) 71%, var(--wall-rust));
+  --wall-7: color-mix(in oklab, var(--wall-amber) 100%, var(--wall-rust));
 }
 
 [data-theme="dark"] {
@@ -214,6 +264,7 @@
 
   --scene-void: var(--ink-950);
   --scene-crude: var(--crude-pitch);
+  --scene-crude-text: var(--ink-0);
   --scene-sheen-cool: var(--crude-olive);
   --scene-sheen-warm: var(--crude-amber);
   --scene-sheen-deep: var(--crude-umber);
@@ -255,12 +306,30 @@
   --chart-crosshair: color-mix(in oklab, var(--ink-0) 45%, transparent);
   --chart-warning: var(--amber-300);
   --chart-danger: var(--leak-300);
+  --wall-steel: var(--steel-500);
+  --wall-rust: var(--rust-600);
+  --wall-amber: var(--amber-400);
+  --wall-0: color-mix(in oklab, var(--wall-rust) 0%, var(--wall-steel));
+  --wall-1: color-mix(in oklab, var(--wall-rust) 29%, var(--wall-steel));
+  --wall-2: color-mix(in oklab, var(--wall-rust) 57%, var(--wall-steel));
+  --wall-3: color-mix(in oklab, var(--wall-rust) 86%, var(--wall-steel));
+  --wall-4: color-mix(in oklab, var(--wall-amber) 14%, var(--wall-rust));
+  --wall-5: color-mix(in oklab, var(--wall-amber) 43%, var(--wall-rust));
+  --wall-6: color-mix(in oklab, var(--wall-amber) 71%, var(--wall-rust));
+  --wall-7: color-mix(in oklab, var(--wall-amber) 100%, var(--wall-rust));
+}
+
+[data-theme="light"] {
+  --matte-fill: color-mix(in oklab, var(--surface-float) 90%, transparent);
+}
+[data-theme="dark"] {
+  --matte-fill: color-mix(in oklab, var(--surface-float) 82%, transparent);
 }
 
 :root {
   --radius-none: 0px;
   --radius-sm: 4px;
-  --radius-control: 6px;
+  --radius-control: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-pill: 9999px;
@@ -325,6 +394,7 @@
   --toast-width: 400px;
   --dialog-width: 480px;
   --drawer-width: 440px;
+  --drawer-width-wide: 800px;
   --fade-edge: 24px;
   --track-size: 2px;
 
@@ -366,14 +436,30 @@
   --mark-corner: 8px;
   --paper-cell: 8px;
   --paper-cell-major: 40px;
+  --scanner-panel: 480px;
+  --scanner-panel-min: 400px;
+  --scanner-scene-min: 200px;
+  --scanner-scene-max: 360px;
+  --scanner-scene-mobile: 260px;
+  --scanner-section-height: 140px;
+  --scanner-list-height: 300px;
+}
+
+:root {
+  --pipe-scene: 240px;
+  --pipe-scene-focus: 72vh;
+  --pipe-scene-mobile: 240px;
+  --priority-list-height: calc(100dvh - 410px);
+  --readout-width: 18rem;
 }
 
 :root {
   --font-sans:
-    "Onest Variable", "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Manrope Variable", "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif;
   --font-accent: "Raleway Variable", "Raleway", var(--font-sans);
-  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
   --font-features: "kern" 1;
   --font-numeric: tabular-nums;
 
@@ -417,6 +503,11 @@
 }
 
 :root {
+  --font-size-scene: clamp(4rem, 2rem + 4vw, 6.5rem);
+  --tracking-stencil: 0.14em;
+}
+
+:root {
   --layer-raised: 1;
   --layer-sticky: 10;
   --layer-popover: 40;
@@ -433,6 +524,13 @@
     0 2px 4px var(--shadow-near), 0 16px 40px -8px var(--shadow-color);
 
   --opacity-stale: 0.55;
+}
+
+:root {
+  --shadow-sheet: var(--shadow-sheen);
+  --matte-blur: 14px;
+  --shadow-camera: 0 3px 0 var(--border-ink);
+  --shadow-camera-on: 0 1px 0 var(--border-ink);
 }
 
 :root {
@@ -453,6 +551,7 @@
   --dur-draw: 900ms;
   --dur-spin: 800ms;
   --dur-breathe: 2400ms;
+  --dur-scene-cut: 1000ms;
   --dur-scene: 800ms;
   --dur-scene-long: 1250ms;
   --dur-alarm: 1600ms;
@@ -486,10 +585,18 @@
   --transition-control-press:
     background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out), scale var(--dur-press) var(--ease-out);
+  --transition-choice:
+    color var(--dur-base) var(--ease-out), scale var(--dur-instant) var(--ease-out);
+  --transition-choice-press:
+    color var(--dur-base) var(--ease-out), scale var(--dur-press) var(--ease-out);
   --transition-fade: opacity var(--dur-base) var(--ease-out);
   --transition-brand-drop: transform var(--dur-scene-long) var(--ease-viscous);
   --transition-brand-rise: transform var(--dur-scene) var(--ease-viscous);
 
+  --transition-drawer:
+    transform var(--dur-panel) var(--ease-drawer), opacity var(--dur-panel) var(--ease-out);
+  --transition-drawer-close:
+    transform var(--dur-exit) var(--ease-out), opacity var(--dur-exit) var(--ease-out);
   --motion-fade-in: kf-fade-in var(--dur-base) var(--ease-out) both;
   --motion-fade-out: kf-fade-out var(--dur-exit) var(--ease-out) both;
   --motion-scale-in: kf-scale-in var(--dur-base) var(--ease-out) both;
@@ -497,9 +604,11 @@
   --motion-rise-in: kf-rise-in var(--dur-slow) var(--ease-out) both;
   --motion-swap-in: kf-swap-in var(--dur-fast) var(--ease-out) both;
   --motion-swap-out: kf-swap-out var(--dur-fast-exit) var(--ease-out) both;
+  --motion-theme-reveal: kf-theme-reveal var(--dur-scene) var(--ease-viscous) both;
   --motion-spin: kf-spin var(--dur-spin) var(--ease-linear) infinite;
   --motion-shimmer: kf-shimmer var(--dur-breathe) var(--ease-in-out) infinite;
   --motion-alarm: none;
+  --motion-drip: kf-drip var(--dur-breathe) var(--ease-in-out) infinite;
   --motion-reveal: kf-reveal var(--dur-scene) var(--ease-viscous) both;
   --motion-toast-in: kf-toast-in var(--dur-slow) var(--ease-out) both;
   --motion-toast-out: kf-toast-out var(--dur-exit) var(--ease-out) both;
@@ -526,6 +635,7 @@
     --dur-draw: 1ms;
     --dur-spin: 1ms;
     --dur-breathe: 1ms;
+    --dur-scene-cut: 1ms;
     --dur-scene: 1ms;
     --dur-scene-long: 1ms;
     --dur-alarm: 1ms;
@@ -541,6 +651,7 @@
     --motion-spin: none;
     --motion-shimmer: none;
     --motion-alarm: none;
+    --motion-drip: none;
     --motion-indeterminate: none;
     --motion-brand-busy: none;
   }
@@ -693,5 +804,35 @@
 
   to {
     transform: translateY(0);
+  }
+}
+
+@keyframes kf-theme-reveal {
+  from {
+    clip-path: circle(0 at var(--theme-reveal-x, 100%) var(--theme-reveal-y, 0));
+  }
+  to {
+    clip-path: circle(
+      var(--theme-reveal-radius, 150vmax) at var(--theme-reveal-x, 100%) var(--theme-reveal-y, 0)
+    );
+  }
+}
+
+@keyframes kf-drip {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.3);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(150%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(190%) scale(1);
   }
 }

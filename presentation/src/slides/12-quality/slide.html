@@ -1,0 +1,39 @@
+<section class="slide" id="quality" data-title="Качество прогнозирования">
+  <h2 class="title a">Точнее базовых подходов <em>в обоих кейсах</em></h2>
+  <figure class="q-panel is-one">
+    <h3 class="a" style="--d:0.15s">Кейс <span data-plain>1</span>: между ВТД, <span class="num" data-num="val_case1_n"></span> сегментов</h3>
+    <div class="q-plot">
+      <svg class="q-scatter" viewBox="0 0 520 540" aria-hidden="true"></svg>
+      <span class="q-axis is-y f" style="--d:0.25s">факт, мм</span>
+      <span class="q-axis is-x f" style="--d:0.25s">прогноз, мм</span>
+      <span class="q-ideal f" style="--d:0.95s">идеальный прогноз</span>
+    </div>
+    <span hidden data-points data-from="scatter_case1"></span>
+    <span hidden data-mae data-num="val_case1_mae"></span>
+    <dl class="q-stats">
+      <div class="a" style="--d:1.35s"><dt>r²</dt><dd class="num count" data-num="val_case1_r2"></dd></div>
+      <div class="a" style="--d:1.45s"><dt>MAE</dt><dd class="num" data-num="val_case1_mae"></dd></div>
+    </dl>
+  </figure>
+  <figure class="q-panel is-two">
+    <h3 class="a" style="--d:0.3s">Кейс <span data-plain>2</span>: от ввода до ВТД, <span class="num" data-num="val_case2_n"></span> сегментов</h3>
+    <div class="q-plot">
+      <svg class="q-scatter" viewBox="0 0 520 540" aria-hidden="true"></svg>
+      <span class="q-axis is-x f" style="--d:0.4s">прогноз, мм</span>
+      <span class="q-flat f" style="--d:1.55s">ВТД без дефектов: стенка по паспорту</span>
+    </div>
+    <span hidden data-points data-from="scatter_case2"></span>
+    <span hidden data-mae data-num="val_case2_mae"></span>
+    <dl class="q-stats">
+      <div class="a" style="--d:1.5s"><dt>r²</dt><dd class="num count" data-num="val_case2_r2"></dd></div>
+      <div class="a" style="--d:1.6s"><dt>MAE</dt><dd class="num" data-num="val_case2_mae"></dd></div>
+      <div class="a is-limit" style="--d:2s"><dt><span class="ico" data-icon="alert"></span>r², труба вне обучения</dt><dd class="num" data-num="strict_case2_r2"></dd></div>
+    </dl>
+  </figure>
+  <div class="q-ladder">
+    <h3 class="a" style="--d:0.45s">Средняя ошибка по подходам, мм</h3>
+    <svg class="q-slope" viewBox="0 0 520 540" aria-hidden="true"></svg>
+    <span hidden data-ladder data-from="mae_approaches_case1"></span>
+    <span hidden data-ladder data-from="mae_approaches_case2"></span>
+  </div>
+</section>

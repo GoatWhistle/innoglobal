@@ -1,0 +1,79 @@
+#architecture .arch {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: visible;
+}
+
+#architecture .arch-axis {
+  fill: none;
+  stroke: var(--ink-300);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+#architecture .arch-disc {
+  fill: var(--deck-raised);
+}
+
+#architecture .arch-node {
+  fill: none;
+  stroke: var(--ink-300);
+  stroke-width: 3;
+  transition: stroke var(--dur-slow) var(--ease-out);
+}
+
+#architecture .arch-node.is-live {
+  stroke: var(--brand-accent);
+}
+
+#architecture .arch-ball {
+  fill: var(--brand-accent);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+#architecture .arch-steps {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+#architecture .arch-steps li {
+  position: absolute;
+  left: var(--x);
+  top: 484px;
+  width: 240px;
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+#architecture .arch-steps .ico {
+  margin-bottom: 62px;
+  color: var(--deck-fg-3);
+  transition: color var(--dur-slow) var(--ease-out);
+}
+
+#architecture .arch-steps li.is-live .ico {
+  color: var(--deck-fg);
+}
+
+#architecture .arch-steps b {
+  font-size: var(--fs-body);
+  font-weight: var(--weight-strong);
+  color: var(--deck-fg);
+}
+
+#architecture .arch-steps li > span:last-child {
+  font-size: var(--fs-micro);
+  line-height: var(--lh-snug);
+  color: var(--deck-fg-2);
+  text-wrap: balance;
+}

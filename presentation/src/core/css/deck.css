@@ -20,7 +20,7 @@ body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: var(--text-primary);
+  background: var(--surface-base);
 }
 
 .viewport {
@@ -59,7 +59,7 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: var(--deck-bg);
+  background: transparent;
   color: var(--deck-fg);
   opacity: 0;
   visibility: hidden;
@@ -84,7 +84,7 @@ body {
   pointer-events: none;
 }
 
-.chrome-brand {
+.chrome-brand.lockup {
   position: absolute;
   left: var(--gutter);
   top: 52px;
@@ -153,5 +153,155 @@ body {
 }
 
 .is-print .blackout {
+  display: none;
+}
+
+.is-morphing .slide {
+  transition: none;
+}
+
+.slide.is-current .title {
+  view-transition-name: deck-title;
+}
+
+.slide.is-current .chrome-brand {
+  view-transition-name: deck-brand;
+}
+
+.slide.is-current .chrome-num {
+  view-transition-name: deck-num;
+}
+
+::view-transition-group(*) {
+  animation-duration: var(--dur-scene);
+  animation-timing-function: var(--ease-in-out);
+}
+
+::view-transition {
+  background: var(--surface-base);
+}
+
+::view-transition-old(root) {
+  animation: deck-leave var(--dur-scene) var(--ease-in-out) both;
+}
+
+::view-transition-new(root) {
+  animation: deck-enter var(--dur-scene) var(--ease-out) both;
+}
+
+[data-dir="back"]::view-transition-old(root) {
+  animation-name: deck-leave-back;
+}
+
+[data-dir="back"]::view-transition-new(root) {
+  animation-name: deck-enter-back;
+}
+
+::view-transition-old(deck-title) {
+  animation: deck-title-out var(--dur-scene) var(--ease-in-out) both;
+}
+
+::view-transition-new(deck-title) {
+  animation: deck-title-in var(--dur-scene) var(--ease-in-out) both;
+}
+
+::view-transition-old(deck-brand),
+::view-transition-new(deck-brand) {
+  animation: none;
+}
+
+@keyframes deck-leave {
+  55%,
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes deck-leave-back {
+  55%,
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes deck-enter {
+  from,
+  25% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes deck-enter-back {
+  from,
+  25% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes deck-title-out {
+  45%,
+  to {
+    opacity: 0;
+    transform: translateY(-28px);
+  }
+}
+
+@keyframes deck-title-in {
+  from,
+  40% {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+.deck-actor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-scene) var(--ease-in-out);
+  view-transition-name: deck-actor;
+}
+
+.deck-actor.is-on {
+  opacity: 1;
+}
+
+.deck-actor.is-off {
+  display: none;
+}
+
+.deck-actor canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.is-reduced .deck-actor {
+  transition: none;
+}
+
+.deck-actor.is-local {
+  view-transition-name: none;
+  transition: none;
+}
+
+.is-print .slide {
+  background: var(--deck-bg);
+}
+
+.is-print .stage > .deck-actor {
+  display: none;
+}
+
+::view-transition-group(deck-actor),
+::view-transition-new(deck-actor) {
+  animation: none;
+}
+
+::view-transition-old(deck-actor) {
   display: none;
 }

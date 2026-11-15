@@ -1,0 +1,74 @@
+#final .final-side {
+  position: absolute;
+  left: var(--gutter);
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  gap: 28px;
+}
+
+#final .final-lockup {
+  justify-content: flex-start;
+  --word-size: 150px;
+  --word-d: 0.1s;
+  --mark-d: 0.5s;
+}
+
+#final .final-line {
+  position: static;
+  width: auto;
+  margin: 24px 0 0;
+  font-size: var(--fs-title);
+  font-weight: var(--weight-regular);
+}
+
+#final .final-team {
+  margin: 0;
+  font-size: var(--fs-body);
+  color: var(--deck-fg-2);
+}
+
+#final .final-team b {
+  font-weight: var(--weight-strong);
+  color: var(--deck-fg);
+}
+
+#final .final-qrs {
+  position: absolute;
+  right: var(--gutter);
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  grid-template-columns: repeat(2, 420px);
+  gap: 24px;
+}
+
+#final .qr-card {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 12px;
+  padding: 28px 24px 24px;
+  border: 1px solid var(--deck-line);
+  border-radius: var(--radius-lg);
+  background: var(--deck-raised);
+  color: var(--deck-fg);
+  text-decoration: none;
+}
+
+#final .qr-card .qr {
+  width: 340px;
+  aspect-ratio: 1;
+}
+
+#final .qr-card b {
+  margin-top: 8px;
+  font-size: var(--fs-body);
+  font-weight: var(--weight-strong);
+}
+
+#final .qr-card .mono {
+  font-size: var(--fs-micro);
+  color: var(--deck-fg-2);
+  white-space: nowrap;
+}

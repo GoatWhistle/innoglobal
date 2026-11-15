@@ -1,0 +1,12 @@
+<section class="slide" id="architecture" data-title="Архитектура решения">
+  <h2 class="title a">От шести таблиц <em>до экрана инженера</em></h2>
+  <svg class="arch" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
+  <ol class="arch-steps">
+    <li style="--x:220px"><span class="ico is-lg" data-icon="file"></span><b>Данные</b><span>паспорт, профиль трассы, ВТД, УЗТ, техрежим, образцы</span></li>
+    <li style="--x:520px"><span class="ico is-lg" data-icon="database"></span><b>DuckDB</b><span><span class="num" data-num="dq_checks"></span> проверки, брак в карантин с причиной</span></li>
+    <li style="--x:820px"><span class="ico is-lg" data-icon="sliders"></span><b>Признаки</b><span>сегменты по <span class="num" data-num="segment_m"></span>, привязка по швам, прошлая ВТД, рельеф, режим</span></li>
+    <li style="--x:1120px"><span class="ico is-lg" data-icon="cpu"></span><b>Две модели</b><span>кейс 1: квантили прошлой ВТД, кейс 2: бустинг и приор рельефа</span></li>
+    <li style="--x:1420px"><span class="ico is-lg" data-icon="layers"></span><b>Прогноз</b><span>result.csv на <span class="num" data-num="forecasts_total"></span> сегментов, P10 и P90, очередь 10 %</span></li>
+    <li style="--x:1700px"><span class="ico is-lg" data-icon="monitor"></span><b>duppel</b><span>FastAPI, 3D-труба, дашборды, ассистент</span></li>
+  </ol>
+</section>
