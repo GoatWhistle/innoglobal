@@ -2,6 +2,8 @@ const ODO_X0 = 780 - (4.4 * 1100) / 11.8
 const ODO_W = (8.8 * 1100) / 11.8
 const ODO_LEN = 5250
 
+const first0 = (pts) => pts[0][1]
+
 const odoCurve = (el) => {
   const svg = el.querySelector(".odo-curve")
   const pts = deckPipes.rows(el.querySelector("[data-curve]"))
@@ -9,9 +11,11 @@ const odoCurve = (el) => {
   const y = (s) => 120 - s * 14
   deckKit.svg("line", { x1: ODO_X0, x2: ODO_X0 + ODO_W, y1: y(0), y2: y(0), class: "odo-zero f", style: "--d:0.5s" }, svg)
   const d = pts.map(([m, s], i) => `${i ? "L" : "M"}${x(m).toFixed(1)} ${y(s).toFixed(1)}`).join("")
-  deckKit.svg("path", { d, class: "odo-line dr", pathLength: "1", style: "--d:0.6s;--t:1.2s" }, svg)
+  deckKit.svg("path", { d, class: "odo-line" }, svg)
+  deckKit.svg("line", { class: "odo-guide", x1: ODO_X0, x2: ODO_X0, y1: 32, y2: y(first0(pts)) }, svg)
+  deckKit.svg("circle", { class: "odo-head", cx: ODO_X0, cy: y(first0(pts)), r: 8 }, svg)
   const [first, last] = [pts[0], pts[pts.length - 1]]
-  for (const [m, s, at] of [[first[0], first[1], 0.7], [last[0], last[1], 1.7]]) {
+  for (const [m, s, at] of [[first[0], first[1], 1.3], [last[0], last[1], 7.6]]) {
     deckKit.svg("circle", { cx: x(m), cy: y(s), r: 7, class: "odo-dot pop", style: `--d:${at}s` }, svg)
   }
   for (const [label, at] of [["0 км", ODO_X0], ["5,25 км", ODO_X0 + ODO_W]]) {
@@ -85,37 +89,78 @@ const odoPig = (el) => {
     }
     return pts[pts.length - 1][1]
   }
-  const { root } = diagParts.pig(a.THREE, a.extras)
+  const { THREE, extras } = a
+  while (extras.children.length) extras.remove(extras.children[0])
+  const { root } = diagParts.pig(THREE, extras)
   root.scale.set(1.1, 0.85, 0.85)
+  const accent = deckPipes.color("--brand-accent")
+  const steel = deckPipes.color("--ink-500")
+  const rings = []
+  for (let i = 0; i < 15; i++) {
+    const x = -4.2 + (8.4 * i) / 14
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.74, 0.018, 8, 96).rotateY(Math.PI / 2),
+      new THREE.MeshBasicMaterial({ color: steel.clone(), transparent: true, opacity: 0.55 }),
+    )
+    ring.position.x = x
+    extras.add(ring)
+    rings.push({ ring, x, glow: 0 })
+  }
+  const svg = el.querySelector(".odo-curve")
+  const line = svg.querySelector(".odo-line")
+  const guide = svg.querySelector(".odo-guide")
+  const head = svg.querySelector(".odo-head")
+  const total = line.getTotalLength()
+  line.style.strokeDasharray = `${total}`
   const cells = [...meter.querySelectorAll("[data-m]")]
-  const fmt = (v, d) => deckKit.fmt(v, d)
-  const place = (u) => {
+  const cx = (u) => ODO_X0 + u * ODO_W
+  const cy = (sv) => 120 - sv * 14
+  const place = (u, dt) => {
     const x = -4.4 + 8.8 * u
     root.position.x = x
     const m = u * ODO_LEN
-    const s = shift(m)
-    cells[0].textContent = `${fmt(m, 0)} м`
-    cells[1].textContent = `${fmt(m + s, 0)} м`
-    cells[2].textContent = `${s >= 0 ? "+" : ""}${fmt(s, 1)} м`
-    const p = deckPipes.project(a.engine, a.group, new a.THREE.Vector3(x, 0, 0), a.host)
-    meter.style.setProperty("--mx", `${(p.x - 70).toFixed(1)}px`)
+    const sv = shift(m)
+    cells[0].textContent = `${deckKit.fmt(m, 0)} м`
+    cells[1].textContent = `${deckKit.fmt(m + sv, 0)} м`
+    cells[2].textContent = `${sv >= 0 ? "+" : ""}${deckKit.fmt(sv, 1)} м`
+    meter.style.setProperty("--mx", `${Math.max(130, Math.min(1430 - meter.offsetWidth, cx(u) - meter.offsetWidth / 2)).toFixed(1)}px`)
+    line.style.strokeDashoffset = `${(total * (1 - u)).toFixed(1)}`
+    for (const attr of ["x1", "x2"]) guide.setAttribute(attr, cx(u).toFixed(1))
+    guide.setAttribute("y2", cy(sv).toFixed(1))
+    head.setAttribute("cx", cx(u).toFixed(1))
+    head.setAttribute("cy", cy(sv).toFixed(1))
+    for (const r of rings) {
+      if (Math.abs(r.x - x) < 0.12) r.glow = 1
+      r.glow = Math.max(0, r.glow - dt * 0.9)
+      r.ring.material.color.copy(steel).lerp(accent, r.glow)
+      r.ring.material.opacity = 0.55 + 0.45 * r.glow
+      r.ring.scale.setScalar(1 + 0.08 * r.glow)
+    }
   }
   cancelAnimationFrame(el._pig)
   meter.classList.remove("is-on")
+  el.classList.remove("is-running")
   if (deckKit.reduced) {
-    place(0.62)
+    place(1, 1)
     meter.classList.add("is-on")
+    el.classList.add("is-running")
     return
   }
-  const t0 = performance.now()
-  const RUN = 7
+  place(0, 0)
+  const RUN = 6.2
+  let last = performance.now()
+  const t0 = last
   const frame = (now) => {
     el._pig = requestAnimationFrame(frame)
-    const t = (now - t0) / 1000 - 1.3
+    const dt = Math.min(0.05, (now - last) / 1000)
+    last = now
+    const t = (now - t0) / 1000 - 1.4
     if (t < 0) return
     meter.classList.add("is-on")
-    const loop = t % (RUN + 1.2)
-    place(Math.min(1, loop / RUN) * 0.96 + 0.02)
+    el.classList.add("is-running")
+    const k = Math.min(1, t / RUN)
+    place(k * k * (3 - 2 * k), dt)
+    if (k >= 1 && rings.every((r) => r.glow === 0)) cancelAnimationFrame(el._pig)
   }
   el._pig = requestAnimationFrame(frame)
 }

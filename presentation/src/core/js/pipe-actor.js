@@ -1,6 +1,6 @@
 (() => {
   const UNIT = 1920 / 13
-  const BASE = { cx: 960, cy: 560, len: 1640, rx: 0, ry: 0, rz: 0, cut: 0, oil: 1, damage: 0, label: 0, inspect: -1 }
+  const BASE = { cx: 960, cy: 560, len: 1640, rx: 0, ry: 0, rz: 0, cut: 0, oil: 1, damage: 0, label: 0, inspect: -1, oilAlpha: 1 }
   const DURATION = 1.15
   const NAME = "Куст-1 - ДНС-1"
   const state = { actor: null, locals: new Map(), current: null }
@@ -91,14 +91,48 @@
   const clearExtras = (a, keep) => {
     for (const [el, group] of a.extras) {
       if (el === keep) continue
-      a.parts.group.remove(group)
-      group.traverse((o) => {
-        o.geometry?.dispose()
-        const list = Array.isArray(o.material) ? o.material : [o.material]
-        for (const m of list) m?.dispose()
-      })
       a.extras.delete(el)
+      const mats = []
+      group.traverse((o) => {
+        const list = Array.isArray(o.material) ? o.material : [o.material]
+        for (const m of list) {
+          if (!m) continue
+          m.transparent = true
+          mats.push([m, m.opacity ?? 1])
+        }
+      })
+      const finish = () => {
+        a.parts.group.remove(group)
+        group.traverse((o) => {
+          o.geometry?.dispose()
+          const list = Array.isArray(o.material) ? o.material : [o.material]
+          for (const m of list) m?.dispose()
+        })
+      }
+      if (deckKit.reduced) {
+        finish()
+        continue
+      }
+      deckKit.tween({
+        dur: 450,
+        update: (v) => {
+          for (const [m, o] of mats) m.opacity = o * (1 - v)
+        },
+        done: finish,
+      })
     }
+  }
+
+  const oilAlpha = (a, value) => {
+    const m = a.parts.oil?.material
+    if (!m) return
+    if (!m.uniforms.oilAlpha) {
+      m.uniforms.oilAlpha = { value: 1 }
+      m.fragmentShader = m.fragmentShader.replace("uniform float time;", "uniform float time;uniform float oilAlpha;").replace("gl_FragColor=vec4(color,1.);", "gl_FragColor=vec4(color,oilAlpha);")
+      m.transparent = true
+      m.needsUpdate = true
+    }
+    m.uniforms.oilAlpha.value = value
   }
 
   const stopInspection = (a) => {
@@ -118,7 +152,13 @@
     if (!a) return
     clearExtras(a, null)
     stopInspection(a)
-    a.engine.corrosionMap([], 1)
+    if (a.oilFade) a.oilFade()
+    const fromAlpha = a.parts.oil?.material.uniforms.oilAlpha?.value ?? 1
+    const toAlpha = Number(parse(el.dataset.pipe || "").oilAlpha ?? 1)
+    if (fromAlpha !== toAlpha) {
+      if (deckKit.reduced) oilAlpha(a, toAlpha)
+      else a.oilFade = deckKit.tween({ dur: 900, delay: 200, curve: "inOut", update: (v) => oilAlpha(a, fromAlpha + (toAlpha - fromAlpha) * v) })
+    }
     const text = el.dataset.pipe
     clearTimeout(a.sleep)
     a.slide = el
@@ -256,6 +296,6 @@
     if (a) a.driver = { el, fn }
   }
 
-  window.deckActor = { stage, printStage, actor, parse, tour, prop, drive }
+  window.deckActor = { stage, printStage, actor, parse, tour, prop, drive, oilAlpha: (el, v) => { const a = state.locals.get(el) ?? state.actor; if (a) oilAlpha(a, v) } }
   window.deckLayers = [...(window.deckLayers ?? []), window.deckActor]
 })()

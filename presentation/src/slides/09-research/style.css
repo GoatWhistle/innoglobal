@@ -38,7 +38,7 @@
 
 #research .odo-end {
   position: absolute;
-  top: 430px;
+  top: 452px;
   display: grid;
   margin: 0;
   font-size: var(--fs-micro);
@@ -228,9 +228,9 @@
 #research .odo-meter {
   position: absolute;
   left: 0;
-  top: 410px;
-  display: grid;
-  gap: 2px;
+  top: 412px;
+  display: flex;
+  gap: 28px;
   translate: var(--mx, 0px) 0;
   font-size: var(--fs-micro);
   font-variant-numeric: tabular-nums;
@@ -252,7 +252,6 @@
 }
 
 #research .odo-meter b {
-  width: 56px;
   font-weight: var(--weight-regular);
   color: var(--deck-fg-3);
 }
@@ -264,4 +263,25 @@
 #research .odo-meter .is-gap span {
   font-weight: var(--weight-strong);
   color: var(--brand-accent);
+}
+
+#research .odo-guide {
+  stroke: var(--brand-accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 5;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+#research .odo-head {
+  fill: var(--brand-accent);
+  stroke: color-mix(in oklab, var(--brand-accent) 30%, transparent);
+  stroke-width: 10;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+#research.is-running .odo-guide,
+#research.is-running .odo-head {
+  opacity: 1;
 }

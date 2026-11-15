@@ -240,11 +240,20 @@ const failMarks = (a) => {
   weld.position.x = -0.2
   extras.add(weld)
   const dark = new THREE.MeshBasicMaterial({ color: deckPipes.color("--deck-fg"), transparent: true, opacity: 0 })
-  const crack = new THREE.Mesh(new THREE.TorusGeometry(0.744, 0.012, 6, 64, 1.1).rotateY(Math.PI / 2).rotateX(0.15), dark)
-  crack.position.x = -0.16
+  const zig = []
+  const zr = deckKit.rng(19)
+  let drift = 0
+  for (let i = 0; i <= 11; i++) {
+    const th = -0.1 + (i / 11) * 1.5 + (zr() - 0.5) * 0.06
+    drift = Math.max(-0.09, Math.min(0.09, drift + (zr() - 0.5) * 0.11))
+    zig.push(new THREE.Vector3(0.05 + drift, Math.cos(th) * 0.738, Math.sin(th) * 0.738))
+  }
+  const crack = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(zig, false, "catmullrom", 0.1), 120, 0.024, 8, false), dark)
+  crack.position.x = -0.2
   extras.add(crack)
   weld.renderOrder = 5
   crack.renderOrder = 6
+  extras.userData.marks = { rust, steel, dark }
   deckKit.tween({ dur: 1100, delay: 1300, curve: "inOut", update: (v) => (rust.alphaTest = 0.999 - v * 0.499) })
   deckKit.tween({
     dur: 700,
@@ -367,30 +376,47 @@ const failSeepMake = (THREE) => {
   const S = 1024
   const [canvas, c] = failCanvas(S, S)
   const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim()
-  const ink = `#${new THREE.Color(css("--crude-pitch") || "black").lerp(new THREE.Color(css("--crude-umber") || "black"), 0.3).getHexString()}`
-  const plume = (scale, seed) => {
-    const depth = 880 * scale
-    const width = 380 * scale
-    const neck = 30 + 26 * scale
-    const half = (d) => {
-      const bulb = Math.sqrt(Math.max(0, 1 - ((d - 0.6) / 0.4) ** 2))
-      const sway = 1 + 0.07 * Math.sin(d * 5 + seed)
-      return neck * Math.max(0, 1 - d * 1.5) ** 1.5 + width * bulb * sway
-    }
-    const lean = (d) => 26 * scale * Math.sin(d * 3 + seed)
-    const N = 200
+  const pitch = new THREE.Color(css("--crude-pitch") || "black")
+  const umber = new THREE.Color(css("--crude-umber") || "saddlebrown")
+  const tint = (k) => `#${pitch.clone().lerp(umber, k).getHexString()}`
+  const random = deckKit.rng(53)
+  const blob = (cx, cy, rx, ry, rough, seed) => {
+    const waves = Array.from({ length: 7 }, (_, i) => [2 + i * 2 + Math.floor(random() * 3), random() * Math.PI * 2, (rough / (i + 1)) * (0.6 + random() * 0.8)])
     c.beginPath()
-    c.moveTo(S / 2 - half(0), 0)
-    for (let i = 1; i <= N; i++) c.lineTo(S / 2 + lean(i / N) - half(i / N), (i / N) * depth)
-    for (let i = N; i >= 0; i--) c.lineTo(S / 2 + lean(i / N) + half(i / N), (i / N) * depth)
+    for (let i = 0; i <= 240; i++) {
+      const t = (i / 240) * Math.PI * 2
+      let r = 1
+      for (const [f, ph, amp] of waves) r += amp * Math.sin(t * f + ph + seed)
+      const x = cx + Math.cos(t) * rx * r
+      const y = cy + Math.sin(t) * ry * r * (Math.sin(t) > 0 ? 1.18 : 0.82)
+      if (i) c.lineTo(x, y)
+      else c.moveTo(x, y)
+    }
     c.closePath()
     c.fill()
   }
-  c.fillStyle = ink
-  c.globalAlpha = 0.2
-  plume(1, 1.3)
-  c.globalAlpha = 0.34
-  plume(0.78, 1.3)
+  c.fillStyle = tint(0.55)
+  c.globalAlpha = 0.22
+  blob(512, 470, 420, 380, 0.16, 1)
+  c.globalAlpha = 0.45
+  c.fillStyle = tint(0.4)
+  blob(512, 380, 300, 300, 0.14, 2)
+  c.globalAlpha = 0.8
+  c.fillStyle = tint(0.18)
+  blob(512, 270, 190, 220, 0.12, 3)
+  c.globalAlpha = 1
+  c.fillStyle = tint(0)
+  blob(512, 150, 90, 140, 0.1, 4)
+  c.fillRect(492, 0, 40, 60)
+  for (let i = 0; i < 70; i++) {
+    const t = random() * Math.PI * 2
+    const d = 0.8 + random() * 0.35
+    c.globalAlpha = 0.25 + random() * 0.4
+    c.beginPath()
+    c.arc(512 + Math.cos(t) * 420 * d, 470 + Math.sin(t) * 380 * d, 3 + random() * 9, 0, Math.PI * 2)
+    c.fill()
+  }
+  c.globalAlpha = 1
   const texture = new THREE.CanvasTexture(canvas)
   texture.colorSpace = THREE.SRGBColorSpace
   texture.anisotropy = 8
@@ -412,7 +438,7 @@ const failGroundMake = (a) => {
   block.position.set(0, FAIL_TOP - FAIL_DEPTH / 2, -1.3)
   group.add(block)
   const halo = new THREE.Mesh(
-    new THREE.PlaneGeometry(2.3, 2.3).translate(0, -1.15, 0),
+    new THREE.PlaneGeometry(2, 2).translate(0, -1, 0),
     new THREE.MeshBasicMaterial({
       map: failSeep(THREE),
       transparent: true,
@@ -423,32 +449,41 @@ const failGroundMake = (a) => {
       polygonOffsetUnits: -4,
     }),
   )
-  halo.position.set(FAIL_X, -0.64, 0.004)
+  halo.position.set(FAIL_X, -0.7, 0.004)
   const profile = []
   for (let i = 0; i <= 48; i++) {
     const d = i / 48
-    const bulb = Math.sqrt(Math.max(0, 1 - ((d - 0.6) / 0.4) ** 2))
-    profile.push(new THREE.Vector2(0.2 * Math.max(0, 1 - d * 1.5) ** 1.5 + 0.4 * bulb + (d === 0 ? 0.04 : 0), -d))
+    const neck = 0.05 * (1 - d) ** 0.7 + 0.014
+    profile.push(new THREE.Vector2(neck + (d === 0 ? 0.025 : 0), -d * 0.36))
   }
-  profile.push(new THREE.Vector2(0, -1))
+  profile.push(new THREE.Vector2(0, -0.36))
   const body = new THREE.Mesh(
     new THREE.LatheGeometry(profile, 72),
     new THREE.MeshStandardMaterial({ color: tone("--crude-pitch"), metalness: 0.55, roughness: 0.16, side: THREE.DoubleSide }),
   )
   body.renderOrder = 7
   body.position.set(FAIL_X, -0.6, 0)
+  const pool = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 48, 24),
+    new THREE.MeshStandardMaterial({ color: tone("--crude-pitch"), metalness: 0.6, roughness: 0.12 }),
+  )
+  pool.position.set(FAIL_X, -0.99, 0.01)
+  pool.renderOrder = 7
   halo.visible = false
   body.visible = false
-  group.add(halo, body)
+  pool.visible = false
+  group.add(halo, body, pool)
   group.userData.seep = {
     set(open, k) {
       const on = open > 0.05
       halo.visible = on
       body.visible = on
-      halo.material.opacity = Math.min(1, k * 3)
-      halo.scale.set(0.5 + 0.5 * k, 0.2 + 0.8 * k, 1)
-      const w = 0.4 + 0.6 * k
-      body.scale.set(w, 0.1 + 0.9 * k, w * 0.6)
+      halo.visible = false
+      body.visible = on
+      body.scale.set(1, Math.max(0.02, Math.min(1, k * 4)), 0.8)
+      const p = Math.max(0, Math.min(1, (k - 0.15) / 0.85))
+      pool.visible = on && p > 0
+      pool.scale.set(0.05 + 0.75 * p, 0.04 + 0.03 * p, 0.05 + 0.3 * p)
     },
   }
   return group
@@ -496,25 +531,16 @@ const failTour = (el, keys) => {
 const failKeys = [
   [1.8, { cx: 1250, cy: 700, len: 2000, rx: 0.12, ry: -0.2 }, 1.7],
   [7.4, { cx: 1000, cy: 700, len: 2100, rx: 0.1, ry: 0.25 }, 1.7],
-  [13, { cx: 640, cy: 660, len: 2200, rx: -0.42, ry: 0.06, oil: 0 }, 1.9],
-  [19.6, { cx: 600, cy: 610, len: 1400, rx: 0.16, ry: 0.12, oil: 1 }, 2.2],
+  [13, { cx: 640, cy: 660, len: 2200, rx: -0.42, ry: 0.06 }, 1.9],
+  [19.6, { cx: 600, cy: 610, len: 1400, rx: 0.16, ry: 0.12 }, 2.2],
 ]
 
 const failFocus = (a, el) => {
   const { THREE, extras } = a
   const accent = deckPipes.color("--brand-accent")
-  const rings = FAIL_WINDOWS.map(([x]) => {
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(0.8, 0.018, 10, 128).rotateY(Math.PI / 2),
-      new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0, depthWrite: false }),
-    )
-    ring.position.x = x
-    ring.renderOrder = 8
-    extras.add(ring)
-    return ring
-  })
-  const pitMat = new THREE.MeshStandardMaterial({ color: deckPipes.color("--wall-rust"), roughness: 0.95, metalness: 0.05 })
-  const darkMat = new THREE.MeshStandardMaterial({ color: deckPipes.color("--crude-umber"), roughness: 1, metalness: 0 })
+  const marks = extras.userData.marks
+  const pitMat = new THREE.MeshStandardMaterial({ color: deckPipes.color("--wall-rust"), roughness: 0.95, metalness: 0.05, emissive: accent, emissiveIntensity: 0 })
+  const darkMat = new THREE.MeshStandardMaterial({ color: deckPipes.color("--crude-umber"), roughness: 1, metalness: 0, emissive: accent, emissiveIntensity: 0 })
   const random = deckKit.rng(77)
   const pits = []
   for (let i = 0; i < 46; i++) {
@@ -523,21 +549,35 @@ const failFocus = (a, el) => {
     const r = 0.03 + random() * 0.06
     const pit = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 10), random() < 0.6 ? pitMat : darkMat)
     pit.position.set(x, -Math.cos(ang) * 0.632, Math.sin(ang) * 0.632)
-    pit.scale.set(1.4, 0.35, 1.4)
     pit.lookAt(pit.position.clone().multiplyScalar(2).setX(x))
     pit.scale.setScalar(0.001)
     extras.add(pit)
     pits.push({ pit, at: 14.4 + random() * 2.2 })
   }
+  if (marks) {
+    marks.rust.emissive = accent.clone()
+    marks.rust.emissiveIntensity = 0
+  }
+  const oilMat = a.parts.oil?.material
+  if (oilMat && !oilMat.uniforms.oilAlpha) {
+    oilMat.uniforms.oilAlpha = { value: 1 }
+    oilMat.fragmentShader = oilMat.fragmentShader.replace("uniform float time;", "uniform float time;uniform float oilAlpha;").replace("gl_FragColor=vec4(color,1.);", "gl_FragColor=vec4(color,oilAlpha);")
+    oilMat.transparent = true
+    oilMat.needsUpdate = true
+  }
+  const crackBase = marks?.dark.color.clone()
   const start = performance.now()
   cancelAnimationFrame(el._focus)
   const tick = (now) => {
     const t = deckKit.reduced ? 99 : (now - start) / 1000
-    FAIL_WINDOWS.forEach(([, from, to], i) => {
-      const k = Math.max(0, Math.min(1, (t - from) / 0.5, (to - t) / 0.5))
-      rings[i].material.opacity = k * (0.55 + 0.35 * Math.sin(t * 4))
-      rings[i].scale.setScalar(1 + 0.04 * Math.sin(t * 4))
-    })
+    const blink = 0.5 + 0.5 * Math.sin(t * 5)
+    const win = FAIL_WINDOWS.map(([, from, to]) => Math.max(0, Math.min(1, (t - from) / 0.4, (to - t) / 0.4)))
+    if (marks) {
+      marks.rust.emissiveIntensity = win[0] * (0.25 + 0.55 * blink)
+      marks.dark.color.copy(crackBase).lerp(accent, win[1] * (0.4 + 0.6 * blink))
+    }
+    pitMat.emissiveIntensity = darkMat.emissiveIntensity = win[2] * (0.2 + 0.6 * blink)
+    if (oilMat?.uniforms.oilAlpha) oilMat.uniforms.oilAlpha.value = 1 - 0.7 * Math.max(0, Math.min(1, (t - 13.6) / 0.8, (20.4 - t) / 0.8))
     for (const p of pits) {
       const k = deckKit.ease.out(Math.max(0, Math.min(1, (t - p.at) / 0.6)))
       p.pit.scale.set(1.4 * k + 0.001, 0.35 * k + 0.001, 1.4 * k + 0.001)
@@ -568,6 +608,8 @@ deckScene("failures", {
   },
   leave(el) {
     cancelAnimationFrame(el._focus)
+    const oilMat = deckActor.actor(el)?.parts.oil?.material
+    if (oilMat?.uniforms.oilAlpha) oilMat.uniforms.oilAlpha.value = 1
     el._place?.()
     el._place = null
     failSeal()
