@@ -171,8 +171,12 @@ def run() -> pd.DataFrame:
     pred_ds[["id", "segment_id", "thickness_pred", "p05", "p10", "p90", "p95"]].round(3).to_csv(
         C.ARTIFACTS_DIR / "uncertainty.csv", index=False)
 
+    # приоритет проверки — 10% сегментов с наименьшей прогнозной толщиной, при равенстве меньший
+    # segment_id. Раньше ранжировали по p10: у 9583 его порядок задаёт ширина хвоста квантильного
+    # CatBoost, а не прогноз (9/148 совпадений с 10% самых тонких по прогнозу) — правило не
+    # объяснялось прогнозом. У кейса 1 p10 = прогноз − константа, порядок тот же.
     top = pd.concat([
-        g.nsmallest(max(1, int(np.ceil(len(g) * 0.10))), "p10")
+        g.sort_values(["thickness_pred", "segment_id"]).head(max(1, int(np.ceil(len(g) * 0.10))))
         for _, g in pred_ds.groupby("id")
     ])
     top[["id", "segment_id", "thickness_pred", "p10"]].round(3).to_csv(

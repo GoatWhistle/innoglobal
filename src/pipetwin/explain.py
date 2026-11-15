@@ -12,7 +12,8 @@
                             «максимум = номинал».
    Затем сдвиг p99 (кейс 2) и клиппинг [0.5, номинал]. Сумма вкладов сверяется с result.csv.
 2. Почему участок проверять раньше других? — слой 2, `ranking`: точное правило predict.py
-   (топ-10% по p10, при равенстве — меньший segment_id), сверка с top_risk_segments.csv.
+   (топ-10% по прогнозной толщине, при равенстве — меньший segment_id), сверка с
+   top_risk_segments.csv. p10 — показатель неопределённости, в ранжирование не входит.
 3. Что физически вызвало утонение? — слой 3, `cards`: наблюдение (факты данных), поведение модели
    (вклады слоя 1), инженерная гипотеза (правила, проверенные на данных) и явный список того,
    чего в данных нет. Карточка — JSON, вход для LLM-прозы (делается отдельно); `render_card` —
@@ -189,8 +190,8 @@ def decompose() -> tuple[pd.DataFrame, dict]:
 
 # ------------------------------------------------------------------ слой 2: ранжирование
 def ranking(dec: pd.DataFrame) -> pd.DataFrame:
-    """Точное правило predict.py: p10 (нижняя граница 80%-интервала), топ ceil(10%) наименьших,
-    при равенстве — меньший segment_id (nsmallest keep='first' по порядку сегментов)."""
+    """Точное правило predict.py: топ ceil(10%) сегментов с наименьшей прогнозной толщиной,
+    при равенстве — меньший segment_id. Сравнивается неокруглённый прогноз декомпозиции."""
     unc = pd.read_csv(C.ARTIFACTS_DIR / "uncertainty.csv")
     df = dec[["id", "segment_id", "case", "thickness_pred"]].merge(
         unc[["id", "segment_id", "p10", "p90"]], on=["id", "segment_id"])
@@ -199,43 +200,36 @@ def ranking(dec: pd.DataFrame) -> pd.DataFrame:
         g = g.sort_values("segment_id").copy()
         n = len(g)
         k = max(1, int(math.ceil(n * TOP_SHARE)))
-        order = np.lexsort((g["segment_id"].to_numpy(), g["p10"].to_numpy()))
+        order = np.lexsort((g["segment_id"].to_numpy(), g["thickness_pred"].to_numpy()))
         rank = np.empty(n, int)
         rank[order] = np.arange(1, n + 1)
         g["rank"] = rank
         g["n"] = n
         g["k_top"] = k
-        g["threshold_p10"] = float(g["p10"].to_numpy()[order[k - 1]])
+        g["threshold"] = float(g["thickness_pred"].to_numpy()[order[k - 1]])
         g["in_top"] = g["rank"] <= k
-        g["rank_by_pred"] = g["thickness_pred"].rank(method="first").astype(int)
         g["lower_width"] = g["thickness_pred"] - g["p10"]
         parts.append(g)
     r = pd.concat(parts, ignore_index=True)
     top = pd.read_csv(C.ARTIFACTS_DIR / "top_risk_segments.csv")
     ours = set(map(tuple, r.loc[r["in_top"], ["id", "segment_id"]].to_numpy()))
     theirs = set(map(tuple, top[["id", "segment_id"]].to_numpy()))
-    # uncertainty.csv округлён до 0.001 — на пороге возможны равенства, которых не было до округления
     diff = ours ^ theirs
-    border = r.set_index(["id", "segment_id"]).loc[list(diff), "p10"] if diff else pd.Series(dtype=float)
-    thr = r.groupby("id")["threshold_p10"].first()
-    assert all(abs(v - thr[i]) <= 1e-3 for (i, _), v in border.items()), \
-        f"топ-10% не совпадает с top_risk_segments.csv: {sorted(diff)[:10]}"
-    r["in_top"] = [(i, s) in theirs for i, s in zip(r["id"], r["segment_id"])]
+    assert not diff, f"топ-10% не совпадает с top_risk_segments.csv: {sorted(diff)[:10]}"
     return r
 
 
 def rule_text(row: pd.Series, conf: float | None) -> str:
     """Текст правила ранжирования для сегмента."""
-    s = (f"Ранг {row['rank']} из {row['n']} по p10 (нижняя граница 80%-интервала) = "
-         f"{row['p10']:.3f} мм. В приоритет проверки входят {row['k_top']} сегментов (10%) с наименьшим "
-         f"p10; порог p10 ≤ {row['threshold_p10']:.3f} мм; при равенстве p10 раньше идёт меньший "
-         f"номер сегмента. Сегмент {'В ПРИОРИТЕТЕ' if row['in_top'] else 'не в приоритете'}.")
+    s = (f"Ранг {row['rank']} из {row['n']} по прогнозной толщине {row['thickness_pred']:.3f} мм. "
+         f"В приоритет проверки входят {row['k_top']} сегментов (10%) с наименьшей прогнозной толщиной; "
+         f"порог ≤ {row['threshold']:.3f} мм; при равенстве раньше идёт меньший номер сегмента. "
+         f"Сегмент {'В ПРИОРИТЕТЕ' if row['in_top'] else 'не в приоритете'}.")
     if conf is not None:
-        s += (f" p10 = прогноз − {conf:.3f} мм (конформная полуширина одна на трубу), поэтому порядок "
-              f"по p10 совпадает с порядком по прогнозу толщины (ранг по прогнозу {row['rank_by_pred']}).")
+        s += f" Неопределённость: p10 = прогноз − {conf:.3f} мм (конформная полуширина одна на трубу)."
     else:
-        s += (f" p10 = прогноз − {row['lower_width']:.3f} мм (ширина нижнего хвоста квантильной модели "
-              f"меняется по сегментам), ранг по самому прогнозу — {row['rank_by_pred']}.")
+        s += (f" Неопределённость: p10 = прогноз − {row['lower_width']:.3f} мм (квантильная модель); "
+              f"в ранжирование не входит.")
     return s
 
 
@@ -331,7 +325,7 @@ def cards(dec: pd.DataFrame, rk: pd.DataFrame, metas: dict) -> list[dict]:
                        check="level + Σ contributions + shift + clip = thickness_mm"),
             # --- ранжирование (слой 2)
             ranking=dict(rank=int(r["rank"]), n=int(r["n"]), k_top=int(r["k_top"]),
-                         threshold_p10=_r(r["threshold_p10"]), in_top=bool(r["in_top"]),
+                         threshold_mm=_r(r["threshold"]), in_top=bool(r["in_top"]),
                          rule=rule_text(r, conf["p10_p90"] if conf else None)),
             observation={}, hypotheses=[], missing=[])
         obs, hyp, miss = card["observation"], card["hypotheses"], card["missing"]
@@ -487,7 +481,7 @@ def run() -> None:
                  key=lambda c: (c["id"], c["ranking"]["rank"]))
     md = ["# Интерпретация прогноза: сегменты в приоритете проверки", "",
           "Слой 1 — точная декомпозиция (сверена с result.csv), слой 2 — правило ранжирования "
-          "(сверено с top_risk_segments.csv), слой 3 — наблюдение / гипотеза / чего нет.", ""]
+          "(топ-10% по прогнозной толщине, сверено с top_risk_segments.csv), слой 3 — наблюдение / гипотеза / чего нет.", ""]
     md += [render_card(c) + "\n" for c in top]
     (C.ARTIFACTS_DIR / "explain_top.md").write_text("\n".join(md))
     for case, m in metas.items():
