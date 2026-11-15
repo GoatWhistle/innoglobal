@@ -70,7 +70,8 @@
     "rg_share_slow": "Rg share slow",
     "rg_watercut_mean": "Rg watercut mean",
     "uzt_dist": "Uzt dist",
-    "uzt_min_250": "Uzt min 250"
+    "uzt_min_250": "Uzt min 250",
+    "prev_ndef_sm21": "Inspection defect count, window 21"
   },
   "comparison": {
     "title": "Historical forecast and observation",

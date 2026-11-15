@@ -1,7 +1,8 @@
 import { useThickness } from "@/entities/pipe"
 import { useMediaQuery } from "@/shared/hooks"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { ButtonAnchor, ButtonLink, Card, Disclosure, StatusBadge } from "@/shared/ui"
+import { ButtonLink, Card, Disclosure, StatusBadge } from "@/shared/ui"
+import { SegmentEvidence } from "./evidence/segment-evidence"
 import styles from "./segment-facts.module.css"
 import { observed } from "./track-model"
 import type { WorkspaceProps } from "./variant-types"
@@ -11,14 +12,16 @@ export function SegmentFacts({
   row,
   profile,
   comparisonDate,
-}: WorkspaceProps & { readonly comparisonDate?: string | null }) {
+  detailsOnly = false,
+}: WorkspaceProps & { readonly comparisonDate?: string | null; readonly detailsOnly?: boolean }) {
   const { t } = useTranslation()
-  const narrow = useMediaQuery("(max-width: 64rem)")
+  const narrow = useFactsLayout(detailsOnly)
   const format = useFormatters()
   const thickness = useThickness()
   const inspectionDate = sourceDate(pipe, comparisonDate)
   const baseline = observed(row, inspectionDate ?? undefined, pipe.passport.nominal_wall_mm)
   const baseDate = inspectionDate ?? pipe.passport.commissioned_at
+  const showHeading = !narrow
   const increase = baseline !== null && row.forecast_mm > baseline
   const baselineLabel = inspectionDate
     ? t("variants:vtdDate", { date: format.date(inspectionDate) })
@@ -77,7 +80,7 @@ export function SegmentFacts({
   )
   return (
     <div className={styles.facts} data-testid="segment-facts">
-      {!narrow ? (
+      {showHeading ? (
         <>
           <Card
             appearance="plain"
@@ -89,7 +92,7 @@ export function SegmentFacts({
           </Card>
           <div className={styles.value}>
             <span>{t("variants:forecast")}</span>
-            <strong data-testid="forecast-value">
+            <strong className={styles.reading} data-testid="forecast-value">
               {thickness.value(row.forecast_mm)}
               <small>{t("pipe:unit.mmShort")}</small>
             </strong>
@@ -99,11 +102,7 @@ export function SegmentFacts({
         </>
       ) : null}
       {measurements}
-      <div className={styles.actions}>
-        <ButtonAnchor variant="secondary" icon="journal" href="#inspection-queue">
-          {t("variants:openQueue")}
-        </ButtonAnchor>
-      </div>
+      <SegmentEvidence pipe={pipe} segment={row.segment_id} />
       <SegmentSources pipe={pipe} row={row} profile={profile} />
     </div>
   )
@@ -143,4 +142,9 @@ function SegmentSources({ pipe, row, profile }: Pick<WorkspaceProps, "pipe" | "r
       </div>
     </Disclosure>
   )
+}
+
+function useFactsLayout(detailsOnly: boolean) {
+  const narrow = useMediaQuery("(width < 48rem)")
+  return narrow || detailsOnly
 }

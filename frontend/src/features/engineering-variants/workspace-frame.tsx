@@ -20,9 +20,9 @@ export function WorkspaceFrame({
   context,
   comparisonDate,
 }: WorkspaceFrameProps) {
-  const narrow = useMediaQuery("(max-width: 64rem)")
+  const narrow = useMediaQuery("(width < 48rem)")
   return (
-    <div className={styles.frame} data-variant={kind}>
+    <div className={styles.frame} data-variant={kind} data-queue={Boolean(queue)}>
       {narrow ? <FocusSummary {...context} comparisonDate={comparisonDate} /> : null}
       {queue ? <div className={styles.queue}>{queue}</div> : null}
       <div className={styles.main}>{children}</div>

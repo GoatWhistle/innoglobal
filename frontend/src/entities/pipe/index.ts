@@ -20,6 +20,7 @@ export type {
   SegmentRow,
 } from "./pipe.types"
 export { readSelectedPipe, rememberSelectedPipe } from "./pipe-selection"
+export { type PriorityGroup, priorityGroups } from "./priority-groups"
 export { THICKNESS_DIGITS, useThickness } from "./use-thickness"
 export { useWorkspaceState } from "./use-workspace-state"
 export { illustrativeAngle, illustrativeThickness } from "./wall-illustration"

@@ -56,6 +56,10 @@
   --transition-brand-drop: transform var(--dur-scene-long) var(--ease-viscous);
   --transition-brand-rise: transform var(--dur-scene) var(--ease-viscous);
 
+  --transition-drawer:
+    transform var(--dur-panel) var(--ease-drawer), opacity var(--dur-panel) var(--ease-out);
+  --transition-drawer-close:
+    transform var(--dur-exit) var(--ease-out), opacity var(--dur-exit) var(--ease-out);
   --motion-fade-in: kf-fade-in var(--dur-base) var(--ease-out) both;
   --motion-fade-out: kf-fade-out var(--dur-exit) var(--ease-out) both;
   --motion-scale-in: kf-scale-in var(--dur-base) var(--ease-out) both;

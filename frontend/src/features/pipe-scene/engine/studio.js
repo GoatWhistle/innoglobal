@@ -15,8 +15,8 @@ import {
 } from "three"
 
 const PANELS = [
-  [26, 7, [-2, 14, 9], 3.4],
-  [34, 1.8, [0, 10, -10], 2.6],
+  [30, 5, [-2, 14, 9], 3.8],
+  [34, 1.8, [0, 10, -10], 3.2],
   [8, 12, [-21, 5, 5], 1.3],
   [24, 1.2, [2, 0.9, 17], 1.1],
   [5, 11, [19, 6, -7], 1.7],
@@ -41,7 +41,7 @@ export function createStudio(renderer) {
         ...DOME,
         side: BackSide,
         uniforms: {
-          uSky: { value: new Color(light ? 0x8f8c86 : 0x0c0b0a) },
+          uSky: { value: new Color(light ? 0xaaa59c : 0x151412) },
           uFloor: { value: new Color(light ? 0xb5b1a9 : 0x1a1816) },
         },
       }),

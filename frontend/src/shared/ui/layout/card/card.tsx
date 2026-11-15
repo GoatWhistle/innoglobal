@@ -4,7 +4,7 @@ import { staggerStyle } from "../../../motion"
 import styles from "./card.module.css"
 
 export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
-  readonly appearance?: "panel" | "sheet" | "plain"
+  readonly appearance?: "panel" | "sheet" | "plain" | "ruled"
   readonly as?: "section" | "article" | "aside" | "div"
   readonly title?: ReactNode
   readonly eyebrow?: ReactNode
@@ -61,6 +61,7 @@ export function Card({
         styles.card,
         appearance === "sheet" && styles.sheet,
         appearance === "plain" && styles.plain,
+        appearance === "ruled" && styles.ruled,
         entering && styles.entering,
         className,
       )}

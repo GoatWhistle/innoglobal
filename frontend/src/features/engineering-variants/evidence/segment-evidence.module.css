@@ -1,0 +1,39 @@
+.evidence {
+  display: grid;
+  gap: var(--space-8);
+  min-inline-size: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+.features {
+  display: grid;
+  gap: var(--space-16);
+}
+.features > div {
+  display: grid;
+  gap: var(--space-4);
+  padding-block-end: var(--space-12);
+  border-block-end: var(--hairline) solid var(--border-subtle);
+}
+.features dt {
+  font-size: var(--font-size-body-sm);
+}
+.features dd {
+  display: grid;
+  gap: var(--space-4);
+  font-variant-numeric: tabular-nums;
+}
+.features dd strong {
+  font-weight: var(--weight-medium);
+}
+.features dd span,
+.note {
+  font-size: var(--font-size-caption);
+  color: var(--text-secondary);
+}
+
+.validation {
+  white-space: normal;
+  inline-size: 100%;
+  text-align: start;
+  justify-content: start;
+}

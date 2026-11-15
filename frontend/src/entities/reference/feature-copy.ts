@@ -17,6 +17,7 @@ const FEATURE_KEY: Readonly<Record<string, MessageKey>> = {
   prev_min: "model:feature.prev_min",
   prev_min_sm5: "model:feature.prev_min_sm5",
   prev_min_sm21: "model:feature.prev_min_sm21",
+  prev_ndef_sm21: "model:feature.prev_ndef_sm21",
   prev_ndef: "model:feature.prev_ndef",
   rg_v_mean: "model:feature.rg_v_mean",
   rg_share_slow: "model:feature.rg_share_slow",

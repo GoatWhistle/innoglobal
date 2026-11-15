@@ -1,61 +1,67 @@
 # Product
 
-## Users and operating context
+## Пользователь и задача
 
-The hackathon jury explores a pipeline forecast on a laptop or projector. An inspection engineer
-needs to identify segments with the thinnest predicted wall, inspect their measurement history and
-understand which evidence supports the priority. The interface is Russian only. Dark is the default;
-light is equally complete for a bright room.
+Инженер обследования выбирает участки с наименьшей прогнозной толщиной стенки, проверяет
+историю замеров и основания для приоритета. Жюри проходит тот же сценарий на ноутбуке
+или проекторе. Интерфейс русскоязычный; графитовая и светлая темы поддерживают оба условия.
 
-## Positioning
+Продукт называется duppel, всегда со строчной буквы. PipeTwin обозначает кейс организатора.
+Название происходит от немецкого Doppel, «двойник». Знак состоит из двух штрихов знака
+повторения, второй из которых опущен: двойник расходится с наблюдением.
+Исходники и утверждённый вариант находятся в `docs/brand/`.
 
-A pipeline wall scanner that connects a selected ten-metre segment, its predicted minimum thickness
-and its available inspection evidence. The product is duppel, always lowercase; PipeTwin is the
-organizer's case name.
+## Что рассчитывает продукт
 
-The name is German Doppel, "twin". The mark is the ditto sign 〃 ("the same") whose second stroke
-has dropped: the twin no longer matches reality. Reference: `work/design/ds/doc-brand.html`,
-sources in `docs/brand/`.
+Кейс требует прогноз минимальной остаточной толщины стенки на дату T для каждого участка
+длиной 10 м двух трубопроводов. В первом случае доступны предыдущие ВТД, во втором
+исходной точкой служит номинал при вводе в эксплуатацию. Контрольное ВТД скрыто.
+Критерий организатора: квадрат корреляции Пирсона; он отличается от коэффициента
+детерминации. Источник: `brief/sources/pipeline-degradation.pdf`, страницы 1–3.
 
-## Product truth
+FastAPI читает импортированные DuckDB и CSV прогнозов. Снимок содержит 525 и 1475 участков;
+происхождение и даты описаны в `docs/data-contract.md`. При запуске обучение не происходит.
+React показывает ответы API; недоступные данные имеют состояние ошибки с повтором запроса.
 
-The current case predicts minimum residual wall thickness at date T for every ten-metre segment of
-two pipes. One case starts from a previous in-line inspection (VTD); the other starts from nominal
-wall thickness at commissioning. The target inspection is withheld. The score is squared Pearson
-correlation, not the coefficient of determination. Sources: the organizer brief, pages 1–3.
+## Основной сценарий
 
-The product serves two real target pipes from the imported DuckDB and forecast CSVs through FastAPI.
-React provides the combined Inspection workspace with its priority queue, data quality and historical validation.
-No retraining occurs at startup. The target inspection remains withheld. The entry point opens the selected pipe in the original physical Three.js scene. Route, unroll and
-section share real segment values. Angular thinning is an explicitly labelled illustration, never
-a measured circumferential defect map. Canvas2D and SVG preserve selection when WebGL fails.
+На `/` инженер выбирает трубу и участок по координате, очереди или профилю. В одном рабочем
+пространстве находятся физическая 3D-труба, прогноз, выбранная база сравнения, дата и профиль.
+Трасса, развёртка и сечение используют один выбор. Участок, режим камеры и диапазон
+сохраняются в URL; управление доступно с клавиатуры.
 
-## Primary scenario
+Очередь содержит первые десять процентов участков по прогнозной толщине. Их можно
+смотреть отдельно или объединёнными по смежности, сортировать по приоритету или расстоянию.
+CSV выгружает строки участков выбранной трубы. Группировка не создаёт ремонтных заданий.
 
-Choose a pipe, move the wall scanner, read the selected segment's minimum thickness alongside its
-baseline and optional interval, then open the thinnest ten percent to prioritize checks. All views
-share one selection. Keyboard and 2D fallback support the same route.
+Панель участка показывает доступные замеры, прогноз, квантили и исходные признаки.
+Значение признака участка и медиана по трубе сопровождаются отдельно подписанной глобальной
+важностью модели. Ссылка ведёт к проверке соответствующего кейса на `/model`.
+Страница `/data` раскрывает состав источников и качество данных.
 
-## Design commitments
+## Дизайн
 
-- Preserve Onest, the own icon set and the warm graphite / engineering-paper themes.
-- The signature is the movable cross-section, linked to the profile and dimensioned wall diagram.
-- A segment minimum does not describe corrosion around the circumference. The diagram is explicitly
-  schematic, with wall thickness exaggerated for legibility. No invented pits are measured defects.
-- Use neutral surfaces and data; amber marks inspection priority. Red needs an error or a supplied
-  violated criterion. Low predicted thickness alone never establishes a leak or failure probability.
-- Keep dates and sources attached to their values. Missing measurements and uncertainty stay missing.
-- No generic KPI-card grid, decorative gradients, glass, glow, fake badges or ornamental animation.
+Утверждённое направление объединяет предметную подачу Superlative и пространственные
+переходы monopo. Существующая Three.js-труба сохранена: металл и нефть видны в обеих темах.
+Onest, собственные иконки и марка duppel остаются частью системы.
 
-## Evidence and boundaries
+На широком экране очередь, сцена с профилем и данные участка стоят рядом. На узком очередь
+открывается в выдвижной панели; на телефоне выбранные значения предшествуют сцене,
+а подробности следуют за профилем. Таблицы и разделители задают структуру вспомогательных
+страниц. Спецификация композиции: `work/screens/material-workspace.md`.
 
-The served snapshot has 525 and 1475 segments. Historical metrics come from imported validation
-artifacts and are not target-date accuracy. Quantile coverage has not been calibrated. Feature
-importance is global. Inspection ranking does not establish safety or failure probability.
+## Границы интерпретации
 
-## Accessibility
+- Угловая форма трубы схематична. Она не является измеренной картой дефектов по окружности.
+- Ранжирование по толщине не устанавливает безопасность, вероятность течи или отказа.
+- Исторические метрики не оценивают точность на скрытом контрольном ВТД.
+- P10/P90 получены от квантильных моделей; их покрытие не откалибровано.
+- Глобальная важность признака не объясняет вклад этого признака в конкретный прогноз.
+- Пропуски измерений остаются пропусками. Номинал явно обозначается как база сравнения.
 
-Text contrast at least 4.5:1, visible keyboard focus, 44px targets and text alongside status colour.
-Selection works through the range, coordinate field, previous/next actions and priority list.
-Reduced motion keeps selection immediate and removes camera smoothing. WebGL failure retains the
-profile, schematic and all numerical evidence.
+## Доступность
+
+Общие правила: контраст текста не ниже 4.5:1, видимый фокус, цели касания от 44px,
+подписи рядом с цветом состояния. Выбор участка немедленный; reduced motion и клавиатура
+отключают плавный перелёт камеры. При отказе WebGL сохраняются выбор, профиль,
+резервная схема и численные данные. Результаты проверок: `work/audits/material-workspace/README.md`.

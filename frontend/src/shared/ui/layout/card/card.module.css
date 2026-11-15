@@ -5,7 +5,7 @@
   min-inline-size: 0;
   padding: var(--space-card);
   border: var(--hairline) solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-control);
   background-color: var(--surface-raised);
 }
 
@@ -64,4 +64,12 @@
   border-width: 0;
   border-radius: var(--radius-none);
   background-color: transparent;
+}
+
+.ruled {
+  padding: var(--space-24) 0;
+  border: 0;
+  border-block-start: var(--hairline) solid var(--border-subtle);
+  border-radius: var(--radius-none);
+  background: transparent;
 }

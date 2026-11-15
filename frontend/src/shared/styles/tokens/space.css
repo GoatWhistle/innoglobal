@@ -56,6 +56,7 @@
   --toast-width: 400px;
   --dialog-width: 480px;
   --drawer-width: 440px;
+  --drawer-width-wide: 800px;
   --fade-edge: 24px;
   --track-size: 2px;
 
@@ -97,8 +98,8 @@
   --mark-corner: 8px;
   --paper-cell: 8px;
   --paper-cell-major: 40px;
-  --scanner-panel: 320px;
-  --scanner-panel-min: 280px;
+  --scanner-panel: 480px;
+  --scanner-panel-min: 400px;
   --scanner-scene-min: 200px;
   --scanner-scene-max: 360px;
   --scanner-scene-mobile: 260px;
@@ -107,7 +108,9 @@
 }
 
 :root {
-  --pipe-scene: clamp(320px, 56vh, 600px);
-  --pipe-scene-mobile: 340px;
+  --pipe-scene: 240px;
+  --pipe-scene-focus: 72vh;
+  --pipe-scene-mobile: 240px;
+  --priority-list-height: calc(100dvh - 410px);
   --readout-width: 18rem;
 }

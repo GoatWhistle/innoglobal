@@ -19,7 +19,7 @@ for (const theme of ["light", "dark"]) {
           await page.evaluate(() => document.documentElement.scrollWidth - innerWidth),
         ).toBeLessThan(2)
         await page.screenshot({
-          path: `../work/audits/main-3d/${theme}-${width}-${mode}.png`,
+          path: `../work/audits/material-workspace/regression-${theme}-${width}-${mode}.png`,
           fullPage: true,
           animations: "disabled",
         })
@@ -58,7 +58,7 @@ test("existing cut controls, baseline and unroll picking share the selected segm
   await page.getByRole("option", { name: /2018/ }).click()
   await expect(page.getByTestId("segment-facts")).toContainText("2018")
   await page.getByRole("radio", { name: pipeCopy.scene.unroll, exact: true }).click()
-  await scene.locator("canvas").click({ position: { x: 400, y: 300 } })
+  await scene.locator("canvas").click()
   await expect(scene).toHaveAttribute("data-mode", "section")
   await page.getByRole("button", { name: pipeCopy.restoration.go, exact: true }).focus()
   await page.keyboard.press("1")

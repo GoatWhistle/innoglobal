@@ -1,6 +1,6 @@
 import { type ReactNode, useState } from "react"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { RangeField, Segmented, Select } from "@/shared/ui"
+import { Disclosure, RangeField, Segmented, Select } from "@/shared/ui"
 import { AlignedTrack } from "../aligned-track"
 import { EvidenceLegend } from "../controls/evidence-legend"
 import type { WorkspaceProps } from "../variant-types"
@@ -22,15 +22,6 @@ export function ComparisonPanel(props: ComparisonPanelProps) {
   return (
     <section className={styles.panel} aria-label={t("variants:compareEvidence")}>
       <div className={styles.toolbar}>
-        <Segmented
-          label={t("variants:compareMode")}
-          value={mode}
-          onChange={setMode}
-          options={[
-            { value: "beside", label: t("variants:beside"), icon: "layers" },
-            { value: "overlay", label: t("variants:overlay"), icon: "chart" },
-          ]}
-        />
         {props.controls}
         <Select
           label={t("variants:baseline")}
@@ -70,13 +61,24 @@ export function ComparisonPanel(props: ComparisonPanelProps) {
           </>
         ) : null}
       </div>
-      <AlignedTrack {...props} kind="delta" compact={compact} />
-      <p className={styles.note}>
-        {t("variants:deltaExplanation", {
-          date: date ? format.date(date) : t("variants:nominalBase"),
-          target: format.date(props.pipe.target_date),
-        })}
-      </p>
+      <Disclosure title={t("variants:moreComparison")}>
+        <Segmented
+          label={t("variants:compareMode")}
+          value={mode}
+          onChange={setMode}
+          options={[
+            { value: "beside", label: t("variants:beside"), icon: "layers" },
+            { value: "overlay", label: t("variants:overlay"), icon: "chart" },
+          ]}
+        />
+        <AlignedTrack {...props} kind="delta" compact={compact} />
+        <p className={styles.note}>
+          {t("variants:deltaExplanation", {
+            date: date ? format.date(date) : t("variants:nominalBase"),
+            target: format.date(props.pipe.target_date),
+          })}
+        </p>
+      </Disclosure>
     </section>
   )
 }

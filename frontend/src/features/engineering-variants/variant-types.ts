@@ -11,6 +11,12 @@ export interface WorkspaceProps {
   readonly onRange: (range: DistanceRange) => void
   readonly onReset: () => void
   readonly section: ReactNode
+  readonly sceneControls?: ReactNode
+  readonly overview?: ReactNode
+  readonly aside?: (range: DistanceRange) => ReactNode
+  readonly baselineDate?: string | undefined
+  readonly onComparisonDate?: (date: string) => void
+  readonly highlights?: readonly number[]
   readonly scene: ReactNode
 }
 export type TrackKind = "forecast" | "observed" | "elevation" | "priority" | "delta"

@@ -135,6 +135,11 @@ export function createWallEngine(canvas, { onPick, onFrame, onFailure, durations
   bindSceneInput(
     canvas,
     {
+      rotate: (dx, dy) => {
+        if (mode === "unroll") return
+        flight.rotate(dx, dy)
+        request()
+      },
       select: (event) => {
         const hit = pick(event)
         if (hit) onPick({ meters: hit.u * pipeline.lengthM, hour: hit.hour })
@@ -142,7 +147,7 @@ export function createWallEngine(canvas, { onPick, onFrame, onFailure, durations
       hover: (event) => {
         const hit = mode === "section" ? null : pick(event)
         uniforms.uHover.value = hit ? hit.u : -1
-        canvas.style.cursor = hit ? "crosshair" : "default"
+        canvas.style.cursor = mode === "unroll" ? "crosshair" : "grab"
         request()
       },
       leave: () => {
@@ -199,16 +204,16 @@ export function createWallEngine(canvas, { onPick, onFrame, onFailure, durations
       uniforms.uInside.value.copy(raw("--crude-pitch"))
       uniforms.uMark.value.copy(raw("--text-primary"))
       uniforms.uGrid.value.copy(raw("--text-primary"))
-      uniforms.uAmbient.value = light ? 0.72 : 0.34
-      uniforms.uSpec.value = light ? 0.16 : 0.85
+      uniforms.uAmbient.value = light ? 0.56 : 0.4
+      uniforms.uSpec.value = light ? 0.65 : 0.9
       uniforms.uEnv.value = studio.cube(light)
-      uniforms.uEnvPower.value = light ? 0.55 : 1
-      outlineMax = light ? 1 : 0.28
+      uniforms.uEnvPower.value = light ? 0.8 : 1.08
+      outlineMax = light ? 0.35 : 0.28
       props.setTheme(light, raw)
       capUniforms.uPaper.value.copy(raw("--surface-raised"))
       capUniforms.uInk.value.copy(raw("--drawing-line"))
-      capUniforms.uDrawing.value = light ? 1 : 0
-      oilUniforms.uCrude.value.copy(light ? raw("--surface-sunken") : raw("--crude-pitch"))
+      capUniforms.uDrawing.value = 0
+      oilUniforms.uCrude.value.copy(raw("--crude-pitch"))
       oilUniforms.uSheen.value.copy(raw("--crude-amber"))
       for (const line of outline) line.material.color.copy(token("--drawing-contour"))
       request()

@@ -1,4 +1,4 @@
-import { type KeyboardEvent, useEffect } from "react"
+import { type KeyboardEvent, useEffect, useState } from "react"
 import { useSearchParams } from "react-router"
 import {
   type PipeList,
@@ -12,7 +12,8 @@ import { PipeScene } from "@/features/pipe-scene"
 import { SegmentStrip } from "@/features/segment-strip"
 import { useFormatters, useTranslation } from "@/shared/i18n"
 import { useInputModality } from "@/shared/motion"
-import { Banner, ButtonAnchor, NumberField, Segmented, Select } from "@/shared/ui"
+import { Banner, Button, ButtonAnchor, Disclosure, Segmented, Select } from "@/shared/ui"
+import { AssistantWorkspace } from "./assistant-workspace"
 import { PipeControls } from "./pipe-controls"
 import styles from "./variants-workspace.module.css"
 
@@ -37,6 +38,8 @@ export function VariantsWorkspace({ pipe, pipes, profile }: VariantsWorkspacePro
       { replace: true },
     )
   const state = useWorkspaceState(profile.rows, pipe.thinnest_segment_id)
+  const [comparisonDate, setComparisonDate] = useState(pipe.last_observed_run ?? undefined)
+  const [highlights, setHighlights] = useState<number[]>([])
   const modality = useInputModality()
   const keyboard = (event: KeyboardEvent) => {
     modality.onKeyDown()
@@ -81,22 +84,37 @@ export function VariantsWorkspace({ pipe, pipes, profile }: VariantsWorkspacePro
     onRange: state.zoom,
     onReset: state.reset,
     section,
+    baselineDate: comparisonDate,
+    onComparisonDate: setComparisonDate,
+    highlights,
+    sceneControls: (
+      <>
+        <Segmented
+          label={t("pipe:scene.label")}
+          value={scene}
+          onChange={setScene}
+          appearance="camera"
+          options={[
+            { value: "route", label: t("pipe:scene.route"), icon: "pipe" },
+            { value: "unroll", label: t("pipe:scene.unroll"), icon: "layers" },
+            { value: "section", label: t("pipe:scene.section"), icon: "cube" },
+          ]}
+        />
+      </>
+    ),
+    overview: (
+      <SegmentStrip
+        rows={profile.rows}
+        nominal={profile.nominal_wall_mm}
+        thinnest={pipe.thinnest_mm}
+        selected={state.segment}
+        range={state.range}
+        onSelect={state.select}
+        onRange={state.zoom}
+      />
+    ),
     scene: (
       <section aria-label={t("pipe:scene.label")}>
-        <div className={styles.cameraBar}>
-          <Segmented
-            label={t("pipe:scene.label")}
-            value={scene}
-            onChange={setScene}
-            appearance="camera"
-            options={[
-              { value: "route", label: t("pipe:scene.route"), icon: "pipe" },
-              { value: "unroll", label: t("pipe:scene.unroll"), icon: "layers" },
-              { value: "section", label: t("pipe:scene.section"), icon: "cube" },
-            ]}
-          />
-          <p>{t(`pipe:restoration.${scene}Question`)}</p>
-        </div>
         <PipeScene
           pipe={pipe}
           profile={profile}
@@ -107,21 +125,6 @@ export function VariantsWorkspace({ pipe, pipes, profile }: VariantsWorkspacePro
           fallback={section}
           readout={false}
         />
-        <SegmentStrip
-          rows={profile.rows}
-          nominal={profile.nominal_wall_mm}
-          thinnest={pipe.thinnest_mm}
-          selected={state.segment}
-          range={state.range}
-          onSelect={state.select}
-          onRange={state.zoom}
-        />
-        <PipeControls
-          key={state.segment}
-          rows={profile.rows}
-          selected={state.segment}
-          onSelect={state.select}
-        />
       </section>
     ),
   }
@@ -131,14 +134,10 @@ export function VariantsWorkspace({ pipe, pipes, profile }: VariantsWorkspacePro
       onKeyDownCapture={keyboard}
       onPointerDownCapture={modality.onPointerDown}
     >
-      <header className={styles.header}>
-        <div>
-          <h1>{t("variants:names.inspection")}</h1>
-          <p>{t("variants:descriptions.inspection")}</p>
-        </div>
-      </header>
       <div className={styles.context}>
+        <h1>{t("variants:names.inspection")}</h1>
         <Select
+          className={styles.pipe}
           label={t("variants:pipe")}
           value={String(pipe.pipe_id)}
           onChange={changePipe}
@@ -147,31 +146,59 @@ export function VariantsWorkspace({ pipe, pipes, profile }: VariantsWorkspacePro
             label: String(item.pipe_id),
           }))}
         />
-        <NumberField
-          className={styles.segment}
-          label={t("variants:segment")}
-          value={row.segment_id}
-          min={profile.rows[0]?.segment_id ?? 0}
-          max={profile.rows.at(-1)?.segment_id ?? 0}
-          onChange={(value) => {
-            if (value !== null) state.select(value)
-          }}
+        <PipeControls
+          key={state.segment}
+          rows={profile.rows}
+          selected={state.segment}
+          onSelect={state.select}
         />
         <p className={styles.target}>
           {t("variants:target")}
           <strong>{format.date(pipe.target_date)}</strong>
         </p>
-        <ButtonAnchor
-          className={styles.export}
-          href="/api/v1/exports/result.csv"
-          variant="quiet"
-          icon="download"
-        >
-          {t("variants:export")}
-        </ButtonAnchor>
+        <p className={styles.baseline}>
+          {t(pipe.last_observed_run ? "variants:lastVtd" : "variants:commissioned")}
+          <strong>
+            {pipe.last_observed_run
+              ? format.date(pipe.last_observed_run)
+              : pipe.passport.commissioned_at
+                ? format.date(pipe.passport.commissioned_at)
+                : t("variants:missing")}
+          </strong>
+        </p>
+        <Disclosure title={t("assistant:exports")}>
+          <ButtonAnchor href="/api/v1/exports/result.csv" variant="quiet" icon="download">
+            {t("variants:export")}
+          </ButtonAnchor>
+        </Disclosure>
       </div>
       {state.invalid ? <Banner tone="warning" title={t("variants:invalid")} /> : null}
-      <Inspection {...props} />
+      {highlights.length ? (
+        <div role="status">
+          {t("assistant:highlight", { segments: highlights.join(", ") })}
+          <Button
+            variant="quiet"
+            onClick={() => {
+              setHighlights([])
+              state.reset()
+            }}
+          >
+            {t("assistant:clear")}
+          </Button>
+        </div>
+      ) : null}
+      <Inspection
+        {...props}
+        aside={(range) => (
+          <AssistantWorkspace
+            workspace={{ ...props, range }}
+            date={comparisonDate}
+            onDate={setComparisonDate}
+            onView={setScene}
+            onHighlight={setHighlights}
+          />
+        )}
+      />
       <div className={styles.mobileExport}>
         <ButtonAnchor href="/api/v1/exports/result.csv" variant="quiet" icon="download">
           {t("variants:export")}

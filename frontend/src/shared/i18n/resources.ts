@@ -1,4 +1,5 @@
 import type { Locale } from "./locale"
+import enAssistant from "./locales/en/assistant.json"
 import enCommon from "./locales/en/common.json"
 import enErrors from "./locales/en/errors.json"
 import enHealth from "./locales/en/health.json"
@@ -12,6 +13,7 @@ import enQuality from "./locales/en/quality.json"
 import enRoute from "./locales/en/route.json"
 import enSection from "./locales/en/section.json"
 import enVariants from "./locales/en/variants.json"
+import ruAssistant from "./locales/ru/assistant.json"
 import ruCommon from "./locales/ru/common.json"
 import ruErrors from "./locales/ru/errors.json"
 import ruHealth from "./locales/ru/health.json"
@@ -29,6 +31,7 @@ import ruVariants from "./locales/ru/variants.json"
 export const NAMESPACES = [
   "common",
   "errors",
+  "assistant",
   "health",
   "inspector",
   "model",
@@ -49,6 +52,7 @@ export const DEFAULT_NAMESPACE: Namespace = "common"
 const en = {
   common: enCommon,
   errors: enErrors,
+  assistant: enAssistant,
   health: enHealth,
   inspector: enInspector,
   model: enModel,
@@ -65,6 +69,7 @@ const en = {
 const ru = {
   common: ruCommon,
   errors: ruErrors,
+  assistant: ruAssistant,
   health: ruHealth,
   inspector: ruInspector,
   model: ruModel,

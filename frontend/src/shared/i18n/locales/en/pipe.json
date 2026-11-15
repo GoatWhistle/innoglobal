@@ -26,7 +26,12 @@
     "unroll": "Unroll",
     "illustration": "Thickness is a model forecast. Defect shape and oil movement are illustrative.",
     "segment": "Segment {{id}}",
-    "forecast": "Minimum forecast thickness"
+    "forecast": "Minimum forecast thickness",
+    "schematic": "Illustrative geometry",
+    "focus": "Focus on pipe",
+    "collapse": "Normal size",
+    "reset": "Reset view",
+    "drag": "Drag to rotate. Arrow keys also rotate the view."
   },
   "restoration": {
     "scale": "Schematic",
@@ -34,27 +39,9 @@
     "nearNominal": "Near nominal",
     "thinner": "Thinner",
     "angle": "Illustrative circumference",
-    "marking": "Ø{{diameter}} × {{wall}}",
-    "position": "CH {{picket}}+{{offset}}",
-    "forecastDate": "Forecast for {{date}}",
     "coordinate": "Distance from start, m",
     "go": "Go",
     "coordinateError": "Enter a distance between 0 and {{length}} m.",
-    "keyboard": "Arrows: one segment. Page Up and Page Down: ten. 1, 2, 3: camera.",
-    "drawing": "Segment drawing",
-    "evidence": "Source evidence",
-    "priority": "Inspect first",
-    "priorityNote": "First {{count}} segments by minimum forecast. Ranking is not a failure probability.",
-    "allPriorities": "Full inspection list",
-    "source": "Source",
-    "snapshot": "Data snapshot",
-    "sheet": "Sheet",
-    "shapeNote": "Circumferential shape is illustrative. The minimum follows the segment forecast. Wall thickness is exaggerated for legibility.",
-    "routeQuestion": "Where is the wall thinner?",
-    "unrollQuestion": "Forecast along the pipe",
-    "sectionQuestion": "Selected segment thickness",
-    "stampTitle": "Drawing identification",
-    "empty": "No target pipes",
-    "emptyDescription": "The current snapshot contains no target pipes."
+    "keyboard": "Arrows: one segment. Page Up and Page Down: ten. 1, 2, 3: camera."
   }
 }

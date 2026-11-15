@@ -20,13 +20,11 @@
   color: var(--text-secondary);
   font-size: var(--font-size-caption);
 }
-.value strong {
+.reading {
+  composes: readoutNumber from "../../shared/styles/compose.module.css";
   display: flex;
   align-items: baseline;
   gap: var(--space-8);
-  font-size: var(--font-size-scene);
-  line-height: var(--line-height-readout);
-  font-weight: var(--weight-light);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--tracking-readout);
 }
@@ -66,21 +64,14 @@
   color: var(--text-warning);
   font-size: var(--font-size-caption);
 }
-.actions {
-  display: grid;
-}
-@media (max-width: 64rem) {
+@media (width < 48rem) {
   .facts {
     grid-template-columns: minmax(0, 1fr);
   }
   .heading {
     grid-column: 1 / -1;
   }
-  .value strong {
-    font-size: var(--font-size-readout);
-  }
-  .facts > section,
-  .actions {
+  .facts > section {
     grid-column: 1 / -1;
   }
 }

@@ -8,12 +8,11 @@ import styles from "./model-page.module.css"
 export interface CaseValidationProps {
   readonly model: ModelValidation
   readonly caseId: string
-  readonly motionIndex: number
 }
 
 const IMPORTANCE_LIMIT = 10
 
-export function CaseValidation({ model, caseId, motionIndex }: CaseValidationProps) {
+export function CaseValidation({ model, caseId }: CaseValidationProps) {
   const { t } = useTranslation()
   const format = useFormatters()
   const target = model.cases.find((item) => item.case_id === caseId)
@@ -35,9 +34,10 @@ export function CaseValidation({ model, caseId, motionIndex }: CaseValidationPro
   if (target === undefined) return null
   return (
     <Card
-      appearance="sheet"
-      motionIndex={motionIndex}
-      eyebrow={t("model:case.pipe", {
+      id={caseId}
+      appearance="ruled"
+      className={styles.case}
+      actions={t("model:case.pipe", {
         pipe: target.pipe_id,
         date: format.date(target.target_date),
       })}
@@ -59,7 +59,11 @@ export function CaseValidation({ model, caseId, motionIndex }: CaseValidationPro
     >
       {selected === undefined ? null : (
         <StatGrid look="ruled">
-          <Stat label={t("model:selected")} value={name(selected.model)} />
+          <Stat
+            className={styles.selectedModel}
+            label={t("model:selected")}
+            value={name(selected.model)}
+          />
           <Stat
             label={t("model:r2")}
             value={format.number(selected.pearson_r2, 3)}
@@ -78,7 +82,7 @@ export function CaseValidation({ model, caseId, motionIndex }: CaseValidationPro
         </StatGrid>
       )}
       <div className={styles.columns}>
-        <Card className={styles.block} title={t("model:metricsTitle")}>
+        <Card appearance="plain" className={styles.block} title={t("model:metricsTitle")}>
           <BarList
             label={t("model:metricsTitle")}
             items={metrics.map((item) => ({
@@ -106,7 +110,7 @@ export function CaseValidation({ model, caseId, motionIndex }: CaseValidationPro
             }))}
           />
         </Card>
-        <Card className={styles.block} title={t("model:importanceTitle")}>
+        <Card appearance="plain" className={styles.block} title={t("model:importanceTitle")}>
           <BarList
             label={t("model:importanceTitle")}
             items={importance.map((item) => {

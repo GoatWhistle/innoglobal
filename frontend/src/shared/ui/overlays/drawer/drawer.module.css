@@ -1,0 +1,61 @@
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  margin: 0;
+  padding: 0;
+  inline-size: min(100%, var(--drawer-width));
+  block-size: 100dvh;
+  min-block-size: var(--target-min);
+  max-block-size: 100dvh;
+  max-inline-size: 100%;
+  background: var(--surface-base);
+  color: var(--text-primary);
+  border: var(--hairline) solid var(--border-subtle);
+  border-inline-start: var(--hairline) solid var(--border-subtle);
+}
+.drawer::backdrop {
+  background: var(--surface-scrim);
+}
+.drawer[data-state="open"] {
+  transform: translateX(0);
+  opacity: 1;
+  transition: var(--transition-drawer);
+}
+.drawer[data-state="closed"] {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: var(--transition-drawer-close);
+}
+.drawer[data-instant="true"] {
+  transition: none;
+}
+.content {
+  overscroll-behavior: contain;
+  min-block-size: 100%;
+  padding: var(--space-24);
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  margin-block-end: var(--space-24);
+}
+.header h2 {
+  font-size: var(--font-size-subheading);
+  font-weight: var(--weight-medium);
+}
+.body {
+  min-inline-size: 0;
+}
+
+@starting-style {
+  .drawer[data-state="open"] {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.drawer[data-size="wide"] {
+  inline-size: min(100%, var(--drawer-width-wide));
+}

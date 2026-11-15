@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { api, unwrap } from "@/shared/api"
 
 export const pipeKeys = {
@@ -48,7 +48,6 @@ export function useSegment(pipeId: number, segmentId: number | null) {
   return useQuery({
     queryKey: pipeKeys.segment(pipeId, segmentId ?? -1),
     enabled: segmentId !== null,
-    placeholderData: keepPreviousData,
     queryFn: ({ signal }) =>
       unwrap(
         api.GET("/api/v1/pipes/{pipe_id}/segments/{segment_id}", {

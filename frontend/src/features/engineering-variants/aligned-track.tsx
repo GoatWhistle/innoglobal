@@ -83,6 +83,18 @@ export function AlignedTrack(props: TrackProps) {
           {kind === "delta" ? (
             <line x1={0} x2={1000} y1={y(0)} y2={y(0)} className={styles.zero} />
           ) : null}
+          {rows
+            .filter((item) => props.highlights?.includes(item.segment_id))
+            .map((item) => (
+              <rect
+                key={item.segment_id}
+                x={x(item.start_m)}
+                width={x(item.end_m) - x(item.start_m)}
+                height={height}
+                className={styles.selection}
+                data-highlight={item.segment_id}
+              />
+            ))}
           <TrackMarks
             rows={rows}
             kind={kind}

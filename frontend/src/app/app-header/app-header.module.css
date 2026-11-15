@@ -30,3 +30,13 @@
     padding-inline: var(--space-page-wide);
   }
 }
+
+@media (width < 48rem) {
+  .header > nav {
+    order: 2;
+    flex-basis: 100%;
+  }
+  .controls {
+    margin-inline-start: auto;
+  }
+}

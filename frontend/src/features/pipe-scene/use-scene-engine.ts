@@ -97,12 +97,20 @@ export function useSceneEngine(props: PipeSceneProps) {
     engine.current?.setTheme(theme)
   }, [theme])
   useEffect(() => {
-    const instant = props.instant
     engine.current?.select(
       props.profile.rows.findIndex((row) => row.segment_id === props.selected),
-      instant,
+      true,
     )
-    engine.current?.setMode(props.mode, instant)
-  }, [props.selected, props.mode, props.profile, props.instant])
-  return { canvas, marker, axes, failed, ready }
+  }, [props.selected, props.profile])
+  useEffect(() => {
+    engine.current?.setMode(props.mode, props.instant)
+  }, [props.mode, props.instant])
+  return {
+    canvas,
+    marker,
+    axes,
+    failed,
+    ready,
+    reset: () => engine.current?.setMode(props.mode, true),
+  }
 }

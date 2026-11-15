@@ -19,10 +19,12 @@ export function DataQualityPage() {
       <PageHeader
         title={t("quality:title")}
         description={t("quality:description")}
-        eyebrow={
-          quality.data?.checked_at
-            ? t("quality:checkedAt", { date: format.dateTime(quality.data.checked_at) })
-            : undefined
+        actions={
+          quality.data?.checked_at ? (
+            <p className={styles.checked}>
+              {t("quality:checkedAt", { date: format.dateTime(quality.data.checked_at) })}
+            </p>
+          ) : undefined
         }
       />
       <QueryView query={quality} label={t("quality:loading")} skeleton={<Skeleton lines={12} />}>
@@ -66,7 +68,7 @@ export function DataQualityPage() {
                 ))}
               </StatGrid>
               <Card
-                appearance="sheet"
+                appearance="ruled"
                 className={styles.wide}
                 title={t("quality:runs.title")}
                 description={t("quality:runs.description")}
@@ -74,7 +76,7 @@ export function DataQualityPage() {
                 <RunsTable runs={data.runs} />
               </Card>
               <Card
-                appearance="sheet"
+                appearance="ruled"
                 className={styles.wide}
                 title={t("quality:checks.title")}
                 description={t("quality:checks.description")}
@@ -82,14 +84,14 @@ export function DataQualityPage() {
                 <ChecksTable checks={data.checks} />
               </Card>
               <Card
-                appearance="sheet"
+                appearance="ruled"
                 title={t("quality:quarantine.title")}
                 description={t("quality:quarantine.description")}
               >
                 <QuarantineTable rows={data.quarantine} />
               </Card>
               <Card
-                appearance="sheet"
+                appearance="ruled"
                 title={t("quality:layers.title")}
                 description={t("quality:layers.description")}
               >

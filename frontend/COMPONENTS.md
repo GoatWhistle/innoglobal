@@ -377,7 +377,7 @@ focus outline. The track uses `--target-min`; keyboard stepping remains native. 
 screen uses it for the overlay boundary, with the percentage in the label. It has one value and
 no custom step, disabled or error props; the two-ended Slider/Range contract above remains a spec.
 
-**Card** in `layout/card/` accepts `appearance?: "panel" | "sheet" | "plain"`, defaulting to
+**Card** in `layout/card/` accepts `appearance?: "panel" | "sheet" | "plain" | "ruled"`, defaulting to
 `"panel"`. The plain appearance removes padding, border, radius and background while retaining the
 grid gap, optional header and accessible title association. Variants use it for headings inside
 their own frame, including gallery captions, the inspection queue and segment facts.
@@ -441,4 +441,42 @@ Route, unroll and section use URL `view` state and shortcuts 1/2/3. The coordina
 previous/next actions share the selected segment. PipeScene accepts `readout?: boolean`,
 defaulting to visible; this composition passes `false` because SegmentFacts already presents
 these values. The former SteelPipe component and raster are removed. Canvas2D/SVG remain
-WebGL fallbacks. Engine, materials and cut behavior remain unchanged.
+WebGL fallbacks. This restoration predates the material-workspace changes below.
+
+## Material workspace, 2026-11-15
+
+Этот раздел описывает текущую композицию. Записи о галерее и пяти вариантах выше сохраняют
+историю исследования; действуют только маршруты `/`, `/data` и `/model`.
+
+| Компонент | Путь | Контракт |
+|---|---|---|
+| Drawer | `shared/ui/overlays/drawer/` | `open`, `onClose`, `title`, `children`; модальный native dialog, фокус на заголовке, Escape, закрытие по фону, возврат фокуса |
+| Card, ruled | `shared/ui/layout/card/` | Заголовок и содержимое разделены линиями; без отдельной фоновой карточки |
+| PriorityQueue | `features/engineering-variants/inspection/priority-queue.tsx` | Те же строки API в боковой колонке и Drawer; выбор участка, сортировка, группы, CSV |
+| SegmentEvidence | `features/engineering-variants/evidence/segment-evidence.tsx` | Запрос по трубе и участку; значения, медианы и глобальная важность, ошибка/повтор, пустое состояние |
+| WorkspaceFrame | `features/engineering-variants/workspace-frame.tsx` | Очередь, основная сцена, профиль и факты; `sceneControls` и `overview` передаются слотами |
+
+`entities/pipe/priority-groups.ts` соединяет только смежные приоритетные участки по координатам
+начала и конца. Ведущий участок группы имеет лучший ранг API. CSV сохраняет исходную
+построчную структуру независимо от выбранного вида очереди.
+
+`ComparisonPanel` сразу показывает основной профиль. Дополнительные режимы сравнения
+и разница открываются через Disclosure. Рельеф и SegmentStrip находятся в отдельном
+раскрываемом разделе. `PipeScene` подписывает схематичность геометрии внутри сцены.
+
+`useSegment` не подставляет подробности предыдущего участка при смене ключа запроса.
+Это исключает чужие признаки под новым заголовком. Drawer использует `usePresence`,
+общие токены перехода и мгновенное действие с клавиатуры; новое движение камеры начинается
+из текущего видимого положения. Значения и частый выбор участка не анимируются.
+
+## Engineering assistant frontend
+
+EngineeringAssistant composes existing Tabs, Segmented, Drawer, ScrollArea and Button. The compact
+readout stays above the conversation. AssistantWorkspace owns typed view actions and the source
+drawer; selected segment/range remain in existing URL state. Each message owns its original context
+and retry input. The optional NDJSON endpoint is a client contract, not an implemented backend.
+An absent endpoint renders the not-connected state; product source data still uses the real API.
+
+The assistant panel uses a 480px desktop column and a compact facts strip. Expand opens the existing
+Drawer at 800px, keeps the conversation and draft, and closes with Escape. The composer stays
+below the independently scrolling message list, with 16px response/input text and a multiline field.

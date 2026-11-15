@@ -16,28 +16,15 @@ export function ModelPage() {
       <QueryView query={model} label={t("model:loading")} skeleton={<Skeleton lines={14} />}>
         {(data) => (
           <div className={styles.grid}>
-            {data.cases.map((item, index) => (
-              <CaseValidation
-                key={item.case_id}
-                model={data}
-                caseId={item.case_id}
-                motionIndex={index}
-              />
+            {data.cases.map((item) => (
+              <CaseValidation key={item.case_id} model={data} caseId={item.case_id} />
             ))}
-            <Card
-              appearance="sheet"
-              title={t("model:uncertainty.title")}
-              motionIndex={data.cases.length}
-            >
+            <Card appearance="ruled" title={t("model:uncertainty.title")}>
               <p className={styles.note}>
                 {t("model:uncertainty.body", { quantiles: data.quantiles.join(", ") })}
               </p>
             </Card>
-            <Card
-              appearance="sheet"
-              title={t("model:limits.title")}
-              motionIndex={data.cases.length + 1}
-            >
+            <Card appearance="ruled" title={t("model:limits.title")}>
               <ul className={styles.limits}>
                 {LIMITS.map((key) => (
                   <li key={key}>{t(`model:limits.${key}`)}</li>

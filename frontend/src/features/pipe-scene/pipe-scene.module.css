@@ -5,13 +5,14 @@
   position: relative;
   block-size: var(--pipe-scene);
   overflow: hidden;
-  background: var(--surface-base);
+  background: var(--scene-void);
 }
 .canvas {
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  touch-action: pan-y;
+  touch-action: none;
+  cursor: grab;
 }
 .canvas[hidden] {
   display: none;
@@ -93,8 +94,61 @@
 .stage[data-mode="section"] .scale {
   display: none;
 }
-@media (max-width: 48rem) {
+
+.notice,
+.sectionTag {
+  position: absolute;
+  z-index: var(--layer-raised);
+  font-size: var(--font-size-caption);
+  pointer-events: none;
+}
+.notice {
+  inset-block-start: var(--space-8);
+  inset-inline-start: var(--space-12);
+  color: var(--text-secondary);
+}
+.tagText strong {
+  display: block;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--weight-medium);
+}
+@media (width < 48rem) {
   .viewport {
     block-size: var(--pipe-scene-mobile);
   }
+}
+
+.sectionTag {
+  inset-block-start: var(--space-40);
+  inset-inline-end: var(--space-12);
+  display: grid;
+  gap: var(--space-4);
+  background: var(--surface-base);
+  padding: var(--space-8);
+  font-variant-numeric: tabular-nums;
+}
+.sectionTag strong {
+  font-weight: var(--weight-medium);
+}
+.stage[data-mode="section"] .tagText,
+.stage[data-mode="section"] .leader {
+  display: none;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  padding-block-end: var(--space-12);
+}
+.controls > span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+.stage[data-focused="true"] .viewport {
+  block-size: var(--pipe-scene-focus);
+}
+.canvas:active {
+  cursor: grabbing;
 }

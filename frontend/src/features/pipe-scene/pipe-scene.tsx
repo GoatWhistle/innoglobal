@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react"
+import { type CSSProperties, type ReactNode, useState } from "react"
 import {
   type PipeSummary,
   type Profile,
@@ -7,6 +7,7 @@ import {
   wallColor,
 } from "@/entities/pipe"
 import { useFormatters, useTranslation } from "@/shared/i18n"
+import { Button } from "@/shared/ui"
 import styles from "./pipe-scene.module.css"
 import { SceneFallback } from "./scene-fallback"
 import { SceneReadout } from "./scene-readout"
@@ -30,20 +31,44 @@ export function PipeScene(props: PipeSceneProps) {
   const format = useFormatters()
   const selected = props.profile.rows.find((row) => row.segment_id === props.selected)
   const { t } = useTranslation()
-  const { canvas, marker, axes, failed, ready } = useSceneEngine(props)
+  const [focused, setFocused] = useState(false)
+  const { canvas, marker, axes, failed, ready, reset } = useSceneEngine(props)
   return (
     <section
       className={styles.stage}
       data-mode={props.mode}
+      data-focused={focused}
       data-renderer={failed ? "fallback" : ready ? "webgl" : "loading"}
       aria-label={t("pipe:scene.label")}
     >
+      <div className={styles.controls}>
+        <Button
+          variant="secondary"
+          icon="expand"
+          aria-pressed={focused}
+          onClick={() => setFocused(!focused)}
+        >
+          {t(focused ? "pipe:scene.collapse" : "pipe:scene.focus")}
+        </Button>
+        <Button variant="quiet" icon="pipe" onClick={reset} disabled={failed}>
+          {t("pipe:scene.reset")}
+        </Button>
+      </div>
       <div className={styles.viewport}>
+        <p className={styles.notice}>{t("pipe:scene.schematic")}</p>
+        {props.mode === "section" && selected ? (
+          <div className={styles.sectionTag}>
+            <span>{thickness.range(selected.start_m, selected.end_m)}</span>
+            <strong>{thickness.withUnit(selected.forecast_mm)}</strong>
+          </div>
+        ) : null}
         <canvas
           ref={canvas}
           className={styles.canvas}
           hidden={failed}
+          tabIndex={0}
           aria-label={t(`pipe:scene.${props.mode}`)}
+          title={t("pipe:scene.drag")}
         />
         {failed ? <SceneFallback {...props} /> : null}
         {failed ? null : (
@@ -52,7 +77,8 @@ export function PipeScene(props: PipeSceneProps) {
               <i className={styles.markerDot} />
               <i className={styles.leader} />
               <span className={styles.tagText}>
-                {selected ? thickness.withUnit(selected.forecast_mm) : ""}
+                {selected ? thickness.range(selected.start_m, selected.end_m) : ""}
+                <strong>{selected ? thickness.withUnit(selected.forecast_mm) : ""}</strong>
               </span>
             </div>
             <div ref={axes} className={styles.axes} hidden>

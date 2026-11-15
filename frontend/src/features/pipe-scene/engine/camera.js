@@ -21,7 +21,29 @@ function fitDistance(points, target, direction, camera, aspect, margin) {
   return distance * margin
 }
 
-export function poses(camera, { L, R }, width, height, cutX, wide) {
+function centerPose(points, pose, direction, verticalCenter) {
+  const right = new Vector3(0, 1, 0).cross(direction).normalize()
+  const up = direction.clone().cross(right).normalize()
+  const distance = pose.position.distanceTo(pose.target)
+  for (let pass = 0; pass < 4; pass++) {
+    const projected = points.map((point) => {
+      const relative = point.clone().sub(pose.target)
+      const depth = distance - relative.dot(direction)
+      return [relative.dot(right) / depth, relative.dot(up) / depth]
+    })
+    const x = projected.map((point) => point[0])
+    const y = projected.map((point) => point[1])
+    const offset = right
+      .clone()
+      .multiplyScalar(((Math.min(...x) + Math.max(...x)) * distance) / 2)
+      .addScaledVector(up, ((Math.min(...y) + Math.max(...y)) / 2 - verticalCenter) * distance)
+    pose.target.add(offset)
+    pose.position.add(offset)
+  }
+  return pose
+}
+
+export function poses(camera, { L, R }, width, height, cutX, _wide) {
   const aspect = width / height,
     tan = Math.tan((camera.fov * Math.PI) / 360)
   const axis = Array.from({ length: 13 }, (_, i) => (i / 12 - 0.5) * L)
@@ -31,26 +53,29 @@ export function poses(camera, { L, R }, width, height, cutX, wide) {
     new Vector3(x, 0, R),
     new Vector3(x, 0, -R),
   ])
-  const az = aspect < 1.3 ? 0.62 : 0.2,
-    el = aspect < 1.3 ? 0.2 : 0.11
+  const az = aspect < 1.3 ? 1.02 : 0.68,
+    el = aspect < 1.3 ? 0.28 : 0.24
   const routeDir = new Vector3(
     Math.sin(az) * Math.cos(el),
     Math.sin(el),
     Math.cos(az) * Math.cos(el),
   ).normalize()
   const routeTarget = new Vector3(0, aspect < 1.3 ? -R * 0.2 : R * 0.1, 0)
-  const reserve = wide && width > 960 ? 340 : 0
-  const fitAspect = (width - reserve) / height
-  const route = {
-    target: routeTarget,
-    position: routeTarget
-      .clone()
-      .addScaledVector(
-        routeDir,
-        fitDistance(tube, routeTarget, routeDir, camera, fitAspect, aspect < 1.3 ? 0.92 : 1.04),
-      ),
-    shift: reserve / 2,
-  }
+  const route = centerPose(
+    tube,
+    {
+      target: routeTarget,
+      position: routeTarget
+        .clone()
+        .addScaledVector(
+          routeDir,
+          fitDistance(tube, routeTarget, routeDir, camera, aspect, aspect < 1.3 ? 1.06 : 1.08),
+        ),
+      shift: 0,
+    },
+    routeDir,
+    aspect < 1.3 ? -tan * 0.16 : 0,
+  )
   const inner = Math.max(1, width - SHEET.left - SHEET.right)
   let scale = inner / L
   const room = Math.max(1, height - SHEET.top - SHEET.bottom)
@@ -82,7 +107,7 @@ export function poses(camera, { L, R }, width, height, cutX, wide) {
         sectionDir,
         fitDistance(ringPoints, cutTarget, sectionDir, camera, aspect, aspect < 1.3 ? 1.5 : 1.65),
       ),
-    shift: wide ? width * 0.14 : 0,
+    shift: 0,
   }
   return { route, unroll, section, sheetScale: scale }
 }
@@ -95,11 +120,13 @@ export function createFlight(camera) {
     duration = 0,
     done = true,
     width = 1,
-    height = 1
+    height = 1,
+    currentShift = 0
   function apply(k) {
     camera.position.lerpVectors(from.position, to.position, k)
     look.lerpVectors(from.target, to.target, k)
     const shift = from.shift + (to.shift - from.shift) * k
+    currentShift = shift
     camera.lookAt(look)
     if (Math.abs(shift) > 0.5) camera.setViewOffset(width, height, shift, 0, width, height)
     else camera.clearViewOffset()
@@ -107,6 +134,23 @@ export function createFlight(camera) {
     camera.updateMatrixWorld()
   }
   return {
+    rotate(dx, dy) {
+      if (!done) return
+      const offset = camera.position.clone().sub(look)
+      const radius = offset.length()
+      const yaw = Math.atan2(offset.x, offset.z) - dx * Math.PI * 2
+      const pitch = Math.max(
+        0.08,
+        Math.min(Math.PI - 0.08, Math.acos(offset.y / radius) - dy * Math.PI),
+      )
+      camera.position.set(
+        look.x + radius * Math.sin(pitch) * Math.sin(yaw),
+        look.y + radius * Math.cos(pitch),
+        look.z + radius * Math.sin(pitch) * Math.cos(yaw),
+      )
+      camera.lookAt(look)
+      camera.updateMatrixWorld()
+    },
     size(w, h) {
       width = w
       height = h
@@ -115,7 +159,7 @@ export function createFlight(camera) {
     go(pose, ms, now) {
       from.position.copy(camera.position)
       from.target.copy(look)
-      from.shift = to.shift
+      from.shift = currentShift
       to.position.copy(pose.position)
       to.target.copy(pose.target)
       to.shift = pose.shift
