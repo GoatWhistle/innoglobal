@@ -1,4 +1,5 @@
 .scene {
+  --scene-offset: 0px;
   display: grid;
   align-content: center;
   gap: var(--space-40);
@@ -17,12 +18,14 @@
   line-height: var(--line-height-display);
   letter-spacing: var(--tracking-display);
   font-variant-numeric: var(--font-numeric);
+  margin-inline-start: var(--scene-offset);
   animation: var(--motion-rise-in);
 }
 
 .axis {
   position: absolute;
-  inset-inline: calc(var(--space-page-wide) * -1);
+  inset-inline: calc((var(--space-page-wide) + var(--scene-offset)) * -1)
+    calc(var(--space-page-wide) * -1);
   inset-block-start: 50%;
   block-size: 0;
   border-block-start: var(--hairline) dashed var(--border-strong);
@@ -100,6 +103,7 @@
   justify-items: start;
   gap: var(--space-16);
   max-inline-size: var(--prose-measure);
+  margin-inline-start: var(--scene-offset);
   animation: var(--motion-rise-in);
 }
 
@@ -125,6 +129,18 @@
   flex-wrap: wrap;
   gap: var(--space-8);
   margin-block-start: var(--space-8);
+}
+
+@media (min-width: 64rem) {
+  .scene {
+    --scene-offset: var(--space-96);
+  }
+}
+
+@media (min-width: 90rem) {
+  .scene {
+    --scene-offset: var(--space-152);
+  }
 }
 
 @media (width < 48rem) {
