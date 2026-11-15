@@ -16,6 +16,8 @@ export interface WorkspaceProps {
   readonly aside?: (range: DistanceRange) => ReactNode
   readonly baselineDate?: string | undefined
   readonly onComparisonDate?: (date: string) => void
+  readonly hoverPosition?: number | null
+  readonly onHoverPosition?: (position: number | null) => void
   readonly highlights?: readonly number[]
   readonly scene: ReactNode
 }

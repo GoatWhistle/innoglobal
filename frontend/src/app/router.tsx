@@ -16,6 +16,10 @@ export const router = createBrowserRouter([
     hydrateFallbackElement: <RouteFallback />,
     children: [
       { index: true, lazy: workspace },
+      {
+        path: "dashboards",
+        lazy: lazyPage(() => import("@/pages/dashboards/dashboards-page"), "DashboardsPage"),
+      },
       { path: "design/variants/inspection", lazy: workspace },
       {
         path: "data",

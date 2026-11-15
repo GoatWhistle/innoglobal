@@ -189,10 +189,15 @@ User: «нет ты ебанулся, это полная хуйня что ты
 
 User: «нет ну блять братан у нас до этого такие ахуенные трубы были а щас дерьмо 2d шное».
 
+User: «/Users/kaifarikman/hackathons/rwb изучи короче в этой репе реализацию дашбордов, которые кастомные буквально и строятся за счет агента. вот ровно подобное мне и здесь надо. ознакомься, потом спроектируй и составь план под это».
+
+User: «мне нужна только фронтенд часть!!!».
+
 ## Current state
 
-Main repo /Users/kaifarikman/hackathons/innoglobal, feat/frontend,
-Frontend implementation commit 06dc95c; backend commit 3ef7f7c. Do not push into dev.
-
-React port implemented; home restored to compact material 3D pipe rows, map is optional. Unroll grid and docked assistant use real catalog data. Evidence: work/audits/react-port/. Separate Compose project duppel-live, frontend 18081/backend 18012. Frontend verify 382 tests, backend 131 tests and 4 chat browser tests passed. LLM free-form analysis is not connected. Continue only in the application frontend, not design-system showcases.
+Repo /Users/kaifarikman/hackathons/innoglobal, feat/frontend, base HEAD 82dbab3; dashboard implementation ready for commit.
+Frontend only. No changes to backend, ML or 3D engines. Do not push into dev.
+Custom dashboards implemented at /dashboards: seven real-profile blocks, shared context/cursor, editable 12-column canvas, library, multiple boards, localStorage definitions/layout, undo. Generator preview/refinement/cancellation tested with test-only transport; production explicitly unavailable until structured agent API exists. Docs: docs/dashboards.md; plan: work/plans/agent-dashboards-frontend.md.
+Compose duppel-live frontend 18081 rebuilt; backend 18012 unchanged. npm run verify: 394 tests, types, rules, lint and build pass. Four dashboard browser scenarios cover 375/1440, both themes, axe, persistence, editing and cancellation. Evidence: work/audits/dashboards/. Earlier 131 backend tests not rerun for frontend-only changes.
+Initial lint/type/a11y failures fixed; warning details in audit. Next: real generator adapter after API contract. Unrelated untracked: .codex/, work/design/pipe-workspace/map-data.json.
 SESSION target exceeded to preserve protected user instructions verbatim.

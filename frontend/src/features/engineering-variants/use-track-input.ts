@@ -2,6 +2,8 @@ import { type KeyboardEvent, type PointerEvent, useRef, useState } from "react"
 import { type DistanceRange, indexAt, type SegmentRow } from "@/entities/pipe"
 
 interface InputProps {
+  readonly hoverPosition?: number | null
+  readonly onHoverPosition?: (position: number | null) => void
   readonly rows: readonly SegmentRow[]
   readonly selected: number
   readonly range: DistanceRange
@@ -44,7 +46,7 @@ export function useTrackInput(props: InputProps) {
     if (row) props.onSelect(row.segment_id)
   }
   return {
-    hover,
+    hover: props.hoverPosition === undefined ? hover : props.hoverPosition,
     drag,
     keyboard,
     handlers: {
@@ -58,6 +60,7 @@ export function useTrackInput(props: InputProps) {
       onPointerMove: (event: PointerEvent<SVGSVGElement>) => {
         const x = point(event)
         setHover(x)
+        props.onHoverPosition?.(x)
         if (origin.current !== null && scanning.current) pick(x)
         else if (origin.current !== null) setDrag([origin.current, x])
       },
@@ -79,7 +82,10 @@ export function useTrackInput(props: InputProps) {
         setDrag(null)
       },
       onPointerLeave: () => {
-        if (origin.current === null) setHover(null)
+        if (origin.current === null) {
+          setHover(null)
+          props.onHoverPosition?.(null)
+        }
       },
     },
   }
