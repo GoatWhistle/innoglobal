@@ -3,7 +3,7 @@
 Берёт artifacts/val_predictions.csv (посегментные честные валидационные прогнозы train.run),
 validation_report.csv, uncertainty.csv, важности, prev_min прошлого ВТД 22871 и вписывает
 const DATA = {...} в report.html (остальная страница не трогается).
-Кейс 1 на графике — блок case1_measured (сдвиг прошлого пропуска измерен по самой паре, как у
+Кейс 1 на графике — блок case1_measured, в ветке dev — case1 (оракул по умолчанию) (сдвиг прошлого пропуска измерен по самой паре, как у
 22871, где он измерен на обоих концах трубы), предиктор dens_quant_cal; кейс 2 — ens_prior_cal.
 Запуск: python experiments/lab69_report_data.py
 """
@@ -42,7 +42,10 @@ def main():
             g = pr[pr["id"] == pid].set_index("segment_id")["prev_min"]
             d["vtd_prev"] = g.reindex(u["segment_id"]).round(3).tolist()
         data[key] = d
-    for case, col, key in (("case1_measured", PRED1, "val_case1"), ("case2", PRED2, "val_case2")):
+    # dev: валидация кейса 1 по умолчанию в режиме оракула — блок case1 и есть «сдвиг измерен»;
+    # case1_measured появляется только при PIPETWIN_ALIGN_ORACLE=0
+    c1 = "case1_measured" if (vp["case"] == "case1_measured").any() else "case1"
+    for case, col, key in ((c1, PRED1, "val_case1"), ("case2", PRED2, "val_case2")):
         v = vp[vp["case"] == case]
         series = [dict(pipe=str(pid), km=km(g["segment_id"]), vtd=g["y"].round(3).tolist(),
                        pred=g[col].round(3).tolist())
