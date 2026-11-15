@@ -1,6 +1,6 @@
 import { type MessageKey, useFormatters, useTranslation } from "@/shared/i18n"
-import { DataTable, NoValue, StatusBadge, type StatusTone } from "@/shared/ui"
-import type { Quality, QualityCheck } from "../reference.types"
+import { DataTable, NoValue, StatusBadge } from "@/shared/ui"
+import type { Quality } from "../reference.types"
 
 const EXCLUSION: Readonly<Record<string, MessageKey>> = {
   "run predates commissioning: replaced pipe": "quality:runs.replaced",
@@ -11,13 +11,6 @@ const QUARANTINE: Readonly<Record<string, MessageKey>> = {
   duplicate: "quality:quarantine.duplicate",
   duplicate_day_superseded: "quality:quarantine.duplicate_day_superseded",
   duplicate_distance: "quality:quarantine.duplicate_distance",
-}
-
-function checkTone(check: QualityCheck): { tone: StatusTone; key: MessageKey } {
-  if (check.failed === 0) return { tone: "normal", key: "quality:checks.passed" }
-  if (check.severity === "error") return { tone: "danger", key: "quality:checks.failed" }
-  if (check.severity === "warn") return { tone: "warning", key: "quality:checks.found" }
-  return { tone: "muted", key: "quality:checks.info" }
 }
 
 export function RunsTable({ runs }: { readonly runs: Quality["runs"] }) {
@@ -63,47 +56,6 @@ export function RunsTable({ runs }: { readonly runs: Quality["runs"] }) {
                   }
                 />
               )}
-            </td>
-          </tr>
-        )
-      })}
-    </DataTable>
-  )
-}
-
-export function ChecksTable({ checks }: { readonly checks: Quality["checks"] }) {
-  const { t } = useTranslation()
-  const format = useFormatters()
-  return (
-    <DataTable
-      label={t("quality:checks.title")}
-      head={
-        <tr>
-          <th scope="col">{t("quality:checks.name")}</th>
-          <th scope="col">{t("quality:checks.meaning")}</th>
-          <th scope="col" data-numeric="">
-            {t("quality:checks.rows")}
-          </th>
-          <th scope="col">{t("quality:checks.result")}</th>
-        </tr>
-      }
-    >
-      {checks.map((check) => {
-        const status = checkTone(check)
-        return (
-          <tr key={check.name}>
-            <th scope="row">
-              <code>{check.name}</code>
-            </th>
-            <td lang="ru">{check.description ?? <NoValue />}</td>
-            <td data-numeric="">
-              {t("quality:checks.ratio", {
-                failed: format.integer(check.failed),
-                total: format.integer(check.total),
-              })}
-            </td>
-            <td>
-              <StatusBadge tone={status.tone} size="compact" label={t(status.key)} />
             </td>
           </tr>
         )
