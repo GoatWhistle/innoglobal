@@ -141,7 +141,8 @@ const odoPig = (el) => {
   meter.classList.remove("is-on")
   el.classList.remove("is-running")
   if (deckKit.reduced) {
-    place(1, 1)
+    place(0.62, 1)
+    line.style.strokeDashoffset = "0"
     meter.classList.add("is-on")
     el.classList.add("is-running")
     return

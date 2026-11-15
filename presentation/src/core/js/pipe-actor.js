@@ -214,6 +214,7 @@
     a.pose = parse(el.dataset.pipe)
     a.t = 1
     apply(a, a.pose, 1)
+    if (a.pose.oilAlpha !== 1) oilAlpha(a, a.pose.oilAlpha)
     state.locals.set(el, a)
     if (a.pose.inspect >= 0) {
       a.inspecting = true

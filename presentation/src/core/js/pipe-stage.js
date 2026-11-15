@@ -121,7 +121,7 @@
     try {
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true })
       renderer.setClearColor(0, 0)
-      renderer.setPixelRatio(Math.min(devicePixelRatio, 1.25))
+      renderer.setPixelRatio(Math.min(devicePixelRatio * 1.5, 2))
       renderer.setSize(host.clientWidth, host.clientHeight, false)
       renderer.domElement.setAttribute("aria-hidden", "true")
       host.append(renderer.domElement)

@@ -80,7 +80,8 @@ deckScene("architecture", {
     const s = deckPipes.studio(host, { fov: 4, distance: D })
     if (!s) return
     const { THREE, scene, camera, steel, edge } = s
-    camera.far = D * 2
+    camera.near = D - 1500
+    camera.far = D + 1500
     camera.position.set(960, -540, D)
     camera.lookAt(960, -540, 0)
     camera.updateProjectionMatrix()
