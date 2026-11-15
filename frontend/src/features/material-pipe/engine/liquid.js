@@ -34,7 +34,7 @@ export function createLiquid({ host, group, camera, oilMat, state, reduced }) {
       let volume = 0
       for (let i = 0; i < 32; i++)
         volume += area((mid - liquidUp.x * ((i + 0.5) / 32 - 0.5) * 11.09) / radial)
-      if (volume / 32 < area(0.22)) lo = mid
+      if (volume / 32 < area(state.level ?? 0.22)) lo = mid
       else hi = mid
     }
     oilMat.uniforms.liquidUp.value.copy(liquidUp)

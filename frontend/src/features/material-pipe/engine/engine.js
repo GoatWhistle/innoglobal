@@ -42,7 +42,8 @@ export function createPipe(host, name, onPhase = () => {}, options = {}) {
     active = entries[0].isIntersecting
   })
   visibility.observe(host)
-  const state = { manualView: false, inspection: null }
+  const seed = flowSeed(name)
+  const state = { manualView: false, inspection: null, level: 0.16 + seed * 0.12 }
   const { updateLiquid, impulse, advance } = createLiquid({
     host,
     group,
@@ -71,15 +72,16 @@ export function createPipe(host, name, onPhase = () => {}, options = {}) {
     state,
   })
 
-  let clock = 2,
+  const pace = 0.7 + seed * 0.6
+  let clock = 2 + seed * 37,
     lastTime = 0
   function frame(ms) {
     frameId = requestAnimationFrame(frame)
     const delta = Math.min((ms - lastTime) / 1000, 0.05)
     lastTime = ms
     if (!active || document.hidden) return
-    if (!reduced.matches) clock += delta
-    advance(delta)
+    if (!reduced.matches) clock += delta * pace
+    advance(delta * pace)
     tickIntro(delta)
     oilMat.uniforms.time.value = clock
     wallMat.uniforms.time.value = clock
@@ -134,4 +136,10 @@ export function createPipe(host, name, onPhase = () => {}, options = {}) {
     scene,
     camera,
   }
+}
+
+function flowSeed(name) {
+  let hash = 2166136261
+  for (const char of name) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619)
+  return (hash >>> 0) / 4294967295
 }
