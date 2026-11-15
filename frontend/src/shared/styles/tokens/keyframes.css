@@ -148,3 +148,22 @@
     );
   }
 }
+
+@keyframes kf-drip {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.3);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(150%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(190%) scale(1);
+  }
+}

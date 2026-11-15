@@ -1,0 +1,139 @@
+.scene {
+  display: grid;
+  align-content: center;
+  gap: var(--space-40);
+  min-block-size: calc(100svh - var(--header-height));
+  padding-block: var(--space-48) var(--space-64);
+  overflow: hidden;
+}
+
+.figure {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-monument);
+  font-weight: var(--weight-light);
+  line-height: var(--line-height-display);
+  letter-spacing: var(--tracking-display);
+  font-variant-numeric: var(--font-numeric);
+  animation: var(--motion-rise-in);
+}
+
+.axis {
+  position: absolute;
+  inset-inline: calc(var(--space-page-wide) * -1);
+  inset-block-start: 50%;
+  block-size: 0;
+  border-block-start: var(--hairline) dashed var(--border-strong);
+}
+
+.digit {
+  position: relative;
+}
+
+.zero {
+  position: relative;
+  display: inline-grid;
+}
+
+.flange {
+  inline-size: 0.74em;
+  block-size: 0.74em;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+}
+
+.ring {
+  stroke-width: 9;
+}
+
+.fine {
+  stroke-width: 1;
+}
+
+.axisFine {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 9 2 1.5 2;
+}
+
+.hole {
+  stroke-width: 1.5;
+  fill: var(--surface-base);
+}
+
+.leader {
+  stroke: var(--text-muted);
+  stroke-width: 0.75;
+}
+
+.leak {
+  stroke: none;
+  fill: var(--scene-leak);
+}
+
+.drop {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: var(--motion-drip);
+}
+
+.callout {
+  composes: captionText from "../../../styles/compose.module.css";
+  position: absolute;
+  inset-inline-start: 114%;
+  inset-block-start: -14%;
+  translate: 0 -50%;
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-normal);
+  white-space: nowrap;
+}
+
+.figure[data-leaking] .callout {
+  inset-block-start: 114%;
+}
+
+.copy {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-16);
+  max-inline-size: var(--prose-measure);
+  animation: var(--motion-rise-in);
+}
+
+.eyebrow {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.title {
+  composes: title from "../../layout/page-header/page-header.module.css";
+}
+
+.text {
+  display: grid;
+  gap: var(--space-8);
+  color: var(--text-secondary);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-block-start: var(--space-8);
+}
+
+@media (width < 48rem) {
+  .axis {
+    inset-inline: calc(var(--space-page) * -1);
+  }
+  .figure[data-code] .callout {
+    inset-inline-start: 50%;
+    inset-block-start: 112%;
+    translate: -50% 0;
+  }
+}

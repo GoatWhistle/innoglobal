@@ -11,7 +11,6 @@
   },
   "action": {
     "retry": "Try again",
-    "home": "Go to the start page",
     "close": "Close"
   },
   "state": {
@@ -29,7 +28,11 @@
   },
   "notFound": {
     "title": "Page not found",
-    "description": "The address may contain a typo, or the page has moved."
+    "eyebrow": "Error 404",
+    "heading": "The pipe ends here",
+    "callout": "Blind flange, DN 404",
+    "description": "There is no {{path}} in the scheme. The link may be outdated, or the segment was removed from the model.",
+    "home": "To pipelines"
   },
   "field": {
     "optional": "optional",

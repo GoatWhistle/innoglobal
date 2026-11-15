@@ -73,6 +73,7 @@
   --motion-spin: kf-spin var(--dur-spin) var(--ease-linear) infinite;
   --motion-shimmer: kf-shimmer var(--dur-breathe) var(--ease-in-out) infinite;
   --motion-alarm: none;
+  --motion-drip: kf-drip var(--dur-breathe) var(--ease-in-out) infinite;
   --motion-reveal: kf-reveal var(--dur-scene) var(--ease-viscous) both;
   --motion-toast-in: kf-toast-in var(--dur-slow) var(--ease-out) both;
   --motion-toast-out: kf-toast-out var(--dur-exit) var(--ease-out) both;
@@ -115,6 +116,7 @@
     --motion-spin: none;
     --motion-shimmer: none;
     --motion-alarm: none;
+    --motion-drip: none;
     --motion-indeterminate: none;
     --motion-brand-busy: none;
   }

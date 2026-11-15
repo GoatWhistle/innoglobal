@@ -14,7 +14,13 @@
     "network_unavailable": "No connection to the server. Check the network and try again."
   },
   "boundary": {
-    "title": "The page failed to open",
-    "description": "Reload the page. If the error repeats, the details are in the browser console."
+    "eyebrow": "Interface failure",
+    "title": "The interface sprang a leak",
+    "callout": "Flange leak",
+    "description": "The page crashed because of a code error. Pipeline data is unaffected.",
+    "hint": "Reload the page. If the error returns, send the details to the team.",
+    "reload": "Reload page",
+    "home": "To pipelines",
+    "details": "Details for developers"
   }
 }
