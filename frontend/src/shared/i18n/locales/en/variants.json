@@ -134,13 +134,15 @@
     "mapPipes": "Pipelines with a forecast",
     "mapLegendProduct": "Pipelines with a wall forecast",
     "mapLegendNetwork": "Rest of the field network",
-    "mapLon": "{{value}}° E",
-    "mapLat": "{{value}}° N",
     "mapKm": "{{value}} km",
     "mapMeters": "{{value}} m",
     "mapFit": "Show the whole field",
     "mapLocator": "Show all of Russia",
-    "mapNoForecast": "No forecast"
+    "mapNoForecast": "No forecast",
+    "mapField": "Field",
+    "mapSelected": "Selected pipeline",
+    "mapCredit": "Map data: © OpenStreetMap contributors, ODbL; Natural Earth",
+    "nominal": "Nominal wall"
   },
   "dash": {
     "title": "Dashboards",

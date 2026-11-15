@@ -11,10 +11,6 @@ export function useMapLabels(): MapLabels {
   const format = useFormatters()
   return useMemo(
     () => ({
-      lon: (value) =>
-        t("variants:workspace.mapLon", { value: format.number(value, places(value)) }),
-      lat: (value) =>
-        t("variants:workspace.mapLat", { value: format.number(value, places(value)) }),
       distance: (km) =>
         km < 1
           ? t("variants:workspace.mapMeters", { value: format.number(km * 1000, 0) })

@@ -136,13 +136,15 @@
     "mapPipes": "Трубы с прогнозом",
     "mapLegendProduct": "Трубы с прогнозом толщины",
     "mapLegendNetwork": "Остальная сеть месторождения",
-    "mapLon": "{{value}}° в. д.",
-    "mapLat": "{{value}}° с. ш.",
     "mapKm": "{{value}} км",
     "mapMeters": "{{value}} м",
     "mapFit": "Показать всё месторождение",
     "mapLocator": "Показать всю Россию",
-    "mapNoForecast": "Без прогноза"
+    "mapNoForecast": "Без прогноза",
+    "mapField": "Месторождение",
+    "mapSelected": "Выбранная труба",
+    "mapCredit": "Данные карты: © участники OpenStreetMap, ODbL; Natural Earth",
+    "nominal": "По паспорту"
   },
   "dash": {
     "title": "Дашборды",

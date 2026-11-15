@@ -1,24 +1,14 @@
+.sidebar {
+  display: grid;
+  align-content: start;
+  gap: var(--space-32);
+}
+
 .layout {
   display: grid;
   grid-template-columns: 20rem minmax(0, 1fr);
   align-items: start;
   gap: var(--space-32);
-}
-
-.sidebar {
-  display: grid;
-  align-content: start;
-  gap: var(--space-24);
-}
-
-.sidebar > * + * {
-  padding-block-start: var(--space-24);
-  border-block-start: var(--hairline) solid var(--border-subtle);
-}
-
-.context {
-  display: grid;
-  gap: var(--space-16);
 }
 
 .stage {
@@ -66,100 +56,6 @@
   font-weight: var(--weight-medium);
 }
 
-.pipes {
-  display: grid;
-  gap: var(--space-12);
-}
-
-.caption {
-  composes: captionText from "../../shared/styles/compose.module.css";
-}
-
-.options {
-  composes: plainList from "../../shared/styles/compose.module.css";
-  display: grid;
-  gap: var(--space-4);
-}
-
-.option {
-  inline-size: 100%;
-  min-block-size: var(--target-min);
-  justify-content: flex-start;
-  padding-block: var(--space-8);
-  text-align: start;
-}
-
-.optionText {
-  display: grid;
-  gap: var(--space-2);
-}
-
-.optionName {
-  font-weight: var(--weight-medium);
-}
-
-.optionMeta {
-  composes: captionText from "../../shared/styles/compose.module.css";
-  font-weight: var(--weight-regular);
-}
-
-.option[aria-pressed="true"] .optionMeta {
-  color: inherit;
-}
-
-.legend {
-  composes: plainList from "../../shared/styles/compose.module.css";
-  display: grid;
-  gap: var(--space-8);
-  color: var(--text-muted);
-  font-size: var(--font-size-caption);
-}
-
-.legend li {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-}
-
-.swatch {
-  inline-size: var(--space-20);
-  block-size: var(--track-size);
-  border-radius: var(--radius-pill);
-  background-color: var(--text-secondary);
-}
-
-.swatch[data-kind="network"] {
-  block-size: var(--hairline);
-  background-color: var(--border-strong);
-}
-
-.locator {
-  composes: frame from "../../shared/ui/primitives/surface/surface.module.css";
-  inline-size: 100%;
-  min-block-size: var(--target-min);
-  padding: var(--space-12);
-}
-
-.locator svg {
-  inline-size: 100%;
-}
-
-.locatorLand {
-  fill: var(--surface-sunken);
-  stroke: var(--border-strong);
-  stroke-width: 0.25;
-}
-
-.locatorHalo {
-  fill: none;
-  stroke: var(--text-primary);
-  stroke-width: 0.4;
-}
-
-.locatorDot {
-  fill: var(--text-primary);
-}
-
 .controls {
   composes: float from "../../shared/ui/primitives/surface/surface.module.css";
   position: absolute;
@@ -178,8 +74,5 @@
     order: -1;
     block-size: 30rem;
     min-block-size: 0;
-  }
-  .locator {
-    display: none;
   }
 }

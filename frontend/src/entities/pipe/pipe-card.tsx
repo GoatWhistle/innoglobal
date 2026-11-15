@@ -7,10 +7,11 @@ import styles from "./pipe-card.module.css"
 export interface PipeCardProps {
   readonly pipe: PipeSummary
   readonly appearance?: "plain" | "panel"
+  readonly heading?: string | undefined
   readonly className?: string | undefined
 }
 
-export function PipeCard({ pipe, appearance = "plain", className }: PipeCardProps) {
+export function PipeCard({ pipe, appearance = "plain", heading, className }: PipeCardProps) {
   const { t } = useTranslation()
   const format = useFormatters()
   return (
@@ -18,11 +19,15 @@ export function PipeCard({ pipe, appearance = "plain", className }: PipeCardProp
       as="aside"
       appearance={appearance}
       className={clsx(styles.card, className)}
-      title={pipe.passport.direction}
-      description={t("variants:workspace.pipeLine", {
-        id: pipe.pipe_id,
-        length: format.number(pipe.passport.length_m / 1000, 1),
-      })}
+      title={heading ?? pipe.passport.direction}
+      description={
+        heading === undefined
+          ? t("variants:workspace.pipeLine", {
+              id: pipe.pipe_id,
+              length: format.number(pipe.passport.length_m / 1000, 1),
+            })
+          : undefined
+      }
     >
       <div className={styles.lead}>
         <p>{t("variants:workspace.minimumBy", { date: format.date(pipe.target_date) })}</p>

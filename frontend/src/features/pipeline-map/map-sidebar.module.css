@@ -1,0 +1,200 @@
+.block {
+  display: grid;
+  gap: var(--space-12);
+}
+
+.caption {
+  composes: captionText from "../../shared/styles/compose.module.css";
+}
+
+.options {
+  composes: plainList from "../../shared/styles/compose.module.css";
+  display: grid;
+  gap: var(--space-8);
+}
+
+.option {
+  composes: frame from "../../shared/ui/primitives/surface/surface.module.css";
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  justify-content: flex-start;
+  padding: var(--space-12);
+  text-align: start;
+}
+
+.option > span {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.optionBody {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.optionRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.optionName {
+  font-weight: var(--weight-medium);
+}
+
+.optionValue {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  font-size: var(--font-size-lead);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.optionValue small {
+  font-size: var(--font-size-caption);
+  font-weight: var(--weight-regular);
+}
+
+.gauge {
+  display: block;
+  inline-size: 100%;
+  block-size: var(--track-size);
+}
+
+.gaugeTrack {
+  fill: var(--border-subtle);
+}
+
+.gaugeFill {
+  fill: currentColor;
+}
+
+.optionMeta {
+  composes: captionText from "../../shared/styles/compose.module.css";
+  font-weight: var(--weight-regular);
+}
+
+.option[aria-pressed="true"] .optionMeta {
+  color: inherit;
+}
+
+.option[aria-pressed="true"] .gaugeTrack {
+  fill: var(--border-control);
+}
+
+.facts {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.facts div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-16);
+  font-size: var(--font-size-label);
+}
+
+.facts dt {
+  color: var(--text-secondary);
+}
+
+.facts dd {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.open {
+  margin-block-start: var(--space-8);
+  justify-content: space-between;
+  flex-direction: row-reverse;
+}
+
+.legend {
+  composes: plainList from "../../shared/styles/compose.module.css";
+  display: grid;
+  gap: var(--space-8);
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.credit {
+  composes: captionText from "../../shared/styles/compose.module.css";
+}
+
+.swatch {
+  inline-size: var(--space-20);
+  block-size: var(--track-size);
+  border-radius: var(--radius-pill);
+  background-color: var(--text-secondary);
+}
+
+.swatch[data-kind="network"] {
+  block-size: var(--hairline);
+  background-color: var(--border-strong);
+}
+
+.locator {
+  composes: option;
+}
+
+.locator > span {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.locatorBody {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.locatorBody svg {
+  inline-size: 100%;
+}
+
+.locatorText {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  white-space: normal;
+  text-align: start;
+}
+
+.locatorText strong {
+  color: var(--text-primary);
+  font-size: var(--font-size-label);
+  font-weight: var(--weight-medium);
+}
+
+.locatorLand {
+  fill: var(--surface-sunken);
+  stroke: var(--border-strong);
+  stroke-width: 0.25;
+}
+
+.locatorHalo {
+  fill: none;
+  stroke: var(--text-primary);
+  stroke-width: 0.4;
+}
+
+.locatorDot {
+  fill: var(--text-primary);
+}
+
+@media (width < 64rem) {
+  .locator {
+    display: none;
+  }
+}

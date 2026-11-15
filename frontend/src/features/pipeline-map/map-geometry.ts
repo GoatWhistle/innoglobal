@@ -1,5 +1,3 @@
-import country from "./russia.json"
-
 export type Point = readonly [number, number]
 export interface View {
   readonly x: number
@@ -14,19 +12,19 @@ export interface Box {
   readonly height: number
 }
 
-export const LON_SCALE = 0.55
-const KM_PER_DEGREE = 111.32
-const MIN_SPAN = 0.002
-const MAX_SPAN = 140
+const EARTH_KM = 40075.017
+const MIN_SPAN = 0.00001
+const MAX_SPAN = 1.5
 
-export const project = (lon: number, lat: number): Point => [
-  (lon < 0 ? lon + 360 : lon) * LON_SCALE,
-  -lat,
-]
-export const outlines = country.map((polygon) =>
-  polygon.map((ring) => ring.map((p) => project(p[0] ?? 0, p[1] ?? 0))),
-)
-export const countryView: View = { x: 9, y: -84, width: 100, height: 50 }
+export const wrapLon = (lon: number) => (lon < 0 ? lon + 360 : lon)
+
+export const project = (lon: number, lat: number): Point => {
+  const phi = (Math.max(-85, Math.min(85, lat)) * Math.PI) / 180
+  return [(wrapLon(lon) + 180) / 360, (1 - Math.log(Math.tan(Math.PI / 4 + phi / 2)) / Math.PI) / 2]
+}
+
+export const latitudeAt = (y: number) =>
+  (Math.atan(Math.sinh(Math.PI * (1 - 2 * y))) * 180) / Math.PI
 
 export function fitBounds(points: readonly Point[], padding = 1.25): View {
   if (!points.length) return countryView
@@ -41,6 +39,8 @@ export function fitBounds(points: readonly Point[], padding = 1.25): View {
     height,
   }
 }
+
+export const countryView: View = fitBounds([project(19, 41), project(191, 82)], 1.04)
 
 export function scaleOf(view: View, box: Box): number {
   return Math.min(box.width / view.width, box.height / view.height)
@@ -79,8 +79,8 @@ export function mixView(from: View, to: View, t: number): View {
 }
 
 export function kmPerUnit(view: View): number {
-  const lat = -centerOf(view)[1]
-  return (KM_PER_DEGREE * Math.cos((lat * Math.PI) / 180)) / LON_SCALE
+  const lat = latitudeAt(centerOf(view)[1])
+  return EARTH_KM * Math.cos((lat * Math.PI) / 180)
 }
 
 export function niceStep(raw: number): number {

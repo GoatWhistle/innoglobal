@@ -1,21 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import { PipeCard, type PipeList } from "@/entities/pipe"
+import type { PipeList } from "@/entities/pipe"
 import { type Network, useNetwork } from "@/entities/reference"
 import { useTranslation } from "@/shared/i18n"
 import { useTheme } from "@/shared/theme"
 import { IconButton, QueryView, Skeleton } from "@/shared/ui"
 import { drawMap, type MapLine, nearestLine } from "./map-drawing"
-import {
-  centerOf,
-  countryView,
-  fitBounds,
-  project,
-  scaleOf,
-  toWorld,
-  type View,
-} from "./map-geometry"
-import { MapLocator } from "./map-locator"
-import { MapLegend, MapPipes } from "./map-pipes"
+import { MapField } from "./map-field"
+import { countryView, fitBounds, project, scaleOf, toWorld, type View } from "./map-geometry"
+import { MapPipes, MapSelection } from "./map-pipes"
 import styles from "./pipeline-map.module.css"
 import { useMapLabels } from "./use-map-labels"
 import { useMapView } from "./use-map-view"
@@ -102,15 +94,12 @@ function MapStage({ pipes, network }: { readonly pipes: PipeList; readonly netwo
     <div className={styles.layout}>
       <aside className={styles.sidebar}>
         <MapPipes pipes={pipes} selected={selected} onSelect={select} />
-        {pipe ? <PipeCard pipe={pipe} /> : null}
-        <div className={styles.context}>
-          <MapLegend />
-          <MapLocator
-            focus={centerOf(field)}
-            label={t("variants:workspace.mapLocator")}
-            onClick={() => map.animateTo(countryView)}
-          />
-        </div>
+        {pipe ? <MapSelection pipe={pipe} /> : null}
+        <MapField
+          lon={network.lines[0]?.points[0]?.[1] ?? 0}
+          lat={network.lines[0]?.points[0]?.[2] ?? 0}
+          onCountry={() => map.animateTo(countryView)}
+        />
       </aside>
       <div className={styles.stage}>
         <canvas
