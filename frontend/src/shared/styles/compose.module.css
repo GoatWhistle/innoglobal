@@ -49,13 +49,6 @@
   list-style: none;
 }
 
-.chartCanvas {
-  display: block;
-  inline-size: 100%;
-  font-family: var(--font-sans);
-  user-select: none;
-}
-
 .secondaryNumber {
   color: var(--text-secondary);
   font-size: var(--font-size-body-sm);
@@ -68,20 +61,8 @@
   stroke-width: var(--hairline);
 }
 
-.reliefLine {
-  fill: none;
-  stroke: var(--drawing-line);
-  stroke-width: var(--hairline);
-}
-
 .captionText {
   color: var(--text-muted);
-  font-size: var(--font-size-caption);
-  line-height: var(--line-height-caption);
-}
-
-.secondaryCaption {
-  color: var(--text-secondary);
   font-size: var(--font-size-caption);
   line-height: var(--line-height-caption);
 }
@@ -104,4 +85,51 @@
   padding-inline: var(--space-12);
   border-radius: var(--radius-control);
   transition: var(--transition-control);
+}
+
+.readoutNumber {
+  font-size: var(--font-size-readout);
+  font-weight: var(--weight-light);
+  line-height: var(--line-height-readout);
+}
+
+.instrumentDot {
+  inline-size: var(--space-8);
+  block-size: var(--space-8);
+  border-radius: var(--radius-round);
+}
+
+.instrumentSurface {
+  display: block;
+  inline-size: 100%;
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+.instrumentLine {
+  composes: contourLine;
+  vector-effect: non-scaling-stroke;
+}
+.instrumentCursor {
+  composes: instrumentLine;
+  stroke: var(--text-primary);
+  stroke-width: var(--focus-ring-width);
+}
+.instrumentHover {
+  composes: instrumentLine;
+  stroke: var(--text-muted);
+  stroke-dasharray: 4 4;
+}
+
+.instrumentBound {
+  fill: none;
+  stroke: var(--wall-amber);
+  stroke-width: var(--chart-stroke);
+}
+.instrumentLegend {
+  composes: plainList;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8) var(--space-16);
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
 }

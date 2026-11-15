@@ -23,7 +23,7 @@ export function Stat({ label, value, unit, hint, size = "regular", className }: 
     <div className={clsx(styles.stat, SIZE_CLASS[size], className)}>
       <dt className={styles.label}>{label}</dt>
       <dd className={styles.body}>
-        <span className={styles.value}>{value}</span>
+        <span className={clsx(styles.value, size === "large" && styles.largeNumber)}>{value}</span>
         {unit === undefined ? null : <span className={styles.unit}>{unit}</span>}
       </dd>
       {hint === undefined ? null : <dd className={styles.hint}>{hint}</dd>}

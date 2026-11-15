@@ -1,0 +1,54 @@
+
+> app-frontend@0.1.0 e2e
+> playwright test --workers=2
+
+
+Running 13 tests using 2 workers
+
+(node:36530) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36531) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › e2e/axe.spec.ts:33:5 › axe dark ru (3.6s)
+  ✓   2 [chromium] › e2e/axe.spec.ts:33:5 › axe light ru (3.6s)
+  ✓   3 [chromium] › e2e/product.spec.ts:36:5 › product 375 light (18.6s)
+  ✓   4 [chromium] › e2e/product.spec.ts:36:5 › product 375 dark (20.5s)
+  ✓   5 [chromium] › e2e/product.spec.ts:36:5 › product 1440 light (20.1s)
+  ✓   7 [chromium] › e2e/product.spec.ts:128:1 › API outage is retryable (4.4s)
+  ✓   8 [chromium] › e2e/product.spec.ts:139:1 › reduced motion and unavailable WebGL keep selection usable (278ms)
+  ✓   9 [chromium] › e2e/product.spec.ts:160:1 › navigation remembers the selected pipe (1.8s)
+  ✓   6 [chromium] › e2e/product.spec.ts:36:5 › product 1440 dark (24.9s)
+(node:38345) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:38371) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  11 [chromium] › e2e/restoration.spec.ts:8:5 › restored physical views 375 dark (19.8s)
+  ✘  10 [chromium] › e2e/restoration.spec.ts:8:5 › restored physical views 375 light (20.0s)
+(node:39006) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:39007) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  13 [chromium] › e2e/restoration.spec.ts:8:5 › restored physical views 1440 dark (22.3s)
+  ✓  12 [chromium] › e2e/restoration.spec.ts:8:5 › restored physical views 1440 light (22.5s)
+
+
+  1) [chromium] › e2e/restoration.spec.ts:8:5 › restored physical views 375 light ──────────────────
+
+    Error: browserContext.close: ENOENT: no such file or directory, open '/Users/kaifarikman/hackathons/innoglobal/frontend/test-results/.playwright-artifacts-2/traces/0c4c93afcab49e9058c3-553f0f82ea62527cf6c0.trace'
+
+    Error: ENOENT: no such file or directory, open '/Users/kaifarikman/hackathons/innoglobal/frontend/test-results/.playwright-artifacts-2/79ca0bd4356428a378fbd83a4e77b5bf.zip'
+
+    Error Context: test-results/restoration-restored-physical-views-375-light-chromium/error-context.md
+
+  2) [chromium] › e2e/restoration.spec.ts:8:5 › restored physical views 375 dark ───────────────────
+
+    Error: browserContext.close: ENOENT: no such file or directory, open '/Users/kaifarikman/hackathons/innoglobal/frontend/test-results/.playwright-artifacts-3/traces/0c4c93afcab49e9058c3-4b2549ae3a664d4dd8a0.trace'
+
+    Error: ENOENT: no such file or directory, open '/Users/kaifarikman/hackathons/innoglobal/frontend/test-results/.playwright-artifacts-3/739163d3eb2b61ec37fd47f72b9a85f5.zip'
+
+    Error Context: test-results/restoration-restored-physical-views-375-dark-chromium/error-context.md
+
+  2 failed
+    [chromium] › e2e/restoration.spec.ts:8:5 › restored physical views 375 light ───────────────────
+    [chromium] › e2e/restoration.spec.ts:8:5 › restored physical views 375 dark ────────────────────
+  11 passed (1.5m)

@@ -35,6 +35,7 @@ export function CaseValidation({ model, caseId, motionIndex }: CaseValidationPro
   if (target === undefined) return null
   return (
     <Card
+      appearance="sheet"
       motionIndex={motionIndex}
       eyebrow={t("model:case.pipe", {
         pipe: target.pipe_id,

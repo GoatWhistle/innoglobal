@@ -25,8 +25,6 @@
 }
 
 .large .value {
-  font-size: var(--font-size-readout);
-  line-height: var(--line-height-readout);
   letter-spacing: var(--tracking-readout);
 }
 
@@ -37,4 +35,8 @@
 
 .hint {
   composes: captionText from "../../../styles/compose.module.css";
+}
+
+.largeNumber {
+  composes: readoutNumber from "../../../styles/compose.module.css";
 }

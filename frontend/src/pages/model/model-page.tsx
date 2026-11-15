@@ -24,12 +24,20 @@ export function ModelPage() {
                 motionIndex={index}
               />
             ))}
-            <Card title={t("model:uncertainty.title")} motionIndex={data.cases.length}>
+            <Card
+              appearance="sheet"
+              title={t("model:uncertainty.title")}
+              motionIndex={data.cases.length}
+            >
               <p className={styles.note}>
                 {t("model:uncertainty.body", { quantiles: data.quantiles.join(", ") })}
               </p>
             </Card>
-            <Card title={t("model:limits.title")} motionIndex={data.cases.length + 1}>
+            <Card
+              appearance="sheet"
+              title={t("model:limits.title")}
+              motionIndex={data.cases.length + 1}
+            >
               <ul className={styles.limits}>
                 {LIMITS.map((key) => (
                   <li key={key}>{t(`model:limits.${key}`)}</li>

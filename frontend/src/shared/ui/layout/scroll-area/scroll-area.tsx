@@ -1,8 +1,9 @@
 import { clsx } from "clsx"
-import type { HTMLAttributes } from "react"
+import type { HTMLAttributes, Ref } from "react"
 import styles from "./scroll-area.module.css"
 
 export interface ScrollAreaProps extends HTMLAttributes<HTMLDivElement> {
+  readonly ref?: Ref<HTMLDivElement>
   readonly axis?: "horizontal" | "vertical"
 }
 

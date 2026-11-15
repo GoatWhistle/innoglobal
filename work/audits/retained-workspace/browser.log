@@ -1,0 +1,20 @@
+
+> app-frontend@0.1.0 e2e
+> playwright test combined-inspection --workers=2 --output=../work/audits/retained-workspace/results
+
+
+Running 7 tests using 2 workers
+
+(node:8812) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8811) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › e2e/combined-inspection.spec.ts:4:1 › combined inspection updates baseline, signed difference and queue together (1.1s)
+  ✓  2 [chromium] › e2e/combined-inspection.spec.ts:32:1 › combined inspection range zoom affects pipe and comparison and survives reload (2.3s)
+  ✓  3 [chromium] › e2e/combined-inspection.spec.ts:59:1 › combined inspection uses nominal baseline without VTD and keeps keyboard selection (1.3s)
+  ✓  4 [chromium] › e2e/combined-inspection.spec.ts:80:5 › retained workspace light 375 (989ms)
+  ✓  5 [chromium] › e2e/combined-inspection.spec.ts:80:5 › retained workspace light 1440 (1.5s)
+  ✓  6 [chromium] › e2e/combined-inspection.spec.ts:80:5 › retained workspace dark 375 (870ms)
+  ✓  7 [chromium] › e2e/combined-inspection.spec.ts:80:5 › retained workspace dark 1440 (806ms)
+
+  7 passed (5.2s)

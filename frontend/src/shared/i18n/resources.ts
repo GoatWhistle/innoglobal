@@ -11,6 +11,7 @@ import enProfile from "./locales/en/profile.json"
 import enQuality from "./locales/en/quality.json"
 import enRoute from "./locales/en/route.json"
 import enSection from "./locales/en/section.json"
+import enVariants from "./locales/en/variants.json"
 import ruCommon from "./locales/ru/common.json"
 import ruErrors from "./locales/ru/errors.json"
 import ruHealth from "./locales/ru/health.json"
@@ -23,6 +24,7 @@ import ruProfile from "./locales/ru/profile.json"
 import ruQuality from "./locales/ru/quality.json"
 import ruRoute from "./locales/ru/route.json"
 import ruSection from "./locales/ru/section.json"
+import ruVariants from "./locales/ru/variants.json"
 
 export const NAMESPACES = [
   "common",
@@ -37,6 +39,7 @@ export const NAMESPACES = [
   "quality",
   "route",
   "section",
+  "variants",
 ] as const
 
 export type Namespace = (typeof NAMESPACES)[number]
@@ -56,6 +59,7 @@ const en = {
   quality: enQuality,
   route: enRoute,
   section: enSection,
+  variants: enVariants,
 }
 
 const ru = {
@@ -71,6 +75,7 @@ const ru = {
   quality: ruQuality,
   route: ruRoute,
   section: ruSection,
+  variants: ruVariants,
 }
 
 export type Dictionary = typeof en

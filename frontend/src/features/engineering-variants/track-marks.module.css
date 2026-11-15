@@ -1,0 +1,36 @@
+.band {
+  fill: var(--surface-range);
+}
+.forecast {
+  composes: instrumentCursor from "../../shared/styles/compose.module.css";
+}
+.observed {
+  composes: instrumentCursor from "../../shared/styles/compose.module.css";
+}
+.observed.observed {
+  stroke: var(--wall-rust);
+}
+.relief {
+  composes: instrumentLine from "../../shared/styles/compose.module.css";
+}
+.relief.relief {
+  stroke: var(--text-secondary);
+}
+.dot {
+  fill: var(--wall-rust);
+}
+.priority,
+.positive {
+  fill: var(--chart-warning);
+}
+.delta {
+  fill: var(--chart-model);
+}
+
+.nominal {
+  composes: observed;
+  stroke-dasharray: 6 4;
+}
+.nominal.nominal {
+  stroke: var(--wall-rust);
+}

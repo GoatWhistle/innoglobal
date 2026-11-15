@@ -66,6 +66,7 @@ export function DataQualityPage() {
                 ))}
               </StatGrid>
               <Card
+                appearance="sheet"
                 className={styles.wide}
                 title={t("quality:runs.title")}
                 description={t("quality:runs.description")}
@@ -73,6 +74,7 @@ export function DataQualityPage() {
                 <RunsTable runs={data.runs} />
               </Card>
               <Card
+                appearance="sheet"
                 className={styles.wide}
                 title={t("quality:checks.title")}
                 description={t("quality:checks.description")}
@@ -80,12 +82,17 @@ export function DataQualityPage() {
                 <ChecksTable checks={data.checks} />
               </Card>
               <Card
+                appearance="sheet"
                 title={t("quality:quarantine.title")}
                 description={t("quality:quarantine.description")}
               >
                 <QuarantineTable rows={data.quarantine} />
               </Card>
-              <Card title={t("quality:layers.title")} description={t("quality:layers.description")}>
+              <Card
+                appearance="sheet"
+                title={t("quality:layers.title")}
+                description={t("quality:layers.description")}
+              >
                 <LayersTable tables={data.tables} />
               </Card>
             </div>

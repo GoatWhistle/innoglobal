@@ -4,6 +4,7 @@ import { staggerStyle } from "../../../motion"
 import styles from "./card.module.css"
 
 export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
+  readonly appearance?: "panel" | "sheet" | "plain"
   readonly as?: "section" | "article" | "aside" | "div"
   readonly title?: ReactNode
   readonly eyebrow?: ReactNode
@@ -38,6 +39,7 @@ function CardHeader({ titleId, title, eyebrow, description, actions }: CardHeade
 
 export function Card({
   as: Tag = "section",
+  appearance = "panel",
   title,
   eyebrow,
   description,
@@ -55,7 +57,13 @@ export function Card({
     <Tag
       aria-labelledby={titled && rest["aria-label"] === undefined ? titleId : undefined}
       {...rest}
-      className={clsx(styles.card, entering && styles.entering, className)}
+      className={clsx(
+        styles.card,
+        appearance === "sheet" && styles.sheet,
+        appearance === "plain" && styles.plain,
+        entering && styles.entering,
+        className,
+      )}
       style={entering ? { ...style, ...staggerStyle(motionIndex) } : style}
       data-motion={entering ? "fade" : undefined}
     >

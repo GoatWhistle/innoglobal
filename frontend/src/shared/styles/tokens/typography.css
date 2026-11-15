@@ -45,3 +45,8 @@
   --tracking-normal: 0;
   --tracking-wide: 0.02em;
 }
+
+:root {
+  --font-size-scene: clamp(4rem, 2rem + 4vw, 6.5rem);
+  --tracking-stencil: 0.14em;
+}

@@ -64,3 +64,29 @@
   composes: choiceInput from "../choice/choice.module.css";
   appearance: none;
 }
+
+.camera {
+  gap: var(--space-4);
+  border-radius: var(--radius-none);
+  padding-block-end: var(--space-8);
+}
+.camera .option {
+  min-block-size: var(--target-min);
+  border: var(--hairline) solid var(--border-subtle);
+  box-shadow: var(--shadow-camera);
+  background: var(--surface-raised);
+}
+.camera .option[data-checked="true"] {
+  background: var(--action-primary);
+  box-shadow: var(--shadow-camera-on);
+  transform: translateY(var(--space-2));
+}
+@media (max-width: 48rem) {
+  .camera {
+    inline-size: 100%;
+  }
+  .camera .option {
+    padding-inline: var(--space-8);
+    font-size: var(--font-size-caption);
+  }
+}

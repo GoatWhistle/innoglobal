@@ -4,9 +4,9 @@ import { RootError } from "./root-error/root-error"
 import { RootLayout } from "./root-layout/root-layout"
 import { RouteFallback } from "./route-fallback/route-fallback"
 
-const redirect = lazyPage(
-  () => import("@/pages/pipe-redirect/pipe-redirect-page"),
-  "PipeRedirectPage",
+const workspace = lazyPage(
+  () => import("@/pages/design-variants/design-variants-page"),
+  "DesignVariantsPage",
 )
 
 export const router = createBrowserRouter([
@@ -15,17 +15,8 @@ export const router = createBrowserRouter([
     errorElement: <RootError />,
     hydrateFallbackElement: <RouteFallback />,
     children: [
-      {
-        index: true,
-        lazy: lazyPage(() => import("@/pages/overview/overview-page"), "OverviewPage"),
-      },
-      { path: "pipes", lazy: redirect },
-      { path: "priorities", lazy: redirect },
-      { path: "pipes/:pipeId", lazy: lazyPage(() => import("@/pages/pipe/pipe-page"), "PipePage") },
-      {
-        path: "pipes/:pipeId/priorities",
-        lazy: lazyPage(() => import("@/pages/priorities/priorities-page"), "PrioritiesPage"),
-      },
+      { index: true, lazy: workspace },
+      { path: "design/variants/inspection", lazy: workspace },
       {
         path: "data",
         lazy: lazyPage(() => import("@/pages/data-quality/data-quality-page"), "DataQualityPage"),

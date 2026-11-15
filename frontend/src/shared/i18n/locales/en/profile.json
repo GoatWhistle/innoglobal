@@ -1,22 +1,3 @@
 {
-  "title": "Title",
-  "description": "Description",
-  "reset": "Reset",
-  "label": "Label",
-  "noSelection": "No selection",
-  "valueText": "Value text: {{segment}}, {{distance}}, {{value}}",
-  "axisMm": "Axis mm",
-  "nominal": "Nominal",
-  "reject": "Reject",
-  "relief": "Relief",
-  "hint": "Hint",
-  "legend": {
-    "band": "Band",
-    "forecast": "Forecast: {{date}}",
-    "modal": "Modal",
-    "nominal": "Nominal",
-    "priority": "Priority",
-    "reject": "Reject",
-    "run": "Run: {{date}}"
-  }
+  "relief": "Relief"
 }

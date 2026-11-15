@@ -25,9 +25,10 @@ wall thickness at commissioning. The target inspection is withheld. The score is
 correlation, not the coefficient of determination. Sources: the organizer brief, pages 1–3.
 
 The product serves two real target pipes from the imported DuckDB and forecast CSVs through FastAPI.
-React provides overview, pipe workspace, priorities, data quality and historical validation.
-No retraining occurs at startup. The target inspection remains withheld. All geometry views are SVG;
-the section is schematic and does not reconstruct measured circumferential defects.
+React provides the combined Inspection workspace with its priority queue, data quality and historical validation.
+No retraining occurs at startup. The target inspection remains withheld. The entry point opens the selected pipe in the original physical Three.js scene. Route, unroll and
+section share real segment values. Angular thinning is an explicitly labelled illustration, never
+a measured circumferential defect map. Canvas2D and SVG preserve selection when WebGL fails.
 
 ## Primary scenario
 

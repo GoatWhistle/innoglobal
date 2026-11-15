@@ -55,7 +55,7 @@ export function SegmentStrip({
   const toMeters = (px: number) => Math.min(total, Math.max(0, ((px - LEFT) / inner) * total))
   const local = (event: PointerEvent<Element>) =>
     event.clientX - event.currentTarget.getBoundingClientRect().left + LEFT
-  const current = selected === null ? undefined : rows[selected]
+  const current = selected === null ? undefined : rows.find((row) => row.segment_id === selected)
 
   const onPointerUp = (event: PointerEvent<SVGRectElement>) => {
     const start = origin.current

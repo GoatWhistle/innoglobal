@@ -24,6 +24,7 @@ export {
 } from "./data-display/status-badge/status-badge"
 export { Checkbox, type CheckboxProps } from "./forms/checkbox/checkbox"
 export { NumberField, type NumberFieldProps } from "./forms/number-field/number-field"
+export { RangeField, type RangeFieldProps } from "./forms/range-field/range-field"
 export {
   Segmented,
   type SegmentedDisplay,
@@ -34,6 +35,7 @@ export { Select, type SelectOption, type SelectProps } from "./forms/select/sele
 export { Switch, type SwitchProps } from "./forms/switch/switch"
 export { TextField, type TextFieldProps, type TextFieldType } from "./forms/text-field/text-field"
 export { Card, type CardProps } from "./layout/card/card"
+export { Disclosure } from "./layout/disclosure/disclosure"
 export { PageHeader, type PageHeaderProps } from "./layout/page-header/page-header"
 export { ScrollArea } from "./layout/scroll-area/scroll-area"
 export { type TabItem, Tabs, type TabsProps } from "./layout/tabs/tabs"

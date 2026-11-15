@@ -1,0 +1,16 @@
+.legend {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+.scale {
+  display: flex;
+  inline-size: var(--sparkline-width);
+  block-size: var(--space-8);
+}
+.scale i {
+  flex: 1;
+}

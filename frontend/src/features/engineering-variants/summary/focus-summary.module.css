@@ -1,0 +1,40 @@
+.summary {
+  display: grid;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-16);
+  border-block-end: var(--hairline) solid var(--border-control);
+  background: var(--surface-raised);
+}
+.readout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--space-8);
+}
+.readout > div {
+  display: grid;
+  gap: var(--space-4);
+}
+.readout span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+.readout strong {
+  font-weight: var(--weight-medium);
+}
+.readout .value {
+  font-size: var(--font-size-heading);
+  font-weight: var(--weight-light);
+  font-variant-numeric: tabular-nums;
+}
+.warning {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.warning p {
+  color: var(--text-warning);
+  font-size: var(--font-size-caption);
+}

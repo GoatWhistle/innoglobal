@@ -22,6 +22,7 @@ export const RARE_EVENT_DURATIONS = new Set([
   "--dur-breathe",
   "--dur-scene",
   "--dur-scene-long",
+  "--dur-scene-cut",
   "--dur-alarm",
   "--dur-indeterminate",
 ])

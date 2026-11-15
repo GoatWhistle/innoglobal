@@ -1,0 +1,15 @@
+
+> app-frontend@0.1.0 e2e
+> playwright test variants --grep ^(comparison|inspection) |review fixes|negative --workers=2 --output=../work/audits/combined-inspection/test-results
+
+
+Running 2 tests using 2 workers
+
+(node:57041) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:57042) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [chromium] › e2e/variants-edges.spec.ts:136:1 › difference readouts include negative values and section has both quantiles (1.7s)
+  ✓  1 [chromium] › e2e/variants-edges.spec.ts:99:1 › review fixes keep mobile tasks, warnings and context visible (6.0s)
+
+  2 passed (6.6s)

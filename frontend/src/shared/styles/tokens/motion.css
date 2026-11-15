@@ -16,6 +16,7 @@
   --dur-draw: 900ms;
   --dur-spin: 800ms;
   --dur-breathe: 2400ms;
+  --dur-scene-cut: 1000ms;
   --dur-scene: 800ms;
   --dur-scene-long: 1250ms;
   --dur-alarm: 1600ms;
@@ -91,6 +92,7 @@
     --dur-draw: 1ms;
     --dur-spin: 1ms;
     --dur-breathe: 1ms;
+    --dur-scene-cut: 1ms;
     --dur-scene: 1ms;
     --dur-scene-long: 1ms;
     --dur-alarm: 1ms;

@@ -14,6 +14,7 @@ export interface SegmentedOption<T extends string> {
 export type SegmentedDisplay = "label" | "icon" | "short"
 
 export interface SegmentedProps<T extends string> {
+  readonly appearance?: "standard" | "camera"
   readonly label: string
   readonly options: readonly SegmentedOption<T>[]
   readonly value: T
@@ -52,13 +53,14 @@ export function Segmented<T extends string>({
   value,
   onChange,
   display = "label",
+  appearance = "standard",
   className,
 }: SegmentedProps<T>) {
   const name = useId()
   const modality = useInputModality()
   return (
     <fieldset
-      className={clsx(styles.segmented, className)}
+      className={clsx(styles.segmented, appearance === "camera" && styles.camera, className)}
       onKeyDown={modality.onKeyDown}
       onPointerDown={modality.onPointerDown}
     >

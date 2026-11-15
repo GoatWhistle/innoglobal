@@ -33,47 +33,15 @@ User: «удаляем ровно все то, что не нужно по ди�
 User: «спулллься полностью , подтяни в мою ветку другую ветку (ml-pipetwin-merge-case-2) и как бы я хочу чтобы у меня появились данные».
 User: «так ну давай промт агенту чтобы построилась полностью наша система по реальным данным и был построен полностью сайт по нашему кейсу, не просто дизайн система а прям готовый фронтенд . сделай это в план и положи в md доку».
 
-## Implemented
-
-DuckDB/CSV read repository, domain snapshot validation and inspection ranking, FastAPI API,
-React overview/workspace/priorities/data/model routes, real route geometry, SVG section,
-keyboard segment selection and URL range, exports and retryable errors. Selected pipe persists
-within the browser session. Compose mounts sources read-only and checks readiness. No paid keys,
-no training on startup. Model forecasts 525 + 1475 segments; no withheld target observations.
-Source merge 251a5ab, imported ML tip f3d7a42. Full plan: work/full-product-plan.md.
-
-## Verification
-
-Frontend verify: 36 rules, types, lint, 366 tests, build passed. Backend ruff, formatting, mypy,
-128 unit/integration tests passed. Compose build and start passed; Chromium through production
-nginx: 9 e2e passed, 375/1440 both themes, axe, API outage/retry, reduced motion, WebGL unavailable,
-selection and exports. Zoom/reset, sort and kilometre filter checked separately. Export byte-equal
-to source. 28 screenshots and logs: work/audits/full-product/. Main URL http://localhost:18080;
-backend port 18010. Local dev servers also use 5179 and 8000.
-
 ## Limits and next
 
 Historical metrics are imported, not retrained. Target VTD is withheld. P10/P90 coverage is not
 calibrated. 1245/1475 case2 predictions equal 3.469 mm, not all predictions; ties use segment ID.
-The real product uses SVG schematic geometry and does not reproduce synthetic circumferential pits.
+The physical scene uses labelled illustrative angular thinning; values come from the real API.
 No physical touch-device or cross-browser certification. Product docs describe current behavior.
 Setup has activated repository hooks; use the configured human Git identity for commits.
 
-## Completion audit
-
-Original five progress-review findings and the full-product acceptance checklist are verified.
-Historical comparison now joins chart_data.json to train_dataset.csv only after checking all
-observed values, unique keys, pipe IDs and split dates. Case1 exposes 55 pairs as a separate
-saved run, computed r2=.3434524851 and MAE=.3506181818; this is not selected-model r2=.5011.
-Case2 returns source_mismatch and no points because its archived observations do not agree.
-UI provides scatter/table and an honest unavailable state. No training or source replacement.
-
-Final verification: frontend 366 tests plus rules/types/lint/build; backend 128 tests,
-ruff/format/mypy; 9 Compose browser scenarios including scatter/table and immediate contrast.
-Segmented colour changes are immediate; only scale animates. Reports and proofs are in
-work/audits/full-product/progress-review.md and completion-checklist.md.
-Remaining limits are data/calibration and physical-device/browser coverage, not unfinished controls.
-Local stack remains at http://localhost:18080, API 18010. Product commit and push are complete; no deployment.
+Previous completion evidence: work/audits/full-product/previous-completion.md.
 
 ## Publication
 
@@ -83,8 +51,46 @@ Product publication commit: 98e7841, branch feat/redesign-oil; push succeeded wi
 Frontend verify, backend 128 tests and Compose 9 e2e are green. Hooks are enabled; no force push,
 no agent attribution and no deployment. Before new work inspect git status and the remote branch.
 
-The pre-push hook rejected bodies in imported ML commits. Their messages were reduced to subjects
-in the pending branch history; author identities and every file tree were preserved. Remote source
-branches were not changed. Original local tip: refs/backups/full-product-before-push (2d92a63).
-Snapshot screenshots remain local under the repository screenshots/ ignore rule; source, docs,
-plans and textual audit logs are published. No pending product work; inspect Git before new tasks.
+Publication history and screenshot scope: work/audits/full-product/previous-completion.md.
+
+## Active design restoration
+
+2026-11-15 user: «ты че ебанат. собери все по моему дизайну , спроектируй»; «Implement the plan.»
+Previous restoration detail: work/audits/main-3d/previous-restoration.md.
+Do not change the original design catalog.
+2026-11-15 user: «ну так а че ты не делаешь до конца??))».
+
+## Local processes
+
+On user request, stopped casechamp Vite (5187), casechamp Uvicorn (8001), site Astro (4321)
+and Python HTTP server (5178) with SIGTERM; verified all four TCP ports free.
+
+## Frontend description
+
+User requested a description of the whole service in Markdown. Saved docs/frontend-overview.md
+and linked from docs/README.md. Branch feat/redesign-oil, HEAD dbb9a47. Documentation-only change.
+
+## Five engineering variants
+
+2026-11-15 user: «щас короче смотри я тебе предложу идеи и ты должен будешь их перебрать в цели и посмотреть как лучше всего нужно будет построить дизайн систему для вопсриятия всего кейса инженеру. вот прям обдумывай, не еблань».
+Five-variant completion: work/audits/variants/README.md.
+
+## Combined inspection and comparison
+
+2026-11-15 user: «короче вот будто бы это дело нужно бы совместить и тогда это должно выглядеть красиво».
+Previous combined-screen completion: work/audits/retained-workspace/previous-state.md.
+
+2026-11-15 user: «так оставляй только этот фронт, остальное нахуй стирай».
+Keep combined inspection at /; remove gallery, alternatives and old pipe/overview/priorities pages.
+Data/model support pages and API retained. Branch feat/redesign-oil, HEAD dbb9a47, uncommitted.
+Verify: 36 rules, types/lint, 375 tests/build pass. Compose 18080 rebuilt; 7 browser tests pass.
+Logs: work/audits/retained-workspace/. Next: user review.
+
+## Main 3D restoration
+
+User: «у тебя есть функционал для этой 3d модели. покажи мне его полностью, дай мне м пользоваться и делать разрезы. все прописано. помимо этого поставь на главную страницу [Image #2] не 2d трубу, а как раз таки 3d. по моим предположениям от 2d нужно вообще отказаться».
+User: «ну то есть это все дело у нас есть, оно прописано. не придумывай, а просто возьми».
+Restore previous controls and engine, no new mechanics. Main scene replaces SteelPipe; original
+camera bar, coordinate form, selection strip and URL modes restored. Engine directory unchanged.
+Verify: 36 rules, types/lint, 375 tests/build pass. Compose: 5 browser tests pass. Review: ship; documentation complete. Next: user review.
+Branch feat/redesign-oil, HEAD dbb9a47; uncommitted. Evidence work/audits/main-3d/.

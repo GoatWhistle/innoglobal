@@ -44,9 +44,7 @@
   "nav": {
     "home": "duppel home",
     "label": "Main navigation",
-    "overview": "Overview",
     "pipes": "Pipe",
-    "priorities": "Priorities",
     "data": "Data",
     "model": "Model"
   }

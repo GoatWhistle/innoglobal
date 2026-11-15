@@ -1,19 +1,8 @@
 {
-  "title": "Title: {{pipe}}",
-  "pageTitle": "Page title: {{pipe}}",
-  "subtitle": "{{direction}}, {{section}}",
-  "loading": "Loading",
-  "loadingMap": "Loading map",
-  "switchLabel": "Switch label",
-  "switchOption": "{{case}}: {{pipe}}",
-  "toPriorities": "To priorities",
-  "exportResult": "Export result",
   "unit": {
     "mmShort": "Mm short",
-    "mShort": "M short",
     "mm": "Mm: {{value}}",
     "m": "M: {{value}}",
-    "km": "Km: {{value}}",
     "range": "Range: {{from}}, {{to}}",
     "span": "{{from}}–{{to}}"
   },
@@ -29,33 +18,43 @@
       "start": "Start"
     }
   },
-  "passport": {
-    "target": "Target",
-    "size": "Size",
-    "sizeValue": "{{diameter}} × {{wall}}",
-    "commissioned": "Commissioned",
-    "length": "Length",
-    "segments": "Segments: {{count}}",
-    "thinnest": "Thinnest",
-    "thinnestAt": "Thinnest at: {{segment}}",
-    "cutoff": "Cutoff: {{percent}}",
-    "cutoffHint": "Cutoff hint: {{count}}",
-    "median": "Median",
-    "nominalHint": "Nominal hint: {{value}}"
-  },
   "scene": {
     "label": "Label",
     "route": "Route",
     "network": "Network",
-    "section": "Section"
+    "section": "Section",
+    "unroll": "Unroll",
+    "illustration": "Thickness is a model forecast. Defect shape and oil movement are illustrative.",
+    "segment": "Segment {{id}}",
+    "forecast": "Minimum forecast thickness"
   },
-  "invalidSegment": {
-    "title": "Title",
-    "body": "Body: {{last}}"
-  },
-  "unknown": {
-    "title": "Title",
-    "description": "Description: {{pipe}}",
-    "back": "Back"
+  "restoration": {
+    "scale": "Schematic",
+    "fallback": "2D schematic: WebGL unavailable. All views and segment selection remain available.",
+    "nearNominal": "Near nominal",
+    "thinner": "Thinner",
+    "angle": "Illustrative circumference",
+    "marking": "Ø{{diameter}} × {{wall}}",
+    "position": "CH {{picket}}+{{offset}}",
+    "forecastDate": "Forecast for {{date}}",
+    "coordinate": "Distance from start, m",
+    "go": "Go",
+    "coordinateError": "Enter a distance between 0 and {{length}} m.",
+    "keyboard": "Arrows: one segment. Page Up and Page Down: ten. 1, 2, 3: camera.",
+    "drawing": "Segment drawing",
+    "evidence": "Source evidence",
+    "priority": "Inspect first",
+    "priorityNote": "First {{count}} segments by minimum forecast. Ranking is not a failure probability.",
+    "allPriorities": "Full inspection list",
+    "source": "Source",
+    "snapshot": "Data snapshot",
+    "sheet": "Sheet",
+    "shapeNote": "Circumferential shape is illustrative. The minimum follows the segment forecast. Wall thickness is exaggerated for legibility.",
+    "routeQuestion": "Where is the wall thinner?",
+    "unrollQuestion": "Forecast along the pipe",
+    "sectionQuestion": "Selected segment thickness",
+    "stampTitle": "Drawing identification",
+    "empty": "No target pipes",
+    "emptyDescription": "The current snapshot contains no target pipes."
   }
 }

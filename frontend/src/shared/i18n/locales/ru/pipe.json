@@ -1,19 +1,8 @@
 {
-  "title": "Труба {{pipe}}",
-  "pageTitle": "Труба {{pipe}}",
-  "subtitle": "{{direction}}, {{section}}",
-  "loading": "Загружаем профиль трубы",
-  "loadingMap": "Загружаем трассу",
-  "switchLabel": "Целевая труба",
-  "switchOption": "{{case}}: {{pipe}}",
-  "toPriorities": "Приоритеты",
-  "exportResult": "Скачать result.csv",
   "unit": {
     "mmShort": "мм",
-    "mShort": "м",
     "mm": "{{value}} мм",
     "m": "{{value}} м",
-    "km": "{{value}} км",
     "range": "{{from}}–{{to}} м",
     "span": "{{from}}–{{to}}"
   },
@@ -29,33 +18,43 @@
       "start": "От номинальной толщины, без исходного ВТД"
     }
   },
-  "passport": {
-    "target": "Дата прогноза",
-    "size": "Диаметр и стенка",
-    "sizeValue": "{{diameter}} × {{wall}}",
-    "commissioned": "Ввод в эксплуатацию",
-    "length": "Длина участка",
-    "segments": "{{count}} сегментов",
-    "thinnest": "Минимальный прогноз",
-    "thinnestAt": "Сегмент {{segment}}",
-    "cutoff": "Граница первых {{percent}}%",
-    "cutoffHint": "{{count}} сегментов к проверке",
-    "median": "Медианный прогноз",
-    "nominalHint": "Номинальная стенка {{value}}"
-  },
   "scene": {
     "label": "Вид участка",
     "route": "Трасса",
     "network": "Сеть",
-    "section": "Сечение"
+    "section": "Сечение",
+    "unroll": "Развёртка",
+    "illustration": "Толщина: прогноз модели. Форма дефектов и движение нефти: иллюстрация.",
+    "segment": "Сегмент {{id}}",
+    "forecast": "Минимальная толщина, прогноз"
   },
-  "invalidSegment": {
-    "title": "Сегмент вне участка",
-    "body": "Выберите сегмент от 0 до {{last}}."
-  },
-  "unknown": {
-    "title": "Труба не найдена",
-    "description": "Трубы {{pipe}} нет среди целевых участков.",
-    "back": "К списку труб"
+  "restoration": {
+    "scale": "Схематично",
+    "fallback": "2D-схема: WebGL недоступен. Все масштабы и выбор сегмента работают.",
+    "nearNominal": "Ближе к номиналу",
+    "thinner": "Тоньше",
+    "angle": "Условная окружность",
+    "marking": "Ø{{diameter}} × {{wall}}",
+    "position": "ПК {{picket}}+{{offset}}",
+    "forecastDate": "Прогноз на {{date}}",
+    "coordinate": "Расстояние от начала, м",
+    "go": "Перейти",
+    "coordinateError": "Введите расстояние от 0 до {{length}} м.",
+    "keyboard": "Стрелки: один сегмент. Page Up и Page Down: десять. 1, 2, 3: масштаб.",
+    "drawing": "Чертёж сегмента",
+    "evidence": "Откуда цифры",
+    "priority": "Проверить в первую очередь",
+    "priorityNote": "Первые {{count}} сегментов по минимальному прогнозу. Ранжирование не означает вероятность отказа.",
+    "allPriorities": "Весь список проверки",
+    "source": "Источник",
+    "snapshot": "Снимок данных",
+    "sheet": "Лист",
+    "shapeNote": "Форма по окружности иллюстративная. Минимум соответствует прогнозу сегмента. Толщина увеличена для читаемости.",
+    "routeQuestion": "Где стенка тоньше?",
+    "unrollQuestion": "Распределение прогноза вдоль трубы",
+    "sectionQuestion": "Толщина выбранного сегмента",
+    "stampTitle": "Паспорт чертежа",
+    "empty": "Целевые трубы отсутствуют",
+    "emptyDescription": "В текущем снимке нет участков для просмотра."
   }
 }

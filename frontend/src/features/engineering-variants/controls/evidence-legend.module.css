@@ -1,0 +1,26 @@
+.legend {
+  composes: instrumentLegend from "../../../shared/styles/compose.module.css";
+}
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+.forecast {
+  inline-size: var(--space-20);
+  border-block-start: var(--chart-stroke) solid var(--text-primary);
+}
+.observation {
+  inline-size: var(--space-20);
+  border-block-start: var(--chart-stroke) solid var(--wall-rust);
+}
+.nominal {
+  inline-size: var(--space-20);
+  border-block-start: var(--chart-stroke) dashed var(--wall-rust);
+}
+.interval {
+  inline-size: var(--space-20);
+  block-size: var(--space-8);
+  background: var(--surface-range);
+  border: var(--hairline) solid var(--border-control);
+}

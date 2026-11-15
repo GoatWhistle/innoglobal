@@ -361,3 +361,84 @@ Catalog with states in both themes: work/design/ds/pipe-kit.html. Screen: screen
 
 All paths are under work/design/ds. The renderer (wall/engine.js) is loaded separately; the store
 (wall/state.js) owns selection, mode and picked hour.
+
+## 9. Engineering variants, 2026-11-15
+
+The React gallery is `/design/variants`; individual screens append `scanner`, `atlas`, `comparison`,
+`inspection` or `drafting`. It uses the existing shared controls and tokens. The original HTML kit
+and pipe catalog remain at the paths above.
+
+### Shared additions
+
+**RangeField** in `forms/range-field/` is exported from `@/shared/ui` with
+`{ label: string; value: number; min: number; max: number; onChange(value: number) }`.
+It wraps a labelled native range input with a square track, a custom decorative thumb and a visible
+focus outline. The track uses `--target-min`; keyboard stepping remains native. The comparison
+screen uses it for the overlay boundary, with the percentage in the label. It has one value and
+no custom step, disabled or error props; the two-ended Slider/Range contract above remains a spec.
+
+**Card** in `layout/card/` accepts `appearance?: "panel" | "sheet" | "plain"`, defaulting to
+`"panel"`. The plain appearance removes padding, border, radius and background while retaining the
+grid gap, optional header and accessible title association. Variants use it for headings inside
+their own frame, including gallery captions, the inspection queue and segment facts.
+
+### Feature catalog
+
+Paths in this table are under `src/features/engineering-variants/`. These are implemented feature
+components with pipe/profile data passed through `WorkspaceProps`, not new generic UI primitives.
+
+| Component | Path | Role |
+|---|---|---|
+| WorkspaceFrame / FocusSummary | `workspace-frame.tsx`, `summary/focus-summary.tsx` | Instrument, evidence and optional queue; compact selected values on narrow screens |
+| AlignedTrack | `aligned-track.tsx` | Shared evidence distance axis, pointer range zoom, keyboard movement and selected cursor |
+| OverviewRuler / WorkspaceTools | `controls/overview-ruler.tsx`, `controls/workspace-tools.tsx` | Whole-pipe position, coordinate input, previous/next, zoom and reset |
+| ScaleLegend / EvidenceLegend | `controls/scale-legend.tsx`, `controls/evidence-legend.tsx` | Fixed colour domain and units; named forecast, VTD/nominal and interval marks |
+| SegmentFacts | `segment-facts.tsx` | Nominal, interval, baseline, dates, source disclosure and existing queue/model links |
+| SegmentSection | `drafting/segment-section.tsx` | Scalar wall diagram, nominal/P10/P90 keys and forecast dimension |
+| Scanner / Atlas / Comparison / Inspection / Drafting | `scanner/`, `atlas/`, `comparison/`, `inspection/`, `drafting/` | Five compositions of the shared evidence and selection |
+
+`src/entities/pipe/use-workspace-state.ts` owns URL segment/range parsing, selection, zoom and reset.
+The page layer preserves `pipe`, `segment`, `from` and `to` when switching variants. Changing pipe
+resets its range. Gallery previews under `public/design-previews/` are fixed captures with adjacent
+provenance JSON; opening a preview uses the current selection.
+
+### Combined inspection extension, 2026-11-15
+
+**ComparisonPanel** in `src/features/engineering-variants/comparison/comparison-panel.tsx` is a
+private feature component reused by `Comparison` and `Inspection`, not a shared UI primitive.
+Its `WorkspaceProps` data and selection callbacks are extended with `{ date: string | undefined;
+onDate(value: string); compact?: boolean; controls?: ReactNode }`. Callers own the baseline date
+and pass the same choice to `SegmentFacts` and `WorkspaceFrame` so plots, signed difference,
+increase warning and horizon agree.
+
+The combined inspection passes `compact`: overlay is the initial mode, both sources span the
+complete visible range, and no wiping boundary is shown. Beside mode separates the sources. The
+optional controls slot places local/whole-pipe scope beside mode and baseline in the same toolbar.
+The standalone comparison retains its initial beside mode and `RangeField` boundary in overlay.
+This difference belongs to these compositions and does not change the shared `RangeField` contract.
+
+Inspection keeps the queue, existing 3D pipe scene and selected facts around the panel. Local scope shows up to
+seven segments, clipped at pipe ends; pointer range zoom switches to the shared URL range. The
+baseline selector falls back to nominal thickness when the pipe has no VTD runs. Missing values
+within a dated VTD remain absent. Difference means forecast minus the selected baseline in mm;
+it does not represent a corrosion rate or a hidden target measurement.
+
+## Retained frontend, 2026-11-15
+
+The combined Inspection workspace is the sole operational composition at `/`. Gallery and
+alternate workspaces, old pipe, overview and separate priorities screens were deleted on user
+request. Data/model pages remain supporting evidence. Earlier variant catalog entries above
+describe the exploration history; only Inspection, ComparisonPanel, its shared instruments and
+the main 3D pipe scene and scalar section fallback remain implemented.
+
+
+### Main 3D restoration, 2026-11-15
+
+The main Inspection instrument is the existing `features/pipe-scene/PipeScene`, composed by
+`pages/design-variants/variants-workspace.tsx` with the camera Segmented control,
+`features/segment-strip/SegmentStrip` and `pages/design-variants/pipe-controls.tsx`.
+Route, unroll and section use URL `view` state and shortcuts 1/2/3. The coordinate form and
+previous/next actions share the selected segment. PipeScene accepts `readout?: boolean`,
+defaulting to visible; this composition passes `false` because SegmentFacts already presents
+these values. The former SteelPipe component and raster are removed. Canvas2D/SVG remain
+WebGL fallbacks. Engine, materials and cut behavior remain unchanged.

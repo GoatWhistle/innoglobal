@@ -208,3 +208,10 @@
   --wall-6: color-mix(in oklab, var(--wall-amber) 71%, var(--wall-rust));
   --wall-7: color-mix(in oklab, var(--wall-amber) 100%, var(--wall-rust));
 }
+
+:root[data-theme="light"] {
+  --matte-fill: color-mix(in oklab, var(--surface-float) 90%, transparent);
+}
+:root[data-theme="dark"] {
+  --matte-fill: color-mix(in oklab, var(--surface-float) 82%, transparent);
+}

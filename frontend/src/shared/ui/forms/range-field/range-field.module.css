@@ -1,0 +1,38 @@
+.field {
+  display: grid;
+  gap: var(--space-4);
+}
+.field label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-caption);
+}
+.track {
+  position: relative;
+  block-size: var(--target-min);
+  background: var(--surface-sunken);
+  border: var(--hairline) solid var(--border-control);
+}
+.track:has(input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+.track input {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+  margin: 0;
+}
+.thumb {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: calc(var(--range-progress) * (100% - var(--target-min)));
+  inline-size: var(--target-min);
+  block-size: var(--target-min);
+  background: var(--text-primary);
+  border: var(--space-16) solid var(--surface-raised);
+  box-shadow: var(--shadow-ring);
+  pointer-events: none;
+}

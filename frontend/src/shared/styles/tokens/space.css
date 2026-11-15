@@ -105,3 +105,9 @@
   --scanner-section-height: 140px;
   --scanner-list-height: 300px;
 }
+
+:root {
+  --pipe-scene: clamp(320px, 56vh, 600px);
+  --pipe-scene-mobile: 340px;
+  --readout-width: 18rem;
+}

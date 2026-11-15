@@ -1,0 +1,16 @@
+.canvas {
+  composes: canvas from "./pipe-scene.module.css";
+  cursor: crosshair;
+}
+.section {
+  inline-size: 60%;
+  block-size: 100%;
+  display: grid;
+  align-content: center;
+}
+@media (max-width: 48rem) {
+  .section {
+    inline-size: 100%;
+    padding-block-start: var(--space-48);
+  }
+}

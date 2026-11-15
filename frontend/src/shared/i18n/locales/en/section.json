@@ -1,8 +1,4 @@
 {
-  "caption": "Caption",
   "label": "Label",
-  "oil": "Oil",
-  "keyForecast": "Key forecast",
-  "keyLow": "P10",
   "keyNominal": "Key nominal"
 }
