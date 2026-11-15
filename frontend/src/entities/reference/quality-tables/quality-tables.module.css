@@ -1,0 +1,30 @@
+.panel {
+  display: grid;
+  align-content: start;
+  gap: var(--space-16);
+  min-inline-size: 0;
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-caption);
+  font-weight: var(--weight-regular);
+  white-space: nowrap;
+}
+
+.meaning {
+  color: var(--text-secondary);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.status {
+  inline-size: 1%;
+  white-space: nowrap;
+}
+
+.row[data-muted] > * {
+  color: var(--text-muted);
+}
