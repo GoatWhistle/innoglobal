@@ -7,9 +7,15 @@ export interface MaterialEngine {
   reset(): void
   zoom(factor: number): void
   fit(): void
+  nudge(): void
+}
+export interface PipeIntro {
+  readonly delay?: number
+  readonly duration?: number
 }
 export function createPipe(
   host: HTMLElement,
   name: string,
   onPhase?: (phase: string) => void,
+  options?: { readonly intro?: PipeIntro },
 ): MaterialEngine

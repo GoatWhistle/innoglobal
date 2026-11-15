@@ -10,6 +10,7 @@ export function PipelineFleet({ pipes }: { readonly pipes: PipeList }) {
   const { t } = useTranslation(),
     format = useFormatters()
   const [map, setMap] = useState(false)
+  const [stirred, setStirred] = useState<number | null>(null)
   if (map)
     return (
       <>
@@ -27,10 +28,19 @@ export function PipelineFleet({ pipes }: { readonly pipes: PipeList }) {
           {t("variants:workspace.mapView")}
         </Button>
       </header>
-      {pipes.items.map((pipe) => (
-        <article className={styles.row} key={pipe.pipe_id}>
+      {pipes.items.map((pipe, index) => (
+        <article
+          className={styles.row}
+          key={pipe.pipe_id}
+          onPointerEnter={() => setStirred(pipe.pipe_id)}
+          onPointerLeave={() => setStirred(null)}
+        >
           <ButtonLink className={styles.pipe} variant="quiet" to={`/?pipe=${pipe.pipe_id}`}>
-            <PipePreview name={pipe.passport.direction} />
+            <PipePreview
+              name={pipe.passport.direction}
+              order={index}
+              stirred={stirred === pipe.pipe_id}
+            />
             <span className="visually-hidden">{pipe.passport.direction}</span>
           </ButtonLink>
           <Card

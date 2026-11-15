@@ -2,8 +2,9 @@ import { buildScene } from "./construction.js"
 import { createControls } from "./controls.js"
 import { createDischarge } from "./discharge.js"
 import { createInspection } from "./inspection.js"
+import { createIntro } from "./intro.js"
 import { createLiquid } from "./liquid.js"
-export function createPipe(host, name, onPhase = () => {}) {
+export function createPipe(host, name, onPhase = () => {}, options = {}) {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)")
   const events = new AbortController()
   let frameId = 0
@@ -50,6 +51,9 @@ export function createPipe(host, name, onPhase = () => {}) {
     state,
     reduced,
   })
+  const { tickIntro, nudge } = options.intro
+    ? createIntro({ group, state, reduced, impulse, ...options.intro })
+    : { tickIntro: () => {}, nudge: () => {} }
   const { defectRoot, defectLip, stream, animateDischarge } = createDischarge(group)
   const { clearInspection, startInspection, tickInspection } = createInspection({
     host,
@@ -76,6 +80,7 @@ export function createPipe(host, name, onPhase = () => {}) {
     if (!active || document.hidden) return
     if (!reduced.matches) clock += delta
     advance(delta)
+    tickIntro(delta)
     oilMat.uniforms.time.value = clock
     wallMat.uniforms.time.value = clock
     tickInspection(delta, clock)
@@ -117,6 +122,7 @@ export function createPipe(host, name, onPhase = () => {}) {
     },
     zoom: zoomBy,
     fit: fitView,
+    nudge,
     corrosionMap,
     inspect: startInspection,
     cancelInspection: clearInspection,
