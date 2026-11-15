@@ -1,39 +1,39 @@
 {
-  "title": "Title",
-  "pageTitle": "Page title",
-  "description": "Description",
-  "loading": "Loading",
+  "title": "Model and validation",
+  "pageTitle": "Model and validation",
+  "description": "Historical checks, baselines and forecast limits. Inspection data for the target cases stays hidden.",
+  "loading": "Loading model results",
   "case": {
-    "pipe": "Pipe: {{pipe}}, {{date}}"
+    "pipe": "Pipe {{pipe}}, forecast for {{date}}"
   },
   "pair": {
-    "between": "Between: {{pipes}}, {{start}}, {{end}}",
-    "fromCommissioning": "From commissioning: {{pipes}}, {{end}}"
+    "between": "Historical check: pipes {{pipes}}, from {{start}} to {{end}}.",
+    "fromCommissioning": "Historical check: pipes {{pipes}}, from commissioning to {{end}}."
   },
-  "selected": "Selected",
-  "r2": "R2",
-  "r2Hint": "R2 hint",
-  "mae": "Mae",
-  "maeMeta": "Mae meta: {{value}}",
-  "segments": "Segments",
-  "segmentsHint": "Segments hint",
-  "metricsTitle": "Metrics title",
-  "importanceTitle": "Importance title",
-  "importanceCatboost": "Importance catboost",
-  "importanceLgbm": "Importance lgbm",
-  "badgeSelected": "Badge selected",
-  "badgeBaseline": "Badge baseline",
+  "selected": "Selected model",
+  "r2": "Squared Pearson correlation r²",
+  "r2Hint": "Not the coefficient of determination R²",
+  "mae": "Mean absolute error",
+  "maeMeta": "MAE {{value}} mm",
+  "segments": "Segments checked",
+  "segmentsHint": "Historical sections, not the hidden target inspection",
+  "metricsTitle": "Ranking by r²",
+  "importanceTitle": "Global feature importance",
+  "importanceCatboost": "CatBoost importance normalised to sum to one. Not a local explanation of the ensemble forecast.",
+  "importanceLgbm": "LightGBM importance normalised to sum to one. Not a causal effect.",
+  "badgeSelected": "Selected",
+  "badgeBaseline": "Baseline",
   "uncertainty": {
-    "title": "Title",
-    "body": "Body: {{quantiles}}"
+    "title": "Uncertainty",
+    "body": "Quantiles: {{quantiles}}. Separate quantile models; actual coverage is not calibrated. The interval does not guarantee thickness bounds."
   },
   "limits": {
-    "title": "Title",
-    "level": "Level",
-    "pearson": "Pearson",
-    "quantiles": "Quantiles",
-    "neighbours": "Neighbours",
-    "regime": "Regime"
+    "title": "Limits of use",
+    "level": "The forecast refers to the minimum in a 10 m segment, not the wall shape around the circumference.",
+    "pearson": "r² measures linear association and does not guarantee a small absolute error.",
+    "quantiles": "P10 / P90 coverage has not been checked on an independent sample.",
+    "neighbours": "Neighbouring segments are dependent; a historical check is not a check on new pipes.",
+    "regime": "Operating regimes and ultrasonic thickness data may be incomplete."
   },
   "name": {
     "b1_nominal_minus_rate": "B1 nominal minus rate",
@@ -89,5 +89,8 @@
     "view": "Historical pair view",
     "chart": "Chart",
     "tableTab": "Table"
-  }
+  },
+  "metricsNote": "{{total}} models on the same historical segments. Top five, the selected model and baselines are shown.",
+  "metricsRest": "Other models: {{total}}",
+  "importanceNote": "Top {{total}} features by importance share."
 }

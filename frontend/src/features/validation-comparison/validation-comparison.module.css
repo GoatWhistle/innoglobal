@@ -1,0 +1,37 @@
+.comparison {
+  margin-block-start: var(--space-32);
+  padding-block-start: var(--space-24);
+  border-block-start: var(--hairline) solid var(--border-subtle);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-24);
+}
+
+.summary {
+  display: grid;
+  align-content: start;
+  gap: var(--space-16);
+  min-inline-size: 0;
+}
+
+.reading {
+  composes: note from "../../shared/ui/layout/text-role/text-role.module.css";
+}
+
+.switch {
+  justify-self: start;
+}
+
+.view {
+  min-inline-size: 0;
+}
+
+@media (min-width: 64rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-32);
+  }
+}
