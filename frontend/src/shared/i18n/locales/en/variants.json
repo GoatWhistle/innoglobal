@@ -128,6 +128,7 @@
     "cell": "1 cell / 10 m",
     "map": "Pipeline map",
     "hideMetrics": "Hide metrics",
-    "minimizeChat": "Minimize chat"
+    "minimizeChat": "Minimize chat",
+    "mapView": "Map"
   }
 }

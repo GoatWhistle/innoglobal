@@ -4,6 +4,7 @@ const page=await browser.newPage({viewport:{width:1440,height:1000}})
 page.setDefaultTimeout(12000);
 const errors=[];page.on('pageerror',e=>errors.push(e.message))
 await page.goto(process.env.E2E_BASE_URL ?? 'http://127.0.0.1:5191')
+await page.getByRole('button',{name:'Карта',exact:true}).click()
 await page.getByRole('button',{name:'К трубам',exact:true}).click()
 await page.screenshot({path:'work/audits/react-port/map-local.png'})
 await page.getByRole('link',{name:'Перейти к трубе'}).click()

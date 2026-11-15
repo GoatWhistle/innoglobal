@@ -185,10 +185,14 @@ User: «Да, переноси всё в приложение».
 
 User: «разверни теперь все наше решение на отдельном порту и все давай мы будем работать только с фронтом, не дизайн системами и тд и тп , ну понял да меня???».
 
+User: «нет ты ебанулся, это полная хуйня что ты щас сделал. уменьши площадь , отрисуй красиво трубы».
+
+User: «нет ну блять братан у нас до этого такие ахуенные трубы были а щас дерьмо 2d шное».
+
 ## Current state
 
 Main repo /Users/kaifarikman/hackathons/innoglobal, feat/frontend,
 Frontend implementation commit 06dc95c; backend commit 3ef7f7c. Do not push into dev.
 
-React port implemented: live map, material pipe, unroll grid, docked assistant backed by real catalog calculations. Evidence: work/audits/react-port/. Separate Compose project duppel-live, frontend 18081/backend 18012. Frontend verify 382 tests, backend 131 tests and 4 chat browser tests passed. LLM free-form analysis is not connected. Continue only in the application frontend, not design-system showcases.
+React port implemented; home restored to compact material 3D pipe rows, map is optional. Unroll grid and docked assistant use real catalog data. Evidence: work/audits/react-port/. Separate Compose project duppel-live, frontend 18081/backend 18012. Frontend verify 382 tests, backend 131 tests and 4 chat browser tests passed. LLM free-form analysis is not connected. Continue only in the application frontend, not design-system showcases.
 SESSION target exceeded to preserve protected user instructions verbatim.

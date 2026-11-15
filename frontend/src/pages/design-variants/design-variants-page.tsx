@@ -1,8 +1,8 @@
 import { useSearchParams } from "react-router"
 import { type PipeList, type PipeSummary, usePipes, useProfile } from "@/entities/pipe"
-import { PipelineMap } from "@/features/pipeline-map"
 import { useDocumentTitle, useTranslation } from "@/shared/i18n"
 import { Banner, ButtonLink, EmptyState, QueryView, Skeleton } from "@/shared/ui"
+import { PipelineFleet } from "./pipeline-fleet"
 import { VariantsWorkspace } from "./variants-workspace"
 
 function ProfileLoader({
@@ -53,7 +53,7 @@ export function DesignVariantsPage() {
   return (
     <QueryView query={pipes} label={t("variants:loading")} skeleton={<Skeleton shape="block" />}>
       {(data) => {
-        if (!search.has("pipe")) return <PipelineMap pipes={data} />
+        if (!search.has("pipe")) return <PipelineFleet pipes={data} />
         const match = data.items.find((item) => item.pipe_id === requested)
         const pipe = match ?? data.items[0]
         return pipe ? (

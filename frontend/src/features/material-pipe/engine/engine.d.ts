@@ -11,5 +11,5 @@ export interface MaterialEngine {
 export function createPipe(
   host: HTMLElement,
   name: string,
-  onPhase: (phase: string) => void,
+  onPhase?: (phase: string) => void,
 ): MaterialEngine
