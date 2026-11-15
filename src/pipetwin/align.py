@@ -125,6 +125,93 @@ def window_shifts_match(vtd: pd.DataFrame, pipe_id: int, run_a, run_b) -> list[t
     return pts or [(length / 2, round(k0, 2))]
 
 
+WELD_TOL = 3.0     # м, отклонение пары швов от грубого сдвига match (труба ~10 м: соседний шов исключён)
+WELD_SIG = float(os.environ.get("PIPETWIN_WELD_SIG", "0.3"))     # м, штраф цепочки за изменение сдвига между соседними парами швов
+WELD_JUMP, WELD_JUMP_PEN = 1.0, 2.0   # скачок сдвига > 1 м (вставка/вырезка) — фиксированный штраф
+WELD_LOOK = 40     # предшественников в цепочке
+WELD_EV, WELD_EV_CAP = float(os.environ.get("PIPETWIN_WELD_EV", "1.0")), 5  # вес совпавших дефектов
+WELD_PRIOR_MED = int(os.environ.get("PIPETWIN_WELD_MED", "5"))
+WELD_TOL = float(os.environ.get("PIPETWIN_WELD_TOL", str(WELD_TOL)))
+
+
+def welds(pipe_id, run) -> np.ndarray:
+    """Позиции кольцевых швов пропуска (начало трубы: dist_m − dist_from_weld_m, медиана по трубе)."""
+    key = ("welds", pipe_id, pd.Timestamp(run))
+    if key not in _cache:
+        d = W.query(f"""
+            select joint_no, median(dist_m - dist_from_weld_m) as w from core.ili_feature
+            where pipe_id = {int(pipe_id)} and run_date = '{pd.Timestamp(run).date()}'
+              and dist_from_weld_m is not null and joint_no is not null
+            group by 1 order by 2""")
+        w = np.sort(d["w"].to_numpy(float))
+        # дубли одного шва под разными номерами — сливаем ближе 0.3 м
+        _cache[key] = w[np.concatenate([[True], np.diff(w) > 0.3])] if len(w) else w
+    return _cache[key]
+
+
+def weld_chain(wa: np.ndarray, wb: np.ndarray, prior=None, XA=None, XB=None) -> list[tuple[float, float]]:
+    """Монотонная цепочка пар швов (a_i, b_j) с максимумом пар и плавным сдвигом (DP, как DTW
+    с пропусками). prior(x) — грубый сдвиг (match/corr): кандидаты в ±WELD_TOL от него."""
+    if len(wa) == 0 or len(wb) == 0:
+        return []
+    nodes = []  # (i, j, shift)
+    for i, a in enumerate(wa):
+        s0 = float(prior(np.array([a]))[0]) if prior is not None else 0.0
+        tol = WELD_TOL if prior is not None else MAX_SHIFT
+        lo, hi = np.searchsorted(wb, a + s0 - tol), np.searchsorted(wb, a + s0 + tol)
+        for j in range(lo, hi):
+            nodes.append((i, j, wb[j] - a))
+    # вес пары: 1 + доказательство дефектами — сколько дефектов трубы i (от a_i до a_{i+1})
+    # находят пару в B при этом сдвиге (дистанция ±MATCH_DX, угол ±MATCH_DA)
+    wt = np.ones(len(nodes))
+    if XA is not None and XB is not None and len(XA) and len(XB):
+        ends = np.append(wa[1:], np.inf)
+        for q, (i, j, sh) in enumerate(nodes):
+            m = (XA[:, 0] >= wa[i]) & (XA[:, 0] < ends[i])
+            if m.any():
+                wt[q] += WELD_EV * min(_n_matched(XA[m], XB, sh), WELD_EV_CAP)
+    if not nodes:
+        return []
+    n = len(nodes)
+    I = np.array([x[0] for x in nodes]); J = np.array([x[1] for x in nodes])  # noqa: E702,E741
+    S = np.array([x[2] for x in nodes])
+    score = wt.copy(); prev = np.full(n, -1)  # noqa: E702
+    for k in range(n):
+        p = np.arange(max(0, k - WELD_LOOK * 4), k)
+        p = p[(I[p] < I[k]) & (J[p] < J[k])]
+        if len(p) == 0:
+            continue
+        d = np.abs(S[p] - S[k])
+        pen = np.where(d > WELD_JUMP, WELD_JUMP_PEN + d / 10, d / WELD_SIG)
+        # пропущенные швы между парами не штрафуются (у 2018 швы видны только у труб с дефектами)
+        c = score[p] - pen
+        b = int(c.argmax())
+        if c[b] > 0:
+            score[k] = wt[k] + c[b]; prev[k] = p[b]  # noqa: E702
+    k = int(score.argmax()); out = []  # noqa: E702
+    while k >= 0:
+        out.append((float(wa[I[k]]), float(S[k]))); k = int(prev[k])  # noqa: E702
+    return out[::-1]
+
+
+def window_shifts_weld(vtd, pipe_id, run_a, run_b) -> list[tuple[float, float]]:
+    """Сдвиг по цепочке совпавших швов; грубый сдвиг match (иначе corr) ограничивает кандидатов."""
+    pts = window_shifts(vtd, pipe_id, run_a, run_b, "match")
+    if not pts:
+        pts = window_shifts(vtd, pipe_id, run_a, run_b, "corr")
+    if not pts:
+        return []
+    x = np.array([p[0] for p in pts]); y = np.array([p[1] for p in pts])  # noqa: E702
+    o = np.argsort(x)
+    # грубый сдвиг сглажен медианой (одиночные выбросы окон match до 9 м у 22871)
+    y = pd.Series(y[o]).rolling(WELD_PRIOR_MED, center=True, min_periods=1).median().to_numpy()
+    prior = _interp(x[o], y)
+    sub = vtd[vtd["id"] == pipe_id]
+    XA, XB = _xa(sub[sub["run_date"] == run_a]), _xa(sub[sub["run_date"] == run_b])
+    ch = weld_chain(welds(pipe_id, run_a), welds(pipe_id, run_b), prior, XA, XB)
+    return ch if len(ch) >= 3 else pts
+
+
 def window_shifts(vtd: pd.DataFrame, pipe_id: int, run_a, run_b,
                   method: str | None = None) -> list[tuple[float, float]]:
     """Точки (дистанция центра окна в координатах пропуска A, сдвиг A -> B)."""
@@ -134,6 +221,10 @@ def window_shifts(vtd: pd.DataFrame, pipe_id: int, run_a, run_b,
         return _cache[key]
     sub = vtd[vtd["id"] == pipe_id]
     a, b = sub[sub["run_date"] == run_a], sub[sub["run_date"] == run_b]
+    if method == "weld":
+        pts = window_shifts_weld(vtd, pipe_id, run_a, run_b)
+        _cache[key] = pts
+        return pts
     pts = window_shifts_match(vtd, pipe_id, run_a, run_b) if method == "match" else []
     if not pts and len(a) and len(b):
         length = int(max(a["Distance"].max(), b["Distance"].max())) + MAX_SHIFT + 1
@@ -179,7 +270,7 @@ def _interp(x: np.ndarray, y: np.ndarray):
 
 
 def _shift_fn(x, y, method):
-    return _interp(x, y) if (method or SHIFT_METHOD) == "match" else _fit(x, y)
+    return _interp(x, y) if (method or SHIFT_METHOD) in ("match", "weld") else _fit(x, y)
 
 
 def raw_offsets() -> pd.Series:
@@ -239,6 +330,11 @@ COMPOSE = os.environ.get("PIPETWIN_CASE1_COMPOSE", "1") == "1"
 
 
 INSIDE_MED, INSIDE_ANCHOR = 5, 3  # медиана по окнам; число крайних окон для опорной прямой
+# Метод сдвига «предыдущий пропуск -> run» для нелинейной части (lab81): weld — цепочка кольцевых
+# швов, точнее окон match (симуляция lab71 на 1250011604: RMSE сдвига 0.71 -> 0.24 м; у 22871 убран
+# ложный −8 м на хвосте). Валидация не меняется (только прогноз 22871, corr 0.994 с match);
+# прирост метрикой не доказуем — она переключается от сдвигов < 0.1 м. PIPETWIN_INSIDE=match — как было.
+INSIDE_METHOD = os.environ.get("PIPETWIN_INSIDE", "weld")
 
 
 def inside_dev(vtd, pipe_id, run_a, run_b):
@@ -247,7 +343,7 @@ def inside_dev(vtd, pipe_id, run_a, run_b):
     Окна сглажены медианой INSIDE_MED (у 22871 пропуск 2018 редкий: соседние окна расходятся
     в среднем на 0.65 м, одиночные выбросы до 9 м), опорная прямая — через медианы
     INSIDE_ANCHOR крайних окон с каждой стороны (сами крайние окна шумные). Вне окон — края."""
-    pts = window_shifts(vtd, pipe_id, run_a, run_b, "match")
+    pts = window_shifts(vtd, pipe_id, run_a, run_b, INSIDE_METHOD)
     k = INSIDE_ANCHOR
     if len(pts) < 2 * k:
         return None
@@ -315,7 +411,7 @@ def to_profile(vtd, passport, pipe_id, run, exclude=None, method=None):
             return zero
         ls = line_shift(vtd, passport, pipe_id, cur, ref[-1], method)
         # только путь кейса 1 (method=match: прогноз 22871); строки обучения и кейс 2 — как были
-        if (COMPOSE and method == "match" and pipe_id == C.CASE1_ID
+        if (COMPOSE and method in ("match", "weld") and pipe_id == C.CASE1_ID
                 and cur == pd.Timestamp(C.CASE1_PREV_RUN)):
             ls = compose_inside(vtd, pipe_id, runs, cur, ls)
         steps.append(ls)
