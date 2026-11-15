@@ -1,4 +1,6 @@
+export { ComparisonPanel } from "./comparison/comparison-panel"
 export { SegmentSection } from "./drafting/segment-section"
 export { Inspection } from "./inspection/inspection"
+export { PriorityQueue } from "./inspection/priority-queue"
 export { SegmentFacts } from "./segment-facts"
 export type { WorkspaceProps } from "./variant-types"

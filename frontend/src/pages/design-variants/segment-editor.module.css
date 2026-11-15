@@ -1,0 +1,20 @@
+.editor {
+  position: absolute;
+  top: var(--space-96);
+  left: var(--space-24);
+  width: 10rem;
+  z-index: var(--layer-raised);
+  background: var(--surface-base);
+  border: 1px dashed var(--border-subtle);
+}
+.editor[data-editing="true"] {
+  width: min(20rem, calc(100% - 3rem));
+  padding: var(--space-12);
+  border: 0;
+}
+.hints {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--font-size-caption);
+}

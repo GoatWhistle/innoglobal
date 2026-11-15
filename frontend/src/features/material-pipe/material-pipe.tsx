@@ -1,0 +1,73 @@
+import { useEffect, useRef, useState } from "react"
+import type { PipeSummary, Profile } from "@/entities/pipe"
+import { useTranslation } from "@/shared/i18n"
+import { Banner, IconButton } from "@/shared/ui"
+import { createPipe, type MaterialEngine } from "./engine/engine.js"
+import styles from "./material-pipe.module.css"
+
+export function MaterialPipe({
+  pipe,
+  profile,
+  selected,
+  inspecting,
+  onPhase,
+}: {
+  readonly pipe: PipeSummary
+  readonly profile: Profile
+  readonly selected: number | null
+  readonly inspecting: boolean
+  readonly onPhase: (phase: string) => void
+}) {
+  const { t } = useTranslation()
+  const host = useRef<HTMLDivElement>(null)
+  const engine = useRef<MaterialEngine | null>(null)
+  const phase = useRef(onPhase)
+  phase.current = onPhase
+  const [failed, setFailed] = useState(false)
+  useEffect(() => {
+    if (!host.current) return
+    try {
+      const scene = createPipe(host.current, pipe.passport.direction, (value) =>
+        phase.current(value),
+      )
+      engine.current = scene
+      scene.corrosionMap(profile.rows, pipe.passport.length_m)
+      return () => {
+        scene.dispose()
+        engine.current = null
+      }
+    } catch {
+      setFailed(true)
+    }
+    return undefined
+  }, [pipe, profile])
+  useEffect(() => {
+    const row = profile.rows.find((r) => r.segment_id === selected)
+    if (inspecting && row)
+      engine.current?.inspect((row.start_m + row.end_m) / 2 / pipe.passport.length_m)
+    else engine.current?.reset()
+  }, [selected, inspecting, profile, pipe.passport.length_m])
+  return (
+    <div className={styles.scene}>
+      <section ref={host} className={styles.host} aria-label={t("pipe:scene.drag")} />
+      <div className={styles.controls}>
+        <IconButton
+          icon="minus"
+          label={t("variants:workspace.zoomOut")}
+          onClick={() => engine.current?.zoom(1 / 1.2)}
+        />
+        <IconButton
+          icon="plus"
+          label={t("variants:workspace.zoomIn")}
+          onClick={() => engine.current?.zoom(1.2)}
+        />
+        <IconButton
+          icon="reset"
+          label={t("variants:workspace.reset")}
+          onClick={() => engine.current?.fit()}
+        />
+      </div>
+      {failed ? <Banner tone="warning" title={t("pipe:restoration.fallback")} /> : null}
+    </div>
+  )
+}

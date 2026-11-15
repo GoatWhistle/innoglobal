@@ -42,12 +42,9 @@
   "showQueue": "Queue: {{count}}",
   "hideScene": "Collapse scene",
   "showScene": "Show pipe",
-  "clear": "Clear selection",
-  "highlight": "Selected segments: {{segments}}",
   "actionError": "This action belongs to another pipe or snapshot.",
   "sourceTitle": "Response source",
   "ranking": "First 10% of segments sorted by forecast thickness, then segment ID. Inspection queue is not failure probability.",
-  "exports": "Exports",
   "rankingTitle": "Selection rule",
   "expand": "Expand chat"
 }

@@ -9,7 +9,7 @@ export interface AppHeaderProps {
   readonly brandState?: BrandMarkState
 }
 
-export function AppHeader({ brandState = "calm" }: AppHeaderProps) {
+export function AppHeader({ brandState = "identity" }: AppHeaderProps) {
   const { t } = useTranslation()
   return (
     <header className={styles.header}>

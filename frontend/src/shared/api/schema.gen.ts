@@ -225,10 +225,35 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/assistant": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Answer */
+        post: operations["answer_api_v1_assistant_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AssistantIn */
+        AssistantIn: {
+            /** Prompt */
+            prompt: string;
+            context: components["schemas"]["ContextIn"];
+            /** History */
+            history?: components["schemas"]["HistoryIn"][];
+        };
         /** CaseOut */
         CaseOut: {
             /** Case Id */
@@ -295,6 +320,32 @@ export interface components {
             /** Forecast Mm */
             forecast_mm: number;
         };
+        /** ContextIn */
+        ContextIn: {
+            /** Pipe Id */
+            pipe_id: number;
+            /** Segment Id */
+            segment_id: number;
+            /** Snapshot Id */
+            snapshot_id: string;
+            /**
+             * Target Date
+             * Format: date
+             */
+            target_date: string;
+            /** Comparison Date */
+            comparison_date?: string | null;
+            /**
+             * Scope
+             * @default segment
+             * @enum {string}
+             */
+            scope: "segment" | "pipe";
+            /** From M */
+            from_m?: number | null;
+            /** To M */
+            to_m?: number | null;
+        };
         /** ErrorResponse */
         ErrorResponse: {
             /** Code */
@@ -320,6 +371,16 @@ export interface components {
              * @constant
              */
             status: "ok";
+        };
+        /** HistoryIn */
+        HistoryIn: {
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "user" | "assistant";
+            /** Content */
+            content: string;
         };
         /** ImportanceOut */
         ImportanceOut: {
@@ -1175,6 +1236,81 @@ export interface operations {
                 };
                 content: {
                     "text/csv": unknown;
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    answer_api_v1_assistant_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/x-ndjson": {
+                        /**
+                         * Type
+                         * @enum {string}
+                         */
+                        type: "status" | "delta" | "evidence" | "done" | "error";
+                        /**
+                         * Text
+                         * @default
+                         */
+                        text: string;
+                        /**
+                         * Code
+                         * @default
+                         */
+                        code: string;
+                        /** Actions */
+                        actions?: {
+                            [key: string]: unknown;
+                        }[];
+                        /** Values */
+                        values?: {
+                            [key: string]: unknown;
+                        }[];
+                    };
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
             /** @description Service Unavailable */

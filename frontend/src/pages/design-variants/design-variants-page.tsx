@@ -1,11 +1,6 @@
 import { useSearchParams } from "react-router"
-import {
-  type PipeList,
-  type PipeSummary,
-  readSelectedPipe,
-  usePipes,
-  useProfile,
-} from "@/entities/pipe"
+import { type PipeList, type PipeSummary, usePipes, useProfile } from "@/entities/pipe"
+import { PipelineMap } from "@/features/pipeline-map"
 import { useDocumentTitle, useTranslation } from "@/shared/i18n"
 import { Banner, ButtonLink, EmptyState, QueryView, Skeleton } from "@/shared/ui"
 import { VariantsWorkspace } from "./variants-workspace"
@@ -53,11 +48,12 @@ export function DesignVariantsPage() {
   const { t } = useTranslation()
   const [search] = useSearchParams()
   const pipes = usePipes()
-  const requested = Number(search.get("pipe") ?? readSelectedPipe())
+  const requested = Number(search.get("pipe"))
   useDocumentTitle(t("variants:names.inspection"))
   return (
     <QueryView query={pipes} label={t("variants:loading")} skeleton={<Skeleton shape="block" />}>
       {(data) => {
+        if (!search.has("pipe")) return <PipelineMap pipes={data} />
         const match = data.items.find((item) => item.pipe_id === requested)
         const pipe = match ?? data.items[0]
         return pipe ? (
