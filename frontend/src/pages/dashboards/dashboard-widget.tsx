@@ -1,0 +1,99 @@
+import type { WidgetDefinition } from "@/entities/dashboard"
+import { useThickness } from "@/entities/pipe"
+import {
+  AlignedTrack,
+  EvidenceLegend,
+  UnrollGrid,
+  type WorkspaceProps,
+} from "@/features/engineering-variants"
+import { useFormatters, useTranslation } from "@/shared/i18n"
+import { Button, ScrollArea } from "@/shared/ui"
+import { DashboardPriority } from "./dashboard-priority"
+import styles from "./dashboard-widget.module.css"
+export function DashboardWidget({
+  item,
+  workspace,
+}: {
+  readonly item: WidgetDefinition
+  readonly workspace: WorkspaceProps
+}) {
+  const format = useFormatters()
+  const thickness = useThickness(),
+    { t } = useTranslation()
+  if (item.kind === "metric")
+    return (
+      <div className={styles.metric}>
+        <strong>{thickness.withUnit(workspace.row.forecast_mm)}</strong>
+        <span>{thickness.range(workspace.row.start_m, workspace.row.end_m)}</span>
+      </div>
+    )
+  if (item.kind === "priority") return <DashboardPriority workspace={workspace} />
+  if (item.kind === "grid")
+    return (
+      <ScrollArea className={styles.scroll}>
+        <UnrollGrid
+          profile={workspace.profile}
+          selected={workspace.row.segment_id}
+          onSelect={workspace.onSelect}
+        />
+      </ScrollArea>
+    )
+  if (item.kind === "table")
+    return (
+      <ScrollArea className={styles.scroll}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>{t("variants:workspace.edit")}</th>
+              <th>{t("variants:workspace.minimum")}</th>
+              <th>{t("inspector:interval")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {workspace.profile.rows
+              .filter((r) => r.end_m > workspace.range.from && r.start_m < workspace.range.to)
+              .map((row) => (
+                <tr
+                  key={row.segment_id}
+                  aria-selected={row.segment_id === workspace.row.segment_id}
+                >
+                  <td>
+                    <Button variant="quiet" onClick={() => workspace.onSelect(row.segment_id)}>
+                      {thickness.range(row.start_m, row.end_m)}
+                    </Button>
+                  </td>
+                  <td>{thickness.withUnit(row.forecast_mm)}</td>
+                  <td>
+                    {t("pipe:unit.span", {
+                      from: thickness.withUnit(row.p10_mm),
+                      to: thickness.withUnit(row.p90_mm),
+                    })}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </ScrollArea>
+    )
+  return (
+    <div className={styles.chart}>
+      <AlignedTrack
+        {...workspace}
+        kind={item.kind}
+        date={workspace.baselineDate}
+        overlay={item.kind === "forecast"}
+      />
+      {item.kind === "forecast" ? <EvidenceLegend date={workspace.baselineDate} /> : null}
+      {item.kind === "delta" ? (
+        <p className={styles.note}>
+          {t("variants:deltaExplanation", {
+            date: workspace.baselineDate
+              ? format.date(workspace.baselineDate)
+              : t("variants:nominalBase"),
+            target: format.date(workspace.pipe.target_date),
+          })}
+        </p>
+      ) : null}
+    </div>
+  )
+}

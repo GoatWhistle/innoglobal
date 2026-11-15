@@ -22,7 +22,10 @@ export const router = createBrowserRouter([
       },
       {
         path: "dashboards/:id",
-        lazy: lazyPage(() => import("@/pages/dashboards/dashboards-page"), "DashboardsPage"),
+        lazy: lazyPage(
+          () => import("@/pages/dashboards/assistant-dashboards-page"),
+          "AssistantDashboardsPage",
+        ),
       },
       { path: "design/variants/inspection", lazy: workspace },
       {

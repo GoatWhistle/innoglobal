@@ -12,7 +12,7 @@ Event identity, deadline and criterion weights are not confirmed by the provided
 | Current scope | approved | Complete local product on real imported data, per work/full-product-plan.md | work/full-product-plan.md, 2026-11-14 |
 | Design | implemented | Onest, graphite/paper, own icons, RU only; physical 3D pipe, profile and dimensioned engineering sheet | frontend/DESIGN.md; work/audits/full-product/progress-review.md |
 | Data | verified locally | ML source CSVs, DuckDB and 2000 forecasts connected to FastAPI and React | README-ML.md, result.csv; merge 251a5ab |
-| Current frontend | verified locally | Live fleet at /; selected pipe workspace, assistant, dashboards and data/model pages retained | work/latest-frontend-dev.md, 2026-11-15 |
+| Current frontend | verified locally 2026-11-15 | Fleet at /, pipe workspace, custom dashboards at /dashboards, assistant dashboards at /dashboards/:id; 394 frontend tests | work/audits/dashboards/README.md, 2026-11-15 |
 | Earlier leak simulator | removed 2026-11-14 | Not part of the final design system; brief kept | brief/pipetwin-original.md; git history |
 
 ## Pointers

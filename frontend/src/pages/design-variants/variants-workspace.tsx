@@ -1,13 +1,13 @@
-import { useState } from "react"
-import { useSearchParams } from "react-router"
+import { useEffect, useState } from "react"
+import { useNavigate, useSearchParams } from "react-router"
 import type { AssistantAction, AssistantMessage } from "@/entities/assistant"
 import { type PipeList, type PipeSummary, type Profile, useWorkspaceState } from "@/entities/pipe"
 import { AssistantDock } from "@/features/engineering-assistant"
 import {
-  ComparisonPanel,
   PriorityQueue,
   SegmentFacts,
   SegmentSection,
+  UnrollGrid,
   type WorkspaceProps,
 } from "@/features/engineering-variants"
 import { MaterialPipe } from "@/features/material-pipe"
@@ -15,7 +15,6 @@ import { PipeScene } from "@/features/pipe-scene"
 import { useTranslation } from "@/shared/i18n"
 import { Banner, Button, Disclosure, Drawer, Icon, Segmented } from "@/shared/ui"
 import { SegmentEditor } from "./segment-editor"
-import { UnrollGrid } from "./unroll-grid"
 import { applyAssistantAction } from "./workspace-actions"
 import { WorkspaceHeader } from "./workspace-header"
 import { WorkspaceMetrics } from "./workspace-metrics"
@@ -27,6 +26,7 @@ export interface VariantsWorkspaceProps {
   readonly profile: Profile
 }
 export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
+  const navigate = useNavigate()
   const { t } = useTranslation()
   const [params, setParams] = useSearchParams()
   const state = useWorkspaceState(profile.rows, 0)
@@ -44,6 +44,12 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
   const [date, setDate] = useState(pipe.last_observed_run ?? undefined)
   const [source, setSource] = useState(false)
   const [controlsHost, setControlsHost] = useState<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (!charts) return
+    const next = new URLSearchParams(params)
+    if (date) next.set("baseline", date)
+    navigate(`/dashboards?${next}`)
+  }, [charts, date, navigate, params])
   if (!row) return null
   const select = (id: number) => {
     state.select(id)
@@ -99,7 +105,7 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
             inspecting={inspecting}
             onInspect={() => setInspecting((v) => !v)}
             onSelect={select}
-            onCharts={() => setCharts((v) => !v)}
+            onCharts={() => navigate(`/dashboards?${params}`)}
             onHide={() => setMetrics(false)}
           />
         ) : null}
@@ -194,7 +200,7 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
           <Icon name="message-circle" size="control" />
         </Button>
       ) : null}
-      {charts ? <ComparisonPanel {...workspace} date={date} onDate={setDate} compact /> : null}
+
       <Disclosure title={t("variants:segmentEvidence")}>
         <SegmentFacts {...workspace} detailsOnly />
       </Disclosure>
