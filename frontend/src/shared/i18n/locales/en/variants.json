@@ -101,9 +101,6 @@
   "queueTitle": "Inspection queue ({{count}})",
   "workspace": {
     "fleet": "Pipelines",
-    "mapHint": "Select a pipeline on the map or in the list",
-    "country": "Russia",
-    "network": "Find pipelines",
     "charts": "Charts",
     "edit": "Segment number",
     "enter": "Enter: go",
@@ -133,7 +130,17 @@
     "queueCount": "Segments in queue",
     "openPipe": "Open pipeline",
     "fleetView": "Pipeline view",
-    "listView": "List"
+    "listView": "List",
+    "mapPipes": "Pipelines with a forecast",
+    "mapLegendProduct": "Pipelines with a wall forecast",
+    "mapLegendNetwork": "Rest of the field network",
+    "mapLon": "{{value}}° E",
+    "mapLat": "{{value}}° N",
+    "mapKm": "{{value}} km",
+    "mapMeters": "{{value}} m",
+    "mapFit": "Show the whole field",
+    "mapLocator": "Show all of Russia",
+    "mapNoForecast": "No forecast"
   },
   "dash": {
     "title": "Dashboards",

@@ -1,43 +1,185 @@
-.map {
-  position: relative;
-  border-block: var(--hairline) solid var(--border-subtle);
-  min-height: 38rem;
+.layout {
+  display: grid;
+  grid-template-columns: 20rem minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-32);
 }
-.map canvas {
-  display: block;
+
+.sidebar {
+  display: grid;
+  align-content: start;
+  gap: var(--space-24);
+}
+
+.sidebar > * + * {
+  padding-block-start: var(--space-24);
+  border-block-start: var(--hairline) solid var(--border-subtle);
+}
+
+.context {
+  display: grid;
+  gap: var(--space-16);
+}
+
+.stage {
+  position: relative;
+  block-size: calc(100svh - var(--header-height) - 11rem);
+  min-block-size: 34rem;
+  overflow: hidden;
+  border: var(--hairline) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface-base);
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: 38rem;
+  height: 100%;
   cursor: grab;
   touch-action: none;
 }
-.map canvas:active {
+
+.canvas[data-hover] {
+  cursor: pointer;
+}
+
+.canvas:active {
   cursor: grabbing;
 }
-.controls {
+
+.tip {
+  composes: float from "../../shared/ui/primitives/surface/surface.module.css";
   position: absolute;
-  inset: var(--space-16) auto auto var(--space-16);
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-12);
+  translate: var(--space-12) var(--space-12);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.tip strong {
+  color: var(--text-primary);
+  font-weight: var(--weight-medium);
+}
+
+.pipes {
+  display: grid;
+  gap: var(--space-12);
+}
+
+.caption {
+  composes: captionText from "../../shared/styles/compose.module.css";
+}
+
+.options {
+  composes: plainList from "../../shared/styles/compose.module.css";
+  display: grid;
+  gap: var(--space-4);
+}
+
+.option {
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  justify-content: flex-start;
+  padding-block: var(--space-8);
+  text-align: start;
+}
+
+.optionText {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.optionName {
+  font-weight: var(--weight-medium);
+}
+
+.optionMeta {
+  composes: captionText from "../../shared/styles/compose.module.css";
+  font-weight: var(--weight-regular);
+}
+
+.option[aria-pressed="true"] .optionMeta {
+  color: inherit;
+}
+
+.legend {
+  composes: plainList from "../../shared/styles/compose.module.css";
+  display: grid;
+  gap: var(--space-8);
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.legend li {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-8);
 }
-.readout {
+
+.swatch {
+  inline-size: var(--space-20);
+  block-size: var(--track-size);
+  border-radius: var(--radius-pill);
+  background-color: var(--text-secondary);
+}
+
+.swatch[data-kind="network"] {
+  block-size: var(--hairline);
+  background-color: var(--border-strong);
+}
+
+.locator {
+  composes: frame from "../../shared/ui/primitives/surface/surface.module.css";
+  inline-size: 100%;
+  min-block-size: var(--target-min);
+  padding: var(--space-12);
+}
+
+.locator svg {
+  inline-size: 100%;
+}
+
+.locatorLand {
+  fill: var(--surface-sunken);
+  stroke: var(--border-strong);
+  stroke-width: 0.25;
+}
+
+.locatorHalo {
+  fill: none;
+  stroke: var(--text-primary);
+  stroke-width: 0.4;
+}
+
+.locatorDot {
+  fill: var(--text-primary);
+}
+
+.controls {
+  composes: float from "../../shared/ui/primitives/surface/surface.module.css";
   position: absolute;
-  right: var(--space-16);
-  bottom: var(--space-16);
-  width: 20rem;
+  inset-block-end: var(--space-16);
+  inset-inline-end: var(--space-16);
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-4);
 }
-.list {
-  margin-block-start: var(--space-16);
-}
-@media (width < 48rem) {
-  .map {
-    min-height: auto;
+
+@media (width < 64rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
   }
-  .map canvas {
-    height: 26rem;
+  .stage {
+    order: -1;
+    block-size: 30rem;
+    min-block-size: 0;
   }
-  .readout {
-    position: static;
-    width: auto;
+  .locator {
+    display: none;
   }
 }

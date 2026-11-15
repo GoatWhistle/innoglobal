@@ -90,6 +90,10 @@
 }
 
 .button[aria-pressed="true"] {
+  --button-surface: var(--action-primary);
+  --button-surface-hover: var(--action-primary-hover);
+  --button-surface-press: var(--action-primary-press);
+  --button-text: var(--action-primary-text);
   background-color: var(--action-primary);
   color: var(--action-primary-text);
 }

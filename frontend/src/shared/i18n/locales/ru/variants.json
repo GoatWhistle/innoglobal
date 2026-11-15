@@ -103,9 +103,6 @@
   "queueTitle": "Очередь проверки ({{count}})",
   "workspace": {
     "fleet": "Трубопроводы",
-    "mapHint": "Выберите трубу на карте или в списке",
-    "country": "Вся Россия",
-    "network": "К трубам",
     "charts": "Графики",
     "edit": "Номер участка",
     "enter": "Enter / перейти",
@@ -135,7 +132,17 @@
     "queueCount": "Участков в очереди",
     "openPipe": "Открыть трубу",
     "fleetView": "Вид списка трубопроводов",
-    "listView": "Список"
+    "listView": "Список",
+    "mapPipes": "Трубы с прогнозом",
+    "mapLegendProduct": "Трубы с прогнозом толщины",
+    "mapLegendNetwork": "Остальная сеть месторождения",
+    "mapLon": "{{value}}° в. д.",
+    "mapLat": "{{value}}° с. ш.",
+    "mapKm": "{{value}} км",
+    "mapMeters": "{{value}} м",
+    "mapFit": "Показать всё месторождение",
+    "mapLocator": "Показать всю Россию",
+    "mapNoForecast": "Без прогноза"
   },
   "dash": {
     "title": "Дашборды",
