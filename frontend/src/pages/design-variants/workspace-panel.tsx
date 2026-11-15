@@ -1,11 +1,10 @@
+import { useState } from "react"
 import type { PipeSummary, Profile, SegmentRow } from "@/entities/pipe"
 import { useThickness } from "@/entities/pipe"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { Button, Card, ScrollArea } from "@/shared/ui"
+import { Button, Card, ScrollArea, Segmented } from "@/shared/ui"
 import { SegmentPicker } from "./segment-picker"
 import styles from "./workspace-panel.module.css"
-
-const PREVIEW = 5
 
 export interface WorkspacePanelProps {
   readonly pipe: PipeSummary
@@ -15,7 +14,6 @@ export interface WorkspacePanelProps {
   readonly inspecting: boolean
   readonly onSelect: (id: number) => void
   readonly onInspect: () => void
-  readonly onQueue: () => void
 }
 
 function SegmentFactsList({ pipe, row }: { readonly pipe: PipeSummary; readonly row: SegmentRow }) {
@@ -64,11 +62,14 @@ export function WorkspacePanel(props: WorkspacePanelProps) {
   const { pipe, profile, row, selected, inspecting, onSelect } = props
   const { t } = useTranslation()
   const thickness = useThickness()
+  const [order, setOrder] = useState<"rank" | "distance">("rank")
   const queue = profile.rows
     .filter((item) => item.priority_rank !== null)
-    .sort((a, b) => (a.priority_rank ?? 0) - (b.priority_rank ?? 0))
+    .sort((a, b) =>
+      order === "rank" ? (a.priority_rank ?? 0) - (b.priority_rank ?? 0) : a.start_m - b.start_m,
+    )
   return (
-    <ScrollArea className={styles.panel}>
+    <div className={styles.panel}>
       <section className={styles.block}>
         <SegmentPicker
           key={selected ?? "none"}
@@ -84,7 +85,7 @@ export function WorkspacePanel(props: WorkspacePanelProps) {
           appearance="plain"
           className={styles.block}
           title={t("inspector:title", { segment: row.segment_id })}
-          description={thickness.range(row.start_m, row.end_m)}
+          actions={<span className={styles.count}>{thickness.range(row.start_m, row.end_m)}</span>}
         >
           <SegmentFactsList pipe={pipe} row={row} />
           {inspecting ? (
@@ -97,32 +98,42 @@ export function WorkspacePanel(props: WorkspacePanelProps) {
       )}
       <Card
         appearance="plain"
-        className={styles.block}
+        className={styles.queueBlock}
         title={t("variants:queue")}
         actions={<span className={styles.count}>{queue.length}</span>}
       >
-        <ul className={styles.queue}>
-          {queue.slice(0, PREVIEW).map((item) => (
-            <li key={item.segment_id}>
-              <Button
-                variant="quiet"
-                className={styles.queueItem}
-                aria-pressed={item.segment_id === selected}
-                onClick={() => onSelect(item.segment_id)}
-              >
-                <span className={styles.queueRow}>
-                  <span className={styles.rank}>{item.priority_rank}</span>
-                  <span className={styles.where}>{thickness.range(item.start_m, item.end_m)}</span>
-                  <strong>{thickness.withUnit(item.forecast_mm)}</strong>
-                </span>
-              </Button>
-            </li>
-          ))}
-        </ul>
-        <Button variant="quiet" icon="journal" onClick={props.onQueue}>
-          {t("variants:workspace.allQueue", { count: queue.length })}
-        </Button>
+        <Segmented
+          label={t("variants:order")}
+          value={order}
+          onChange={setOrder}
+          options={[
+            { value: "rank", label: t("variants:byPriority") },
+            { value: "distance", label: t("variants:byDistance") },
+          ]}
+        />
+        <ScrollArea className={styles.queueScroll}>
+          <ul className={styles.queue}>
+            {queue.map((item) => (
+              <li key={item.segment_id}>
+                <Button
+                  variant="quiet"
+                  className={styles.queueItem}
+                  aria-pressed={item.segment_id === selected}
+                  onClick={() => onSelect(item.segment_id)}
+                >
+                  <span className={styles.queueRow}>
+                    <span className={styles.rank}>{item.priority_rank}</span>
+                    <span className={styles.where}>
+                      {thickness.range(item.start_m, item.end_m)}
+                    </span>
+                    <strong>{thickness.withUnit(item.forecast_mm)}</strong>
+                  </span>
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </ScrollArea>
       </Card>
-    </ScrollArea>
+    </div>
   )
 }

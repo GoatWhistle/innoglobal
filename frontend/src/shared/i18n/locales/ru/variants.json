@@ -138,11 +138,9 @@
     "mapSelected": "Выбранная труба",
     "mapCredit": "Данные карты: © участники OpenStreetMap, ODbL; Natural Earth",
     "nominal": "По паспорту",
-    "pickHint": "Номер от 0 до {{max}}, Enter чтобы перейти",
+    "pickHint": "От 0 до {{max}}, Enter",
     "pickPrompt": "Выберите участок: введите номер, нажмите на трубу или выберите строку из очереди проверки.",
-    "askAssistant": "Спросить помощника",
-    "csv": "Скачать CSV",
-    "allQueue": "Вся очередь ({{count}})"
+    "csv": "Скачать CSV"
   },
   "dash": {
     "title": "Дашборды",

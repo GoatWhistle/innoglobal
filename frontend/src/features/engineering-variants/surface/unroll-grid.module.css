@@ -1,5 +1,13 @@
 .surface {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  min-block-size: 0;
   padding: var(--space-24);
+}
+.gridBox {
+  flex: 1;
+  min-block-size: 0;
 }
 .surface header,
 .surface footer {

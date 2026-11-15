@@ -91,17 +91,17 @@
   --chart-crosshair: color-mix(in oklab, var(--ink-1000) 45%, transparent);
   --chart-warning: var(--amber-500);
   --chart-danger: var(--leak-700);
-  --wall-steel: var(--steel-300);
-  --wall-rust: var(--rust-500);
-  --wall-amber: var(--wall-amber-500);
-  --wall-0: color-mix(in oklab, var(--wall-rust) 0%, var(--wall-steel));
-  --wall-1: color-mix(in oklab, var(--wall-rust) 29%, var(--wall-steel));
-  --wall-2: color-mix(in oklab, var(--wall-rust) 57%, var(--wall-steel));
-  --wall-3: color-mix(in oklab, var(--wall-rust) 86%, var(--wall-steel));
-  --wall-4: color-mix(in oklab, var(--wall-amber) 14%, var(--wall-rust));
-  --wall-5: color-mix(in oklab, var(--wall-amber) 43%, var(--wall-rust));
-  --wall-6: color-mix(in oklab, var(--wall-amber) 71%, var(--wall-rust));
-  --wall-7: color-mix(in oklab, var(--wall-amber) 100%, var(--wall-rust));
+  --wall-steel: var(--ink-200);
+  --wall-rust: var(--ink-600);
+  --wall-amber: var(--amber-500);
+  --wall-0: var(--ink-100);
+  --wall-1: var(--ink-200);
+  --wall-2: var(--ink-300);
+  --wall-3: var(--ink-400);
+  --wall-4: var(--ink-500);
+  --wall-5: var(--ink-700);
+  --wall-6: var(--amber-500);
+  --wall-7: var(--leak-700);
 }
 
 :root[data-theme="dark"] {
@@ -196,17 +196,17 @@
   --chart-crosshair: color-mix(in oklab, var(--ink-0) 45%, transparent);
   --chart-warning: var(--amber-300);
   --chart-danger: var(--leak-300);
-  --wall-steel: var(--steel-500);
-  --wall-rust: var(--rust-600);
+  --wall-steel: var(--ink-700);
+  --wall-rust: var(--ink-300);
   --wall-amber: var(--amber-400);
-  --wall-0: color-mix(in oklab, var(--wall-rust) 0%, var(--wall-steel));
-  --wall-1: color-mix(in oklab, var(--wall-rust) 29%, var(--wall-steel));
-  --wall-2: color-mix(in oklab, var(--wall-rust) 57%, var(--wall-steel));
-  --wall-3: color-mix(in oklab, var(--wall-rust) 86%, var(--wall-steel));
-  --wall-4: color-mix(in oklab, var(--wall-amber) 14%, var(--wall-rust));
-  --wall-5: color-mix(in oklab, var(--wall-amber) 43%, var(--wall-rust));
-  --wall-6: color-mix(in oklab, var(--wall-amber) 71%, var(--wall-rust));
-  --wall-7: color-mix(in oklab, var(--wall-amber) 100%, var(--wall-rust));
+  --wall-0: var(--ink-800);
+  --wall-1: var(--ink-700);
+  --wall-2: var(--ink-600);
+  --wall-3: var(--ink-500);
+  --wall-4: var(--ink-400);
+  --wall-5: var(--ink-200);
+  --wall-6: var(--amber-400);
+  --wall-7: var(--leak-300);
 }
 
 :root[data-theme="light"] {

@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { useSearchParams } from "react-router"
+import { useNavigate, useSearchParams } from "react-router"
+import type { AssistantAction, AssistantMessage } from "@/entities/assistant"
 import { type PipeList, type PipeSummary, type Profile, useWorkspaceState } from "@/entities/pipe"
+import { AssistantChat } from "@/features/engineering-assistant"
 import {
-  PriorityQueue,
   SegmentFacts,
   SegmentSection,
   UnrollGrid,
@@ -15,11 +16,11 @@ import {
   ButtonAnchor,
   ButtonLink,
   Disclosure,
-  Drawer,
+  IconButton,
   PageHeader,
-  ScrollArea,
   Segmented,
 } from "@/shared/ui"
+import { useChatOpen } from "./use-chat-open"
 import { WorkspacePanel } from "./workspace-panel"
 import styles from "./workspace-shell.module.css"
 
@@ -40,8 +41,8 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
   const row = profile.rows.find((r) => r.segment_id === state.segment) ?? profile.rows[0]
   const mode: View = params.get("view") === "unroll" ? "unroll" : "route"
   const [inspecting, setInspecting] = useState(false)
-  const [queue, setQueue] = useState(false)
-  const [order, setOrder] = useState<"rank" | "distance">("rank")
+  const [chat, setChat] = useChatOpen()
+  const navigate = useNavigate()
   const [date, setDate] = useState(pipe.last_observed_run ?? undefined)
   if (!row) return null
   const select = (id: number) => {
@@ -72,6 +73,15 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
     baselineDate: date,
     onComparisonDate: setDate,
   }
+  const act = (action: AssistantAction, _message: AssistantMessage) => {
+    if (action.kind === "source" && action.source === "model") {
+      navigate("/model")
+      return
+    }
+    const id = action.segment_ids?.[0]
+    if (id !== undefined) select(id)
+    if (action.kind === "view") setMode(action.view === "unroll" ? "unroll" : "route")
+  }
   const context = new URLSearchParams({ pipe: String(pipe.pipe_id) })
   if (selected !== null) context.set("segment", String(selected))
   return (
@@ -99,9 +109,6 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
                 { value: "unroll", label: t("pipe:scene.unroll") },
               ]}
             />
-            <ButtonLink variant="secondary" icon="message-circle" to={`/assistant?${context}`}>
-              {t("variants:workspace.askAssistant")}
-            </ButtonLink>
             <ButtonLink variant="secondary" icon="chart" to={`/dashboards?${context}`}>
               {t("assistant:dashboards")}
             </ButtonLink>
@@ -111,7 +118,7 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
           </div>
         }
       />
-      <div className={styles.workspace}>
+      <div className={styles.workspace} data-chat={chat}>
         <WorkspacePanel
           pipe={pipe}
           profile={profile}
@@ -123,7 +130,6 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
             if (mode !== "route") setMode("route")
             setInspecting((value) => !value)
           }}
-          onQueue={() => setQueue(true)}
         />
         <main className={styles.stage}>
           {mode === "route" ? (
@@ -135,34 +141,30 @@ export function VariantsWorkspace({ pipe, profile }: VariantsWorkspaceProps) {
               onPhase={() => undefined}
             />
           ) : (
-            <ScrollArea className={styles.unroll}>
-              <UnrollGrid profile={profile} selected={selected} onSelect={select} />
-            </ScrollArea>
+            <UnrollGrid profile={profile} selected={selected} onSelect={select} />
           )}
         </main>
+        {chat ? (
+          <AssistantChat
+            pipe={pipe}
+            profile={profile}
+            row={row}
+            onHide={() => setChat(false)}
+            onAction={act}
+          />
+        ) : (
+          <aside className={styles.rail}>
+            <IconButton
+              icon="message-circle"
+              label={t("assistant:show")}
+              onClick={() => setChat(true)}
+            />
+          </aside>
+        )}
       </div>
       <Disclosure title={t("variants:segmentEvidence")}>
         <SegmentFacts {...workspace} detailsOnly />
       </Disclosure>
-      <Drawer open={queue} onClose={() => setQueue(false)} title={t("variants:queue")}>
-        <PriorityQueue
-          pipe={pipe}
-          row={row}
-          rows={profile.rows
-            .filter((r) => r.priority_rank !== null)
-            .sort((a, b) =>
-              order === "rank"
-                ? (a.priority_rank ?? 0) - (b.priority_rank ?? 0)
-                : a.start_m - b.start_m,
-            )}
-          order={order}
-          onOrder={setOrder}
-          onSelect={(id) => {
-            select(id)
-            setQueue(false)
-          }}
-        />
-      </Drawer>
     </div>
   )
 }

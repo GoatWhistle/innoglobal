@@ -1,15 +1,14 @@
 .panel {
-  display: grid;
-  align-content: start;
-  gap: var(--space-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
   min-block-size: 0;
-  padding-inline-end: var(--space-8);
 }
 
 .block {
   display: grid;
-  gap: var(--space-16);
-  padding-block-end: var(--space-24);
+  gap: var(--space-12);
+  padding-block-end: var(--space-16);
   border-block-end: var(--hairline) solid var(--border-subtle);
 }
 
@@ -44,7 +43,7 @@
 
 .facts {
   display: grid;
-  gap: var(--space-12);
+  gap: var(--space-8);
 }
 
 .facts div {
@@ -65,13 +64,28 @@
 }
 
 .facts .lead dd {
-  font-size: var(--font-size-heading);
+  font-size: var(--font-size-lead);
   font-weight: var(--weight-medium);
 }
 
 .note {
   color: var(--text-secondary);
   font-size: var(--font-size-label);
+}
+
+.queueBlock {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-12);
+  min-block-size: 0;
+}
+
+.queueScroll {
+  flex: 1;
+  min-block-size: 0;
+  margin-inline: calc(var(--space-12) * -1);
+  padding-inline: var(--space-12);
 }
 
 .queue {

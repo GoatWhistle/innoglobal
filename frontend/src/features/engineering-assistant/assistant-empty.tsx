@@ -15,7 +15,6 @@ export function AssistantEmpty({ context, disabled, onAsk }: AssistantEmptyProps
   return (
     <div className={styles.empty}>
       <h1 className={styles.intro}>{t("assistant:welcome")}</h1>
-      <p className={styles.lead}>{t("assistant:page.description")}</p>
       <p className={styles.context}>{context}</p>
       <div className={styles.starters}>
         {STARTERS.map((key) => (

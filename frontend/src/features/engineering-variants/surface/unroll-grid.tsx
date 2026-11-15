@@ -7,7 +7,7 @@ import { Card } from "@/shared/ui"
 import styles from "./unroll-grid.module.css"
 
 const GUTTER = 64
-const ROW = 24
+const MIN_ROW = 18
 const STEPS = [0, 1, 2, 3, 4, 5, 6, 7] as const
 export function UnrollGrid({
   profile,
@@ -24,6 +24,8 @@ export function UnrollGrid({
     { theme } = useTheme()
   const canvas = useRef<HTMLCanvasElement>(null)
   const columns = useRef(50)
+  const rowHeight = useRef(MIN_ROW)
+  const box = useRef<HTMLDivElement>(null)
   const min = Math.min(...profile.rows.map((row) => row.forecast_mm))
   const row = profile.rows.find((item) => item.segment_id === selected)
   const label = row
@@ -37,6 +39,9 @@ export function UnrollGrid({
       const width = element.clientWidth
       columns.current = width < 480 ? 20 : 50
       const rows = Math.ceil(profile.rows.length / columns.current)
+      const room = box.current?.clientHeight ?? 0
+      const ROW = Math.max(MIN_ROW, Math.floor(room / rows))
+      rowHeight.current = ROW
       const height = rows * ROW
       const ratio = window.devicePixelRatio
       element.width = width * ratio
@@ -74,16 +79,17 @@ export function UnrollGrid({
         const x = GUTTER + (index % columns.current) * cell,
           y = Math.floor(index / columns.current) * ROW
         ctx.fillStyle = tokens.getPropertyValue(`--wall-${level}`)
-        ctx.fillRect(x + 2, y + 2, cell - 4, 20)
+        ctx.fillRect(x + 1, y + 1, cell - 2, ROW - 2)
         if (item.segment_id === selected) {
           ctx.strokeStyle = tokens.getPropertyValue("--text-primary")
           ctx.lineWidth = 2
-          ctx.strokeRect(x + 1, y + 1, cell - 2, 22)
+          ctx.strokeRect(x + 1, y + 1, cell - 2, ROW - 2)
         }
       })
     }
     const observer = new ResizeObserver(draw)
     observer.observe(element)
+    if (box.current) observer.observe(box.current)
     draw()
     return () => observer.disconnect()
   }, [profile, selected, min, theme, t, format])
@@ -104,47 +110,50 @@ export function UnrollGrid({
         </span>
         <span>{t("pipe:restoration.thinner")}</span>
       </div>
-      <canvas
-        ref={canvas}
-        className={styles.grid}
-        tabIndex={0}
-        role="slider"
-        aria-label={t("variants:workspace.surface")}
-        aria-valuemin={0}
-        aria-valuemax={profile.rows.length - 1}
-        aria-valuenow={selected ?? 0}
-        aria-valuetext={label}
-        title={label}
-        onPointerDown={(event) => {
-          const box = event.currentTarget.getBoundingClientRect()
-          const index =
-            Math.floor((event.clientY - box.top) / ROW) * columns.current +
-            Math.floor(
-              (event.clientX - box.left - GUTTER) / ((box.width - GUTTER) / columns.current),
+      <div ref={box} className={styles.gridBox}>
+        <canvas
+          ref={canvas}
+          className={styles.grid}
+          tabIndex={0}
+          role="slider"
+          aria-label={t("variants:workspace.surface")}
+          aria-valuemin={0}
+          aria-valuemax={profile.rows.length - 1}
+          aria-valuenow={selected ?? 0}
+          aria-valuetext={label}
+          title={label}
+          onPointerDown={(event) => {
+            const rect = event.currentTarget.getBoundingClientRect()
+            const index =
+              Math.floor((event.clientY - rect.top) / rowHeight.current) * columns.current +
+              Math.floor(
+                (event.clientX - rect.left - GUTTER) / ((rect.width - GUTTER) / columns.current),
+              )
+            const item = profile.rows[index]
+            if (item) onSelect(item.segment_id)
+          }}
+          onKeyDown={(event) => {
+            const index = Math.max(
+              0,
+              profile.rows.findIndex((item) => item.segment_id === selected),
             )
-          const item = profile.rows[index]
-          if (item) onSelect(item.segment_id)
-        }}
-        onKeyDown={(event) => {
-          const index = Math.max(
-            0,
-            profile.rows.findIndex((item) => item.segment_id === selected),
-          )
-          const offsets: Record<string, number> = {
-            ArrowLeft: -1,
-            ArrowRight: 1,
-            ArrowUp: -columns.current,
-            ArrowDown: columns.current,
-            Home: -index,
-            End: profile.rows.length - 1 - index,
-          }
-          const offset = offsets[event.key]
-          if (offset === undefined) return
-          event.preventDefault()
-          const item = profile.rows[Math.max(0, Math.min(profile.rows.length - 1, index + offset))]
-          if (item) onSelect(item.segment_id)
-        }}
-      />
+            const offsets: Record<string, number> = {
+              ArrowLeft: -1,
+              ArrowRight: 1,
+              ArrowUp: -columns.current,
+              ArrowDown: columns.current,
+              Home: -index,
+              End: profile.rows.length - 1 - index,
+            }
+            const offset = offsets[event.key]
+            if (offset === undefined) return
+            event.preventDefault()
+            const item =
+              profile.rows[Math.max(0, Math.min(profile.rows.length - 1, index + offset))]
+            if (item) onSelect(item.segment_id)
+          }}
+        />
+      </div>
       <footer>
         <span>{label}</span>
         <span>

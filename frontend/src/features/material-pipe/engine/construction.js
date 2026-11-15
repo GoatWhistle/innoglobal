@@ -167,7 +167,7 @@ p=pos;n=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMat
   const label = makeLabel(name)
   group.add(label)
   const marker = new THREE.Mesh(
-    new THREE.TorusGeometry(0.74, 0.028, 12, 96),
+    new THREE.TorusGeometry(0.738, 0.009, 8, 128),
     new THREE.MeshBasicMaterial({ color: 0xf7f6f4, transparent: true, opacity: 0.95 }),
   )
   marker.rotation.y = Math.PI / 2

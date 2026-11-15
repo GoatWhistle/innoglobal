@@ -136,11 +136,9 @@
     "mapSelected": "Selected pipeline",
     "mapCredit": "Map data: © OpenStreetMap contributors, ODbL; Natural Earth",
     "nominal": "Nominal wall",
-    "pickHint": "Number from 0 to {{max}}, press Enter to go",
+    "pickHint": "From 0 to {{max}}, Enter",
     "pickPrompt": "Pick a segment: type its number, click the pipe or choose a row from the inspection queue.",
-    "askAssistant": "Ask the assistant",
-    "csv": "Download CSV",
-    "allQueue": "Whole queue ({{count}})"
+    "csv": "Download CSV"
   },
   "dash": {
     "title": "Dashboards",

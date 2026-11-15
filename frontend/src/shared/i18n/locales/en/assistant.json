@@ -62,8 +62,8 @@
   "page": {
     "newChat": "New conversation",
     "followUps": "You can ask next",
-    "pipe": "Pipeline",
-    "description": "The assistant reads the wall thickness forecast, inspection runs and the inspection queue of the selected pipe. Every answer is grounded in server data.",
     "pipeContext": "Whole pipe {{pipe}}, forecast for {{date}}"
-  }
+  },
+  "hide": "Hide assistant",
+  "show": "Open assistant"
 }

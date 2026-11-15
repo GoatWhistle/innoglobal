@@ -1,8 +1,8 @@
-import { type ReactNode, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { type AssistantAction, type AssistantMessage, useAssistant } from "@/entities/assistant"
 import type { PipeSummary, Profile, SegmentRow } from "@/entities/pipe"
 import { useFormatters, useTranslation } from "@/shared/i18n"
-import { Button, Segmented } from "@/shared/ui"
+import { Button, Card, IconButton, ScrollArea, Segmented } from "@/shared/ui"
 import { AssistantAnswer } from "./assistant-answer"
 import styles from "./assistant-chat.module.css"
 import { AssistantComposer } from "./assistant-composer"
@@ -12,30 +12,30 @@ export interface AssistantChatProps {
   readonly pipe: PipeSummary
   readonly profile: Profile
   readonly row: SegmentRow
-  readonly toolbar: ReactNode
-  readonly onReset: () => void
+  readonly onHide: () => void
   readonly onAction: (action: AssistantAction, message: AssistantMessage) => void
 }
 
 const FOLLOW_UPS = ["compare", "neighbors", "available"] as const
 
-function nearBottom() {
-  const root = document.documentElement
-  return root.scrollHeight - window.scrollY - window.innerHeight < 160
+export function AssistantChat(props: AssistantChatProps) {
+  const [session, setSession] = useState(0)
+  return (
+    <AssistantSession key={session} {...props} onReset={() => setSession((value) => value + 1)} />
+  )
 }
 
-export function AssistantChat({
+function AssistantSession({
   pipe,
   profile,
   row,
-  toolbar,
+  onHide,
   onReset,
   onAction,
-}: AssistantChatProps) {
+}: AssistantChatProps & { readonly onReset: () => void }) {
   const { t } = useTranslation()
   const format = useFormatters()
   const [scope, setScope] = useState<"segment" | "pipe">("segment")
-  const follow = useRef(true)
   const end = useRef<HTMLDivElement>(null)
   const chat = useAssistant({
     pipe_id: pipe.pipe_id,
@@ -50,43 +50,40 @@ export function AssistantChat({
   const count = chat.messages.length
   const tail = chat.messages.at(-1)
   useEffect(() => {
-    const track = () => {
-      follow.current = nearBottom()
-    }
-    window.addEventListener("scroll", track, { passive: true })
-    return () => window.removeEventListener("scroll", track)
-  }, [])
-  useEffect(() => {
-    if (follow.current && (count || tail?.text || tail?.status))
-      end.current?.scrollIntoView({ block: "end" })
+    if (count || tail?.text || tail?.status) end.current?.scrollIntoView({ block: "end" })
   }, [count, tail?.text, tail?.status])
   const send = (text: string) => {
     if (!text.trim() || chat.busy) return
-    follow.current = true
     chat.send(text.trim())
   }
   return (
     <section className={styles.chat} aria-label={t("assistant:title")}>
-      <div className={styles.bar}>
-        <div className={styles.barInner}>
-          {toolbar}
-          <Segmented
-            label={t("assistant:scope")}
-            value={scope}
-            onChange={setScope}
-            options={[
-              { value: "segment", label: t("assistant:segmentScope") },
-              { value: "pipe", label: t("assistant:pipeScope") },
-            ]}
-          />
-          {count ? (
-            <Button variant="quiet" icon="plus" disabled={chat.busy} onClick={onReset}>
-              {t("assistant:page.newChat")}
-            </Button>
-          ) : null}
-        </div>
-      </div>
-      <div className={styles.log} role="log" aria-label={t("assistant:conversation")}>
+      <Card
+        appearance="plain"
+        className={styles.head}
+        title={t("assistant:title")}
+        actions={
+          <div className={styles.headActions}>
+            {count ? (
+              <Button variant="quiet" icon="plus" disabled={chat.busy} onClick={onReset}>
+                {t("assistant:page.newChat")}
+              </Button>
+            ) : null}
+            <IconButton icon="chevron-right" label={t("assistant:hide")} onClick={onHide} />
+          </div>
+        }
+      >
+        <Segmented
+          label={t("assistant:scope")}
+          value={scope}
+          onChange={setScope}
+          options={[
+            { value: "segment", label: t("assistant:segmentScope") },
+            { value: "pipe", label: t("assistant:pipeScope") },
+          ]}
+        />
+      </Card>
+      <ScrollArea className={styles.log} role="log" aria-label={t("assistant:conversation")}>
         {count ? null : (
           <AssistantEmpty
             context={
@@ -132,7 +129,7 @@ export function AssistantChat({
           </div>
         ) : null}
         <div ref={end} />
-      </div>
+      </ScrollArea>
       <AssistantComposer busy={chat.busy} onSend={send} onStop={chat.stop} />
     </section>
   )
