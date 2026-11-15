@@ -11,3 +11,5 @@ Scope: frontend constructor, existing real profile API, no backend or 3D-engine 
 - Frontend image rebuilt and service healthy on 18081; backend service not rebuilt.
 
 Production agent generation remains unavailable because current AssistantEvent does not contain structured widget data. Existing seven engineering kinds are the supported registry; free SQL/HTML/JavaScript and arbitrary sources are unsupported. RU is the product language; EN dictionary parity is maintained, but no separate EN visual matrix was requested.
+
+Deployed navigation smoke: WebGL inspection → «Графики» → dashboard → return to WebGL; segment 50 preserved, no browser page errors. Implementation commit: 7f3fb2a.

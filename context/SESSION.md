@@ -195,9 +195,9 @@ User: «мне нужна только фронтенд часть!!!».
 
 ## Current state
 
-Repo /Users/kaifarikman/hackathons/innoglobal, feat/frontend, base HEAD 82dbab3; dashboard implementation ready for commit.
+Repo /Users/kaifarikman/hackathons/innoglobal, feat/frontend. Dashboard implementation: 7f3fb2a (Git HEAD before this memory update).
 Frontend only. No changes to backend, ML or 3D engines. Do not push into dev.
 Custom dashboards implemented at /dashboards: seven real-profile blocks, shared context/cursor, editable 12-column canvas, library, multiple boards, localStorage definitions/layout, undo. Generator preview/refinement/cancellation tested with test-only transport; production explicitly unavailable until structured agent API exists. Docs: docs/dashboards.md; plan: work/plans/agent-dashboards-frontend.md.
-Compose duppel-live frontend 18081 rebuilt; backend 18012 unchanged. npm run verify: 394 tests, types, rules, lint and build pass. Four dashboard browser scenarios cover 375/1440, both themes, axe, persistence, editing and cancellation. Evidence: work/audits/dashboards/. Earlier 131 backend tests not rerun for frontend-only changes.
+Compose duppel-live frontend 18081 rebuilt; backend 18012 unchanged. npm run verify: 394 tests, types, rules, lint and build pass. Four dashboard browser scenarios cover 375/1440, both themes, axe, persistence, editing and cancellation. Evidence: work/audits/dashboards/. Backend unchanged; tests not rerun.
 Initial lint/type/a11y failures fixed; warning details in audit. Next: real generator adapter after API contract. Unrelated untracked: .codex/, work/design/pipe-workspace/map-data.json.
 SESSION target exceeded to preserve protected user instructions verbatim.
