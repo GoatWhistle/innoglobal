@@ -37,9 +37,7 @@ export function ModelImportance({ model, caseId }: ModelImportanceProps) {
           }
         })}
       />
-      <p className={styles.note}>
-        {t(caseId === "case1" ? "model:importanceCatboost" : "model:importanceLgbm")}
-      </p>
+      <p className={styles.note}>{t("model:importanceLgbm")}</p>
     </Card>
   )
 }

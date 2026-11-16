@@ -1,4 +1,4 @@
-"""Этап 1: чтение очищенного слоя хранилища (core), сегментация, посегментные таргеты, обучающие пары."""
+"""Чтение очищенного слоя хранилища (core), сегментация, посегментные таргеты, обучающие пары."""
 import numpy as np
 import pandas as pd
 
@@ -63,45 +63,24 @@ def segment_targets(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
     segs["y"] = segs["segment_id"].map(g.min())
     segs["had_defect"] = segs["y"].notna()
     segs["y"] = segs["y"].fillna(wall)
-    # денойз-статистики таргета (lab60): шумный снаряд — минимум есть крайняя
-    # статистика замеров, квантили остатка устойчивее; в признаки не идут
-    for q, col in ((0.10, "y_q10"), (0.25, "y_q25")):
-        segs[col] = segs["segment_id"].map(g.quantile(q)).fillna(wall)
-    segs["y_ndef"] = segs["segment_id"].map(g.size()).fillna(0).astype(int)
     return segs
 
 
-def build_pairs(runs: pd.DataFrame, passport: pd.DataFrame,
-                extended: bool = False) -> pd.DataFrame:
-    """Обучающие пары «старт -> целевой пропуск».
-
-    Базово: (ввод -> первый ВТД) и (ВТД i -> ВТД i+1).
-    extended=True добавляет все комбинации (ввод -> ВТД j) и (ВТД i -> ВТД j),
-    i < j — больше пар и горизонтов из тех же пропусков.
-    Пропуски, непригодные для обучения (core.ili_run.is_training_eligible), исключаются.
+def build_pairs(runs: pd.DataFrame, passport: pd.DataFrame) -> pd.DataFrame:
+    """Обучающие пары «старт -> целевой пропуск»: все комбинации (ввод -> ВТД j) и (ВТД i -> ВТД j),
+    i < j. Пропуски, непригодные для обучения (core.ili_run.is_training_eligible), исключаются.
     """
     pas = passport.set_index("id")
     rows = []
     for pipe_id, grp in runs[runs["is_training_eligible"]].groupby("id"):
         dates = sorted(grp["run_date"])
         comm = pas.loc[pipe_id, "date_in"]
-        if extended:
-            starts = [(comm, "comm2vtd")] + [(d, "vtd2vtd") for d in dates]
-            for (s, kind), e in (
-                ((s, k), e) for s, k in starts for e in dates
-                if k == "comm2vtd" or s < e
-            ):
-                rows.append(dict(id=pipe_id, start=s, end=e, kind=kind))
-        else:
-            prev = None
-            for d in dates:
-                rows.append(dict(
-                    id=pipe_id,
-                    start=prev if prev is not None else comm,
-                    end=d,
-                    kind="vtd2vtd" if prev is not None else "comm2vtd",
-                ))
-                prev = d
+        starts = [(comm, "comm2vtd")] + [(d, "vtd2vtd") for d in dates]
+        for (s, kind), e in (
+            ((s, k), e) for s, k in starts for e in dates
+            if k == "comm2vtd" or s < e
+        ):
+            rows.append(dict(id=pipe_id, start=s, end=e, kind=kind))
     return pd.DataFrame(rows)
 
 

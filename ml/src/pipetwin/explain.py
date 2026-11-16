@@ -1,6 +1,6 @@
 """Интерпретация прогноза: точная декомпозиция числа, правило ранжирования, карточка сегмента.
 
-Три вопроса (Q&A менторов №2):
+Три вопроса:
 1. Почему модель дала такое число? — слой 1, `decompose`. Финальные предикторы обоих кейсов —
    аффинные композиции z-слагаемых, поэтому вклад каждого слагаемого в мм точный, без SHAP:
    кейс 1 (dens_quant_cal): pred = уровень + k·[z(q02) + z(q10) + z(q10_nb3) − z(ndef_w5)],
@@ -19,7 +19,7 @@
    чего в данных нет. Карточка — JSON, вход для LLM-прозы (делается отдельно); `render_card` —
    детерминированный шаблон.
 
-Запуск: python -m pipetwin.explain (после run_all.py). Выход: artifacts/explain_contrib.csv,
+Запускается последним шагом конвейера (python -m pipetwin). Выход: artifacts/explain_contrib.csv,
 artifacts/explain_cards.jsonl, artifacts/explain_top.md.
 """
 import json
@@ -34,13 +34,11 @@ from . import config as C
 from . import features as F
 from . import prepare
 from . import warehouse as W
-from .predict import PREDICTOR
-from .train import (analog_rates, blend_prob, calibrate_level, case1_stat_predictors, predict_bag,
-                    prior_blend, zscore)
+from .predict import LO_MM, TOP_SHARE
+from .train import (CASES, analog_rates, calibrate_level, case1_blend, dens_quant_cal,
+                    predict_base, prior_blend, zscore)
 
-LO_MM = 0.5          # физические рамки predict.py
-TOP_SHARE = 0.10     # доля сегментов в приоритете проверки (predict.py)
-BOTTOM_DEG = (120.0, 240.0)  # донная часть трубы (file.pdf: 96% внутренних дефектов Куст-2)
+BOTTOM_DEG = (120.0, 240.0)  # донная часть трубы (96% внутренних дефектов на нитке Куст-2)
 TOL_MM = 1e-6        # допуск сверки декомпозиции с пересчётом
 TOL_CSV = 6e-4       # допуск сверки с result.csv / uncertainty.csv (округление до 0.001)
 
@@ -70,22 +68,11 @@ def _final(raw: np.ndarray, shift: float, wt_nom: float) -> np.ndarray:
 
 
 def _case1(grp: pd.DataFrame, b: dict) -> tuple[pd.DataFrame, dict, np.ndarray]:
-    name, smooth = PREDICTOR["case1"]
-    if name != "dens_quant_cal" or smooth:
-        raise NotImplementedError(f"декомпозиция написана для dens_quant_cal без сглаживания, "
-                                  f"а PREDICTOR = {name}, smooth={smooth}")
-    models, X = b["models"], grp[b["features"]]
-    agg = b.get("member_agg", "mean")
-    preds = predict_bag(models["bag"], X, grp["wt_nom"].values, 1.0, agg=agg)
-    p_def = models["clf"].predict_proba(X)[:, 1]
-    q05 = np.mean([m.predict(X) for m in models["q05_pair"]], axis=0)
-    shape = (predict_bag(models["shape_bag"], X, grp["wt_nom"].values, agg=agg)["ensemble"]
-             if "shape_bag" in models else preds["ensemble"])
-    eb = blend_prob(shape, p_def, b["blend_w"], gap=shape - q05, gap_w=b.get("gap_w", 0.0))
-    if b.get("calib") is not None:
-        raise NotImplementedError("calib != None не поддержан")
-    k_scale = float(b.get("quant_scale", 1.0)) if not isinstance(b.get("quant_scale"), str) else 1.0
-    ref = case1_stat_predictors(grp, eb, b.get("quant_scale", "ens"))[name]
+    cfg = CASES["case1"]
+    X = grp[b["features"]]
+    eb = case1_blend(b["models"], X, grp["wt_nom"].values, cfg)["ens_blend"]
+    k_scale = float(cfg["quant_scale"])
+    ref = dens_quant_cal(grp, eb, k_scale)
 
     zs = {t: sgn * zscore(grp[col].to_numpy(float)) for t, (col, sgn, _) in CASE1_TERMS.items()}
     s = sum(zs.values())
@@ -95,7 +82,7 @@ def _case1(grp: pd.DataFrame, b: dict) -> tuple[pd.DataFrame, dict, np.ndarray]:
     contrib = pd.DataFrame({f"c_{t}": k * z for t, z in zs.items()}, index=grp.index)
     raw = level + contrib.sum(axis=1).to_numpy()
     err = float(np.max(np.abs(raw - ref)))
-    assert err < TOL_MM, f"кейс 1: декомпозиция расходится с case1_stat_predictors на {err:.2e} мм"
+    assert err < TOL_MM, f"кейс 1: декомпозиция расходится с dens_quant_cal на {err:.2e} мм"
     meta = dict(level_mm=level, level_desc="среднее по трубе бленда ансамбля LGBM+XGB+AFT "
                 "(медиана членов) с классификатором дефекта (ens_blend)",
                 scale_k=k, ens_blend_std=float(np.std(eb)), quant_scale=k_scale, shift_mm=0.0)
@@ -103,12 +90,8 @@ def _case1(grp: pd.DataFrame, b: dict) -> tuple[pd.DataFrame, dict, np.ndarray]:
 
 
 def _case2(grp: pd.DataFrame, b: dict, pipe_id: int, dir_of: dict) -> tuple[pd.DataFrame, dict, np.ndarray]:
-    name, smooth = PREDICTOR["case2"]
-    if name != "ens_prior_cal" or smooth:
-        raise NotImplementedError(f"декомпозиция написана для ens_prior_cal, а PREDICTOR = {name}")
     models, X = b["models"], grp[b["features"]]
-    preds = predict_bag(models["bag"], X, grp["wt_nom"].values, 1.0, agg=b.get("member_agg", "mean"))
-    ens = preds["ensemble"]
+    ens = predict_base(models["base"], X, grp["wt_nom"].values)["ensemble"]
     prior = models["relief_prior"]
     Xp = grp[F.PRIOR_FEATS].fillna(0.0)
     p = prior.decision_function(Xp)
@@ -117,13 +100,13 @@ def _case2(grp: pd.DataFrame, b: dict, pipe_id: int, dir_of: dict) -> tuple[pd.D
     # −логит, центрированный по трубе: −Σ coef_j·(xs_j − mean_j); /std(p) = z(−P)
     parts = -(xs - xs.mean(axis=0)) * lr.coef_[0]
     sd_p = float(np.std(p))
-    w = b["prior_w"]
+    w = CASES["case2"]["prior_w"]
     const_ens = float(np.std(ens)) <= 1e-9
     zp = parts / sd_p if sd_p > 1e-12 else np.zeros_like(parts)
     if const_ens:  # train.prior_blend: mean(ens) + z(−P)
         terms, a = {}, 1.0
         prior_terms = zp
-    else:          # blend_prob: zscore(z(ens) + w·z(−P))·std(ens) + mean(ens)
+    else:          # train.blend_prob: zscore(z(ens) + w·z(−P))·std(ens) + mean(ens)
         bsum = zscore(ens) + w * zscore(-p)
         a = float(np.std(ens)) / float(np.std(bsum))
         terms = {"ens": zscore(ens)}
@@ -177,7 +160,7 @@ def decompose() -> tuple[pd.DataFrame, dict]:
         metas[case] = meta
         out.append(df)
     dec = pd.concat(out, ignore_index=True)
-    res = pd.read_csv(C.ROOT / "result.csv")
+    res = pd.read_csv(C.RESULT_CSV)
     chk = dec.merge(res, on=["id", "segment_id"], suffixes=("", "_csv"))
     assert len(chk) == len(res) == len(dec), "набор сегментов не совпадает с result.csv"
     err = float((chk["thickness_pred"] - chk["thickness_pred_csv"]).abs().max())
@@ -243,14 +226,9 @@ def _prev_defects(pred_ds: pd.DataFrame) -> pd.DataFrame:
     out = []
     for pid, grp in pred_ds[pred_ds["kind"] == "vtd2vtd"].groupby("id"):
         start = pd.Timestamp(grp["start"].iloc[0])
-        if align.MODE == "profile":
-            f = align.to_profile(vtd, passport, pid, start, None,
-                                 method=align.CASE1_SHIFT_METHOD if pid == C.CASE1_ID else None)
-        else:
-            f = align.shift_for_pair(vtd, passport, pid, start, pd.Timestamp(grp["end"].iloc[0]),
-                                     has_target=False)
-        sub = (align.shifted_vtd(vtd, pid, start, f, int(nseg.loc[pid])) if f is not None
-               else vtd[(vtd["id"] == pid) & (vtd["run_date"] == start)])
+        f = align.to_profile(vtd, passport, pid, start, None,
+                             method=align.CASE1_SHIFT_METHOD if pid == C.CASE1_ID else None)
+        sub = align.shifted_vtd(vtd, pid, start, f, int(nseg.loc[pid]))
         out.append(sub)
     d = pd.concat(out, ignore_index=True) if out else vtd.iloc[0:0]
     # сверка: число дефектов по сегментам = prev_ndef матрицы прогноза
@@ -312,7 +290,6 @@ def cards(dec: pd.DataFrame, rk: pd.DataFrame, metas: dict) -> list[dict]:
         conf = bundle["cases"][case].get("conformal")
         terms = [c for c in metas[case]["terms"]]
         contrib = sorted(((c[2:], float(row[c])) for c in terms), key=lambda t: t[1])
-        pas = passport.loc[pid]
         card = dict(
             id=pid, segment_id=sid, case=case,
             dist_m=[sid * C.SEG_LEN, (sid + 1) * C.SEG_LEN],

@@ -1,9 +1,27 @@
-name: ${COMPOSE_PROJECT_NAME:-app}
+name: ${COMPOSE_PROJECT_NAME:-duppel}
 
 services:
+  # Конвейер ML: data/*.csv -> хранилище -> модели -> result.csv и артефакты в томе results.
+  # При повторном запуске ничего не пересчитывает, если результаты уже есть.
+  # Пересчитать принудительно: docker compose run --rm pipeline python -m pipetwin
+  pipeline:
+    build:
+      context: ml
+    image: ${COMPOSE_PROJECT_NAME:-duppel}-pipeline:${TAG:-latest}
+    volumes:
+      - ./data:/input:ro
+      - results:/out
+    restart: "no"
+
   backend:
-    image: ${COMPOSE_PROJECT_NAME:-app}-backend:${TAG:-latest}
-    pull_policy: never
+    build:
+      context: backend
+      args:
+        LLM: ${LLM:-false}
+    image: ${COMPOSE_PROJECT_NAME:-duppel}-backend:${TAG:-latest}
+    depends_on:
+      pipeline:
+        condition: service_completed_successfully
     env_file:
       - path: .env
         required: false
@@ -11,13 +29,9 @@ services:
       DATA_ROOT: /data
       STATE_ROOT: /state
     volumes:
-      - assistant-state:/state
-      - ./warehouse:/data/warehouse:ro
-      - ./data/processed:/data/data/processed:ro
-      - ./artifacts:/data/artifacts:ro
+      - results:/data
       - ./docs/methodology:/data/docs/methodology:ro
-      - ./result.csv:/data/result.csv:ro
-      - ./chart_data.json:/data/chart_data.json:ro
+      - assistant-state:/state
     ports:
       - "127.0.0.1:${BACKEND_PORT:-8000}:8000"
     healthcheck:
@@ -32,11 +46,14 @@ services:
     restart: unless-stopped
 
   frontend:
+    build:
+      context: frontend
+      args:
+        SITE_URL: ${SITE_URL:-}
+    image: ${COMPOSE_PROJECT_NAME:-duppel}-frontend:${TAG:-latest}
     depends_on:
       backend:
         condition: service_healthy
-    image: ${COMPOSE_PROJECT_NAME:-app}-frontend:${TAG:-latest}
-    pull_policy: never
     env_file:
       - path: .env
         required: false
@@ -50,4 +67,5 @@ services:
     restart: unless-stopped
 
 volumes:
+  results:
   assistant-state:

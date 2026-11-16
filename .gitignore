@@ -1,23 +1,24 @@
-.DS_Store
-Thumbs.db
-*:Zone.Identifier
-.idea/
-.vscode/
-*.swp
+# результаты конвейера (python -m pipetwin) — пересобираются из data/*.csv
+/result.csv
+/chart_data.json
+/artifacts/
+/warehouse/
+/data/processed/
+catboost_info/
 
-.claude/settings.local.json
-.claude/worktrees/
-.claude/scheduled_tasks.lock
-.claude/RESUME.md
-.impeccable/
-.playwright-mcp/
-
+# окружение
 .env
 .env.*
 !.env.example
-*.local
-.local/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+var/
 
+# фронтенд
 node_modules/
 dist/
 coverage/
@@ -29,25 +30,9 @@ blob-report/
 screenshots/
 shots/
 
-__pycache__/
-*.py[cod]
-.venv/
-logs/
-data/processed/lab/
-experiments/data/lab40_cache.joblib
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.hypothesis/
-htmlcov/
-.coverage
-*.egg-info/
-
-models/
-*.safetensors
-*.pt
-*.gguf
-var/
-catboost_info/
-
-var/
+# редакторы и ОС
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

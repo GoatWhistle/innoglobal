@@ -18,14 +18,13 @@
   "segmentsHint": "Historical 10 m sections, not the hidden inspection",
   "metricsTitle": "Ranking by r²",
   "importanceTitle": "Global feature importance",
-  "importanceCatboost": "CatBoost importance normalised to sum to one. Not a local explanation of the ensemble forecast.",
   "importanceLgbm": "LightGBM importance normalised to sum to one. Not a causal effect.",
   "badgeSelected": "Selected",
   "badgeBaseline": "Baseline",
   "uncertainty": {
     "title": "Uncertainty",
-    "quantiles": "Quantiles {{quantiles}}, a separate model for each.",
-    "coverage": "Actual interval coverage is not calibrated.",
+    "quantiles": "Case 1: conformal interval from validation residuals. Case 2: quantiles {{quantiles}}, a separate model for each.",
+    "coverage": "Case 2 interval coverage is not calibrated.",
     "bound": "The interval does not guarantee thickness bounds."
   },
   "limits": {
@@ -39,15 +38,15 @@
   "name": {
     "b1_nominal_minus_rate": "B1 nominal minus rate",
     "b2_prev_smoothed": "B2 prev smoothed",
-    "catboost": "CatBoost",
     "lgbm": "LightGBM",
     "xgb": "XGBoost",
     "aft": "AFT",
     "ensemble": "Ensemble",
-    "ens_blend": "Ens blend",
-    "catboost_smooth5": "Catboost smooth5",
-    "ensemble_smooth5": "Ensemble smooth5",
-    "ens_blend_smooth5": "Ens blend smooth5"
+    "ens_blend": "Ensemble with defect classifier",
+    "dens_quant": "Previous ILI quantiles and defect density",
+    "dens_quant_cal": "Previous ILI quantiles at ensemble level",
+    "ens_prior": "LightGBM with relief prior",
+    "ens_prior_cal": "Relief prior, analog-calibrated"
   },
   "feature": {
     "dist_m": "Dist m",
@@ -76,7 +75,7 @@
   },
   "comparison": {
     "title": "Historical forecast and observation",
-    "separate": "A separate saved run, not the selected model. Metrics are recalculated from rounded pairs.",
+    "separate": "Forecast of the selected model on the validation pair; models were trained without it. Metrics are recalculated from rounded values.",
     "samples": "Verified pairs",
     "label": "Historical forecast versus observation, equal millimetre scales",
     "observed": "Observed, mm",

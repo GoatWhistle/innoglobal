@@ -3,8 +3,8 @@
 Аналитическая БД с исходными данными, очищенными по слоям. Один файл, без сервера.
 
 ```bash
-uvx --with duckdb python warehouse/build.py         # data/*.csv -> warehouse/pipetwin.duckdb (~2 с)
-uvx --from duckdb duckdb warehouse/pipetwin.duckdb  # SQL-консоль (или DBeaver / Python duckdb)
+uv run --project ml python ml/warehouse/build.py     # data/*.csv -> warehouse/pipetwin.duckdb (~2 с)
+uvx --from duckdb duckdb warehouse/pipetwin.duckdb   # SQL-консоль (или DBeaver / Python duckdb)
 ```
 
 Сборка идемпотентна (`create or replace`). Код завершается с ошибкой, если упала проверка уровня `error`.

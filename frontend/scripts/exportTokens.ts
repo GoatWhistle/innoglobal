@@ -46,7 +46,7 @@ export const GLOBAL_CONTRACT = [
 const COMMENT = /\/\*[\s\S]*?\*\//g
 const ROOT_THEME = /:root\[data-theme=/g
 const PACKAGE_FONT_URL = /url\(\.\/files\/([\w.-]+)\)/g
-const KEPT_FACE = /\/\*\s*[\w-]+?-(latin|latin-ext|cyrillic|cyrillic-ext)-(?:wght|400)-normal\s*\*\/\s*$/
+const KEPT_FACE = /\/\*\s*[\w-]+?-(latin|latin-ext|cyrillic|cyrillic-ext)-wght-normal\s*\*\/\s*$/
 const BLOCK = /([^{}]+)\{([^{}]*)\}/g
 
 export function buildTokenCss(sources: readonly TokenSource[]): string {

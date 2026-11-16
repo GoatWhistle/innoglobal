@@ -1,6 +1,4 @@
-"""Этап 2: признаки сегментов — геометрия трассы, режим, прошлое ВТД, гравиметрия."""
-import os
-
+"""Признаки сегментов: геометрия трассы, техрежим, прошлое ВТД, образцы-свидетели."""
 import numpy as np
 import pandas as pd
 
@@ -14,11 +12,10 @@ YEAR = pd.Timedelta(days=365.25)
 
 # ---------------------------------------------------------------- геометрия
 def relief_features(z: np.ndarray) -> dict:
-    """Относительные признаки карманов/подъёмов профиля (experiments/lab39).
+    """Относительные признаки карманов и подъёмов профиля.
 
-    Источник формы рельефного приора кейса 2 (нефть товарная: коррозия только там,
-    где выпадает и стоит вода). Все признаки относительные — не выдают трубу по
-    абсолютной отметке/дистанции."""
+    Источник формы рельефного приора кейса 2 (товарная нефть: коррозия только там, где выпадает
+    и стоит вода). Признаки относительные — не выдают трубу по абсолютной отметке или дистанции."""
     z = pd.Series(z)
     out = {}
     for w in (5, 11, 31, 101):  # прогиб относительно скользящего среднего
@@ -68,11 +65,11 @@ def geometry_features(altitudes: pd.DataFrame, nseg: pd.Series) -> pd.DataFrame:
         uphill_ahead = zs.shift(-3) - zs
         df["water_trap"] = ((df["lowness_250m"] < 0.1) & (uphill_ahead.values > 0.5)).astype(int)
         # глубина кармана: насколько сегмент ниже обоих окрестных гребней —
-        # непрерывная мера объёма стоячей воды (донная коррозия, см. file.pdf)
+        # непрерывная мера объёма стоячей воды (донная коррозия)
         left_max = zs.rolling(50, min_periods=1).max()
         right_max = zs[::-1].rolling(50, min_periods=1).max()[::-1]
         df["pocket_depth"] = (np.minimum(left_max, right_max) - zs).clip(lower=0).values
-        # затяжные подъёмы (консультация практика, experiments/lab8): поток теряет
+        # затяжные подъёмы: поток теряет
         # энергию, эмульсия расслаивается, вода и мехпримеси идут по низу трубы
         zsm = zs.rolling(11, center=True, min_periods=1).mean()
         up = (zsm.diff().fillna(0) > 0).astype(int)
@@ -114,7 +111,7 @@ def regime_features(regime: pd.DataFrame, pipe_id: int,
         w = regime[regime["id"] == pipe_id]
     years = (end - start) / YEAR
     t = w["t_start"].fillna(w["t_mix"])
-    # доли режимов течения (experiments/lab8); окно без разметки -> вся история
+    # доли режимов течения; окно без разметки -> вся история
     fr = w["flow_regime"].dropna()
     if fr.empty:
         fr = regime.loc[regime["id"] == pipe_id, "flow_regime"].dropna()
@@ -136,7 +133,7 @@ def regime_features(regime: pd.DataFrame, pipe_id: int,
         rg_share_trans=sh("Переходный"),
         rg_share_turb=sh("Турбулентный"),
         # граничные T/P участка — сырьё для интерполяции вдоль дистанции
-        # (experiments/lab12); из датасета удаляются в build_rows
+        # (удаляются из датасета в build_rows)
         tp_t_start=w["t_start"].mean(),
         tp_t_end=w["t_end"].mean(),
         tp_p_start=w["p_start"].mean(),
@@ -146,15 +143,8 @@ def regime_features(regime: pd.DataFrame, pipe_id: int,
 
 # --------------------------------------------------------------------- УЗТ
 def load_uzt() -> pd.DataFrame:
-    """Только правдоподобные замеры УЗТ (толщина ≤ номинал·1.15). Сырые 67 замеров толще
-    номинала на постоянные ~7 мм (сдвиг нуля прибора, core.ut_measurement.ut_offset_mm);
-    PIPETWIN_UZT=corr берёт толщину за вычетом сдвига, raw (по умолчанию) — сырую (таблица пуста).
-    Со старым кейсом 2 (LGBM с z) corr давал V1 0.181 -> 0.193, но с боевым ens_prior_cal (exp/case2)
-    corr вредит: V1 0.1946 -> 0.1785, V2 0.0480 -> 0.0474, V3 0.0094 = (lab65); профиль 9583 тот же."""
-    if os.environ.get("PIPETWIN_UZT", "raw") == "corr":
-        return W.query("""
-            select pipe_id as id, dist_m as dist, measured_at as date, thickness_corr_mm as thick
-            from core.ut_measurement where is_plausible_corr""")
+    """Правдоподобные замеры УЗТ (толщина ≤ номинал·1.15). У этого датасета все сырые замеры
+    толще номинала (сдвиг нуля прибора), поэтому таблица пуста и признаки УЗТ — NaN."""
     return W.query("""
         select pipe_id as id, dist_m as dist, measured_at as date, thickness_mm as thick
         from core.ut_measurement where is_plausible""")
@@ -214,7 +204,7 @@ def gravimetry_by_pipe() -> pd.DataFrame:
         select pipe_id as id,
                avg(rate_avg_mm_y)          as grav_rate_mean,
                max(rate_max_mm_y)          as grav_rate_max,
-               -- Cl- рушит плёнку FeCO3: corr с rate +0.30 (experiments/lab5)
+               -- Cl- рушит плёнку FeCO3: корреляция со скоростью +0.30
                median(cl_mg_l)             as grav_cl,
                median(mineralization_mg_l) as grav_mineralization
         from x group by 1 order by 1""")
@@ -273,9 +263,8 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
     df["prev_maxdepth"] = df["segment_id"].map(depth).fillna(0.0)
     age = max(start_age_years, 1e-6)
     df["prev_loss_rate"] = (wt_nom - df["prev_min"]).clip(lower=0) / age  # мм/год
-    # устойчивые статистики сегмента для предиктора aligned_stats (train.aligned_stats_score):
-    # по дефектам корреляция 2022 <-> 2023 всего 0.34 (шум снаряда, регрессия к среднему),
-    # поэтому 10-й процентиль остатка и соседи надёжнее голого минимума
+    # устойчивые статистики сегмента для предиктора кейса 1 (train.dens_quant_score): по дефектам
+    # корреляция 2022 <-> 2023 всего 0.34 (шум снаряда), квантили остатка надёжнее минимума
     q10 = sub.dropna(subset=["Residual Wall Thickness"]).groupby("segment_id")[
         "Residual Wall Thickness"].quantile(0.1)
     df["prev_q10"] = df["segment_id"].map(q10).fillna(df["prev_min"])
@@ -284,8 +273,7 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
     df["prev_q02"] = df["segment_id"].map(q02).fillna(df["prev_min"])
     df["prev_q10_nb3"] = df["prev_q10"].rolling(3, center=True, min_periods=1).mean()
     df["prev_lnn_nb3"] = np.log1p(df["prev_ndef"]).rolling(3, center=True, min_periods=1).mean()
-    # плотность дефектов в окне ±2 сегмента (линейно, на 1000 дефектов пропуска): слагаемое
-    # предиктора dens_quant (train.dens_quant_score, experiments/lab56b); окна ±1/±5 — то же (плато)
+    # плотность дефектов в окне ±2 сегмента на 1000 дефектов пропуска
     df["prev_ndef_w5"] = (df["prev_ndef"].rolling(5, center=True, min_periods=1).sum()
                           / total_def * 1000.0)
     df["has_prev"] = 1
@@ -294,10 +282,9 @@ def start_state_features(vtd: pd.DataFrame, runs: pd.DataFrame, nseg: pd.Series,
 
 # ------------------------------------------------------------------ сборка
 META_COLS = ["id", "segment_id", "kind", "start", "end", "y", "had_defect", "split",
-             "aft_lb", "aft_ub",  # метки survival-модели — не признаки
-             "y_q10", "y_q25", "y_ndef"]  # денойз-статистики таргета (lab60)
+             "aft_lb", "aft_ub"]  # метки survival-модели — не признаки
 
-# группы признаков, подключаемые по кейсам (итог абляций, см. experiments/)
+# группы признаков, подключаемые по кейсам
 UZT_FEATS = ["uzt_dist", "uzt_min_250", "uzt_loss_rate"]
 PROF_FEATS = ["prev_p25_sm21", "prev_ndef_norm"]
 INTER_FEATS = ["x_pool_slow", "x_trap_wc"]
@@ -307,7 +294,7 @@ CHEM_FEATS = ["grav_cl", "grav_mineralization"]
 REGIME_SHARE_FEATS = ["rg_share_laminar", "rg_share_trans", "rg_share_turb"]
 CLIMB_FEATS = ["climb_len", "climb_rise", "climb_pos", "rise_500m"]
 TP_FEATS = ["t_at", "p_at"]
-# только для предиктора aligned_stats, в бустинги не идут (их состав не меняется)
+# только для статистического предиктора кейса 1, в бустинги не идут
 STAT_FEATS = ["prev_q10", "prev_q02", "prev_q10_nb3", "prev_lnn_nb3", "prev_ndef_w5"]
 # только для рельефного приора кейса 2 (train.fit_relief_prior), не в бустингах
 RELIEF_FEATS = ["sag_5", "sag_11", "sag_31", "sag_101", "curv", "vbottom", "catch_left",
@@ -323,24 +310,21 @@ OPTIONAL_FEATS = (UZT_FEATS + PROF_FEATS + INTER_FEATS + ERA_FEATS + POCKET_FEAT
 def case_features(ds: pd.DataFrame, case: str) -> list[str]:
     """Наборы по кейсам: case1 — база + доли режимов течения + интерполяция T/P;
     case2 — база + УЗТ + эпохи ингибирования (скорость коррозии по гравиметрии
-    упала на порядок после 2012-2013) + затяжные подъёмы + интерполяция T.
-    Режимы/подъёмы — experiments/lab8; t_at/p_at — lab12 (p_at кейсу 2 вредит)."""
+    упала на порядок после 2012-2013) + затяжные подъёмы + интерполяция T."""
     base = [c for c in feature_columns(ds) if c not in OPTIONAL_FEATS]
     if case == "case2":
-        # абсолютная отметка z у кейса 2 — идентификатор трубы (lab36): 9583 различалась
-        # только ею (ступень 16%/84% = полка 3.740); без z V1 0.181 -> 0.190, строгая V2
-        # 0.010 -> 0.030. Форму 9583 даёт рельефный приор (lab39).
+        # абсолютная отметка z у кейса 2 работает как идентификатор трубы — исключена;
+        # форму профиля 9583 даёт рельефный приор
         return [f for f in base if f != "z"] + UZT_FEATS + ERA_FEATS + CLIMB_FEATS + ["t_at"]
     return base + REGIME_SHARE_FEATS + TP_FEATS
 
 
 def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
-               passport, altitudes, regime, geom, grav, uzt,
-               honest_ex=None, measured: bool = False) -> pd.DataFrame:
-    """honest_ex — дата пропуска, который запрещено использовать для выравнивания
-    (честная валидация кейса 1, см. honest_val_rows).
-    measured=True — у валидационной пары кейса 1 сдвиг прошлого пропуска оценивается по самой
-    паре (как в прогнозе 22871, где сдвиг измерен на обоих концах), а не от соседа."""
+               passport, altitudes, regime, geom, grav, uzt, honest_ex=None) -> pd.DataFrame:
+    """Строки «сегмент × пара пропусков». Все пропуски переводятся в координаты профиля трассы.
+
+    honest_ex — дата пропуска, который запрещено использовать для выравнивания
+    (честные обучающие строки валидации кейса 1, см. honest_val_rows)."""
     pas = passport.set_index("id")
     frames = []
     for _, p in pairs.iterrows():
@@ -350,38 +334,23 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
         df = geom[geom["id"] == pipe_id].copy()
         vtd_start = vtd
         vtd_end = vtd
-        if align.MODE == "profile":
-            # всё в координатах профиля; у валидационной пары кейса 1 целевой пропуск не
-            # используется для оценки сдвига прошлого (как при настоящем прогнозе)
-            ex = (pd.Timestamp(end) if align.is_case1_val(pipe_id, start, end)
-                  and not (align.ORACLE or measured) else honest_ex)
-            # кейс 1 (валидация 2022 -> 2023 и прогноз целевой трубы) — сдвиг по совпавшим дефектам
-            case1 = (align.is_case1_val(pipe_id, start, end)
-                     or (not with_target and pipe_id == C.CASE1_ID))
-            method = align.CASE1_SHIFT_METHOD if case1 else None
-            if kind == "vtd2vtd":
-                vtd_start = align.shifted_vtd(vtd, pipe_id, start,
-                                              align.to_profile(vtd, passport, pipe_id, start, ex,
-                                                               method=method),
-                                              int(nseg.loc[pipe_id]))
-            if with_target:
-                vtd_end = align.shifted_vtd(vtd, pipe_id, end,
-                                            align.to_profile(vtd, passport, pipe_id, end,
-                                                             honest_ex),
-                                            int(nseg.loc[pipe_id]))
-        elif kind == "vtd2vtd":
-            # дистанции прошлого пропуска -> координаты целевого (сбой одометра, align.py)
-            f = align.shift_for_pair(vtd, passport, pipe_id, start, end, has_target=with_target)
-            if f is not None:
-                vtd_start = align.shifted_vtd(vtd, pipe_id, start, f, int(nseg.loc[pipe_id]))
+        # кейс 1 (валидация 2022 -> 2023 и прогноз 22871) — сдвиг по совпавшим дефектам
+        case1 = align.is_case1_val(start, end) or (not with_target and pipe_id == C.CASE1_ID)
+        method = align.CASE1_SHIFT_METHOD if case1 else None
+        n = int(nseg.loc[pipe_id])
+        if kind == "vtd2vtd":
+            f = align.to_profile(vtd, passport, pipe_id, start, honest_ex, method=method)
+            vtd_start = align.shifted_vtd(vtd, pipe_id, start, f, n)
+        if with_target:
+            f = align.to_profile(vtd, passport, pipe_id, end, honest_ex)
+            vtd_end = align.shifted_vtd(vtd, pipe_id, end, f, n)
         st = start_state_features(vtd_start, runs, nseg, passport, pipe_id, start, kind, age_start)
         df = df.merge(st, on=["id", "segment_id"])
 
         for k, v in regime_features(regime, pipe_id, start, end).items():
             df[k] = v
-        # пространственная интерполяция техрежима (experiments/lab12): режим
-        # дан одним расчётом на участок, но граничные T/P дают линейный
-        # профиль вдоль дистанции — единственная вариация режима по трубе
+        # режим дан одним расчётом на участок, но граничные T/P дают линейный профиль вдоль
+        # дистанции — единственная вариация режима по трубе
         df["t_at"] = df["tp_t_start"] + df["dist_frac"] * (df["tp_t_end"] - df["tp_t_start"])
         df["p_at"] = df["tp_p_start"] + df["dist_frac"] * (df["tp_p_end"] - df["tp_p_start"])
         df = df.drop(columns=["tp_t_start", "tp_t_end", "tp_p_start", "tp_p_end"])
@@ -392,7 +361,7 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
         df["x_trap_wc"] = df["water_trap"] * df["rg_watercut_mean"] / 100.0
         df["horizon_years"] = (end - start) / YEAR
         # эпохи ингибирования: по гравиметрии скорость коррозии упала на
-        # порядок после 2012-2013 (0.3 -> 0.02 мм/год, experiments/lab5) —
+        # порядок после 2012-2013 (0.3 -> 0.02 мм/год) —
         # горизонт делится на "до" и "после" внедрения ингибиторной программы
         era = pd.Timestamp("2013-01-01")
         df["yrs_pre_inhib"] = max((min(end, era) - start) / YEAR, 0.0)
@@ -409,7 +378,7 @@ def build_rows(pairs: pd.DataFrame, with_target: bool, *, vtd, runs, nseg,
         df["kind"], df["start"], df["end"] = kind, start, end
         if with_target:
             tgt = prepare.segment_targets(vtd_end, runs, nseg, pipe_id, end)
-            df = df.merge(tgt[["segment_id", "y", "had_defect", "y_q10", "y_q25", "y_ndef"]],
+            df = df.merge(tgt[["segment_id", "y", "had_defect"]],
                           on="segment_id")
         frames.append(df)
     return pd.concat(frames, ignore_index=True)
@@ -427,8 +396,6 @@ def assign_split(ds: pd.DataFrame) -> pd.DataFrame:
     v1 = ((ds["kind"] == "vtd2vtd")
           & (ds["end"] == pd.Timestamp(C.VAL_CASE1_END))
           & (ds["start"] == pd.Timestamp(C.VAL_CASE1_START)))
-    if C.VAL_CASE1_IDS is not None:
-        v1 &= ds["id"].isin(C.VAL_CASE1_IDS)
     ds.loc[v1, "split"] = "val_case1"
     for pid, end in C.VAL_CASE2_PAIRS:
         v2 = ((ds["kind"] == "comm2vtd") & (ds["id"] == pid)
@@ -443,20 +410,14 @@ def assign_split(ds: pd.DataFrame) -> pd.DataFrame:
 
 
 def honest_val_rows(pairs: pd.DataFrame, train: pd.DataFrame, ctx: dict) -> pd.DataFrame:
-    """Строки труб валидации кейса 1 с выравниванием БЕЗ целевого пропуска валидации.
+    """Строки труб валидации кейса 1, выровненные БЕЗ целевого пропуска валидации.
 
-    align.to_profile выравнивает пропуск цепочкой к более позднему пропуску той же трубы с
-    высотами. Для труб валидации (соседи цели, пара 2022 -> 2023) это пропуск 2023 — скрытый
-    таргет валидации: обучающие строки «… -> 2022» получали координаты из него (таргет 2022 в
-    таких координатах коррелирует с таргетом валидации r²=0.59, честно — 0.12), и бустинги
-    запоминали профиль по позиционным признакам (experiments lab54, ветка exp/newmodels).
-    Эти строки заменяют исходные ТОЛЬКО в модели валидации кейса 1 (split=train_honest);
-    финальные модели и боевой прогноз (у 22871 пропуска 2023 нет) не меняются.
+    to_profile выравнивает пропуск цепочкой к более позднему пропуску той же трубы. Для соседей
+    целевой трубы это пропуск 2023 — таргет валидации: обучающие строки «… -> 2022» получали бы
+    координаты из него, и бустинги запоминали бы профиль по позиционным признакам. Эти строки
+    заменяют исходные только в модели валидации кейса 1 (split=train_honest); финальные модели
+    и прогноз (у 22871 пропуска 2023 нет) не меняются.
     """
-    # и в оракуле (PIPETWIN_ALIGN_ORACLE=1): оракул измеряет сдвиг ВАЛИДАЦИОННОЙ пары по 2023,
-    # но train-строки тех же труб всё равно должны выравниваться без скрытого пропуска (аудит lab80)
-    if align.MODE != "profile":
-        return train.iloc[0:0]
     end = pd.Timestamp(C.VAL_CASE1_END)
     vids = train.loc[train["split"] == "val_case1", "id"].unique()
     keep = train[(train["split"] == "train") & train["id"].isin(vids)][["id", "start", "end", "kind"]]
@@ -473,7 +434,7 @@ def feature_columns(ds: pd.DataFrame) -> list[str]:
     return [c for c in ds.columns if c not in META_COLS]
 
 
-def build_all(extended: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
+def build_all() -> tuple[pd.DataFrame, pd.DataFrame]:
     """Полный этап подготовки: train-датасет и матрица для прогноза."""
     passport = prepare.load_passport()
     altitudes = prepare.load_altitudes()
@@ -487,19 +448,10 @@ def build_all(extended: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
     ctx = dict(vtd=vtd, runs=runs, nseg=nseg, passport=passport,
                altitudes=altitudes, regime=regime, geom=geom, grav=grav,
                uzt=load_uzt())
-    pairs = prepare.build_pairs(runs, passport, extended=extended)
+    pairs = prepare.build_pairs(runs, passport)
     train = build_rows(pairs, with_target=True, **ctx)
     train = assign_split(train)
     train = pd.concat([train, honest_val_rows(pairs, train, ctx)], ignore_index=True)
-    if not align.ORACLE:
-        # второй блок валидации кейса 1: те же пары со сдвигом, измеренным по самой паре.
-        # В обучение не идёт (split != "train"), только в отчёт как case1_measured; модели
-        # валидации обучены на честных строках (train_honest), так что блок тоже честный
-        vp = train.loc[train["split"] == "val_case1", ["id", "start", "end", "kind"]].drop_duplicates()
-        if len(vp):
-            vm = build_rows(vp, with_target=True, measured=True, **ctx)
-            vm["split"] = "val_case1_measured"
-            train = pd.concat([train, vm], ignore_index=True)
     predict = build_rows(prepare.prediction_pairs(passport), with_target=False, **ctx)
 
     C.PROCESSED_DIR.mkdir(parents=True, exist_ok=True)

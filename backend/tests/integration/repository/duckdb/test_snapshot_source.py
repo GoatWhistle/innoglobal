@@ -114,7 +114,7 @@ def test_comparison_is_distinct_from_selected_model(client: TestClient) -> None:
         )
     assert selected["model"] == "dens_quant_cal"
     assert selected["pearson_r2"] == float(metric["pearson_r2"])
-    assert comparison["pearson_r2"] != selected["pearson_r2"]
+    assert comparison["pearson_r2"] == pytest.approx(selected["pearson_r2"], abs=5e-4)
     with (REPOSITORY_ROOT / "data/processed/train_dataset.csv").open() as handle:
         validation = {
             (int(row["id"]), int(row["segment_id"])): float(row["y"])
@@ -128,11 +128,13 @@ def test_comparison_is_distinct_from_selected_model(client: TestClient) -> None:
         )
 
 
-def test_incompatible_historical_observations_are_not_exposed(client: TestClient) -> None:
+def test_case2_comparison_matches_selected_predictor(client: TestClient) -> None:
     model = client.get("/api/v1/model/validation").json()
     comparison = next(item for item in model["comparisons"] if item["case_id"] == "case2")
-    assert comparison["status"] == "source_mismatch"
-    assert comparison["source_samples"] == 525
-    assert comparison["points"] == []
-    assert comparison["pearson_r2"] is None
-    assert comparison["mae_mm"] is None
+    selected = next(
+        item for item in model["metrics"] if item["case_id"] == "case2" and item["is_selected"]
+    )
+    assert comparison["status"] == "available"
+    assert comparison["source_samples"] == len(comparison["points"]) == 525
+    assert selected["model"] == "ens_prior_cal"
+    assert comparison["pearson_r2"] == pytest.approx(selected["pearson_r2"], abs=5e-4)

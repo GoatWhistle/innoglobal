@@ -1,6 +1,6 @@
 """Сборка аналитического хранилища PipeTwin (DuckDB): raw -> core -> mart + DQ.
 
-Запуск:  uvx --with duckdb python warehouse/build.py [--db PATH] [--data DIR]
+Запуск из корня репозитория:  uv run --project ml python ml/warehouse/build.py [--db PATH] [--data DIR]
 """
 import argparse
 import sys
@@ -9,7 +9,7 @@ from pathlib import Path
 
 import duckdb
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]  # корень репозитория
 SQL_DIR = Path(__file__).resolve().parent / "sql"
 
 # (имя, уровень, SQL числа нарушений, SQL знаменателя, смысл)
