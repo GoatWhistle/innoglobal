@@ -44,7 +44,7 @@ for (const theme of ["light", "dark"]) {
           await page.evaluate(() => document.documentElement.scrollWidth - innerWidth),
         ).toBeLessThan(2)
         await page.screenshot({
-          path: `../work/audits/material-workspace/regression-${theme}-${width}-${mode}.png`,
+          path: `test-results/material-workspace/regression-${theme}-${width}-${mode}.png`,
           animations: "disabled",
         })
       }
