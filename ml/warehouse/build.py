@@ -68,7 +68,7 @@ CHECKS = [
      "select count(*) from raw.vtd_south_train", "дистанция < 0 или за концом профиля"),
     ("ili.quarantine.beyond_pot_flag", "warn",
      "select count(*) from quarantine.ili_feature where reason = 'beyond_pot_flag'",
-     "select count(*) from raw.vtd_south_train", "организаторы пометили is_beyond_pot"),
+     "select count(*) from raw.vtd_south_train", "выгрузка пометила is_beyond_pot"),
     ("ili.quarantine.duplicate", "warn",
      "select count(*) from quarantine.ili_feature where reason = 'duplicate'",
      "select count(*) from raw.vtd_south_train", "точные дубли дефекта"),
