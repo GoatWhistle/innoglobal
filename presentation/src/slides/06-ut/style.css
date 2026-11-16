@@ -1,8 +1,0 @@
-#ut .plaque {
-  right: 120px;
-  top: 400px;
-}
-
-#ut.is-current .plaque {
-  view-transition-name: plaque-ut;
-}
