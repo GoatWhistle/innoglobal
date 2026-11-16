@@ -1,100 +1,120 @@
-# Как запустить продукт
+# Запуск
 
-Для просмотра нужны Docker с Compose и Buildx, готовые файлы из [контракта данных](data-contract.md), включая `chart_data.json` и исторический `train_dataset.csv`.
-Платные ключи и обучение не нужны. Команды выполняются из корня репозитория.
+Нужны Docker и Docker Compose v2. Платные ключи и GPU не нужны. Команды выполняются из корня
+репозитория.
+
+**Читайте, если** поднимаете стенд или работаете с кодом · **Связано:**
+[Архитектура](architecture.md) · [Данные](data-contract.md) · [Безопасность](security.md)
+
+---
 
 ## Как поднять стенд?
 
 ```bash
-docker buildx bake
-BACKEND_PORT=18010 FRONTEND_PORT=18080 docker compose up -d --wait
+docker compose up --build -d --wait
 ```
 
-Откройте http://localhost:18080. API: http://localhost:18010/docs.
-Выбранные порты позволяют держать локальный dev-сервер отдельно. Без переменных используются 8000 и 8080.
-Compose подключает DuckDB, признаки, артефакты и результат в `/data` только для чтения.
-Backend работает непривилегированным пользователем. Nginx проксирует `/api/` и поддерживает прямые ссылки SPA.
+Compose собирает три образа и запускает их по очереди:
+
+| Сервис | Что делает | Порт |
+| --- | --- | --- |
+| `pipeline` | Читает `data/*.csv`, строит хранилище, признаки, модели и прогноз, пишет результат в том `results` и завершается | — |
+| `backend` | FastAPI: загружает снимок из тома `results`, проверяет его полноту и отдаёт API | `127.0.0.1:8000` |
+| `frontend` | Nginx: раздаёт интерфейс и проксирует `/api/` в backend | `127.0.0.1:8080` |
+
+Первый запуск занимает несколько минут: сборка образов и около минуты на конвейер. Затем откройте
+**http://localhost:8080**. Интерактивная схема API: http://localhost:8000/docs.
+
+Результаты лежат в томе `results` и при повторных запусках не пересчитываются.
 
 ```bash
-BACKEND_PORT=18010 FRONTEND_PORT=18080 docker compose ps
-curl --fail http://localhost:18080/api/v1/ready
-BACKEND_PORT=18010 FRONTEND_PORT=18080 docker compose restart
+docker compose ps
+curl --fail http://localhost:8080/api/v1/ready
+docker compose logs --tail=50 pipeline
 ```
 
-`/health` проверяет процесс, `/ready` проверяет загруженный снимок. Healthcheck Compose использует readiness.
-При изменении исходных файлов перезапустите backend: снимок читается при старте, не на каждый запрос.
-Для остановки используйте `docker compose down`; исходные данные остаются в репозитории.
+`/health` проверяет процесс, `/ready` проверяет загруженный снимок; healthcheck Compose
+использует `/ready`.
+
+## Как пересчитать прогноз?
+
+```bash
+docker compose run --rm pipeline python -m pipetwin
+docker compose restart backend
+```
+
+Backend читает снимок при старте, поэтому после пересчёта его нужно перезапустить.
+Конвейер детерминирован: seed 42, версии библиотек закреплены в `ml/uv.lock`, повторный запуск
+даёт тот же `result.csv` байт в байт.
+
+Забрать прогноз из тома:
+
+```bash
+docker compose cp backend:/data/result.csv ./result.csv
+```
+
+## Какие настройки есть?
+
+Скопируйте `.env.example` в `.env` и меняйте нужные значения.
+
+| Переменная | По умолчанию | Назначение |
+| --- | --- | --- |
+| `COMPOSE_PROJECT_NAME` | `duppel` | Имя проекта Compose, образов и томов |
+| `FRONTEND_PORT`, `BACKEND_PORT` | `8080`, `8000` | Порты на `127.0.0.1` |
+| `LLM` | `false` | `true` ставит в образ backend библиотеки LLM-помощника |
+| `LANGUAGE_MODEL` | `none` | `codex` включает исследовательский режим помощника |
+| `DECISION_MODEL` | `lexical` | Классификатор запросов помощника; `system_one` — внешний HTTP-сервис |
+| `SITE_URL` | пусто | Публичный адрес для мета-тегов интерфейса |
+
+Без LLM помощник отвечает сводкой по выбранному сегменту. Как подключить модель:
+[помощник](assistant.md#как-включить-модель).
 
 ## Как работать без контейнеров?
 
-В отдельных терминалах:
+Нужны [uv](https://docs.astral.sh/uv/) и Node.js 22.18 или новее; Python 3.12 uv поставит сам.
 
 ```bash
-cd backend
-uv sync
-uv run uvicorn app.main:create_app --factory --port 8000
+cd ml && uv sync && uv run python -m pipetwin && cd ..
+```
+
+Конвейер пишет `result.csv`, `artifacts/`, `warehouse/`, `data/processed/` и `chart_data.json`
+в корень репозитория. В отдельных терминалах:
+
+```bash
+cd backend && uv sync && uv run uvicorn app.main:create_app --factory --port 8000
 ```
 
 ```bash
-cd frontend
-npm ci
-npm run dev -- --port 5179
+cd frontend && npm ci && npm run dev
 ```
 
-Откройте http://localhost:5179. Vite направляет `/api/` на localhost:8000;
-другой адрес задаётся `API_URL`. Backend принимает `DATA_ROOT`, по умолчанию корень репозитория.
-Данные не попадают во frontend bundle.
-
-Инженерный помощник по умолчанию выдаёт сводку без LLM. Для исследования через Codex SDK
-на `gpt-6.1-sol` задайте `LANGUAGE_MODEL=codex`; контейнеру нужна сборка `LLM=true`.
-Авторизация и ограничения: [помощник](assistant.md#как-включить-codex).
+Интерфейс откроется на http://localhost:5173; Vite направляет `/api/` на `localhost:8000`,
+другой адрес задаётся `API_URL`. Backend читает файлы из `DATA_ROOT`, по умолчанию из корня
+репозитория.
 
 ## Как проверить изменения?
 
 ```bash
-cd backend
-uv run ruff check .
-uv run ruff format --check .
-uv run mypy .
-uv run pytest tests/unit
-uv run pytest tests/integration
+cd ml && uv run pytest && uv run ruff check src tests warehouse
 ```
 
 ```bash
-cd frontend
-npm run verify
-npm run api:types
-E2E_BASE_URL=http://localhost:18080 npx playwright test e2e/product.spec.ts
+cd backend && uv run ruff check . && uv run mypy . && uv run pytest
 ```
 
-Интеграционные тесты читают настоящие DuckDB/CSV. Браузерные тесты требуют запущенного backend.
-Для первого запуска Playwright установите Chromium: `npx playwright install chromium`.
-Обучение и подготовка описаны отдельно в [README ML](../README-ML.md);
-`run_all.py` перезаписывает артефакты, поэтому для проверки готового сайта он не нужен.
+```bash
+cd frontend && npm run verify
+```
+
+Тесты backend читают настоящие результаты конвейера, поэтому сначала нужен локальный
+`python -m pipetwin`. На Windows запускайте Python-проверки с `PYTHONUTF8=1`. Браузерные сценарии требуют запущенного стенда:
+
+```bash
+cd frontend
+npx playwright install chromium
+E2E_BASE_URL=http://localhost:8080 npm run e2e
+```
 
 ---
 
 <sub>[Документация](README.md) · [README проекта](../README.md)</sub>
-
-## Локальный dev-стенд с исследовательским агентом
-
-Текущий собранный фронтенд доступен на http://localhost:18089, горячая версия — на
-http://localhost:5179. Они используют API на порту 8000, запущенный с `LANGUAGE_MODEL=codex`.
-Агент работает через PydanticAI; авторизация Codex остаётся на хосте.
-
-```bash
-cd backend
-LANGUAGE_MODEL=codex uv run uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8000
-```
-
-В другом терминале, из корня проекта:
-
-```bash
-COMPOSE_PROJECT_NAME=innopa-dev docker buildx bake frontend
-COMPOSE_PROJECT_NAME=innopa-dev FRONTEND_PORT=18089 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --no-deps --wait frontend
-curl --fail http://localhost:18089/api/v1/ready
-```
-
-Dev-конфигурация рассчитана на Docker Desktop: Nginx обращается к API хоста через
-`host.docker.internal:8000`. Backend должен оставаться запущенным. Таблицы, графики и версии
-дашбордов обслуживаются этим API; данные не встраиваются во frontend bundle.
