@@ -245,7 +245,10 @@ flowchart LR
 ---
 
 <p align="center">
-  <img src="docs/readme/mark-2cfda5f0.light.png" alt="duppel" width="32" height="32">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/mark-2cfda5f0.dark.png">
+    <img src="docs/readme/mark-2cfda5f0.light.png" alt="duppel" width="32" height="32">
+  </picture>
   <br>
   <sub>Team GoatWhistle, 2026. Licensed under <a href="LICENSE">MIT</a>.</sub>
 </p>
